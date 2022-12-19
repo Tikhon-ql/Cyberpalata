@@ -1,0 +1,12 @@
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.Model\Cyberpalata.Model\bin\Debug\net6.0\Cyberpalata.Model.deps.json
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.Model\Cyberpalata.Model\bin\Debug\net6.0\Cyberpalata.Model.dll
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.Model\Cyberpalata.Model\bin\Debug\net6.0\Cyberpalata.Model.pdb
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.Model\Cyberpalata.Model\obj\Debug\net6.0\Cyberpalata.Model.csproj.AssemblyReference.cache
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.Model\Cyberpalata.Model\obj\Debug\net6.0\Cyberpalata.Model.GeneratedMSBuildEditorConfig.editorconfig
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.Model\Cyberpalata.Model\obj\Debug\net6.0\Cyberpalata.Model.AssemblyInfoInputs.cache
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.Model\Cyberpalata.Model\obj\Debug\net6.0\Cyberpalata.Model.AssemblyInfo.cs
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.Model\Cyberpalata.Model\obj\Debug\net6.0\Cyberpalata.Model.csproj.CoreCompileInputs.cache
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.Model\Cyberpalata.Model\obj\Debug\net6.0\Cyberpalata.Model.dll
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.Model\Cyberpalata.Model\obj\Debug\net6.0\refint\Cyberpalata.Model.dll
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.Model\Cyberpalata.Model\obj\Debug\net6.0\Cyberpalata.Model.pdb
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.Model\Cyberpalata.Model\obj\Debug\net6.0\ref\Cyberpalata.Model.dll
