@@ -1,0 +1,14 @@
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.WebApi\Cyberpalata.DataProvider\bin\Debug\net6.0\Cyberpalata.DataProvider.deps.json
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.WebApi\Cyberpalata.DataProvider\bin\Debug\net6.0\Cyberpalata.DataProvider.runtimeconfig.json
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.WebApi\Cyberpalata.DataProvider\bin\Debug\net6.0\Cyberpalata.DataProvider.dll
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.WebApi\Cyberpalata.DataProvider\bin\Debug\net6.0\Cyberpalata.DataProvider.pdb
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.WebApi\Cyberpalata.DataProvider\obj\Debug\net6.0\Cyberpalata.DataProvider.csproj.AssemblyReference.cache
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.WebApi\Cyberpalata.DataProvider\obj\Debug\net6.0\Cyberpalata.DataProvider.GeneratedMSBuildEditorConfig.editorconfig
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.WebApi\Cyberpalata.DataProvider\obj\Debug\net6.0\Cyberpalata.DataProvider.AssemblyInfoInputs.cache
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.WebApi\Cyberpalata.DataProvider\obj\Debug\net6.0\Cyberpalata.DataProvider.AssemblyInfo.cs
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.WebApi\Cyberpalata.DataProvider\obj\Debug\net6.0\Cyberpalata.DataProvider.csproj.CoreCompileInputs.cache
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.WebApi\Cyberpalata.DataProvider\obj\Debug\net6.0\Cyberpalata.DataProvider.dll
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.WebApi\Cyberpalata.DataProvider\obj\Debug\net6.0\refint\Cyberpalata.DataProvider.dll
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.WebApi\Cyberpalata.DataProvider\obj\Debug\net6.0\Cyberpalata.DataProvider.pdb
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.WebApi\Cyberpalata.DataProvider\obj\Debug\net6.0\Cyberpalata.DataProvider.genruntimeconfig.cache
+D:\Tikhon\Proga\AspNetCore\Internship\Cyberpalata.WebApi\Cyberpalata.DataProvider\obj\Debug\net6.0\ref\Cyberpalata.DataProvider.dll
