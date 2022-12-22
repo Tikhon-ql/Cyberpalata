@@ -3,11 +3,13 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import {LoungeInfo} from './pages/LoungeInfo'
 import {GamingRoomInfo} from './pages/GamingRoomInfo'
 import { GameConsoleRoom } from './pages/GameConsoleRoom';
-import Home from './Home'
+import { Header } from './pages/header/Header';
+import Home from './pages/Home'
 
 export const Index = () => {
     return (
         <BrowserRouter basename='/'>
+            <Header/>
             <Routes>
                 <Route path='/' element={<Home />} />
                 <Route path="/lounge" element = {<LoungeInfo/>}/>

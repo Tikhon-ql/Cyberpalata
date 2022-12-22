@@ -1,4 +1,4 @@
-import {Logo} from './logoComponent'
+import {Logo} from '../logoComponent'
 import {Link} from 'react-router-dom'
 
 const Home = () => {
@@ -10,7 +10,7 @@ const Home = () => {
             </div>
             <div style={{"justifyContent":"right"}}>
                 <Link to='/gamingRoom'><div className='gamingRoomLink'><label className='labelRoomHoriz'>Gaming room</label></div></Link>
-                <Link to='/gameConsoleRoom'><div className='gameConsoleRoomLink'>  <label className='labelRoomHoriz'>Game console room</label></div></Link>
+                <Link to='/gameConsoleRoom'><div className='gameConsoleRoomLink'><label className='labelRoomHoriz'>Game console room</label></div></Link>
             </div>
         </div>
     </>
