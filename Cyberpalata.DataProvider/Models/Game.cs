@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cyberpalata.DataProvider.Models.Support
+namespace Cyberpalata.DataProvider.Models
 {
     public class Game
     {

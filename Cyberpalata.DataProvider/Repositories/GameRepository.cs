@@ -1,6 +1,5 @@
 ﻿using Cyberpalata.DataProvider.Interfaces;
-using Cyberpalata.DataProvider.Models.Support;
-using Cyberpalata.DataProvider.Support;
+using Cyberpalata.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Cyberpalata.DataProvider.DbContext;
 using Microsoft.EntityFrameworkCore;
+using Cyberpalata.DataProvider.Models;
 
 namespace Cyberpalata.DataProvider.Repositories
 {
@@ -44,13 +44,14 @@ namespace Cyberpalata.DataProvider.Repositories
 
         public void Delete(Guid id)
         {
-            var game = _context.Games.AsNoTracking().FirstOrDefault(g => g.Id == id);
-            if (game == null)
-                throw new ArgumentException(nameof(id), $"Not found game with id: {id}");
+            //var game = _context.Games.AsNoTracking().FirstOrDefault(g => g.Id == id);
+            //if (game == null)
+            //    throw new ArgumentException(nameof(id), $"Not found game with id: {id}");
+            var game = _context.Games.AsNoTracking().Single(g => g.Id == id);
             _context.Games.Remove(game);
             _context.SaveChanges();
         }
-
+            
         public PagedList<Game> GetPageList(int pageNumber)
         {
             var list = _context.Games.Skip((pageNumber - 1) * 10).Take(10);

@@ -1,5 +1,5 @@
 ﻿using Cyberpalata.DataProvider.Models.Devices;
-using Cyberpalata.DataProvider.Models.Enums;
+using Cyberpalata.Common.Enums;
 using Cyberpalata.DataProvider.Models.Peripheral;
 using System;
 using System.Collections.Generic;
@@ -15,11 +15,11 @@ namespace Cyberpalata.DataProvider.Models.Rooms
         {
 
         }
-        public List<Device> Devices { get; set; }
+        public List<Device> Devices { get; set; } = new();
 
-        public List<Periphery> Peripheries { get; set; }
+        public List<Periphery> Peripheries { get; set; } = new(); 
 
-        public GamingModuleType Type { get; set; } = GamingModuleType.Common;
+        public GamingRoomType Type { get; set; } = GamingRoomType.Common;
 
     }
 }

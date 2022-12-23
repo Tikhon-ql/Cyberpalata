@@ -1,11 +1,11 @@
 ﻿using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Devices;
-using Cyberpalata.DataProvider.Support;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cyberpalata.Common;
 using Cyberpalata.DataProvider.DbContext;
 using Microsoft.EntityFrameworkCore;
 

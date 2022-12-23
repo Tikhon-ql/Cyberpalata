@@ -1,4 +1,4 @@
-﻿using Cyberpalata.DataProvider.Models.Support;
+﻿using Cyberpalata.DataProvider.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Cyberpalata.DataProvider.Interfaces
 {
-    public interface IMenuPositionRepository : IRepository<MenuPosition>
+    public interface IMenuPositionRepository : IRepository<MenuItem>
     {
     }
 }

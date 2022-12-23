@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cyberpalata.DataProvider.Models.Enums
+namespace Cyberpalata.Logic.Models.Devices
 {
-    public enum MenuPositionType
+    public class DeviceDto
     {
-        Drink = 0,
-        Food = 1
+        public Guid Id { get; set; }
     }
 }

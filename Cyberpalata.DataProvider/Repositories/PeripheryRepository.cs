@@ -1,6 +1,6 @@
 ﻿using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Peripheral;
-using Cyberpalata.DataProvider.Support;
+using Cyberpalata.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;

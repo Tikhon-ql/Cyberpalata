@@ -1,25 +1,24 @@
-﻿using Cyberpalata.DataProvider.Models.Enums;
+﻿using Cyberpalata.Common.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cyberpalata.DataProvider.Models.Support
+namespace Cyberpalata.Logic.Models
 {
-    public class MenuPosition
+    public class MenuItemDto
     {
-        public MenuPosition(string name, decimal cost, MenuPositionType type = MenuPositionType.Food)
+        public MenuItemDto(string name, decimal cost)
         {
             Name = name;
             Cost = cost;
-            Type = type;
         }
 
         public Guid Id { get; set; }
         public string Name { get; set; }
         public decimal Cost { get; set; }
 
-        public MenuPositionType Type { get; set; }
+        public MenuItemType Type { get; set; } = MenuItemType.Food;
     }
 }

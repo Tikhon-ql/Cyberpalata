@@ -1,6 +1,5 @@
 ﻿using Cyberpalata.DataProvider.Interfaces;
-using Cyberpalata.DataProvider.Models.Support;
-using Cyberpalata.DataProvider.Support;
+using Cyberpalata.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Cyberpalata.DataProvider.DbContext;
 using Microsoft.EntityFrameworkCore;
+using Cyberpalata.DataProvider.Models;
 
 namespace Cyberpalata.DataProvider.Repositories
 {

@@ -4,18 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cyberpalata.DataProvider.Models.Devices
+namespace Cyberpalata.Logic.Models.Devices
 {
-    public class Pc : Device
+    public class PcDto : DeviceDto
     {
-        public Pc(string cPu, string gPu, int sSd, int hDd, int rAmCount, string rAmName)
+        public PcDto(string cpu, string gpu, int ssd, int hdd, int ramCount, string ramName)
         {
-            Cpu = cPu;
-            Gpu = gPu;
-            Ssd = sSd;
-            Hdd = hDd;
-            RamCount = rAmCount;
-            RamName = rAmName;
+            Cpu = cpu;
+            Gpu = gpu;
+            Ssd = ssd;
+            Hdd = hdd;
+            RamCount = ramCount;
+            RamName = ramName;
         }
 
         public string Cpu { get; set; }
@@ -26,6 +26,5 @@ namespace Cyberpalata.DataProvider.Models.Devices
 
         public int RamCount { get; set; }
         public string RamName { get; set; }
-
     }
 }

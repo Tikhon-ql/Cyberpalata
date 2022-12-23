@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cyberpalata.DataProvider.Support
+namespace Cyberpalata.Common
 {
     public class PagedList<T> where T : class
     {

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Cyberpalata.DataProvider.Models.Support;
 
 namespace Cyberpalata.DataProvider.Models.Rooms
 {
@@ -13,7 +12,7 @@ namespace Cyberpalata.DataProvider.Models.Rooms
         {
         }
 
-        public virtual List<MenuPosition> Menu { get; set; } = new();
+        public virtual List<MenuItem> Menu { get; set; } = new();
 
     }
 }

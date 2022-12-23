@@ -1,13 +1,13 @@
 ﻿using Cyberpalata.DataProvider.Interfaces;
-using Cyberpalata.DataProvider.Models.Support;
-using Cyberpalata.DataProvider.Support;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cyberpalata.Common;
 using Cyberpalata.DataProvider.DbContext;
 using Microsoft.EntityFrameworkCore;
+using Cyberpalata.DataProvider.Models;
 
 namespace Cyberpalata.DataProvider.Repositories
 {
@@ -18,7 +18,7 @@ namespace Cyberpalata.DataProvider.Repositories
         {
             this._context = context;
         }
-        public void Create(MenuPosition entity)
+        public void Create(MenuItem entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
@@ -26,7 +26,7 @@ namespace Cyberpalata.DataProvider.Repositories
             _context.SaveChanges();
         }
 
-        public MenuPosition Read(Guid id)
+        public MenuItem Read(Guid id)
         {
             var position = _context.MenuPositions.AsNoTracking().FirstOrDefault(p => p.Id == id);
             if (position == null)
@@ -34,7 +34,7 @@ namespace Cyberpalata.DataProvider.Repositories
             return position;
         }
 
-        public void Update(MenuPosition entity)
+        public void Update(MenuItem entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
@@ -51,10 +51,10 @@ namespace Cyberpalata.DataProvider.Repositories
             _context.SaveChanges();
         }
 
-        public PagedList<MenuPosition> GetPageList(int pageNumber)
+        public PagedList<MenuItem> GetPageList(int pageNumber)
         {
             var list = _context.MenuPositions.Skip((pageNumber - 1) * 20).Take(20);
-            return new PagedList<MenuPosition>(list.ToList(), pageNumber, 20, _context.MenuPositions.Count());
+            return new PagedList<MenuItem>(list.ToList(), pageNumber, 20, _context.MenuPositions.Count());
         }
     }
 }

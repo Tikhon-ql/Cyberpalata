@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Cyberpalata.Common;
 
-namespace Cyberpalata.DataProvider.Interfaces
+namespace Cyberpalata.Logic.Interfaces
 {
-    public interface IRepository<T> where T : class
+    public interface IService<T>
     {
         void Create(T entity);
         T Read(Guid id);
         void Update(T entity);
         void Delete(Guid id);
-        PagedList<T> GetPageList(int pageNumber);
     }
 }

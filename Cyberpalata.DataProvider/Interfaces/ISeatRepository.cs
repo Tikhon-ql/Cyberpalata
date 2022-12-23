@@ -1,4 +1,4 @@
-﻿using Cyberpalata.DataProvider.Models.Support;
+﻿using Cyberpalata.DataProvider.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -5,19 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using Cyberpalata.Common.Enums;
 
-namespace Cyberpalata.DataProvider.Models.Peripheral
+namespace Cyberpalata.DataProvider.Models
 {
-    public abstract class Periphery
+    public class MenuItem
     {
-        protected Periphery(string name, PeripheryType type)
+        public MenuItem(string name, decimal cost)
         {
-
             Name = name;
-            Type = type;
+            Cost = cost;
         }
 
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public PeripheryType Type { get; set; }
+        public decimal Cost { get; set; }
+
+        public MenuItemType Type { get; set; } = MenuItemType.Food;
     }
 }

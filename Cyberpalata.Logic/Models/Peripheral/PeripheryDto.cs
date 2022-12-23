@@ -1,17 +1,16 @@
-﻿using System;
+﻿using Cyberpalata.Common.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Cyberpalata.Common.Enums;
 
-namespace Cyberpalata.DataProvider.Models.Peripheral
+namespace Cyberpalata.Logic.Models.Peripheral
 {
-    public abstract class Periphery
+    public class PeripheryDto
     {
-        protected Periphery(string name, PeripheryType type)
+        public PeripheryDto(string name, PeripheryType type)
         {
-
             Name = name;
             Type = type;
         }
