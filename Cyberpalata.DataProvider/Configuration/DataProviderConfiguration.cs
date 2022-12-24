@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Cyberpalata.DataProvider.DbContext;
 using Cyberpalata.DataProvider.Interfaces;
+using Cyberpalata.DataProvider.Interfaces.UnitOfWork;
 using Cyberpalata.DataProvider.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -23,13 +24,15 @@ namespace Cyberpalata.DataProvider.Configuration
                 options.UseSqlServer(connectionStirng);
             });
 
-            services.AddTransient<IDeviceRepository,DeviceRepository>();
-            services.AddTransient<IGameRepository,GameRepository>();
-            services.AddTransient<ISeatRepository,SeatRepository>();
-            services.AddTransient<IMenuItemRepository,MenuItemRepository>();
-            services.AddTransient<IPeripheryRepository, PeripheryRepository>();
-            services.AddTransient<IPriceRepository, PriceRepository>();
-            services.AddTransient<IRoomRepository, RoomRepository>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+            //services.AddTransient<IDeviceRepository,DeviceRepository>();
+            //services.AddTransient<IGameRepository,GameRepository>();
+            //services.AddTransient<ISeatRepository,SeatRepository>();
+            //services.AddTransient<IMenuItemRepository,MenuItemRepository>();
+            //services.AddTransient<IPeripheryRepository, PeripheryRepository>();
+            //services.AddTransient<IPriceRepository, PriceRepository>();
+            //services.AddTransient<IRoomRepository, RoomRepository>();
         }
     }
 }
