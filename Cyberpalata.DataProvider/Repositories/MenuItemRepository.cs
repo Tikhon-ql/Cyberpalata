@@ -11,10 +11,10 @@ using Cyberpalata.DataProvider.Models;
 
 namespace Cyberpalata.DataProvider.Repositories
 {
-    public class MenuPositionRepository : IMenuPositionRepository
+    public class MenuItemRepository : IMenuItemRepository
     {
         private readonly ApplicationDbContext _context;
-        public MenuPositionRepository(ApplicationDbContext context)
+        public MenuItemRepository(ApplicationDbContext context)
         {
             this._context = context;
         }

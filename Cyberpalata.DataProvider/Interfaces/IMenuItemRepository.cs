@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Cyberpalata.DataProvider.Interfaces
 {
-    public interface IMenuPositionRepository : IRepository<MenuItem>
+    public interface IMenuItemRepository : IRepository<MenuItem>
     {
     }
 }

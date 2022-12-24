@@ -26,7 +26,7 @@ namespace Cyberpalata.DataProvider.Configuration
             services.AddTransient<IDeviceRepository,DeviceRepository>();
             services.AddTransient<IGameRepository,GameRepository>();
             services.AddTransient<ISeatRepository,SeatRepository>();
-            services.AddTransient<IMenuPositionRepository,MenuPositionRepository>();
+            services.AddTransient<IMenuItemRepository,MenuItemRepository>();
             services.AddTransient<IPeripheryRepository, PeripheryRepository>();
             services.AddTransient<IPriceRepository, PriceRepository>();
             services.AddTransient<IRoomRepository, RoomRepository>();

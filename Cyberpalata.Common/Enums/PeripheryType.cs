@@ -6,11 +6,6 @@ using System.Threading.Tasks;
 
 namespace Cyberpalata.Common.Enums
 {
-    //   Headphone = 0,
-    //Keypad = 1,
-    //Mouse = 2,
-    //Screen = 3,
-    //Chair = 4,
     public class PeripheryType : Enumeration
     {
         public static PeripheryType Headphone = new(1, nameof(Headphone));
