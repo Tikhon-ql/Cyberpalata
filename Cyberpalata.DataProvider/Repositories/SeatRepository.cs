@@ -11,50 +11,41 @@ using Cyberpalata.DataProvider.Models;
 
 namespace Cyberpalata.DataProvider.Repositories
 {
-    public class SeatRepository : ISeatRepository
+    internal class SeatRepository : ISeatRepository
     {
         private readonly ApplicationDbContext _context;
         public SeatRepository(ApplicationDbContext context)
         {
             this._context = context;
         }
-        public void Create(Seat entity)
+        public async Task CreateAsync(Seat entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
-            _context.Seats.Add(entity);
-            _context.SaveChanges();
+            await _context.Seats.AddAsync(entity);
         }
 
-        public Seat Read(Guid id)
+        public async Task<Seat> ReadAsync(Guid id)
         {
-            var seat = _context.Seats.AsNoTracking().FirstOrDefault(s => s.Id == id);
-            if (seat == null)
-                throw new ArgumentException(nameof(id), $"Not found seat with id: {id}");
+            var seat = await _context.Seats.SingleAsync(s => s.Id == id);
             return seat;
         }
 
-        public void Update(Seat entity)
+        public async Task DeleteAsync(Guid id)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-            _context.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            _context.SaveChanges();
-        }
-
-        public void Delete(Guid id)
-        {
-            var seat = _context.Seats.AsNoTracking().FirstOrDefault(s => s.Id == id);
-            if (seat == null)
-                throw new ArgumentException(nameof(id), $"Not found seat with id: {id}");
+            var seat = await _context.Seats.SingleAsync(s => s.Id == id);
             _context.Seats.Remove(seat);
-            _context.SaveChanges();
         }
 
-        public PagedList<Seat> GetPageList(int pageNumber)
+        private PagedList<Seat> GetPageList(int pageNumber)
         {
             var list = _context.Seats.Skip((pageNumber - 1) * 20).Take(20);
             return new PagedList<Seat>(list.ToList(), pageNumber, 20, _context.Seats.Count());
+        }
+
+        public async Task<PagedList<Seat>> GetPageListAsync(int pageNumber)
+        {
+            return await Task.Run(() => GetPageList(pageNumber));
         }
     }
 }

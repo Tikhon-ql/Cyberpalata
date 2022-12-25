@@ -8,16 +8,6 @@ namespace Cyberpalata.DataProvider.Models.Devices
 {
     public class Pc : Device
     {
-        public Pc(string cPu, string gPu, int sSd, int hDd, int rAmCount, string rAmName)
-        {
-            Cpu = cPu;
-            Gpu = gPu;
-            Ssd = sSd;
-            Hdd = hDd;
-            RamCount = rAmCount;
-            RamName = rAmName;
-        }
-
         public string Cpu { get; set; }
         public string Gpu { get; set; }
 

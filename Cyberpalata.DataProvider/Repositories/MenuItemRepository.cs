@@ -1,6 +1,7 @@
 ﻿using Cyberpalata.DataProvider.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Formats.Asn1;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,50 +12,42 @@ using Cyberpalata.DataProvider.Models;
 
 namespace Cyberpalata.DataProvider.Repositories
 {
-    public class MenuItemRepository : IMenuItemRepository
+    internal class MenuItemRepository : IMenuItemRepository
     {
         private readonly ApplicationDbContext _context;
         public MenuItemRepository(ApplicationDbContext context)
         {
             this._context = context;
         }
-        public void Create(MenuItem entity)
+        public async Task CreateAsync(MenuItem entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
-            _context.MenuPositions.Add(entity);
-            _context.SaveChanges();
+            await _context.MenuItems.AddAsync(entity);
         }
 
-        public MenuItem Read(Guid id)
+        public async Task<MenuItem> ReadAsync(Guid id)
         {
-            var position = _context.MenuPositions.AsNoTracking().FirstOrDefault(p => p.Id == id);
-            if (position == null)
-                throw new ArgumentException(nameof(id), $"Not found menu position with id: {id}");
+            var position = await _context.MenuItems.SingleAsync(p => p.Id == id);
             return position;
         }
 
-        public void Update(MenuItem entity)
+
+        public async Task DeleteAsync(Guid id)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-            _context.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            _context.SaveChanges();
+            var position = await _context.MenuItems.SingleAsync(p => p.Id == id);
+            _context.MenuItems.Remove(position);
         }
 
-        public void Delete(Guid id)
+        private PagedList<MenuItem> GetPageList(int pageNumber)
         {
-            var position = _context.MenuPositions.AsNoTracking().FirstOrDefault(p => p.Id == id);
-            if (position == null)
-                throw new ArgumentException(nameof(id), $"Not found menu position with id: {id}");
-            _context.MenuPositions.Remove(position);
-            _context.SaveChanges();
+            var list = _context.MenuItems.Skip((pageNumber - 1) * 20).Take(20);
+            return new PagedList<MenuItem>(list.ToList(), pageNumber, 20, _context.MenuItems.Count());
         }
 
-        public PagedList<MenuItem> GetPageList(int pageNumber)
+        public async Task<PagedList<MenuItem>> GetPageListAsync(int pageNumber)
         {
-            var list = _context.MenuPositions.Skip((pageNumber - 1) * 20).Take(20);
-            return new PagedList<MenuItem>(list.ToList(), pageNumber, 20, _context.MenuPositions.Count());
+            return await Task.Run(() => GetPageList(pageNumber));
         }
     }
 }

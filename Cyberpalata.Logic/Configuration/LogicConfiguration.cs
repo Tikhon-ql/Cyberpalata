@@ -19,13 +19,13 @@ namespace Cyberpalata.Logic.Configuration
 
             services.AddAutoMapper(typeof(AppMappingProfile));
 
-            services.AddTransient<IRoomService, RoomService>();
+            //services.AddTransient<IRoomService, RoomService>();
             services.AddTransient<IGameService, GameService>();
-            services.AddTransient<ISeatService, SeatService>();
-            services.AddTransient<IDeviceService, DeviceService>();
-            services.AddTransient<IPriceService, PriceService>();
-            services.AddTransient<IPeripheryService, PeripheryService>();
-            services.AddTransient<IMenuItemService, MenuItemService>();
+            //services.AddTransient<ISeatService, SeatService>();
+            //services.AddTransient<IDeviceService, DeviceService>();
+            //services.AddTransient<IPriceService, PriceService>();
+            //services.AddTransient<IPeripheryService, PeripheryService>();
+            //services.AddTransient<IMenuItemService, MenuItemService>();
         }
     }
 }

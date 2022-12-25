@@ -11,50 +11,42 @@ using Cyberpalata.DataProvider.Models;
 
 namespace Cyberpalata.DataProvider.Repositories
 {
-    public class PriceRepository : IPriceRepository
+    internal class PriceRepository : IPriceRepository
     {
         private readonly ApplicationDbContext _context;
         public PriceRepository(ApplicationDbContext context)
         {
             this._context = context;
         }
-        public void Create(Price entity)
+        public async Task CreateAsync(Price entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
-            _context.Prices.Add(entity);
-            _context.SaveChanges();
+            await _context.Prices.AddAsync(entity);
         }
 
-        public Price Read(Guid id)
+        public async Task<Price> ReadAsync(Guid id)
         {
-            var price = _context.Prices.AsNoTracking().FirstOrDefault(p => p.Id == id);
-            if (price == null)
-                throw new ArgumentException(nameof(id), $"Not found price with id: {id}");
+            var price = await _context.Prices.SingleAsync(p => p.Id == id);
             return price;
         }
 
-        public void Update(Price entity)
-        {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-            _context.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            _context.SaveChanges();
-        }
 
-        public void Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            var price = _context.Prices.AsNoTracking().FirstOrDefault(p => p.Id == id);
-            if (price == null)
-                throw new ArgumentException(nameof(id), $"Not found price with id: {id}");
+            var price = await _context.Prices.SingleAsync(p => p.Id == id);
             _context.Prices.Remove(price);
-            _context.SaveChanges();
         }
 
-        public PagedList<Price> GetPageList(int pageNumber)
+        private PagedList<Price> GetPageList(int pageNumber)
         {
             var list = _context.Prices.Skip((pageNumber - 1) * 10).Take(10);
             return new PagedList<Price>(list.ToList(), pageNumber, 10, _context.Prices.Count());
+        }
+
+        public async Task<PagedList<Price>> GetPageListAsync(int pageNumber)
+        {
+            return await Task.Run(() => GetPageList(pageNumber));
         }
     }
 }

@@ -24,29 +24,30 @@ namespace Cyberpalata.Logic.Services
             _repository = repository;
         }
 
-        public void Create(GameDto entity)
-        {
-            _repository.Create(_mapper.Map<Game>(entity));
+        public Task CreateAsync(GameDto entity)
+        { 
+            return _repository.CreateAsync(_mapper.Map<Game>(entity));
         }
 
-        public GameDto Read(Guid id)
+        public Task<GameDto> ReadAsync(Guid id)
         {
-            return _mapper.Map<GameDto>(_repository.Read(id));
+            return Task.Run(async()=> _mapper.Map<GameDto>(await _repository.ReadAsync(id)));
         }
 
-        public void Update(GameDto entity)
+        public Task UpdateAsync(GameDto entity)
         {
-            _repository.Update(_mapper.Map<Game>(entity));
+            //_repository.Update(_mapper.Map<Game>(entity));
+            return Task.CompletedTask;
         }
 
-        public void Delete(Guid id)
+        public Task DeleteAsync(Guid id)
         {
-            _repository.Delete(id);
+            return _repository.DeleteAsync(id);
         }
 
-        public PagedList<GameDto> GetPagedList(int pageNumber)
+        public Task<PagedList<GameDto>> GetPagedListAsync(int pageNumber)
         {
-            return _mapper.Map<PagedList<GameDto>>(_repository.GetPageList(pageNumber));
+            return Task.Run(async ()=> _mapper.Map<PagedList<GameDto>>( await _repository.GetPageListAsync(pageNumber))) ;
         }
     }
 }

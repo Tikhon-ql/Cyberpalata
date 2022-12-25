@@ -13,40 +13,40 @@ using System.Threading.Tasks;
 
 namespace Cyberpalata.Logic.Services
 {
-    public class RoomService : IRoomService
-    {
-        private readonly IMapper _mapper;
-        private readonly IRoomRepository _repository;
+    //public class RoomService : IRoomService
+    //{
+    //    private readonly IMapper _mapper;
+    //    private readonly IRoomRepository _repository;
 
-        public RoomService(IMapper mapper, IRoomRepository repository)
-        {
-            _mapper = mapper;
-            _repository = repository;
-        }
+    //    public RoomService(IMapper mapper, IRoomRepository repository)
+    //    {
+    //        _mapper = mapper;
+    //        _repository = repository;
+    //    }
 
-        public void Create(RoomDto entity)
-        {
-            _repository.Create(_mapper.Map<Room>(entity));
-        }
+    //    public void Create(RoomDto entity)
+    //    {
+    //        _repository.Create(_mapper.Map<Room>(entity));
+    //    }
 
-        public RoomDto Read(Guid id)
-        {
-            return _mapper.Map<RoomDto>(_repository.Read(id));
-        }
+    //    public RoomDto Read(Guid id)
+    //    {
+    //        return _mapper.Map<RoomDto>(_repository.Read(id));
+    //    }
 
-        public void Update(RoomDto entity)
-        {
-            _repository.Update(_mapper.Map<Room>(entity));
-        }
+    //    public void Update(RoomDto entity)
+    //    {
+    //        _repository.Update(_mapper.Map<Room>(entity));
+    //    }
 
-        public void Delete(Guid id)
-        {
-            _repository.Delete(id);
-        }
+    //    public void Delete(Guid id)
+    //    {
+    //        _repository.Delete(id);
+    //    }
 
-        public PagedList<RoomDto> GetPagedList(int pageNumber)
-        {
-            return _mapper.Map<PagedList<RoomDto>>(_repository.GetPageList(pageNumber));
-        }
-    }
+    //    public PagedList<RoomDto> GetPagedList(int pageNumber)
+    //    {
+    //        return _mapper.Map<PagedList<RoomDto>>(_repository.GetPageList(pageNumber));
+    //    }
+    //}
 }

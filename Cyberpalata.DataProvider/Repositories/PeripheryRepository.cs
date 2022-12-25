@@ -11,50 +11,42 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cyberpalata.DataProvider.Repositories
 {
-    public class PeripheryRepository : IPeripheryRepository
+    internal class PeripheryRepository : IPeripheryRepository
     {
         private readonly ApplicationDbContext _context;
         public PeripheryRepository(ApplicationDbContext context)
         {
             this._context = context;
         }
-        public void Create(Periphery entity)
+        public async Task CreateAsync(Periphery entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
-            _context.Peripheries.Add(entity);
-            _context.SaveChanges();
+            await _context.Peripheries.AddAsync(entity);
         }
 
-        public Periphery Read(Guid id)
+        public async Task<Periphery> ReadAsync(Guid id)
         {
-            var Periphery = _context.Peripheries.AsNoTracking().FirstOrDefault(h => h.Id == id);
-            if (Periphery == null)
-                throw new ArgumentException(nameof(id), $"Not found periphery with id: {id}");
-            return Periphery;
+            var periphery = await _context.Peripheries.SingleAsync(h => h.Id == id);
+            return periphery;
         }
 
-        public void Update(Periphery entity)
+
+        public async Task DeleteAsync(Guid id)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-            _context.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            _context.SaveChanges();
+            var periphery = await _context.Peripheries.SingleAsync(g => g.Id == id);
+            _context.Peripheries.Remove(periphery);
         }
 
-        public void Delete(Guid id)
-        {
-            var Periphery = _context.Peripheries.AsNoTracking().FirstOrDefault(g => g.Id == id);
-            if (Periphery == null)
-                throw new ArgumentException(nameof(id), $"Not found Periphery with id: {id}");
-            _context.Peripheries.Remove(Periphery);
-            _context.SaveChanges();
-        }
-
-        public PagedList<Periphery> GetPageList(int pageNumber)
+        private PagedList<Periphery> GetPageList(int pageNumber)
         {
             var list = _context.Peripheries.Skip((pageNumber - 1) * 10).Take(10);
             return new PagedList<Periphery>(list.ToList(), pageNumber, 10, _context.Peripheries.Count());
+        }
+
+        public async Task<PagedList<Periphery>> GetPageListAsync(int pageNumber)
+        {
+            return await Task.Run(() => GetPageList(pageNumber));
         }
     }
 }

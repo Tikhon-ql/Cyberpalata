@@ -11,7 +11,7 @@ using Cyberpalata.DataProvider.Models;
 
 namespace Cyberpalata.DataProvider.DbContext
 {
-    public class ApplicationDbContext : Microsoft.EntityFrameworkCore.DbContext
+    internal class ApplicationDbContext : Microsoft.EntityFrameworkCore.DbContext
     {
 
         public ApplicationDbContext(DbContextOptions options) : base(options)
@@ -20,13 +20,22 @@ namespace Cyberpalata.DataProvider.DbContext
         }
 
         public DbSet<Room> Rooms { get; set; }
-        //public DbSet<GamingModule> GamingModules { get; set; }
-        //public DbSet<GamingModule> ConsoleModules { get; set; }
+        //public DbSet<GamingRoom> GamingRooms { get; set; }
+        //public DbSet<GameConsoleRoom> ConsoleRooms { get; set; }
         public DbSet<Device> Devices { get; set; }
         public DbSet<Game> Games { get; set; }
-        public DbSet<MenuItem> MenuPositions { get; set; }
+        public DbSet<MenuItem> MenuItems { get; set; }
         public DbSet<Price> Prices { get; set; }
         public DbSet<Seat> Seats { get; set; }
         public DbSet<Periphery> Peripheries { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<GameConsoleRoom>().ToTable("GameConsoleRoom");
+            modelBuilder.Entity<GamingRoom>().ToTable("GamingRoom");
+            modelBuilder.Entity<Pc>().ToTable("Pc");
+            modelBuilder.Entity<GameConsole>().ToTable("GameConsole");
+        }
     }
 }

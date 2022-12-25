@@ -7,15 +7,8 @@ using Cyberpalata.Common.Enums;
 
 namespace Cyberpalata.DataProvider.Models.Peripheral
 {
-    public abstract class Periphery
+    public class Periphery
     {
-        protected Periphery(string name, PeripheryType type)
-        {
-
-            Name = name;
-            Type = type;
-        }
-
         public Guid Id { get; set; }
         public string Name { get; set; }
         public PeripheryType Type { get; set; }
