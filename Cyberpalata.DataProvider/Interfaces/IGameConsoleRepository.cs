@@ -1,13 +1,13 @@
-﻿using Cyberpalata.DataProvider.Models.Devices;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cyberpalata.DataProvider.Models.Devices;
 
 namespace Cyberpalata.DataProvider.Interfaces
 {
-    public interface IDeviceRepository : IRepository<Device>
+    public interface IGameConsoleRepository : IRepository<GameConsole>
     {
     }
 }

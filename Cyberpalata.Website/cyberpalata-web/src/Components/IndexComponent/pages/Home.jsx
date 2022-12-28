@@ -1,9 +1,11 @@
 import {Logo} from '../logoComponent'
 import {Link} from 'react-router-dom'
+import { GameLibrary } from './GameLibrary'
 
 const Home = () => {
     return <>
         <Link to='/'><Logo/></Link>
+        <Link to="/gamesLibrary"><div>Games</div></Link>
         <div style={{"display":"flex", "justifyContent":"center", "position":"absolute", "top":"30%","left":"30%"}}>
             <div className='loungeLink'>
                 <Link to='/lounge'><label className='labelRoomVert'>Lounge</label></Link>

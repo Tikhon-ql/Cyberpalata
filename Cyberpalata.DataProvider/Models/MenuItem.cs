@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,9 +10,9 @@ namespace Cyberpalata.DataProvider.Models
 {
     public class MenuItem
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public decimal Cost { get; set; }
-        public MenuItemType Type { get; set; }
+        [Key] [Required] public Guid Id { get; set; }
+        [Required] [MaxLength(50)] public string? Name { get; set; }
+        [Required] public decimal Cost { get; set; }
+        [Required] public MenuItemType? Type { get; set; }
     }
 }

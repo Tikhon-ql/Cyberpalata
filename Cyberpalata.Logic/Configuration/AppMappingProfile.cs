@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cyberpalata.Common;
 
 namespace Cyberpalata.Logic.Configuration
 {
@@ -26,6 +27,7 @@ namespace Cyberpalata.Logic.Configuration
             CreateMap<Seat,SeatDto>();
             CreateMap<Game, GameDto>();
             CreateMap<Periphery, PeripheryDto>();
+            CreateMap<PagedList<Game>, PagedList<GameDto>>();
         }
     }
 }

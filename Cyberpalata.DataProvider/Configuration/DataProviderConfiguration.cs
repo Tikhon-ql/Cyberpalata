@@ -17,22 +17,26 @@ namespace Cyberpalata.DataProvider.Configuration
     {
         public static void ConfigureDataProvider(this IServiceCollection services, IConfiguration configuration)
         {
-            string connectionStirng = configuration.GetConnectionString("CyberpalataConnectionString");
+            var connectionString = configuration.GetConnectionString("CyberpalataConnectionString");
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlServer(connectionStirng);
+                options.UseSqlServer(connectionString);
             });
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
-            services.AddTransient<IDeviceRepository, DeviceRepository>();
             services.AddTransient<IGameRepository, GameRepository>();
-            services.AddTransient<ISeatRepository, SeatRepository>();
-            services.AddTransient<IMenuItemRepository, MenuItemRepository>();
-            services.AddTransient<IPeripheryRepository, PeripheryRepository>();
-            services.AddTransient<IPriceRepository, PriceRepository>();
-            services.AddTransient<IRoomRepository, RoomRepository>();
+            //services.AddTransient<ISeatRepository, SeatRepository>();
+            //services.AddTransient<IMenuItemRepository, MenuItemRepository>();
+            //services.AddTransient<IPeripheryRepository, PeripheryRepository>();
+            //services.AddTransient<IPriceRepository, PriceRepository>();
+            //services.AddTransient<IPcRepository, PcRepository>();
+            //services.AddTransient<IGameConsoleRepository, GameConsoleRepository>();
+            //services.AddTransient<IGameConsoleRoomRepository, GameConsoleRoomRepository>();
+            //services.AddTransient<IGamingRoomRepository, GamingRoomRepository>();
+            //services.AddTransient<ILoungeRepository, LoungeRepository>();
+            
         }
     }
 }
