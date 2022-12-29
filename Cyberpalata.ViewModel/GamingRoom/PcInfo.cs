@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Cyberpalata.Common.Enums;
 
 namespace Cyberpalata.ViewModel.GamingRoom
 {
-    public class Periphery
+    public class PcInfo
     {
-        public Periphery(string name, string typeName)
+        public PcInfo(string name, string value)
         {
             Name = name;
-            TypeName = typeName;
+            Value = value;
         }
         public string? Name { get; set; }
-        public string? TypeName { get; set; }
+        public string? Value { get; set; }
     }
 }

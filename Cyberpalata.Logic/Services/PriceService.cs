@@ -12,41 +12,42 @@ using System.Threading.Tasks;
 
 namespace Cyberpalata.Logic.Services
 {
-    //public class PriceService : IPriceService
-    //{
+    public class PriceService : IPriceService
+    {
 
-    //    private readonly IMapper _mapper;
-    //    private readonly IPriceRepository _repository;
+        private readonly IMapper _mapper;
+        private readonly IPriceRepository _repository;
 
-    //    public PriceService(IMapper mapper, IPriceRepository repository)
-    //    {
-    //        _mapper = mapper;
-    //        _repository = repository;
-    //    }
+        public PriceService(IMapper mapper, IPriceRepository repository)
+        {
+            _mapper = mapper;
+            _repository = repository;
+        }
 
-    //    public void Create(PriceDto entity)
-    //    {
-    //        _repository.Create(_mapper.Map<Price>(entity));
-    //    }
+        public async Task CreateAsync(PriceDto entity)
+        {
+            _repository.CreateAsync(_mapper.Map<Price>(entity));
+        }
 
-    //    public PriceDto Read(Guid id)
-    //    {
-    //        return _mapper.Map<PriceDto>(_repository.Read(id));
-    //    }
+        public async Task<PriceDto> ReadAsync(Guid id)
+        {
+            return _mapper.Map<PriceDto>(await _repository.ReadAsync(id));
+        }
 
-    //    public void Update(PriceDto entity)
-    //    {
-    //        _repository.Update(_mapper.Map<Price>(entity));
-    //    }
+        public Task UpdateAsync(PriceDto entity)
+        {
+            //_repository.Update(_mapper.Map<Price>(entity));
+            throw new NotImplementedException();
+        }
 
-    //    public void Delete(Guid id)
-    //    {
-    //        _repository.Delete(id);
-    //    }
+        public async Task DeleteAsync(Guid id)
+        {
+            await _repository.DeleteAsync(id);
+        }
 
-    //    public PagedList<PriceDto> GetPagedList(int pageNumber)
-    //    {
-    //        return _mapper.Map<PagedList<PriceDto>>(_repository.GetPageList(pageNumber));
-    //    }
-    //}
+        public async Task<PagedList<PriceDto>> GetPagedListAsync(int pageNumber)
+        {
+            return _mapper.Map<PagedList<PriceDto>>(await _repository.GetPageListAsync(pageNumber));
+        }
+    }
 }

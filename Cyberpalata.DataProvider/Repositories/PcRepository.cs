@@ -4,31 +4,50 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cyberpalata.Common;
+using Cyberpalata.DataProvider.DbContext;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Devices;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cyberpalata.DataProvider.Repositories
 {
-    //internal class PcRepository : IPcRepository
-    //{
-    //    public Task CreateAsync(Pc entity)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
+    internal class PcRepository : IPcRepository
+    {
+        private readonly ApplicationDbContext _context;
 
-    //    public Task<Pc> ReadAsync(Guid id)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
+        public PcRepository(ApplicationDbContext context)
+        {
+            _context = context;
+        }
 
-    //    public Task DeleteAsync(Guid id)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
+        public async Task CreateAsync(Pc entity)
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+            await _context.Pcs.AddAsync(entity);
+        }
 
-    //    public Task<PagedList<Pc>> GetPageListAsync(int pageNumber)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-    //}
+        public async Task<Pc> ReadAsync(Guid id)
+        {
+            var pc = await _context.Pcs.SingleAsync();
+            return pc;
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            var pc = await ReadAsync(id);
+            _context.Pcs.Remove(pc);
+        }
+
+        private PagedList<Pc> GetPageList(int pageNumber)
+        {
+            var list = _context.Pcs.Skip((pageNumber-1) * 10).Take(10).ToList();
+            return new PagedList<Pc>(list,pageNumber,10,_context.Pcs.Count());
+        }
+
+        public Task<PagedList<Pc>> GetPageListAsync(int pageNumber)
+        {
+            return Task.Run(()=>GetPageList(pageNumber));
+        }
+    }
 }

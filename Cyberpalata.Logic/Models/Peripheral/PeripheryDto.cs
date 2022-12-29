@@ -9,14 +9,8 @@ namespace Cyberpalata.Logic.Models.Peripheral
 {
     public class PeripheryDto
     {
-        public PeripheryDto(string name, PeripheryType type)
-        {
-            Name = name;
-            Type = type;
-        }
-
         public Guid Id { get; set; }
-        public string Name { get; set; }
-        public PeripheryType Type { get; set; }
+        public string? Name { get; set; }
+        public PeripheryType? Type { get; set; }
     }
 }

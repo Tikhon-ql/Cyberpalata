@@ -27,11 +27,11 @@ namespace Cyberpalata.DataProvider.Configuration
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             services.AddTransient<IGameRepository, GameRepository>();
+            services.AddTransient<IPcRepository, PcRepository>();
+            services.AddTransient<IPeripheryRepository, PeripheryRepository>();
+            services.AddTransient<IPriceRepository, PriceRepository>();
             //services.AddTransient<ISeatRepository, SeatRepository>();
             //services.AddTransient<IMenuItemRepository, MenuItemRepository>();
-            //services.AddTransient<IPeripheryRepository, PeripheryRepository>();
-            //services.AddTransient<IPriceRepository, PriceRepository>();
-            //services.AddTransient<IPcRepository, PcRepository>();
             //services.AddTransient<IGameConsoleRepository, GameConsoleRepository>();
             //services.AddTransient<IGameConsoleRoomRepository, GameConsoleRoomRepository>();
             //services.AddTransient<IGamingRoomRepository, GamingRoomRepository>();

@@ -12,41 +12,42 @@ using System.Threading.Tasks;
 
 namespace Cyberpalata.Logic.Services
 {
-    //public class PeripheryService : IPeripheryService
-    //{
+    public class PeripheryService : IPeripheryService
+    {
 
-    //    private readonly IMapper _mapper;
-    //    private readonly IPeripheryRepository _repository;
+        private readonly IMapper _mapper;
+        private readonly IPeripheryRepository _repository;
 
-    //    public PeripheryService(IMapper mapper, IPeripheryRepository repository)
-    //    {
-    //        _mapper = mapper;
-    //        _repository = repository;
-    //    }
+        public PeripheryService(IMapper mapper, IPeripheryRepository repository)
+        {
+            _mapper = mapper;
+            _repository = repository;
+        }
 
-    //    public void Create(PeripheryDto entity)
-    //    {
-    //        _repository.Create(_mapper.Map<Periphery>(entity));
-    //    }
+        public async Task CreateAsync(PeripheryDto entity)
+        {
+            await _repository.CreateAsync(_mapper.Map<Periphery>(entity));
+        }
 
-    //    public PeripheryDto Read(Guid id)
-    //    {
-    //        return _mapper.Map<PeripheryDto>(_repository.Read(id));
-    //    }
+        public async Task<PeripheryDto> ReadAsync(Guid id)
+        {
+            return _mapper.Map<PeripheryDto>(await _repository.ReadAsync(id));
+        }
 
-    //    public void Update(PeripheryDto entity)
-    //    {
-    //        _repository.Update(_mapper.Map<Periphery>(entity));
-    //    }
+        public Task UpdateAsync(PeripheryDto entity)
+        {
+            //_repository.Update(_mapper.Map<Periphery>(entity));
+            throw new NotImplementedException();
+        }
 
-    //    public void Delete(Guid id)
-    //    {
-    //        _repository.Delete(id);
-    //    }
+        public async Task DeleteAsync(Guid id)
+        {
+            await _repository.DeleteAsync(id);
+        }
 
-    //    public PagedList<PeripheryDto> GetPagedList(int pageNumber)
-    //    {
-    //        return _mapper.Map<PagedList<PeripheryDto>>(_repository.GetPageList(pageNumber));
-    //    }
-    //}
+        public async Task<PagedList<PeripheryDto>> GetPagedListAsync(int pageNumber)
+        {
+            return _mapper.Map<PagedList<PeripheryDto>>(await _repository.GetPageListAsync(pageNumber));
+        }
+    }
 }

@@ -20,14 +20,16 @@ namespace Cyberpalata.Logic.Configuration
     {
         public AppMappingProfile()
         {
-            CreateMap<Device, DeviceDto>();
             CreateMap<MenuItem, MenuItemDto>();
-            CreateMap<Room, RoomDto>();
             CreateMap<Price, PriceDto>();
+            CreateMap<PagedList<Price>, PagedList<PriceDto>>();
             CreateMap<Seat,SeatDto>();
             CreateMap<Game, GameDto>();
-            CreateMap<Periphery, PeripheryDto>();
             CreateMap<PagedList<Game>, PagedList<GameDto>>();
+            CreateMap<Periphery, PeripheryDto>();
+            CreateMap<PagedList<Periphery>, PagedList<PeripheryDto>>();
+            CreateMap<Pc, PcDto>();
+            CreateMap<PagedList<Pc>,PagedList<PcDto>>();
         }
     }
 }

@@ -3,6 +3,7 @@ using Cyberpalata.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using Cyberpalata.DataProvider.DbContext;
@@ -32,9 +33,6 @@ namespace Cyberpalata.DataProvider.Repositories
         }
         public async Task DeleteAsync(Guid id)
         {
-            //var game = _context.Games.AsNoTracking().FirstOrDefault(g => g.Id == id);
-            //if (game == null)
-            //    throw new ArgumentException(nameof(id), $"Not found game with id: {id}");
             var game = await _context.Games.SingleAsync(g => g.Id == id);
             _context.Games.Remove(game);
         }
