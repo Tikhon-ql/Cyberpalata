@@ -17,5 +17,10 @@ namespace Cyberpalata.WebApi.Controllers
             _unitOfWork.CommitAsync();
             return Ok((data));
         }
+        public IActionResult ReturnSuccess()
+        {
+            _unitOfWork.CommitAsync();
+            return Ok();
+        }
     }
 }

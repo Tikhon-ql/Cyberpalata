@@ -23,6 +23,7 @@ namespace Cyberpalata.Logic.Configuration
             services.AddTransient<IPcService, PcService>();
             services.AddTransient<IPeripheryService, PeripheryService>();
             services.AddTransient<IPriceService, PriceService>();
+            services.AddTransient<IApiUserService, ApiUserService>();
             //services.AddTransient<ISeatService, SeatService>();
             //services.AddTransient<IMenuItemService, MenuItemService>();
         }

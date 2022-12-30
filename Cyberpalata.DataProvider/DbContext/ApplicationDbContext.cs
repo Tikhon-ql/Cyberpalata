@@ -6,15 +6,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Cyberpalata.DataProvider.Models;
+using Cyberpalata.DataProvider.Models.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace Cyberpalata.DataProvider.DbContext
 {
-    internal class ApplicationDbContext : Microsoft.EntityFrameworkCore.DbContext
+    internal class ApplicationDbContext : IdentityDbContext<ApiUser>
     {
 
-        public ApplicationDbContext(DbContextOptions options) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
         }
@@ -36,6 +39,9 @@ namespace Cyberpalata.DataProvider.DbContext
             modelBuilder.Entity<Pc>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<Periphery>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<Price>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
+            modelBuilder.Ignore<IdentityUserLogin<string>>();
+            modelBuilder.Ignore<IdentityUserRole<string>>();
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using Cyberpalata.Common.Intefaces;
 using Cyberpalata.DataProvider.DbContext;
 using Cyberpalata.DataProvider.Interfaces;
+using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.DataProvider.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,12 +26,17 @@ namespace Cyberpalata.DataProvider.Configuration
                 options.UseSqlServer(connectionString);
             });
 
+            services.AddIdentity<ApiUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             services.AddTransient<IGameRepository, GameRepository>();
             services.AddTransient<IPcRepository, PcRepository>();
             services.AddTransient<IPeripheryRepository, PeripheryRepository>();
             services.AddTransient<IPriceRepository, PriceRepository>();
+            services.AddTransient<IApiUserRepository, ApiUserRepository>();
             //services.AddTransient<ISeatRepository, SeatRepository>();
             //services.AddTransient<IMenuItemRepository, MenuItemRepository>();
             //services.AddTransient<IGameConsoleRepository, GameConsoleRepository>();
