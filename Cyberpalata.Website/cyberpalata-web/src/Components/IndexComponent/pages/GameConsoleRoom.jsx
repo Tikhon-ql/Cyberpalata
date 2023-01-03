@@ -8,20 +8,21 @@ import axios from 'axios';
 import { useState } from 'react';
 import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 import { PriceInfo } from './body/PriceInfo';
+import { useParams } from 'react-router-dom'
 
 export const GameConsoleRoom = () => {
-
+    const {id} = useParams();
     const [deviceInfo, setDevice] = useState([]);
-    const [peripheryInfo, setPeriphery] = useState([]);
     const [priceInfo, setPrices] = useState([]);
     {
-        axios.get(`https://localhost:7227/gameConsoleRoom`).then(res => {
+        //399CE32F-1610-44DD-B634-4FFDC223038B
+        axios.get(`https://localhost:7227/gameConsoleRoom/id?id=${id}`).then(res => {
             //console.dir(res);
-            setDevice(res.data.pcInfos);
-            setPeriphery(res.data.peripheries);
+            setDevice(res.data.gameConsoles);
             setPrices(res.data.prices);
         })
     }
+    console.dir(deviceInfo);
     return <div style={{"position" : "absolute", "top":"30%", "left":"41%"}}>
         <Link style={{"textDecoration":"none", "color":"black"}}>
             <div className='bookButton labelText'>
@@ -38,7 +39,7 @@ export const GameConsoleRoom = () => {
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                                 {deviceInfo.map(device=>{
-                                    return <DeviceInfo type={device.name} value={device.value}/>
+                                    return <DeviceInfo  value={device}/>
                                 })}
                             </Dropdown.Menu>
                         </Dropdown>

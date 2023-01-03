@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Cyberpalata.Logic.Interfaces.Room
 {
-    public interface IGameConsoleRoomService : IService<GameConsoleRoomDto>
+    public interface IGameConsoleRoomService : IService<GameConsoleRoomDto>, IRoomService
     {
     }
 }

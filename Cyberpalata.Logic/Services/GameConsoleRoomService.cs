@@ -48,5 +48,20 @@ namespace Cyberpalata.Logic.Services
         {
             throw new NotImplementedException();
         }
+
+        public async Task<List<Guid>> GetRoomIdsAsync()
+        {
+            return await _repository.GetRoomIdsAsync();
+        }
+
+        public async Task<List<string>> GetRoomNamesAsync()
+        {
+            return await _repository.GetRoomNamesAsync();
+        }
+
+        public async Task<List<Tuple<string, string>>> GetRoomNameWithIdAsync()
+        {
+            return await _repository.GetRoomNameWithIdAsync();
+        }
     }
 }

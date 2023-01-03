@@ -6,6 +6,7 @@ import { GameConsoleRoom } from './pages/GameConsoleRoom';
 import { Header } from './pages/header/Header';
 import Home from './pages/Home'
 import { GameLibrary } from './pages/GameLibrary';
+import { GameConsoleRooms } from './pages/GameConsoleRooms';
 
 export const Index = () => {
     return (
@@ -15,7 +16,8 @@ export const Index = () => {
                 <Route path='/' element={<Home />} />
                 <Route path="/lounge" element = {<LoungeInfo/>}/>
                 <Route path="/gamingRoom" element = {<GamingRoomInfo/>}/>
-                <Route path="/gameConsoleRoom" element = {<GameConsoleRoom/>}/>
+                <Route path="/gameConsoleRoom" element = {<GameConsoleRooms/>}/>
+                <Route path="/gameConsoleRoom/:id" element = {<GameConsoleRoom/>}/>
                 <Route path="/gamesLibrary" element = {<GameLibrary/>}/>          
             </Routes>
         </BrowserRouter>

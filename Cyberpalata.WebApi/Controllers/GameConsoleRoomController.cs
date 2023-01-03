@@ -36,6 +36,19 @@ namespace Cyberpalata.WebApi.Controllers
         //}
 
         [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            var infos = await _gameConsoleRoomService.GetRoomNameWithIdAsync();
+
+            var viewModel = new GameConsoleRoomsViewModel
+            {
+                Infos = infos.Select(x => new GameConsoleRoomInfo {Id = x.Item1,Name = x.Item2}).ToList()
+            };
+            return ReturnSuccess(viewModel);
+        }
+
+
+        [HttpGet("id")]
         public async Task<IActionResult> Get(Guid id)
         {
             var roomDto = await _gameConsoleRoomService.ReadAsync(id);

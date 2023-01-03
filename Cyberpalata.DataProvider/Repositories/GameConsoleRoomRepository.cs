@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
 using Cyberpalata.Common;
@@ -60,6 +61,21 @@ namespace Cyberpalata.DataProvider.Repositories
         public List<Seat> GetSeats(Guid id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<Guid>> GetRoomIdsAsync()
+        {
+            return await _context.Rooms.Select(r=>r.Id).ToListAsync();
+        }
+
+        public async Task<List<string>> GetRoomNamesAsync()
+        {
+            return await _context.Rooms.Select(r => r.Name).ToListAsync();
+        }
+
+        public async Task<List<Tuple<string,string>>> GetRoomNameWithIdAsync()
+        {
+            return await _context.Rooms.Select(r => new Tuple<string, string>(r.Id.ToString(),r.Name)).ToListAsync();
         }
     }
 }
