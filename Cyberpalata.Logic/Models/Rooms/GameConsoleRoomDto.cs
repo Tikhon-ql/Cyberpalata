@@ -9,9 +9,6 @@ namespace Cyberpalata.Logic.Models.Rooms
 {
     public class GameConsoleRoomDto : RoomDto
     {
-        public GameConsoleRoomDto() : base("Console game room") { }
-
         public virtual List<GameConsole> Consoles { get; set; } = new();
-
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cyberpalata.ViewModel.GamingRoom
+namespace Cyberpalata.ViewModel.Rooms.GamingRoom
 {
     public class GamingRoomViewModel
     {

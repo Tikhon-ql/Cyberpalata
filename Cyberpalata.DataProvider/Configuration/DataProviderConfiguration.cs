@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Cyberpalata.Common.Intefaces;
 using Cyberpalata.DataProvider.DbContext;
 using Cyberpalata.DataProvider.Interfaces;
+using Cyberpalata.DataProvider.Interfaces.Room;
 using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.DataProvider.Repositories;
 using Microsoft.AspNetCore.Identity;
@@ -26,7 +27,15 @@ namespace Cyberpalata.DataProvider.Configuration
                 options.UseSqlServer(connectionString);
             });
 
-            services.AddIdentity<ApiUser, IdentityRole>()
+            services.AddIdentity<ApiUser, IdentityRole>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 0;
+            })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -37,13 +46,12 @@ namespace Cyberpalata.DataProvider.Configuration
             services.AddTransient<IPeripheryRepository, PeripheryRepository>();
             services.AddTransient<IPriceRepository, PriceRepository>();
             services.AddTransient<IApiUserRepository, ApiUserRepository>();
+            services.AddTransient<IGameConsoleRepository, GameConsoleRepository>();
+            services.AddTransient<IGameConsoleRoomRepository, GameConsoleRoomRepository>();
             //services.AddTransient<ISeatRepository, SeatRepository>();
             //services.AddTransient<IMenuItemRepository, MenuItemRepository>();
-            //services.AddTransient<IGameConsoleRepository, GameConsoleRepository>();
-            //services.AddTransient<IGameConsoleRoomRepository, GameConsoleRoomRepository>();
             //services.AddTransient<IGamingRoomRepository, GamingRoomRepository>();
             //services.AddTransient<ILoungeRepository, LoungeRepository>();
-            
         }
     }
 }

@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.Logic.Models.Identity;
+using System.Reflection.Metadata;
 
 namespace Cyberpalata.Logic.Configuration
 {
@@ -32,8 +33,9 @@ namespace Cyberpalata.Logic.Configuration
             CreateMap<PagedList<Periphery>, PagedList<PeripheryDto>>();
             CreateMap<Pc, PcDto>();
             CreateMap<PagedList<Pc>,PagedList<PcDto>>();
-
-            CreateMap<ApiUser, ApiUserDto>();
+            CreateMap<GameConsole, GameConsoleDto>();
+            CreateMap<PagedList<GameConsole>, PagedList<GameConsoleDto>>();
+            CreateMap<GameConsoleRoom, GameConsoleRoomDto>();
         }
     }
 }

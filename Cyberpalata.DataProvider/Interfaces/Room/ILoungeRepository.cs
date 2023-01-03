@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Cyberpalata.DataProvider.Models.Rooms;
 
-namespace Cyberpalata.DataProvider.Interfaces
+namespace Cyberpalata.DataProvider.Interfaces.Room
 {
-    public interface IGamingRoomRepository : IRepository<GamingRoom>
+    public interface ILoungeRepository : IRepository<Lounge>, IRoomRepository
     {
     }
 }

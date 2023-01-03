@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cyberpalata.DataProvider.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221230193537_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230102234915_InitialCreate2")]
+    partial class InitialCreate2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,6 +40,28 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PeripheryType");
+                });
+
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Devices.GameConsole", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<string>("ConsoleName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<Guid>("ConsoleRoomId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConsoleRoomId");
+
+                    b.ToTable("GameConsoles");
                 });
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Devices.Pc", b =>
@@ -181,9 +203,57 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.Property<int>("Hours")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("RoomId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("RoomId");
+
                     b.ToTable("Prices");
+                });
+
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Rooms.Room", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Rooms");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Room");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Seat", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("RoomId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoomId");
+
+                    b.ToTable("Seat");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -319,6 +389,24 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Rooms.GameConsoleRoom", b =>
+                {
+                    b.HasBaseType("Cyberpalata.DataProvider.Models.Rooms.Room");
+
+                    b.HasDiscriminator().HasValue("GameConsoleRoom");
+                });
+
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Devices.GameConsole", b =>
+                {
+                    b.HasOne("Cyberpalata.DataProvider.Models.Rooms.GameConsoleRoom", "ConsoleRoom")
+                        .WithMany("Consoles")
+                        .HasForeignKey("ConsoleRoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ConsoleRoom");
+                });
+
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Peripheral.Periphery", b =>
                 {
                     b.HasOne("Cyberpalata.Common.Enums.PeripheryType", "Type")
@@ -328,6 +416,28 @@ namespace Cyberpalata.DataProvider.Migrations
                         .IsRequired();
 
                     b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Price", b =>
+                {
+                    b.HasOne("Cyberpalata.DataProvider.Models.Rooms.Room", "Room")
+                        .WithMany("Prices")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Room");
+                });
+
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Seat", b =>
+                {
+                    b.HasOne("Cyberpalata.DataProvider.Models.Rooms.Room", "Room")
+                        .WithMany("Seats")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -379,6 +489,18 @@ namespace Cyberpalata.DataProvider.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Rooms.Room", b =>
+                {
+                    b.Navigation("Prices");
+
+                    b.Navigation("Seats");
+                });
+
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Rooms.GameConsoleRoom", b =>
+                {
+                    b.Navigation("Consoles");
                 });
 #pragma warning restore 612, 618
         }

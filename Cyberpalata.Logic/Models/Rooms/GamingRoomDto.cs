@@ -11,7 +11,6 @@ namespace Cyberpalata.Logic.Models.Rooms
 {
     internal class GamingRoomDto : RoomDto
     {
-        public GamingRoomDto() : base("Gaming room") { }
 
         public List<DeviceDto> Devices { get; set; } = new();
 

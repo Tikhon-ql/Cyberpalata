@@ -11,6 +11,7 @@ using Cyberpalata.DataProvider.Models.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Policy;
 
 namespace Cyberpalata.DataProvider.DbContext
 {
@@ -24,6 +25,7 @@ namespace Cyberpalata.DataProvider.DbContext
 
         //public DbSet<GamingRoom> GamingRooms { get; set; }
         //public DbSet<GameConsoleRoom> GameConsoleRooms { get; set; }
+        public DbSet<Room> Rooms { get; set; }
         public DbSet<Pc> Pcs { get; set; }
 
         //public DbSet<GameConsole> GameConsoles { get; set; }
@@ -31,7 +33,8 @@ namespace Cyberpalata.DataProvider.DbContext
         //public DbSet<MenuItem> MenuItems { get; set; }
         public DbSet<Price> Prices { get; set; }
         //public DbSet<Seat> Seats { get; set; }
-        public DbSet<Periphery> Peripheries { get; set; }
+        public DbSet<Periphery> Peripheries { get; set; }  
+        public DbSet<GameConsole> GameConsoles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -39,8 +42,15 @@ namespace Cyberpalata.DataProvider.DbContext
             modelBuilder.Entity<Pc>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<Periphery>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<Price>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
+            modelBuilder.Entity<GameConsole>().Property(g => g.Id).HasDefaultValueSql("NEWID()");
+            modelBuilder.Entity<GameConsoleRoom>().Property(g => g.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Ignore<IdentityUserLogin<string>>();
             modelBuilder.Ignore<IdentityUserRole<string>>();
+
+            modelBuilder.Entity<GameConsoleRoom>().HasMany(g=>g.Consoles).WithOne(gc=>gc.ConsoleRoom);
+
+            modelBuilder.Entity<GameConsoleRoom>().HasData(new GameConsoleRoom { Id = new Guid("399ce32f-1610-44dd-b634-4ffdc223038b"),Name = "ConsoleRoom1" });
+
             base.OnModelCreating(modelBuilder);
         }
     }

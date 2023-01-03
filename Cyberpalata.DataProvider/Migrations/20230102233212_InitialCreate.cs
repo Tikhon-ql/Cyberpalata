@@ -89,16 +89,16 @@ namespace Cyberpalata.DataProvider.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Prices",
+                name: "Room",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
-                    Hours = table.Column<int>(type: "int", nullable: false),
-                    Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Prices", x => x.Id);
+                    table.PrimaryKey("PK_Room", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -226,6 +226,64 @@ namespace Cyberpalata.DataProvider.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "GameConsoles",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
+                    ConsoleName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ConsoleRoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GameConsoles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GameConsoles_Room_ConsoleRoomId",
+                        column: x => x.ConsoleRoomId,
+                        principalTable: "Room",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Prices",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
+                    Hours = table.Column<int>(type: "int", nullable: false),
+                    Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Prices", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Prices_Room_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Room",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Seat",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Number = table.Column<int>(type: "int", nullable: false),
+                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Seat", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Seat_Room_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Room",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -266,9 +324,24 @@ namespace Cyberpalata.DataProvider.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_GameConsoles_ConsoleRoomId",
+                table: "GameConsoles",
+                column: "ConsoleRoomId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Peripheries_TypeId",
                 table: "Peripheries",
                 column: "TypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Prices_RoomId",
+                table: "Prices",
+                column: "RoomId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Seat_RoomId",
+                table: "Seat",
+                column: "RoomId");
         }
 
         /// <inheritdoc />
@@ -290,6 +363,9 @@ namespace Cyberpalata.DataProvider.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "GameConsoles");
+
+            migrationBuilder.DropTable(
                 name: "Games");
 
             migrationBuilder.DropTable(
@@ -302,6 +378,9 @@ namespace Cyberpalata.DataProvider.Migrations
                 name: "Prices");
 
             migrationBuilder.DropTable(
+                name: "Seat");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -309,6 +388,9 @@ namespace Cyberpalata.DataProvider.Migrations
 
             migrationBuilder.DropTable(
                 name: "PeripheryType");
+
+            migrationBuilder.DropTable(
+                name: "Room");
         }
     }
 }

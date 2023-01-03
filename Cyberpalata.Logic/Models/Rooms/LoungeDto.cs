@@ -8,7 +8,6 @@ namespace Cyberpalata.Logic.Models.Rooms
 {
     public class LoungeDto : RoomDto
     {
-        public LoungeDto() : base("Lounge") { }
         public virtual List<MenuItemDto> Menu { get; set; } = new();
     }
 }

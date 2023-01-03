@@ -7,14 +7,9 @@ using System.Threading.Tasks;
 namespace Cyberpalata.Logic.Models.Rooms
 {
     public class RoomDto
-    {
-        public RoomDto(string name)
-        {
-            Name = name;
-        }
-
+    { 
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
 
         public virtual List<PriceDto> Prices { get; set; } = new();

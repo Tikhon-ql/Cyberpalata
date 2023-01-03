@@ -10,17 +10,25 @@ namespace Cyberpalata.WebApi.Controllers
     public class ApiUserController : BaseController
     {
         private readonly IApiUserService _userService;
-        public ApiUserController(IApiUserService userService,IUnitOfWork uinOfWork) : base(uinOfWork)
+        public ApiUserController(IApiUserService userService, IUnitOfWork uinOfWork) : base(uinOfWork)
         {
             _userService = userService;
         }
 
-        [HttpPost]
-        public IActionResult Post(string userName, string password)
-        {
-            var apiUserDto = new ApiUserDto { UserName = userName };
-            _userService.CreateAsync(apiUserDto, password);
+        [HttpGet]
+        public async Task<IActionResult> Get(string userName, string password)
+        { 
+            await _userService.LoginAsync(userName, password,false);
+            Console.WriteLine(User.Identity.Name);
             return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post(string userName, string password)
+        {
+            var apiUserDto = new ApiUserDto { Email = userName };
+            await _userService.CreateAsync(apiUserDto, password);
+            return ReturnSuccess();
         }
     }
 }

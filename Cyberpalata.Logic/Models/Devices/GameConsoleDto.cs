@@ -8,11 +8,6 @@ namespace Cyberpalata.Logic.Models.Devices
 {
     public class GameConsoleDto : DeviceDto
     {
-        public GameConsoleDto(string consoleName)
-        {
-            ConsoleName = consoleName;
-        }
-
-        public string ConsoleName { get; set; }
+        public string? ConsoleName { get; set; }
     }
 }

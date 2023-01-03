@@ -1,6 +1,6 @@
     
 import {Link, useAsyncError} from 'react-router-dom'
-import './GamingRoomInfo.css'
+import './RoomInfo.css'
 import './../Index.css'
 import { DeviceInfo } from './body/DeviceInfo'
 import Dropdown from 'react-bootstrap/Dropdown';

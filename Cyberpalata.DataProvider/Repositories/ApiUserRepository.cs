@@ -33,6 +33,7 @@ namespace Cyberpalata.DataProvider.Repositories
         public async Task LoginAsync(string username, string password, bool isPersistent)
         {
             var result = await _signInManager.PasswordSignInAsync(username, password, isPersistent,false);
+            Console.WriteLine(result.ToString());
         }
 
         public async Task LogoutAsync()
