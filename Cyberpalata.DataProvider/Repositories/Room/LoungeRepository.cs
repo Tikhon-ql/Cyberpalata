@@ -7,7 +7,7 @@ using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Rooms;
 
-namespace Cyberpalata.DataProvider.Repositories
+namespace Cyberpalata.DataProvider.Repositories.Room
 {
     //internal class LoungeRepository : ILoungeRepository
     //{

@@ -10,33 +10,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cyberpalata.Logic.Services
+namespace Cyberpalata.Logic.Services.Room
 {
-    internal class GameConsoleRoomService : IGameConsoleRoomService
+    internal class GameConsoleRoomService :RoomService, IGameConsoleRoomService
     {
-        private readonly IGameConsoleRoomRepository _repository;
+        private readonly IGameConsoleRoomRepository _gameConsoleRoomRepository;
         private readonly IMapper _mapper;
 
-        public GameConsoleRoomService(IGameConsoleRoomRepository repository, IMapper mapper)
+        public GameConsoleRoomService(IGameConsoleRoomRepository repository, IMapper mapper) : base(repository)
         {
-            _repository = repository;
+            _gameConsoleRoomRepository = repository;
             _mapper = mapper;
         }
-        
 
         public async Task CreateAsync(GameConsoleRoomDto entity)
         {
-            await _repository.CreateAsync(_mapper.Map<GameConsoleRoom>(entity));
+            await _gameConsoleRoomRepository.CreateAsync(_mapper.Map<GameConsoleRoom>(entity));
         }
 
         public Task DeleteAsync(Guid id)
         {
             throw new NotImplementedException();
-        } 
+        }
 
         public async Task<GameConsoleRoomDto> ReadAsync(Guid id)
         {
-            return _mapper.Map<GameConsoleRoomDto>(await _repository.ReadAsync(id));
+            return _mapper.Map<GameConsoleRoomDto>(await _gameConsoleRoomRepository.ReadAsync(id));
         }
 
         public Task UpdateAsync(GameConsoleRoomDto entity)
@@ -47,21 +46,6 @@ namespace Cyberpalata.Logic.Services
         public Task<PagedList<GameConsoleRoomDto>> GetPagedListAsync(int pageNumber)
         {
             throw new NotImplementedException();
-        }
-
-        public async Task<List<Guid>> GetRoomIdsAsync()
-        {
-            return await _repository.GetRoomIdsAsync();
-        }
-
-        public async Task<List<string>> GetRoomNamesAsync()
-        {
-            return await _repository.GetRoomNamesAsync();
-        }
-
-        public async Task<List<Tuple<string, string>>> GetRoomNameWithIdAsync()
-        {
-            return await _repository.GetRoomNameWithIdAsync();
         }
     }
 }

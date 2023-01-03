@@ -9,6 +9,7 @@ using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Interfaces.Room;
 using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.DataProvider.Repositories;
+using Cyberpalata.DataProvider.Repositories.Room;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

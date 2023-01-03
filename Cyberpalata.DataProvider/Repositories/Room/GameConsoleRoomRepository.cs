@@ -13,14 +13,12 @@ using Cyberpalata.DataProvider.Models.Devices;
 using Cyberpalata.DataProvider.Models.Rooms;
 using Microsoft.EntityFrameworkCore;
 
-namespace Cyberpalata.DataProvider.Repositories
+namespace Cyberpalata.DataProvider.Repositories.Room
 {
-    internal class GameConsoleRoomRepository : IGameConsoleRoomRepository
+    internal class GameConsoleRoomRepository : RoomRepository, IGameConsoleRoomRepository
     {
-        private readonly ApplicationDbContext _context;
-        public GameConsoleRoomRepository(ApplicationDbContext context)
+        public GameConsoleRoomRepository(ApplicationDbContext context) : base(context)
         {
-            _context = context;
         }
 
         public async Task CreateAsync(GameConsoleRoom entity)
@@ -51,31 +49,6 @@ namespace Cyberpalata.DataProvider.Repositories
         public List<GameConsole> GetGameConsoles(Guid id)
         {
             throw new NotImplementedException();
-        }
-
-        public List<Price> GetPrices(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Seat> GetSeats(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<List<Guid>> GetRoomIdsAsync()
-        {
-            return await _context.Rooms.Select(r=>r.Id).ToListAsync();
-        }
-
-        public async Task<List<string>> GetRoomNamesAsync()
-        {
-            return await _context.Rooms.Select(r => r.Name).ToListAsync();
-        }
-
-        public async Task<List<Tuple<string,string>>> GetRoomNameWithIdAsync()
-        {
-            return await _context.Rooms.Select(r => new Tuple<string, string>(r.Id.ToString(),r.Name)).ToListAsync();
         }
     }
 }

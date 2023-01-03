@@ -9,7 +9,7 @@ using Cyberpalata.Logic.Models.Peripheral;
 
 namespace Cyberpalata.Logic.Models.Rooms
 {
-    internal class GamingRoomDto : RoomDto
+    public class GamingRoomDto : RoomDto
     {
 
         public List<DeviceDto> Devices { get; set; } = new();

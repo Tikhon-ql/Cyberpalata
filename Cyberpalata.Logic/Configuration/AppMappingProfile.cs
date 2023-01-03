@@ -36,6 +36,8 @@ namespace Cyberpalata.Logic.Configuration
             CreateMap<GameConsole, GameConsoleDto>();
             CreateMap<PagedList<GameConsole>, PagedList<GameConsoleDto>>();
             CreateMap<GameConsoleRoom, GameConsoleRoomDto>();
+
+            CreateMap<GamingRoom, GamingRoomDto>();
         }
     }
 }
