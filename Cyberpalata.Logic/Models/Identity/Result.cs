@@ -1,0 +1,42 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Cyberpalata.Logic.Models.Identity
+{
+    public class Result
+    {
+        public bool Success { get; }
+        public string Error { get; set; }
+        public bool IsFailure => !Success;
+
+        protected Result(bool success, string error = "")
+        {
+            if (success && error != string.Empty)
+                throw new InvalidOperationException();
+            if (!success && error == string.Empty)
+                throw new InvalidOperationException();
+            Success = success;
+            Error = error;
+        }
+
+        public static Result Fail(string errorMessage) => new Result(false, errorMessage);
+        public static Result Ok() => new Result(true);
+    }
+
+    public class Result<T> : Result
+    {
+
+        public T Value { get; set; }
+        protected Result(T value,bool success, string error = "") : base(success, error)
+        {
+            Value = value;
+        }
+        //??????
+        public new static Result<T> Fail(string errorMessage) => new Result<T>(default(T), false, errorMessage);
+        public new static Result<T> Ok(T value) => new Result<T>(value, true);
+        //??????
+    }
+}

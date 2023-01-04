@@ -46,11 +46,11 @@ namespace Cyberpalata.Logic.Configuration
             CreateMap<GameConsole, GameConsoleDto>();
             CreateMap<PagedList<GameConsole>, PagedList<GameConsoleDto>>();
 
-            CreateMap<ApiUser, AuthorizationRequest>()
-                .ForMember(dst => dst.Username, opt => opt.MapFrom(src => src.Username))
-                .ForMember(dst => dst.Surname, opt => opt.MapFrom(src => src.Surname))
-                .ForMember(dst => dst.Email, opt => opt.MapFrom(src => src.Email))
-                .ForMember(dst => dst.Phone, opt => opt.MapFrom(src => src.Phone));
+            //CreateMap<ApiUser, AuthorizationRequest>()
+            //    .ForMember(dst => dst.Username, opt => opt.MapFrom(src => src.Username))
+            //    .ForMember(dst => dst.Surname, opt => opt.MapFrom(src => src.Surname))
+            //    .ForMember(dst => dst.Email, opt => opt.MapFrom(src => src.Email))
+            //    .ForMember(dst => dst.Phone, opt => opt.MapFrom(src => src.Phone));
         }
     }
 }

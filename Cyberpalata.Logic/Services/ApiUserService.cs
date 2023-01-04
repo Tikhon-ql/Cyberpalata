@@ -21,13 +21,13 @@ namespace Cyberpalata.Logic.Services
     {
         private readonly IApiUserRepository _userRepository;
         private readonly IConfiguration _configuration;
-        private readonly IMapper _mapper;
+        //private readonly IMapper _mapper;
 
-        public ApiUserService(IApiUserRepository userRepository, IConfiguration configuration,IMapper mapper)
+        public ApiUserService(IApiUserRepository userRepository, IConfiguration configuration/*,IMapper mapper*/)
         {
             _userRepository = userRepository;
             _configuration = configuration;
-            _mapper = mapper;
+            //_mapper = mapper;
         }
 
         /// <summary>
@@ -37,24 +37,24 @@ namespace Cyberpalata.Logic.Services
         /// <returns></returns>
         public async Task CreateAsync(AuthorizationRequest request)
         {
-            await _userRepository.CreateAsync(_mapper.Map<ApiUser>(request));
+            await _userRepository.CreateAsync(ApiUserMapper.MapToApiUser(request));
         }
 
-        public async Task<bool> ValidateUserAsync(string email, string password)
+        public async Task<Result> ValidateUserAsync(AuthenticateRequest request)
         {
-            var user = await _userRepository.ReadAsync(email);
-            if (user.Password == password)
-                return true;
-            return false;
+            var user = await _userRepository.ReadAsync(request.Email.Address);
+            if (user.Password == request.Password)
+                return Result.Ok();
+            return Result.Fail("Email or password is incorrect!!!");
         }
         //? Нужна ли асинхронность
-        public async Task<string> GenerateTokenAsync(string email, string password)
+        public async Task<string> GenerateTokenAsync(AuthenticateRequest request)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecurityKey"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, email)
+                new Claim(ClaimTypes.NameIdentifier, request.Email?.Address)
             };
             var token = new JwtSecurityToken(_configuration["Jwt:Issuer"],
                 _configuration["Jwt:Audience"],
@@ -64,7 +64,5 @@ namespace Cyberpalata.Logic.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-
-      
     }
 }
