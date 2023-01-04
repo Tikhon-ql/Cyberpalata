@@ -30,11 +30,6 @@ namespace Cyberpalata.Logic.Services
         {
             return _mapper.Map<GameConsoleDto>(await _repository.ReadAsync(id));
         }
-
-        public Task UpdateAsync(GameConsoleDto entity)
-        {
-            throw new NotImplementedException();
-        }
         public async Task DeleteAsync(Guid id)
         {
             await _repository.DeleteAsync(id);
@@ -43,6 +38,11 @@ namespace Cyberpalata.Logic.Services
         public Task<PagedList<GameConsoleDto>> GetPagedListAsync(int pageNumber)
         {
             return Task.Run( async() => _mapper.Map<PagedList<GameConsoleDto>>(await _repository.GetPageListAsync(pageNumber)));
-        }  
+        }
+
+        public async Task<List<GameConsoleDto>> GetByGameConsoleRoomId(Guid roomId)
+        {
+            return _mapper.Map<List<GameConsoleDto>>(await _repository.GetByGameConsoleRoomIdAsync(roomId));
+        }
     }
 }

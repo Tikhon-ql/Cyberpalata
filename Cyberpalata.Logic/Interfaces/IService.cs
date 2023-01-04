@@ -11,7 +11,6 @@ namespace Cyberpalata.Logic.Interfaces
     {
         Task CreateAsync(T entity);
         Task<T> ReadAsync(Guid id);
-        Task UpdateAsync(T entity);
         Task DeleteAsync(Guid id);
         Task<PagedList<T>> GetPagedListAsync(int pageNumber);
     }

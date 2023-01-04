@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cyberpalata.Common;
-using Cyberpalata.DataProvider.DbContext;
+using Cyberpalata.DataProvider.Context;
 using Microsoft.EntityFrameworkCore;
 using Cyberpalata.DataProvider.Models;
 

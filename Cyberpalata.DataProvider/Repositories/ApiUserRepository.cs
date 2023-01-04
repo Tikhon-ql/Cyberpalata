@@ -1,9 +1,14 @@
-﻿using Cyberpalata.DataProvider.Interfaces;
+﻿using Cyberpalata.Common;
+using Cyberpalata.DataProvider.Context;
+using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Identity;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
+using System.Net.NetworkInformation;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,33 +17,34 @@ namespace Cyberpalata.DataProvider.Repositories
     internal class ApiUserRepository : IApiUserRepository
     {
 
-        private readonly UserManager<ApiUser> _userManager;
-        private readonly SignInManager<ApiUser> _signInManager;
+        private readonly ApplicationDbContext _context;
 
-        public ApiUserRepository(UserManager<ApiUser> userManager, SignInManager<ApiUser> signInManager)
+        public ApiUserRepository(ApplicationDbContext context)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            _context = context;
         }
 
-        public async Task CreateAsync(ApiUser user, string password)
+        public async Task CreateAsync(ApiUser entity)
         {
-            if (user == null)
-                throw new ArgumentNullException(nameof(user));
-            var result = await _userManager.CreateAsync(user, password);
-            if (!result.Succeeded)
-                throw new InvalidOperationException();
+            if(entity == null)
+                throw new ArgumentNullException(nameof(entity));
+            await _context.Users.AddAsync(entity);
         }
 
-        public async Task LoginAsync(string username, string password, bool isPersistent)
+        public async Task<ApiUser> ReadAsync(string email)
         {
-            var result = await _signInManager.PasswordSignInAsync(username, password, isPersistent,false);
-            Console.WriteLine(result.ToString());
+            return await _context.Users.SingleAsync(u => u.Email == email);
         }
 
-        public async Task LogoutAsync()
+        private PagedList<ApiUser> GetPageList(int pageNumber)
         {
-            await _signInManager.SignOutAsync();
+            var list = _context.Users.Skip((pageNumber - 1) * 10).Take(10).ToList();
+            return new PagedList<ApiUser>(list, pageNumber,10,_context.Users.Count());
+        }
+
+        public async Task<PagedList<ApiUser>> GetPageListAsync(int pageNumber)
+        {
+            return await Task.Run(() => GetPageList(pageNumber));
         }
     }
 }

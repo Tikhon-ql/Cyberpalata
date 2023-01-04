@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cyberpalata.Common.Intefaces;
-using Cyberpalata.DataProvider.DbContext;
+using Cyberpalata.DataProvider.Context;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Repositories;
 

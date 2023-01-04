@@ -15,19 +15,20 @@ namespace Cyberpalata.WebApi.Controllers
             _userService = userService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get(string userName, string password)
-        { 
-            await _userService.LoginAsync(userName, password,false);
-            Console.WriteLine(User.Identity.Name);
-            return Ok();
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> Get(string userName, string password)
+        //{ 
+        //    await _userService.LoginAsync(userName, password,false);
+        //    Console.WriteLine(User.Identity.Name);
+        //    return Ok();
+        //}
 
         [HttpPost]
-        public async Task<IActionResult> Post(string userName, string password)
+        public async Task<IActionResult> Post(string email, string userName, string surname,string phone, string password)
         {
-            var apiUserDto = new ApiUserDto { Email = userName };
-            await _userService.CreateAsync(apiUserDto, password);
+            ///На этом этапе нужно пароль преобразовывать в хеш и кидать на регистрацию или это нужно делать на слое бизнес логики?
+            var request = new AuthorizationRequest {Email = email,Username = userName,Surname = surname, Phone = phone, Password = password };
+            await _userService.CreateAsync(request);
             return ReturnSuccess();
         }
     }

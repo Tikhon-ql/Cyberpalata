@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace Cyberpalata.DataProvider.Interfaces
 {
-    public interface ISeatRepository : IRepository<Seat>
+    public interface IRoomRepository : IRepository<Room>
     {
-        List<Seat> GetByRoomId(Guid roomId);
     }
 }

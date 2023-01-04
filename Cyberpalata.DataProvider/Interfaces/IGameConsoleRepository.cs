@@ -9,5 +9,7 @@ namespace Cyberpalata.DataProvider.Interfaces
 {
     public interface IGameConsoleRepository : IRepository<GameConsole>
     {
+        //TODO: add pagination
+        Task<List<GameConsole>> GetByGameConsoleRoomIdAsync(Guid roomId);
     }
 }

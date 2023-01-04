@@ -9,5 +9,6 @@ namespace Cyberpalata.Logic.Interfaces
 {
     public interface IGameConsoleService : IService<GameConsoleDto>
     {
+        Task<List<GameConsoleDto>> GetByGameConsoleRoomId(Guid roomId);
     }
 }

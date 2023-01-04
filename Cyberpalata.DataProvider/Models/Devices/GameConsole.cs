@@ -1,4 +1,4 @@
-﻿using Cyberpalata.DataProvider.Models.Rooms;
+﻿
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,6 +11,6 @@ namespace Cyberpalata.DataProvider.Models.Devices
     public class GameConsole : Device
     {
         [MaxLength(50)] [Required] public string? ConsoleName { get; set; }
-        [Required] public GameConsoleRoom? ConsoleRoom { get; set; }
+        [Required] public Room? ConsoleRoom { get; set; }
     }
 }

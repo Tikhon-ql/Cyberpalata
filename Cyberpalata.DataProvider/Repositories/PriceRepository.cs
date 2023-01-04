@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Cyberpalata.DataProvider.DbContext;
+using Cyberpalata.DataProvider.Context;
 using Microsoft.EntityFrameworkCore;
 using Cyberpalata.DataProvider.Models;
 
@@ -47,6 +47,11 @@ namespace Cyberpalata.DataProvider.Repositories
         public async Task<PagedList<Price>> GetPageListAsync(int pageNumber)
         {
             return await Task.Run(() => GetPageList(pageNumber));
+        }
+
+        public async Task<List<Price>> GetByRoomIdAsync(Guid roomId)
+        {
+            return await Task.Run(() => { return _context.Prices.Where(p => p.Room.Id == roomId).ToList(); });
         }
     }
 }

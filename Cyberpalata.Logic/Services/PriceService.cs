@@ -34,12 +34,6 @@ namespace Cyberpalata.Logic.Services
             return _mapper.Map<PriceDto>(await _repository.ReadAsync(id));
         }
 
-        public Task UpdateAsync(PriceDto entity)
-        {
-            //_repository.Update(_mapper.Map<Price>(entity));
-            throw new NotImplementedException();
-        }
-
         public async Task DeleteAsync(Guid id)
         {
             await _repository.DeleteAsync(id);
@@ -48,6 +42,11 @@ namespace Cyberpalata.Logic.Services
         public async Task<PagedList<PriceDto>> GetPagedListAsync(int pageNumber)
         {
             return _mapper.Map<PagedList<PriceDto>>(await _repository.GetPageListAsync(pageNumber));
+        }
+
+        public async Task<List<PriceDto>> GetByRoomIdAsync(Guid roomId)
+        {
+            return _mapper.Map<List<PriceDto>>(await _repository.GetByRoomIdAsync(roomId));
         }
     }
 }

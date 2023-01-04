@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace Cyberpalata.Logic.Interfaces
 {
-    public interface IPriceService : IService<PriceDto>
+    public interface IRoomService : IService<RoomDto>
     {
-        Task<List<PriceDto>> GetByRoomIdAsync(Guid roomId);
     }
 }

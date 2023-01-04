@@ -10,8 +10,8 @@ namespace Cyberpalata.Logic.Interfaces
 {
     public interface IApiUserService
     {
-        Task CreateAsync(ApiUserDto user, string password);
-        Task LoginAsync(string username, string password, bool isPersistent);
-        Task LogoutAsync();
+        Task CreateAsync(AuthorizationRequest request);
+        Task<bool> ValidateUserAsync(string email, string password);
+        Task<string> GenerateTokenAsync(string email, string password);
     }
 }

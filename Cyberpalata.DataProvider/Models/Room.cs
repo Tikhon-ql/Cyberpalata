@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cyberpalata.DataProvider.Models.Rooms
+namespace Cyberpalata.DataProvider.Models
 {
     public class Room
     {

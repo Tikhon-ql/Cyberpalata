@@ -5,10 +5,9 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Cyberpalata.Common;
-using Cyberpalata.DataProvider.DbContext;
+using Cyberpalata.DataProvider.Context;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Devices;
-using Cyberpalata.DataProvider.Models.Rooms;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cyberpalata.DataProvider.Repositories
@@ -49,6 +48,11 @@ namespace Cyberpalata.DataProvider.Repositories
         public async Task<PagedList<GameConsole>> GetPageListAsync(int pageNumber)
         {
             return await Task.Run(() => GetPageList(pageNumber));
+        }
+
+        public async Task<List<GameConsole>> GetByGameConsoleRoomIdAsync(Guid roomId)
+        {
+            return await Task.Run(() => { return _context.GameConsoles.Where(gc => gc.ConsoleRoom.Id == roomId).ToList(); });
         }
     }
 }

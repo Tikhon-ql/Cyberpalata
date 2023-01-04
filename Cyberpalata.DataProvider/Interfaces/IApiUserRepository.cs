@@ -1,4 +1,5 @@
-﻿using Cyberpalata.DataProvider.Models.Identity;
+﻿using Cyberpalata.Common;
+using Cyberpalata.DataProvider.Models.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,8 @@ namespace Cyberpalata.DataProvider.Interfaces
 {
     public interface IApiUserRepository
     {
-        Task CreateAsync(ApiUser user, string password);
-        Task LoginAsync(string username, string password, bool isPersistent);
-        Task LogoutAsync();
+        Task CreateAsync(ApiUser entity);
+        Task<ApiUser> ReadAsync(string email);
+        Task<PagedList<ApiUser>> GetPageListAsync(int pageNumber);
     }
 }

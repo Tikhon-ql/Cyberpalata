@@ -1,6 +1,5 @@
 ﻿using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Interfaces;
-using Cyberpalata.Logic.Interfaces.Room;
 using Cyberpalata.ViewModel.Rooms;
 using Cyberpalata.ViewModel.Rooms.GameConsoleRoom;
 using Cyberpalata.ViewModel.Rooms.GamingRoom;
@@ -12,12 +11,12 @@ namespace Cyberpalata.WebApi.Controllers
     [Route("/gameConsoleRoom")]
     public class GameConsoleRoomController : BaseController
     {
-        private readonly IGameConsoleRoomService _gameConsoleRoomService;
+        private readonly IRoomService _gameConsoleRoomService;
 
         private readonly IGameConsoleService _gameConsoleService;
         private readonly IPriceService _priceService;
 
-        public GameConsoleRoomController(IGameConsoleRoomService gameConsoleRoomService, IGameConsoleService gameConsoleService,IPriceService priceService,IUnitOfWork uinOfWork) : base(uinOfWork)
+        public GameConsoleRoomController(IRoomService gameConsoleRoomService, IGameConsoleService gameConsoleService,IPriceService priceService,IUnitOfWork uinOfWork) : base(uinOfWork)
         {
             _gameConsoleRoomService = gameConsoleRoomService;
             _gameConsoleService = gameConsoleService;
@@ -39,11 +38,11 @@ namespace Cyberpalata.WebApi.Controllers
         public async Task<IActionResult> Get()
         {
             //read all 
-            var infos = await _gameConsoleRoomService.GetRoomNameWithIdAsync();
+            var infos = (await _gameConsoleRoomService.GetPagedListAsync(1)).Items;
 
             var viewModel = new GameConsoleRoomsViewModel
             {
-                Infos = infos.Select(x => new GameConsoleRoomInfo {Id = x.Item1,Name = x.Item2}).ToList()
+                Infos = infos.Select(x => new GameConsoleRoomInfo {Id = x.Id.ToString(),Name = x.Name}).ToList()
             };
             return ReturnSuccess(viewModel);
         }
@@ -52,11 +51,12 @@ namespace Cyberpalata.WebApi.Controllers
         [HttpGet("id")]
         public async Task<IActionResult> Get(Guid id)
         {
-            var roomDto = await _gameConsoleRoomService.ReadAsync(id);
+            var prices = await _priceService.GetByRoomIdAsync(id);
+            var consoles = await _gameConsoleService.GetByGameConsoleRoomId(id);
             var viewModel = new GameConsoleRoomViewModel
             {
-                GameConsoles = roomDto.Consoles.Select(c => c.ConsoleName).ToList(),
-                Prices = roomDto.Prices.Select(p => new Price(p.Hours, p.Cost)).ToList(),
+                GameConsoles = consoles.Select(c => c.ConsoleName).ToList(),
+                Prices = prices.Select(p => new Price(p.Hours, p.Cost)).ToList(),
             };
             return ReturnSuccess(viewModel);
         }
