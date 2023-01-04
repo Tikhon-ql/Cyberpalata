@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cyberpalata.Logic.Models.Identity
+namespace Cyberpalata.Common
 {
     public class Result
     {
@@ -23,20 +23,18 @@ namespace Cyberpalata.Logic.Models.Identity
         }
 
         public static Result Fail(string errorMessage) => new Result(false, errorMessage);
+        public static Result<T> Fail<T>(string errorMessage) => new Result<T>(default(T), false, errorMessage);
+        public new static Result<T> Ok<T>(T value) => new Result<T>(value, true);
         public static Result Ok() => new Result(true);
+
     }
 
     public class Result<T> : Result
     {
-
         public T Value { get; set; }
-        protected Result(T value,bool success, string error = "") : base(success, error)
+        internal Result(T value,bool success, string error = "") : base(success, error)
         {
             Value = value;
         }
-        //??????
-        public new static Result<T> Fail(string errorMessage) => new Result<T>(default(T), false, errorMessage);
-        public new static Result<T> Ok(T value) => new Result<T>(value, true);
-        //??????
     }
 }
