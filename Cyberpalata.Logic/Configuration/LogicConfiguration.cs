@@ -21,11 +21,12 @@ namespace Cyberpalata.Logic.Configuration
 
             services.AddTransient<IRoomService, RoomService>();
             services.AddTransient<IGameService, GameService>();
-            //services.AddTransient<IPcService, PcService>();
-            //services.AddTransient<IPeripheryService, PeripheryService>();
             services.AddTransient<IPriceService, PriceService>();
             services.AddTransient<IApiUserService, ApiUserService>();
             services.AddTransient<IGameConsoleService, GameConsoleService>();
+            services.AddTransient<IUserRefreshTokenService, UserRefreshTokenService>();
+            //services.AddTransient<IPcService, PcService>();
+            //services.AddTransient<IPeripheryService, PeripheryService>();
             //services.AddTransient<ISeatService, SeatService>();
             //services.AddTransient<IMenuItemService, MenuItemService>();
         }

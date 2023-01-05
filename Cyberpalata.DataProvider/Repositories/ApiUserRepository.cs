@@ -33,7 +33,8 @@ namespace Cyberpalata.DataProvider.Repositories
 
         public async Task<ApiUser> ReadAsync(string email)
         {
-            return await _context.Users.SingleAsync(u => u.Email == email);
+            var entity = await _context.Users.SingleAsync(u => u.Email == email);
+            return entity;
         }
 
         private PagedList<ApiUser> GetPageList(int pageNumber)

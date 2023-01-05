@@ -30,11 +30,12 @@ namespace Cyberpalata.DataProvider.Configuration
             services.AddTransient<IApiUserRepository, ApiUserRepository>();
             services.AddTransient<IRoomRepository, RoomRepository>();
             services.AddTransient<IGameRepository, GameRepository>();
-            //services.AddTransient<IPcRepository, PcRepository>();
-           // services.AddTransient<IPeripheryRepository, PeripheryRepository>();
             services.AddTransient<IPriceRepository, PriceRepository>();
             services.AddTransient<IApiUserRepository, ApiUserRepository>();
             services.AddTransient<IGameConsoleRepository, GameConsoleRepository>();
+            services.AddTransient<IUserRefreshTokenRepository, UserRefreshTokenRepository>();
+            //services.AddTransient<IPcRepository, PcRepository>();
+           // services.AddTransient<IPeripheryRepository, PeripheryRepository>();
            // services.AddTransient<IGameConsoleRoomRepository, GameConsoleRoomRepository>();
             //services.AddTransient<ISeatRepository, SeatRepository>();
             //services.AddTransient<IMenuItemRepository, MenuItemRepository>();

@@ -13,6 +13,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,14 +22,14 @@ namespace Cyberpalata.Logic.Services
     internal class ApiUserService : IApiUserService
     {
         private readonly IApiUserRepository _userRepository;
+        private readonly IUserRefreshTokenRepository _refreshTokenRepository;
         private readonly IConfiguration _configuration;
-        //private readonly IMapper _mapper;
 
-        public ApiUserService(IApiUserRepository userRepository, IConfiguration configuration/*,IMapper mapper*/)
+        public ApiUserService(IApiUserRepository userRepository, IConfiguration configuration, IUserRefreshTokenRepository refreshTokenRepository)
         {
             _userRepository = userRepository;
             _configuration = configuration;
-            //_mapper = mapper;
+            _refreshTokenRepository = refreshTokenRepository;
         }
 
         /// <summary>
@@ -50,8 +51,8 @@ namespace Cyberpalata.Logic.Services
                 return Result.Ok();
             return Result.Fail("Email or password is incorrect!!!");
         }
-        //? Нужна ли асинхронность
-        public string GenerateToken(AuthenticateRequest request)
+
+        public Token GenerateToken(AuthenticateRequest request)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecurityKey"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -59,12 +60,34 @@ namespace Cyberpalata.Logic.Services
             {
                 new Claim(ClaimTypes.NameIdentifier, request.Email)
             };
-            var token = new JwtSecurityToken(_configuration["Jwt:Issuer"],
+            var accessToken = new JwtSecurityToken(_configuration["Jwt:Issuer"],
                 _configuration["Jwt:Audience"],
                 claims,
-                expires: DateTime.Now.AddMinutes(30),
+                expires: DateTime.Now.AddSeconds(10),
                 signingCredentials: credentials);
-            return new JwtSecurityTokenHandler().WriteToken(token);
+
+            var refreshToken = GenerateRefreshToken();
+
+            _refreshTokenRepository.CreateAsync(new UserRefreshToken {UserEmail = request.Email, RefreshToken = refreshToken});
+
+            var token = new Token
+            {
+                AccessToken = new JwtSecurityTokenHandler().WriteToken(accessToken),
+                RefreshToken = refreshToken
+            };
+
+            return token;
+        }
+
+        private string GenerateRefreshToken()
+        {
+
+            var randomNumber = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomNumber);
+                return Convert.ToBase64String(randomNumber);
+            }
         }
     }
 }

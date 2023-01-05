@@ -46,6 +46,8 @@ namespace Cyberpalata.Logic.Configuration
             CreateMap<GameConsole, GameConsoleDto>();
             CreateMap<PagedList<GameConsole>, PagedList<GameConsoleDto>>();
 
+            CreateMap<UserRefreshToken, UserRefreshTokenDto>();
+
             //CreateMap<ApiUser, AuthorizationRequest>()
             //    .ForMember(dst => dst.Username, opt => opt.MapFrom(src => src.Username))
             //    .ForMember(dst => dst.Surname, opt => opt.MapFrom(src => src.Surname))

@@ -1,4 +1,5 @@
 using Cyberpalata.Logic.Configuration;
+using Cyberpalata.WebApi.Midlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -12,7 +13,8 @@ builder.Services.AddControllers();
 builder.Services.AddCors();
 
 ///?????????????????????????????????????????????????
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
@@ -23,7 +25,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecurityKey"]))
     };
+    options.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = context =>
+        {
+            if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+            {
+                Console.WriteLine("TOKEN EXPIRED");
+                context.Response.Headers.Add("IS-TOKEN-EXPIRED", "true");
+            }
+            return Task.CompletedTask;
+        }
+    };
 });
+
 ///?????????????????????????????????????????????????
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -49,6 +64,8 @@ app.UseCors(options =>
         .AllowAnyHeader()
         .AllowAnyMethod();
 });
+
+//app.UseMiddleware<IsTokenExpiredMidleware>();
 
 app.UseAuthorization();
 

@@ -13,6 +13,6 @@ namespace Cyberpalata.Logic.Interfaces
     {
         Task<Result> CreateAsync(AuthorizationRequest request);
         Task<Result> ValidateUserAsync(AuthenticateRequest request);
-        string GenerateToken(AuthenticateRequest request);
+        Token GenerateToken(AuthenticateRequest request);
     }
 }
