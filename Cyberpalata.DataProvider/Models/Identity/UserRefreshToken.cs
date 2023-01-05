@@ -12,6 +12,5 @@ namespace Cyberpalata.DataProvider.Models.Identity
         [Key] public Guid Id { get; set; }
         [Required] public string? UserEmail { get; set; }
         [Required] public string? RefreshToken { get; set; }
-        public bool IsActive { get; set; } = true;   
     }
 }

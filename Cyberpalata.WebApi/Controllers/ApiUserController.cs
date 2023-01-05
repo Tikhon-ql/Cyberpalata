@@ -43,7 +43,7 @@ namespace Cyberpalata.WebApi.Controllers
 
             var token = _userService.GenerateToken(request);
 
-            return ReturnSuccess(token.AccessToken);
+            return await ReturnSuccessAsync(token);
         }
     }
 }

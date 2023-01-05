@@ -11,6 +11,5 @@ namespace Cyberpalata.Logic.Models.Identity
     {
         [Required] public string? UserEmail { get; set; }
         [Required] public string? RefreshToken { get; set; }
-        public bool IsActive { get; set; } = true;
     }
 }
