@@ -48,6 +48,8 @@ namespace Cyberpalata.Logic.Configuration
 
             CreateMap<UserRefreshToken, UserRefreshTokenDto>();
 
+            CreateMap<ApiUser, ApiUserDto>();
+
             //CreateMap<ApiUser, AuthorizationRequest>()
             //    .ForMember(dst => dst.Username, opt => opt.MapFrom(src => src.Username))
             //    .ForMember(dst => dst.Surname, opt => opt.MapFrom(src => src.Surname))

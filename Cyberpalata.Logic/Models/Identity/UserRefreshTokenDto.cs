@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cyberpalata.DataProvider.Models.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Cyberpalata.Logic.Models.Identity
 {
     public class UserRefreshTokenDto
     {
-        [Required] public string? UserEmail { get; set; }
-        [Required] public string? RefreshToken { get; set; }
+        [Required] public byte[] RefreshToken { get; set; }
+        [Required] public DateTime Expiration { get; set; }
     }
 }

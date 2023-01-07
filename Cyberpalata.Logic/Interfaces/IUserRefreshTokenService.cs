@@ -9,8 +9,8 @@ namespace Cyberpalata.Logic.Interfaces
 {
     public interface IUserRefreshTokenService
     {
-        Task CreateAsync(UserRefreshTokenDto entity);
-        Task<UserRefreshTokenDto> ReadAsync(string userEmail);
-        Task DeleteAsync(string userEmail);
+        //Task CreateAsync(UserRefreshTokenDto entity);
+        Task<UserRefreshTokenDto> ReadAsync(Guid userId);
+        Task DeleteAsync(string refreshToken);
     }
 }

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
 
-namespace Cyberpalata.DataProvider.Models.Identity
+namespace Cyberpalata.Logic.Models.Identity
 {
-    public class ApiUser
+    public class ApiUserDto
     {
         [Required] public Guid Id { get; set; }
         [Required] public string Username { get; set; }

@@ -23,13 +23,13 @@ namespace Cyberpalata.Logic.Services
     {
         private readonly IApiUserRepository _userRepository;
         private readonly IUserRefreshTokenRepository _refreshTokenRepository;
-        private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
-        public ApiUserService(IApiUserRepository userRepository, IConfiguration configuration, IUserRefreshTokenRepository refreshTokenRepository)
+        public ApiUserService(IApiUserRepository userRepository, IUserRefreshTokenRepository refreshTokenRepository, IMapper mapper)
         {
             _userRepository = userRepository;
-            _configuration = configuration;
             _refreshTokenRepository = refreshTokenRepository;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -44,50 +44,9 @@ namespace Cyberpalata.Logic.Services
             return Result.Ok();
         }
 
-        public async Task<Result> ValidateUserAsync(AuthenticateRequest request)
+        public async Task<ApiUserDto> GetByRefreshToken(string refreshToken)
         {
-            var user = await _userRepository.ReadAsync(request.Email);
-            if (user.Password == request.Password)
-                return Result.Ok();
-            return Result.Fail("Email or password is incorrect!!!");
-        }
-
-        public Token GenerateToken(AuthenticateRequest request)
-        {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecurityKey"]));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, request.Email)
-            };
-            var accessToken = new JwtSecurityToken(_configuration["Jwt:Issuer"],
-                _configuration["Jwt:Audience"],
-                claims,
-                expires: DateTime.Now.AddSeconds(10),
-                signingCredentials: credentials);
-
-            var refreshToken = GenerateRefreshToken();
-
-            _refreshTokenRepository.CreateAsync(new UserRefreshToken {UserEmail = request.Email, RefreshToken = refreshToken});
-
-            var token = new Token
-            {
-                AccessToken = new JwtSecurityTokenHandler().WriteToken(accessToken),
-                RefreshToken = refreshToken
-            };
-
-            return token;
-        }
-
-        private string GenerateRefreshToken()
-        {
-
-            var randomNumber = new byte[32];
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(randomNumber);
-                return Convert.ToBase64String(randomNumber);
-            }
+            return _mapper.Map<ApiUserDto>(await _refreshTokenRepository.GetUserByRefreshToken(refreshToken));
         }
     }
 }

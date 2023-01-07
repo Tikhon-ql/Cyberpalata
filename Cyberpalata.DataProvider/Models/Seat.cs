@@ -11,6 +11,6 @@ namespace Cyberpalata.DataProvider.Models
     {
         [Key] [Required] public Guid Id { get; set; }
         [Required] public int Number { get; set; }
-        [Required] public Room? Room { get; set; }
+        [Required] public Room Room { get; set; }
     }
 }

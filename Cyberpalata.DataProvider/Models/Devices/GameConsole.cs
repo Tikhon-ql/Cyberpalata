@@ -10,7 +10,7 @@ namespace Cyberpalata.DataProvider.Models.Devices
 {
     public class GameConsole : Device
     {
-        [MaxLength(50)] [Required] public string? ConsoleName { get; set; }
-        [Required] public Room? ConsoleRoom { get; set; }
+        [MaxLength(50)] [Required] public string ConsoleName { get; set; }
+        [Required] public Room ConsoleRoom { get; set; }
     }
 }

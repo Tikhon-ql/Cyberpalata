@@ -16,9 +16,9 @@ namespace Cyberpalata.Logic.Configuration
             {
                 Username = request.Username,
                 Surname = request.Surname,
-                Email = request?.Email,
-                Password = request?.Password,
-                Phone = request?.Phone
+                Email = request.Email,
+                Password = request.Password,
+                Phone = request.Phone
             };
         }
     }

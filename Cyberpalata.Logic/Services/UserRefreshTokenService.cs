@@ -22,19 +22,19 @@ namespace Cyberpalata.Logic.Services
             _mapper = mapper;
         }
 
-        public async Task CreateAsync(UserRefreshTokenDto entity)
+        //public async Task CreateAsync(UserRefreshTokenDto entity)
+        //{
+        //    await _repository.CreateAsync(_mapper.Map<UserRefreshToken>(entity));
+        //}
+
+        public async Task<UserRefreshTokenDto> ReadAsync(Guid userId)
         {
-            await _repository.CreateAsync(_mapper.Map<UserRefreshToken>(entity));
+            return _mapper.Map<UserRefreshTokenDto>(await _repository.ReadAsync(userId));
         }
 
-        public async Task DeleteAsync(string userEmail)
+        public async Task DeleteAsync(string refreshToken)
         {
-            await _repository.DeleteAsync(userEmail);
-        }
-
-        public async Task<UserRefreshTokenDto> ReadAsync(string userEmail)
-        {
-            return _mapper.Map<UserRefreshTokenDto>(await _repository.ReadAsync(userEmail));
+            await _repository.DeleteAsync(refreshToken);
         }
     }
 }

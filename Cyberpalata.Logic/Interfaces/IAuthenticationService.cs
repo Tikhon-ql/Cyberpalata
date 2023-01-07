@@ -1,5 +1,4 @@
 ﻿using Cyberpalata.Common;
-using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.Logic.Models.Identity;
 using System;
 using System.Collections.Generic;
@@ -9,9 +8,10 @@ using System.Threading.Tasks;
 
 namespace Cyberpalata.Logic.Interfaces
 {
-    public interface IApiUserService
+    public interface IAuthenticationService
     {
-        Task<Result> CreateAsync(AuthorizationRequest request);
-        Task<ApiUserDto> GetByRefreshToken(string refreshToken);
+        Task<Result<ApiUserDto>> ValidateUserAsync(AuthenticateRequest request);
+        Task<Token> GenerateTokenAsync(ApiUserDto user);
+        string GenerateAccessToken(ApiUserDto user);
     }
 }

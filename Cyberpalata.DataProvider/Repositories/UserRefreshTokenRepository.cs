@@ -25,15 +25,40 @@ namespace Cyberpalata.DataProvider.Repositories
             await _context.RefreshTokens.AddAsync(entity);
         }
 
-        public async Task<UserRefreshToken> ReadAsync(string userEmail)
+        public async Task<UserRefreshToken> ReadAsync(Guid userId)
         {
-            return await _context.RefreshTokens.SingleAsync(t => t.UserEmail == userEmail);
+            return await _context.RefreshTokens.SingleAsync(t => t.User.Id == userId);
         }
 
-        public async Task DeleteAsync(string userEmail)
+        public async Task DeleteAsync(string refreshToken)
         {
-            var entity = await ReadAsync(userEmail);
+            var entity = await _context.RefreshTokens.SingleAsync(t => t.RefreshToken == Encoding.UTF8.GetBytes(refreshToken));
             _context.RefreshTokens.Remove(entity);
-        }     
+        }
+
+        public async Task<ApiUser> GetUserByRefreshToken(string refreshToken)
+        {
+            var token = await _context.RefreshTokens.SingleAsync(rt=>rt.RefreshToken == Encoding.UTF8.GetBytes(refreshToken));
+            return token.User;
+        }
+        //??????????
+        public async Task<bool> IsAlreadyHasToken(Guid userId)
+        {
+            try
+            {
+                var res = await ReadAsync(userId);
+                return true;
+            }
+            catch(InvalidOperationException exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task DeleteAsync(Guid userId)
+        {
+            var entity = await ReadAsync(userId);
+            _context.RefreshTokens.Remove(entity);
+        }
     }
 }
