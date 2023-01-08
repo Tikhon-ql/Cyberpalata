@@ -1,9 +1,11 @@
 ﻿using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mail;
+using System.Security.Claims;
 
 namespace Cyberpalata.WebApi.Controllers
 {
@@ -42,7 +44,7 @@ namespace Cyberpalata.WebApi.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("");
+                return BadRequest("Bad request");
             }
             var result = await _authenticationService.ValidateUserAsync(request);
             if (result.IsFailure)
@@ -54,21 +56,16 @@ namespace Cyberpalata.WebApi.Controllers
         }
 
         [HttpPost("/refresh")]
+        [Authorize]
         public async Task<IActionResult> RefreshToken([Required] string refreshToken)
         {
-            var user = await _userService.GetByRefreshToken(refreshToken);
-            UserRefreshTokenDto refToken = await _refreshTokenService.ReadAsync(user.Id);
+            //Add result 
+            // _authService.RefreshToken();
+            var res = await _authenticationService.RefreshTokenAsync(refreshToken,new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)));
+            if (res.IsFailure)
+                return BadRequest(res.Error);
 
-            if(refToken.Expiration >= DateTime.Now)
-                return await ReturnSuccessAsync(await _authenticationService.GenerateTokenAsync(user));
-            else
-            {
-                return await ReturnSuccessAsync(new Token
-                {
-                    AccessToken = _authenticationService.GenerateAccessToken(user),
-                    RefreshToken = refreshToken
-                });
-            }
+            return await ReturnSuccessAsync(res.Value);
         }
     }
 }

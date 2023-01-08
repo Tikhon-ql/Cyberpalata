@@ -15,7 +15,7 @@ namespace Cyberpalata.DataProvider.Interfaces
         Task DeleteAsync(string refreshToken);
         //????????
         Task DeleteAsync(Guid userId);
-        Task<ApiUser> GetUserByRefreshToken(string refreshToken);
+        Task<Result<ApiUser>> GetUserByRefreshToken(string refreshToken);
         Task<bool> IsAlreadyHasToken(Guid userId);
     }
 }

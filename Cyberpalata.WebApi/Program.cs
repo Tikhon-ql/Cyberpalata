@@ -1,4 +1,5 @@
 using Cyberpalata.Logic.Configuration;
+using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.WebApi.Midlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -31,11 +32,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         {
             if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
             {
-                Console.WriteLine("TOKEN EXPIRED");
-                context.Response.Headers.Add("IS-TOKEN-EXPIRED", "true");
+                //Console.WriteLine("TOKEN EXPIRED");
+                //context.Response.Headers.Add("IS-TOKEN-EXPIRED", "true");
+                //var service = builder.Services.Single(s => s.ServiceType == typeof(IAuthenticationService));
+                //((IAuthenticationService)service.ImplementationInstance).RefreshTokenAsync(context.Result.Properties);
             }
             return Task.CompletedTask;
-        }
+        },
     };
 });
 

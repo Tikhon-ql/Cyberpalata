@@ -36,10 +36,18 @@ namespace Cyberpalata.DataProvider.Repositories
             _context.RefreshTokens.Remove(entity);
         }
 
-        public async Task<ApiUser> GetUserByRefreshToken(string refreshToken)
+        public async Task<Result<ApiUser>> GetUserByRefreshToken(string refreshToken)
         {
-            var token = await _context.RefreshTokens.SingleAsync(rt=>rt.RefreshToken == Encoding.UTF8.GetBytes(refreshToken));
-            return token.User;
+            try
+            {
+                var token = await _context.RefreshTokens.SingleAsync(rt => rt.RefreshToken == Encoding.UTF8.GetBytes(refreshToken));
+                return Result.Ok(token.User);
+            }
+            catch(Exception ex)
+            {
+                //?????
+                return (Result<ApiUser>)Result.Fail(ex.Message);
+            }
         }
         //??????????
         public async Task<bool> IsAlreadyHasToken(Guid userId)

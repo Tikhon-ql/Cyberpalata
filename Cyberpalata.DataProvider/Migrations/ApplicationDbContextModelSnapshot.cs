@@ -139,15 +139,19 @@ namespace Cyberpalata.DataProvider.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
-                    b.Property<string>("RefreshToken")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("Expiration")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("UserEmail")
+                    b.Property<byte[]>("RefreshToken")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("RefreshTokens");
                 });
@@ -210,6 +214,7 @@ namespace Cyberpalata.DataProvider.Migrations
                         .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -246,6 +251,17 @@ namespace Cyberpalata.DataProvider.Migrations
                         .IsRequired();
 
                     b.Navigation("ConsoleRoom");
+                });
+
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Identity.UserRefreshToken", b =>
+                {
+                    b.HasOne("Cyberpalata.DataProvider.Models.Identity.ApiUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Peripheral.Periphery", b =>

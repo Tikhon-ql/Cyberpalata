@@ -43,10 +43,5 @@ namespace Cyberpalata.Logic.Services
             await _userRepository.CreateAsync(ApiUserMapper.MapToApiUser(request));
             return Result.Ok();
         }
-
-        public async Task<ApiUserDto> GetByRefreshToken(string refreshToken)
-        {
-            return _mapper.Map<ApiUserDto>(await _refreshTokenRepository.GetUserByRefreshToken(refreshToken));
-        }
     }
 }

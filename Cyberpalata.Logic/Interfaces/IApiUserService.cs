@@ -12,6 +12,5 @@ namespace Cyberpalata.Logic.Interfaces
     public interface IApiUserService
     {
         Task<Result> CreateAsync(AuthorizationRequest request);
-        Task<ApiUserDto> GetByRefreshToken(string refreshToken);
     }
 }

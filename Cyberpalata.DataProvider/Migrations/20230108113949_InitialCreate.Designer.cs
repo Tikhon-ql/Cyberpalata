@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cyberpalata.DataProvider.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230105115933_InitialCreate")]
+    [Migration("20230108113949_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -142,18 +142,19 @@ namespace Cyberpalata.DataProvider.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                    b.Property<DateTime>("Expiration")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("RefreshToken")
+                    b.Property<byte[]>("RefreshToken")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
 
-                    b.Property<string>("UserEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("RefreshTokens");
                 });
@@ -216,6 +217,7 @@ namespace Cyberpalata.DataProvider.Migrations
                         .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -252,6 +254,17 @@ namespace Cyberpalata.DataProvider.Migrations
                         .IsRequired();
 
                     b.Navigation("ConsoleRoom");
+                });
+
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Identity.UserRefreshToken", b =>
+                {
+                    b.HasOne("Cyberpalata.DataProvider.Models.Identity.ApiUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Peripheral.Periphery", b =>

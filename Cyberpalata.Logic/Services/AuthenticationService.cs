@@ -47,13 +47,7 @@ namespace Cyberpalata.Logic.Services
             var accessToken = GenerateAccessToken(user);
             var refreshToken = GenerateRefreshToken();
 
-            //??????? await 
-            if(await _refreshTokenRepository.IsAlreadyHasToken(user.Id))
-            {
-                _refreshTokenRepository.DeleteAsync(user.Id);
-            }
-
-            _refreshTokenRepository.CreateAsync(new UserRefreshToken { User = _mapper.Map<ApiUser>(user), Expiration = DateTime.Now.AddDays(2), RefreshToken = refreshToken });
+            await _refreshTokenRepository.CreateAsync(new UserRefreshToken { User = _mapper.Map<ApiUser>(user), Expiration = DateTime.Now.AddDays(2), RefreshToken = refreshToken });
 
             return new Token
             {
@@ -62,13 +56,52 @@ namespace Cyberpalata.Logic.Services
             };
         }
 
-        public string GenerateAccessToken(ApiUserDto user)
+        public async Task<Result<Token>> RefreshTokenAsync(string refreshToken, Guid userId)
+        {
+            try
+            {
+                Result<ApiUser> userResult = await _refreshTokenRepository.GetUserByRefreshToken(refreshToken);
+                if (userResult.IsFailure)
+                    return (Result<Token>)Result.Fail(userResult.Error);
+
+                if (userResult.Value.Id != userId)
+                    throw new ArgumentException("Invalid user's id!", nameof(userId));
+
+                UserRefreshToken refToken = await _refreshTokenRepository.ReadAsync(userResult.Value.Id);
+                //????
+
+                //var isIncorrectRefreshToken = refreshToken != Encoding.UTF8.GetString(refToken.RefreshToken);
+                //if (isIncorrectRefreshToken)
+                //    throw new ArgumentException("Wrong refresh token!");
+
+                var isExpired = refToken.Expiration >= DateTime.Now.AddMinutes(-5);
+                if (isExpired)
+                    return Result.Ok(await GenerateTokenAsync(_mapper.Map<ApiUserDto>(userResult.Value)));
+                else
+                {
+                    return Result.Ok(new Token
+                    {
+                        AccessToken = GenerateAccessToken(_mapper.Map<ApiUserDto>(userResult.Value)),
+                        RefreshToken = refreshToken
+                    });
+                }
+
+            }
+            catch(Exception ex)
+            {
+                return (Result<Token>)Result.Fail(ex.Message);
+            }
+        }
+
+        private string GenerateAccessToken(ApiUserDto user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecurityKey"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Email),
+                //???? 
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
             };
             var accessToken = new JwtSecurityToken(_configuration["Jwt:Issuer"],
                 _configuration["Jwt:Audience"],
