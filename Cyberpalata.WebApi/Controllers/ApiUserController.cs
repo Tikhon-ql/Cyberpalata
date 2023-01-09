@@ -35,8 +35,10 @@ namespace Cyberpalata.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromForm]AuthorizationRequest request)
         {
-            await _userService.CreateAsync(request);
-            return await ReturnSuccessAsync();
+            var result = await _userService.CreateAsync(request);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+            return await ReturnSuccess();
         }
 
         [HttpPost("authenticate")]
@@ -52,20 +54,20 @@ namespace Cyberpalata.WebApi.Controllers
 
             var token = await _authenticationService.GenerateTokenAsync(result.Value);
 
-            return await ReturnSuccessAsync(token);
+            return await ReturnSuccess(token);
         }
 
-        [HttpPost("/refresh")]
+        [HttpGet("refresh")]
         [Authorize]
-        public async Task<IActionResult> RefreshToken([Required] string refreshToken)
+        public async Task<IActionResult> RefreshToken()
         {
             //Add result 
             // _authService.RefreshToken();
-            var res = await _authenticationService.RefreshTokenAsync(refreshToken,new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)));
-            if (res.IsFailure)
-                return BadRequest(res.Error);
-
-            return await ReturnSuccessAsync(res.Value);
+            //var res = await _authenticationService.RefreshTokenAsync(refreshToken,new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)));
+            //if (res.IsFailure)
+            //    return BadRequest(res.Error);
+            //return await ReturnSuccess(res.Value);
+            return await ReturnSuccess("Good");
         }
     }
 }

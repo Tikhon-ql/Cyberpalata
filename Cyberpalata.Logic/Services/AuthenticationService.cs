@@ -47,7 +47,10 @@ namespace Cyberpalata.Logic.Services
             var accessToken = GenerateAccessToken(user);
             var refreshToken = GenerateRefreshToken();
 
-            await _refreshTokenRepository.CreateAsync(new UserRefreshToken { User = _mapper.Map<ApiUser>(user), Expiration = DateTime.Now.AddDays(2), RefreshToken = refreshToken });
+            // to get by email / automapper doesn't work
+            var apiUser = await _userRepository.ReadAsync(user.Email);
+
+            await _refreshTokenRepository.CreateAsync(new UserRefreshToken { User = apiUser,Expiration = DateTime.Now.AddDays(2), RefreshToken = refreshToken });
 
             return new Token
             {
@@ -56,32 +59,38 @@ namespace Cyberpalata.Logic.Services
             };
         }
 
+        //Maybe
+        //add read by refreshToken 
+        //
+
         public async Task<Result<Token>> RefreshTokenAsync(string refreshToken, Guid userId)
         {
             try
             {
-                Result<ApiUser> userResult = await _refreshTokenRepository.GetUserByRefreshToken(refreshToken);
-                if (userResult.IsFailure)
-                    return (Result<Token>)Result.Fail(userResult.Error);
+                //Maybe
+                UserRefreshToken? refreshTokenOrNothing = await _refreshTokenRepository.ReadAsync(refreshToken);
+                //Result<ApiUser> userResult = await _refreshTokenRepository.GetUserByRefreshToken(refreshToken);
+                //if (userResult.IsFailure)
+                //    return (Result<Token>)Result.Fail(userResult.Error);
 
-                if (userResult.Value.Id != userId)
+                if(refreshTokenOrNothing.User.Id != userId)
                     throw new ArgumentException("Invalid user's id!", nameof(userId));
 
-                UserRefreshToken refToken = await _refreshTokenRepository.ReadAsync(userResult.Value.Id);
+                //нужно брать по userId или по самому значению
                 //????
 
                 //var isIncorrectRefreshToken = refreshToken != Encoding.UTF8.GetString(refToken.RefreshToken);
                 //if (isIncorrectRefreshToken)
                 //    throw new ArgumentException("Wrong refresh token!");
 
-                var isExpired = refToken.Expiration >= DateTime.Now.AddMinutes(-5);
+                var isExpired = refreshTokenOrNothing.Expiration >= DateTime.Now.AddMinutes(-5);
                 if (isExpired)
-                    return Result.Ok(await GenerateTokenAsync(_mapper.Map<ApiUserDto>(userResult.Value)));
+                    return Result.Ok(await GenerateTokenAsync(_mapper.Map<ApiUserDto>(refreshTokenOrNothing.User)));
                 else
                 {
                     return Result.Ok(new Token
                     {
-                        AccessToken = GenerateAccessToken(_mapper.Map<ApiUserDto>(userResult.Value)),
+                        AccessToken = GenerateAccessToken(_mapper.Map<ApiUserDto>(refreshTokenOrNothing.User)),
                         RefreshToken = refreshToken
                     });
                 }

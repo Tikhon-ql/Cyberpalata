@@ -27,9 +27,9 @@ namespace Cyberpalata.Logic.Services
         //    await _repository.CreateAsync(_mapper.Map<UserRefreshToken>(entity));
         //}
 
-        public async Task<UserRefreshTokenDto> ReadAsync(Guid userId)
+        public async Task<UserRefreshTokenDto> ReadAsync(string refreshToken)
         {
-            return _mapper.Map<UserRefreshTokenDto>(await _repository.ReadAsync(userId));
+            return _mapper.Map<UserRefreshTokenDto>(await _repository.ReadAsync(refreshToken));
         }
 
         public async Task DeleteAsync(string refreshToken)

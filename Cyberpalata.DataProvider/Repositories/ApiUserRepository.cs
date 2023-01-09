@@ -24,11 +24,14 @@ namespace Cyberpalata.DataProvider.Repositories
             _context = context;
         }
 
-        public async Task CreateAsync(ApiUser entity)
+        public async Task<Result> CreateAsync(ApiUser entity)
         {
             if(entity == null)
                 throw new ArgumentNullException(nameof(entity));
+            if (_context.Users.Count(c => c.Email == entity.Email) > 0)
+                return Result.Fail("User already exist");
             await _context.Users.AddAsync(entity);
+            return Result.Ok();
         }
 
         public async Task<ApiUser> ReadAsync(string email)

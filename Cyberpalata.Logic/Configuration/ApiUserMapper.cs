@@ -1,4 +1,5 @@
-﻿using Cyberpalata.DataProvider.Models.Identity;
+﻿using Azure.Core;
+using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.Logic.Models.Identity;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,19 @@ namespace Cyberpalata.Logic.Configuration
 {
     public static class ApiUserMapper
     {
+
+        public static ApiUser MapFromDto(ApiUserDto dto)
+        {
+            return new ApiUser
+            {
+                Username = dto.Username,
+                Surname = dto.Surname,
+                Email = dto.Email,
+                Password = dto.Password,
+                Phone = dto.Phone
+            };
+        }
+
         public static ApiUser MapToApiUser(AuthorizationRequest request)
         {
             return new ApiUser

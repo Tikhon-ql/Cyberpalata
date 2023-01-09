@@ -14,6 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddCors();
 
 ///?????????????????????????????????????????????????
+///
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
@@ -22,24 +23,23 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
+        //ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        //ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecurityKey"]))
     };
-    options.Events = new JwtBearerEvents
-    {
-        OnAuthenticationFailed = context =>
-        {
-            if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
-            {
-                //Console.WriteLine("TOKEN EXPIRED");
-                //context.Response.Headers.Add("IS-TOKEN-EXPIRED", "true");
-                //var service = builder.Services.Single(s => s.ServiceType == typeof(IAuthenticationService));
-                //((IAuthenticationService)service.ImplementationInstance).RefreshTokenAsync(context.Result.Properties);
-            }
-            return Task.CompletedTask;
-        },
-    };
+    //options.Events = new JwtBearerEvents
+    //{
+    //    OnAuthenticationFailed = context =>
+    //    {
+    //        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+    //        {
+
+    //            //Console.WriteLine("TOKEN EXPIRED");
+    //            //context.Response.Headers.Add("IS-TOKEN-EXPIRED", "true");
+    //        }
+    //        return Task.CompletedTask;
+    //    },
+    //};
 });
 
 ///?????????????????????????????????????????????????

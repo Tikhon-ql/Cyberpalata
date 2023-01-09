@@ -12,12 +12,12 @@ namespace Cyberpalata.WebApi.Controllers
                 _unitOfWork = uinOfWork;
         }
 
-        protected async Task<IActionResult> ReturnSuccessAsync<T>(T data)
+        protected async Task<IActionResult> ReturnSuccess<T>(T data)
         {
             await _unitOfWork.CommitAsync();
             return Ok((data));
         }
-        protected async Task<IActionResult> ReturnSuccessAsync()
+        protected async Task<IActionResult> ReturnSuccess()
         {
             await _unitOfWork.CommitAsync();
             return Ok();

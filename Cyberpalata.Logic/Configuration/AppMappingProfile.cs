@@ -22,6 +22,8 @@ namespace Cyberpalata.Logic.Configuration
     {
         public AppMappingProfile()
         {
+            CreateMap<ApiUser, ApiUserDto>();
+
             CreateMap<Game, GameDto>();
             CreateMap<PagedList<Game>, PagedList<GameDto>>();
  
@@ -46,9 +48,16 @@ namespace Cyberpalata.Logic.Configuration
             CreateMap<GameConsole, GameConsoleDto>();
             CreateMap<PagedList<GameConsole>, PagedList<GameConsoleDto>>();
 
-            CreateMap<UserRefreshToken, UserRefreshTokenDto>();
 
-            CreateMap<ApiUser, ApiUserDto>();
+            //CreateMap<PagedList<ApiUser>, PagedList<ApiUserDto>>();
+
+            CreateMap<UserRefreshToken, UserRefreshTokenDto>();
+                //.ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
+                //.ForMember(dst => dst.Username, opt => opt.MapFrom(src => src.Username))
+                //.ForMember(dst => dst.Surname, opt => opt.MapFrom(src => src.Surname))
+                //.ForMember(dst => dst.Email, opt => opt.MapFrom(src => src.Email))
+                //.ForMember(dst => dst.Phone, opt => opt.MapFrom(src => src.Phone))
+                //.ForMember(dst => dst.Password, opt => opt.MapFrom(src => src.Password));
 
             //CreateMap<ApiUser, AuthorizationRequest>()
             //    .ForMember(dst => dst.Username, opt => opt.MapFrom(src => src.Username))

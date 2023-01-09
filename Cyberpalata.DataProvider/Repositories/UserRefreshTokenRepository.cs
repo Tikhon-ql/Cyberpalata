@@ -21,13 +21,13 @@ namespace Cyberpalata.DataProvider.Repositories
 
         public async Task CreateAsync(UserRefreshToken entity)
         {
-            if(entity== null) throw new ArgumentNullException(nameof(entity));
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
             await _context.RefreshTokens.AddAsync(entity);
         }
 
-        public async Task<UserRefreshToken> ReadAsync(Guid userId)
+        public async Task<UserRefreshToken> ReadAsync(string refreshToken)
         {
-            return await _context.RefreshTokens.SingleAsync(t => t.User.Id == userId);
+            return await _context.RefreshTokens.SingleAsync(t => t.RefreshToken == Encoding.UTF8.GetBytes(refreshToken));
         }
 
         public async Task DeleteAsync(string refreshToken)
@@ -38,35 +38,9 @@ namespace Cyberpalata.DataProvider.Repositories
 
         public async Task<Result<ApiUser>> GetUserByRefreshToken(string refreshToken)
         {
-            try
-            {
-                var token = await _context.RefreshTokens.SingleAsync(rt => rt.RefreshToken == Encoding.UTF8.GetBytes(refreshToken));
-                return Result.Ok(token.User);
-            }
-            catch(Exception ex)
-            {
-                //?????
-                return (Result<ApiUser>)Result.Fail(ex.Message);
-            }
-        }
-        //??????????
-        public async Task<bool> IsAlreadyHasToken(Guid userId)
-        {
-            try
-            {
-                var res = await ReadAsync(userId);
-                return true;
-            }
-            catch(InvalidOperationException exception)
-            {
-                return false;
-            }
+            var token = await _context.RefreshTokens.SingleAsync(rt => rt.RefreshToken == Encoding.UTF8.GetBytes(refreshToken));
+            return Result.Ok(token.User);
         }
 
-        public async Task DeleteAsync(Guid userId)
-        {
-            var entity = await ReadAsync(userId);
-            _context.RefreshTokens.Remove(entity);
-        }
     }
 }

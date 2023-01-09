@@ -40,8 +40,7 @@ namespace Cyberpalata.Logic.Services
         public async Task<Result> CreateAsync(AuthorizationRequest request)
         {
             //Добавить проверки
-            await _userRepository.CreateAsync(ApiUserMapper.MapToApiUser(request));
-            return Result.Ok();
+            return await _userRepository.CreateAsync(ApiUserMapper.MapToApiUser(request));
         }
     }
 }
