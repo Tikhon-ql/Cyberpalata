@@ -142,9 +142,9 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.Property<DateTime>("Expiration")
                         .HasColumnType("datetime2");
 
-                    b.Property<byte[]>("RefreshToken")
+                    b.Property<string>("RefreshToken")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");

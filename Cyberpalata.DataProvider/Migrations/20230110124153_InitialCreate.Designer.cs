@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cyberpalata.DataProvider.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230108113949_InitialCreate")]
+    [Migration("20230110124153_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -145,9 +145,9 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.Property<DateTime>("Expiration")
                         .HasColumnType("datetime2");
 
-                    b.Property<byte[]>("RefreshToken")
+                    b.Property<string>("RefreshToken")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");

@@ -10,7 +10,7 @@ namespace Cyberpalata.Logic.Models.Identity
 {
     public class UserRefreshTokenDto
     {
-        [Required] public byte[] RefreshToken { get; set; }
+        [Required] public string RefreshToken { get; set; }
         [Required] public DateTime Expiration { get; set; }
     }
 }

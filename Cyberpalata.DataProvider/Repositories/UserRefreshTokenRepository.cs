@@ -27,20 +27,28 @@ namespace Cyberpalata.DataProvider.Repositories
 
         public async Task<UserRefreshToken> ReadAsync(string refreshToken)
         {
-            return await _context.RefreshTokens.SingleAsync(t => t.RefreshToken == Encoding.UTF8.GetBytes(refreshToken));
+            try
+            {
+                var res = await _context.RefreshTokens.SingleAsync(t => t.RefreshToken == refreshToken);
+                return res;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine();
+                return null;
+            }
         }
 
         public async Task DeleteAsync(string refreshToken)
         {
-            var entity = await _context.RefreshTokens.SingleAsync(t => t.RefreshToken == Encoding.UTF8.GetBytes(refreshToken));
+            var entity = await _context.RefreshTokens.SingleAsync(t => t.RefreshToken == refreshToken);
             _context.RefreshTokens.Remove(entity);
         }
 
         public async Task<Result<ApiUser>> GetUserByRefreshToken(string refreshToken)
         {
-            var token = await _context.RefreshTokens.SingleAsync(rt => rt.RefreshToken == Encoding.UTF8.GetBytes(refreshToken));
+            var token = await _context.RefreshTokens.SingleAsync(rt => rt.RefreshToken == refreshToken);
             return Result.Ok(token.User);
         }
-
     }
 }

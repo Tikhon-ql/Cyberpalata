@@ -55,7 +55,7 @@ namespace Cyberpalata.Logic.Services
             return new Token
             {
                 AccessToken = accessToken,
-                RefreshToken = Convert.ToBase64String(refreshToken)
+                RefreshToken = refreshToken
             };
         }
 
@@ -68,7 +68,7 @@ namespace Cyberpalata.Logic.Services
             try
             {
                 //Maybe
-                UserRefreshToken? refreshTokenOrNothing = await _refreshTokenRepository.ReadAsync(refreshToken);
+                UserRefreshToken refreshTokenOrNothing = await _refreshTokenRepository.ReadAsync(refreshToken);
                 //Result<ApiUser> userResult = await _refreshTokenRepository.GetUserByRefreshToken(refreshToken);
                 //if (userResult.IsFailure)
                 //    return (Result<Token>)Result.Fail(userResult.Error);
@@ -121,13 +121,13 @@ namespace Cyberpalata.Logic.Services
             return new JwtSecurityTokenHandler().WriteToken(accessToken);
         }
 
-        private byte[] GenerateRefreshToken()
+        private string GenerateRefreshToken()
         {
             var randomNumber = new byte[32];
             using (var rng = RandomNumberGenerator.Create())
             {
                 rng.GetBytes(randomNumber);
-                return randomNumber;
+                return Convert.ToBase64String(randomNumber);
             }
         }
     }

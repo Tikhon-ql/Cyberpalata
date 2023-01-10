@@ -62,12 +62,10 @@ namespace Cyberpalata.WebApi.Controllers
         public async Task<IActionResult> RefreshToken([Required]string refreshToken)
         {
             //Add result 
-            // _authService.RefreshToken();
-            //var res = await _authenticationService.RefreshTokenAsync(refreshToken,new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)));
-            //if (res.IsFailure)
-            //    return BadRequest(res.Error);
-            //return await ReturnSuccess(res.Value);
-            return await ReturnSuccess(refreshToken);
+            var res = await _authenticationService.RefreshTokenAsync(refreshToken, new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)));
+            if (res.IsFailure)
+                return BadRequest(res.Error);
+            return await ReturnSuccess(res.Value);
         }
     }
 }
