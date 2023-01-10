@@ -69,21 +69,11 @@ namespace Cyberpalata.Logic.Services
             {
                 //Maybe
                 UserRefreshToken refreshTokenOrNothing = await _refreshTokenRepository.ReadAsync(refreshToken);
-                //Result<ApiUser> userResult = await _refreshTokenRepository.GetUserByRefreshToken(refreshToken);
-                //if (userResult.IsFailure)
-                //    return (Result<Token>)Result.Fail(userResult.Error);
 
                 if(refreshTokenOrNothing.User.Id != userId)
                     throw new ArgumentException("Invalid user's id!", nameof(userId));
 
-                //нужно брать по userId или по самому значению
-                //????
-
-                //var isIncorrectRefreshToken = refreshToken != Encoding.UTF8.GetString(refToken.RefreshToken);
-                //if (isIncorrectRefreshToken)
-                //    throw new ArgumentException("Wrong refresh token!");
-
-                var isExpired = refreshTokenOrNothing.Expiration >= DateTime.Now.AddMinutes(-5);
+                var isExpired = DateTime.Now.AddMinutes(30) >= refreshTokenOrNothing.Expiration;
                 if (isExpired)
                     return Result.Ok(await GenerateTokenAsync(_mapper.Map<ApiUserDto>(refreshTokenOrNothing.User)));
                 else
@@ -115,7 +105,7 @@ namespace Cyberpalata.Logic.Services
             var accessToken = new JwtSecurityToken(_configuration["Jwt:Issuer"],
                 _configuration["Jwt:Audience"],
                 claims,
-                expires: DateTime.Now.AddSeconds(10),
+                expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: credentials);
            
             return new JwtSecurityTokenHandler().WriteToken(accessToken);

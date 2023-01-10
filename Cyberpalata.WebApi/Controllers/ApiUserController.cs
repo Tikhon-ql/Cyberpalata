@@ -59,7 +59,7 @@ namespace Cyberpalata.WebApi.Controllers
 
         [HttpPost("refresh")]
         [Authorize]
-        public async Task<IActionResult> RefreshToken([Required]string refreshToken)
+        public async Task<IActionResult> RefreshToken([Required][FromForm] string refreshToken)
         {
             //Add result 
             var res = await _authenticationService.RefreshTokenAsync(refreshToken, new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)));

@@ -27,16 +27,7 @@ namespace Cyberpalata.DataProvider.Repositories
 
         public async Task<UserRefreshToken> ReadAsync(string refreshToken)
         {
-            try
-            {
-                var res = await _context.RefreshTokens.SingleAsync(t => t.RefreshToken == refreshToken);
-                return res;
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine();
-                return null;
-            }
+            return await _context.RefreshTokens.Include(i => i.User).SingleAsync(rt=>rt.RefreshToken == refreshToken);
         }
 
         public async Task DeleteAsync(string refreshToken)
