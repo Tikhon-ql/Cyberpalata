@@ -57,9 +57,9 @@ namespace Cyberpalata.WebApi.Controllers
             return await ReturnSuccess(token);
         }
 
-        [HttpGet("refresh")]
+        [HttpPost("refresh")]
         [Authorize]
-        public async Task<IActionResult> RefreshToken()
+        public async Task<IActionResult> RefreshToken([Required]string refreshToken)
         {
             //Add result 
             // _authService.RefreshToken();
@@ -67,7 +67,7 @@ namespace Cyberpalata.WebApi.Controllers
             //if (res.IsFailure)
             //    return BadRequest(res.Error);
             //return await ReturnSuccess(res.Value);
-            return await ReturnSuccess("Good");
+            return await ReturnSuccess(refreshToken);
         }
     }
 }

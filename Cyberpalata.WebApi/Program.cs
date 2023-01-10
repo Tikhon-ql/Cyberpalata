@@ -16,33 +16,27 @@ builder.Services.AddCors();
 ///?????????????????????????????????????????????????
 ///
 
-builder.Services.AddAuthorization();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateIssuer = false,
-        ValidateAudience = false,
-        ValidateLifetime = false,
-        ValidateIssuerSigningKey = false,
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecurityKey"]))
     };
-    //options.Events = new JwtBearerEvents
-    //{
-    //    OnAuthenticationFailed = context =>
-    //    {
-    //        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
-    //        {
-
-    //            //Console.WriteLine("TOKEN EXPIRED");
-    //            //context.Response.Headers.Add("IS-TOKEN-EXPIRED", "true");
-    //        }
-    //        return Task.CompletedTask;
-    //    },
-    //};
+    options.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = context =>
+        {
+            Console.WriteLine("bad");
+            return Task.CompletedTask;
+        },
+    };
 });
 
 ///?????????????????????????????????????????????????
@@ -75,7 +69,7 @@ app.UseCors(options =>
 
 app.UseAuthorization();
 
-app.UseAuthentication();
+app.UseHttpLogging();
 
 app.MapControllers();
 

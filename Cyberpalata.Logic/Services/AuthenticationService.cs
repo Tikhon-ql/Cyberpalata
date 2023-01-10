@@ -55,7 +55,7 @@ namespace Cyberpalata.Logic.Services
             return new Token
             {
                 AccessToken = accessToken,
-                RefreshToken = Encoding.UTF8.GetString(refreshToken)
+                RefreshToken = Convert.ToBase64String(refreshToken)
             };
         }
 
