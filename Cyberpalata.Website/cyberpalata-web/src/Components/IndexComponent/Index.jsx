@@ -7,6 +7,8 @@ import { Header } from './pages/header/Header';
 import Home from './pages/Home'
 import { GameLibrary } from './pages/GameLibrary';
 import { GameConsoleRooms } from './pages/GameConsoleRooms';
+import {LoginComponent} from './pages/header/LoginComponent';
+import {RegistrationComponent} from './pages/header/RegistrationComponent';
 
 export const Index = () => {
     return (
@@ -19,6 +21,8 @@ export const Index = () => {
                 <Route path="/gameConsoleRoom" element = {<GameConsoleRooms/>}/>
                 <Route path="/gameConsoleRoom/:id" element = {<GameConsoleRoom/>}/>
                 <Route path="/gamesLibrary" element = {<GameLibrary/>}/>          
+                <Route path="/login" element = {<LoginComponent/>}/>                
+                <Route path="/register" element = {<RegistrationComponent/>}/>                
             </Routes>
         </BrowserRouter>
     );

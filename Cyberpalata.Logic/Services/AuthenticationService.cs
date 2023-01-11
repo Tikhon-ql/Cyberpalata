@@ -42,7 +42,7 @@ namespace Cyberpalata.Logic.Services
             return (Result<ApiUserDto>)Result.Fail("Email or password is incorrect!!!");
         }
 
-        public async Task<Token> GenerateTokenAsync(ApiUserDto user)
+        public async Task<TokenDto> GenerateTokenAsync(ApiUserDto user)
         {
             var accessToken = GenerateAccessToken(user);
             var refreshToken = GenerateRefreshToken();
@@ -52,7 +52,7 @@ namespace Cyberpalata.Logic.Services
 
             await _refreshTokenRepository.CreateAsync(new UserRefreshToken { User = apiUser,Expiration = DateTime.Now.AddDays(2), RefreshToken = refreshToken });
 
-            return new Token
+            return new TokenDto
             {
                 AccessToken = accessToken,
                 RefreshToken = refreshToken
@@ -63,12 +63,19 @@ namespace Cyberpalata.Logic.Services
         //add read by refreshToken 
         //
 
-        public async Task<Result<Token>> RefreshTokenAsync(string refreshToken, Guid userId)
+        public async Task<Result<TokenDto>> RefreshTokenAsync(TokenDto tokenDto)
         {
             try
             {
+
+                //????????????
+                var handler = new JwtSecurityTokenHandler();
+                var jwtSecurityToken = handler.ReadJwtToken(tokenDto.AccessToken);
+                var userId = new Guid(jwtSecurityToken.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value);
+                //????????????
+
                 //Maybe
-                UserRefreshToken refreshTokenOrNothing = await _refreshTokenRepository.ReadAsync(refreshToken);
+                UserRefreshToken refreshTokenOrNothing = await _refreshTokenRepository.ReadAsync(tokenDto.RefreshToken);
 
                 if(refreshTokenOrNothing.User.Id != userId)
                     throw new ArgumentException("Invalid user's id!", nameof(userId));
@@ -78,19 +85,20 @@ namespace Cyberpalata.Logic.Services
                     return Result.Ok(await GenerateTokenAsync(_mapper.Map<ApiUserDto>(refreshTokenOrNothing.User)));
                 else
                 {
-                    return Result.Ok(new Token
+                    return Result.Ok(new TokenDto
                     {
                         AccessToken = GenerateAccessToken(_mapper.Map<ApiUserDto>(refreshTokenOrNothing.User)),
-                        RefreshToken = refreshToken
+                        RefreshToken = tokenDto.RefreshToken
                     });
                 }
 
             }
             catch(Exception ex)
             {
-                return (Result<Token>)Result.Fail(ex.Message);
+                return (Result<TokenDto>)Result.Fail(ex.Message);
             }
         }
+
 
         private string GenerateAccessToken(ApiUserDto user)
         {
@@ -100,6 +108,7 @@ namespace Cyberpalata.Logic.Services
             {
                 //???? 
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name,user.Username),
                 new Claim(ClaimTypes.Email, user.Email),
             };
             var accessToken = new JwtSecurityToken(_configuration["Jwt:Issuer"],

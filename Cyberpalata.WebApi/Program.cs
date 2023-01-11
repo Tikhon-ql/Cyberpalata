@@ -3,15 +3,18 @@ using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.WebApi.Midlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Serialization;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson();
 
 builder.Services.AddCors();
+
+
 
 ///?????????????????????????????????????????????????
 ///

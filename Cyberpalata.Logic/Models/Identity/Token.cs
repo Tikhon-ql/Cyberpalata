@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cyberpalata.Logic.Models.Identity
 {
-    public class Token
+    public class TokenDto
     {
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }

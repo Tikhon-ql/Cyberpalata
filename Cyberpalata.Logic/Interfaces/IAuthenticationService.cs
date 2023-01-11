@@ -11,7 +11,7 @@ namespace Cyberpalata.Logic.Interfaces
     public interface IAuthenticationService
     {
         Task<Result<ApiUserDto>> ValidateUserAsync(AuthenticateRequest request);
-        Task<Token> GenerateTokenAsync(ApiUserDto user);
-        Task<Result<Token>> RefreshTokenAsync(string refreshToken, Guid userId);
+        Task<TokenDto> GenerateTokenAsync(ApiUserDto user);
+        Task<Result<TokenDto>> RefreshTokenAsync(TokenDto tokenDto);
     }
 }

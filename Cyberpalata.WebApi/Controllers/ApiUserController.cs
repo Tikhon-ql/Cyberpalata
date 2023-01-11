@@ -32,8 +32,8 @@ namespace Cyberpalata.WebApi.Controllers
         //    return Ok();
         //}
 
-        [HttpPost]
-        public async Task<IActionResult> Post([FromForm]AuthorizationRequest request)
+        [HttpPost("register")]
+        public async Task<IActionResult> Post(AuthorizationRequest request)
         {
             var result = await _userService.CreateAsync(request);
             if (result.IsFailure)
@@ -42,7 +42,7 @@ namespace Cyberpalata.WebApi.Controllers
         }
 
         [HttpPost("authenticate")]
-        public async Task<IActionResult> Authenticate([FromForm]AuthenticateRequest request)
+        public async Task<IActionResult> Authenticate(AuthenticateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -57,15 +57,17 @@ namespace Cyberpalata.WebApi.Controllers
             return await ReturnSuccess(token);
         }
 
+        [AllowAnonymous]
         [HttpPost("refresh")]
-        [Authorize]
-        public async Task<IActionResult> RefreshToken([Required][FromForm] string refreshToken)
+        public async Task<IActionResult> RefreshToken([FromBody]TokenDto tokenDto)
         {
-            //Add result 
-            var res = await _authenticationService.RefreshTokenAsync(refreshToken, new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)));
+            ////Add result 
+            /////send accessToken
+            var res = await _authenticationService.RefreshTokenAsync(tokenDto);
             if (res.IsFailure)
                 return BadRequest(res.Error);
             return await ReturnSuccess(res.Value);
         }
     }
 }
+ 
