@@ -35,6 +35,10 @@ namespace Cyberpalata.WebApi.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Post(AuthorizationRequest request)
         {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest("Bad request");
+            }
             var result = await _userService.CreateAsync(request);
             if (result.IsFailure)
                 return BadRequest(result.Error);

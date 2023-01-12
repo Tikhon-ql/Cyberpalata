@@ -1,4 +1,5 @@
 ﻿using Cyberpalata.Logic.Interfaces;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Cyberpalata.WebApi.Midlewares
 {
@@ -13,13 +14,10 @@ namespace Cyberpalata.WebApi.Midlewares
         }
 
         public async Task InvokeAsync(HttpContext context)
-        {            
-            _next.Invoke(context);
-            var service = context.RequestServices.GetService<IUserRefreshTokenService>();
-            if (context.Response.Headers["IS-TOKEN-EXPIRED"] == "true")
-            {
-                context.Response.Headers.Add("Result", "GOOD");
-            }
+        {
+            context.GetTokenAsync("accessToken");
+            context.Request.Headers.ToList().ForEach(item => Console.WriteLine(item.Value)); ;
+            await _next.Invoke(context);
         }
     }
 }

@@ -80,7 +80,7 @@ namespace Cyberpalata.Logic.Services
                 if(refreshTokenOrNothing.User.Id != userId)
                     throw new ArgumentException("Invalid user's id!", nameof(userId));
 
-                var isExpired = DateTime.Now.AddMinutes(30) >= refreshTokenOrNothing.Expiration;
+                var isExpired = DateTime.Now.AddMinutes(5) >= refreshTokenOrNothing.Expiration;
                 if (isExpired)
                     return Result.Ok(await GenerateTokenAsync(_mapper.Map<ApiUserDto>(refreshTokenOrNothing.User)));
                 else
@@ -114,7 +114,7 @@ namespace Cyberpalata.Logic.Services
             var accessToken = new JwtSecurityToken(_configuration["Jwt:Issuer"],
                 _configuration["Jwt:Audience"],
                 claims,
-                expires: DateTime.Now.AddMinutes(30),
+                expires: DateTime.Now.AddMinutes(1),
                 signingCredentials: credentials);
            
             return new JwtSecurityTokenHandler().WriteToken(accessToken);

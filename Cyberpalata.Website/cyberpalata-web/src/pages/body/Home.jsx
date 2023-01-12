@@ -1,10 +1,10 @@
-import {Logo} from '../logoComponent'
+import './../../Components/Index.css';
 import {Link} from 'react-router-dom'
-import { GameLibrary } from './GameLibrary'
+import { GameLibrary } from './../body/GameLibrary';
 
-const Home = () => {
+export const Home = () => {
     return <>
-        <Link to='/'><Logo/></Link>
+      
         <div style={{"display":"flex", "justifyContent":"center", "position":"absolute", "top":"30%","left":"30%"}}>
             <div className='loungeLink'>
                 <Link to='/lounge'><label className='labelRoomVert'>Lounge</label></Link>
@@ -16,5 +16,3 @@ const Home = () => {
         </div>
     </>
 }
-
-export default Home

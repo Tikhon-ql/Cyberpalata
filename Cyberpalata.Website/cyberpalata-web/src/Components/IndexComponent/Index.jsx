@@ -9,6 +9,7 @@ import { GameLibrary } from './pages/GameLibrary';
 import { GameConsoleRooms } from './pages/GameConsoleRooms';
 import {LoginComponent} from './pages/header/LoginComponent';
 import {RegistrationComponent} from './pages/header/RegistrationComponent';
+import { LogoutComponent } from './pages/header/LogoutComponent';
 
 export const Index = () => {
     return (
@@ -22,6 +23,7 @@ export const Index = () => {
                 <Route path="/gameConsoleRoom/:id" element = {<GameConsoleRoom/>}/>
                 <Route path="/gamesLibrary" element = {<GameLibrary/>}/>          
                 <Route path="/login" element = {<LoginComponent/>}/>                
+                <Route path="/logout" element = {<LogoutComponent/>}/>                
                 <Route path="/register" element = {<RegistrationComponent/>}/>                
             </Routes>
         </BrowserRouter>
