@@ -1,10 +1,12 @@
 import './../../Components/Index.css';
 import {Link} from 'react-router-dom'
 import { GameLibrary } from './../body/GameLibrary';
+import { Header } from '../header/Header';
+import jwtDecode from 'jwt-decode';
 
 export const Home = () => {
     return <>
-      
+        <Header/>
         <div style={{"display":"flex", "justifyContent":"center", "position":"absolute", "top":"30%","left":"30%"}}>
             <div className='loungeLink'>
                 <Link to='/lounge'><label className='labelRoomVert'>Lounge</label></Link>

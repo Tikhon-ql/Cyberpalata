@@ -1,9 +1,13 @@
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const RegistrationComponent = ()=>{
 
+    let navigate = useNavigate();
+
     function sendRegisterRequest(event)
     {
+        event.preventDefault();
         const data = {
             "username": event.target.elements.username.value,
             "surname": event.target.elements.surname.value,
@@ -13,15 +17,16 @@ export const RegistrationComponent = ()=>{
             "passwordConfirm" : event.target.elements.passwordConfirm.value
         }
 
-        console.dir(data);
+        //console.dir(data);
 
         const apiRequestUrl = `https://localhost:7227/users/register`;
         
         const res = axios.post(apiRequestUrl, data).then(res=>
         {
-            console.log("anime");
+            navigate("/");
+            //console.log("anime");
         });
-       
+        
     }
 
     return<div class="row">

@@ -12,7 +12,7 @@ namespace Cyberpalata.DataProvider.Interfaces
     {
         Task CreateAsync(UserRefreshToken entity);
         Task<UserRefreshToken> ReadAsync(string refreshToken);
-        Task DeleteAsync(string refreshToken);
+        void Delete(UserRefreshToken refreshToken);
         Task<Result<ApiUser>> GetUserByRefreshToken(string refreshToken);
     }
 }

@@ -1,9 +1,11 @@
 import { createBrowserHistory } from "@remix-run/router";
 import axios  from 'axios';
 import {Link} from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 export const LoginComponent = () => {
 
+    let navigate = useNavigate();
     function sendLoginRequest(event)
     {
         event.preventDefault();
@@ -12,15 +14,17 @@ export const LoginComponent = () => {
             "password":event.target.elements.password.value
         }
 
-        console.dir(data);
+        // console.dir(data);
 
-        const apiRequestUrl = `https://localhost:7227/users/authenticate`;
+        const apiRequestUrl = `https://localhost:7227/users/login`;
         
         const res = axios.post(apiRequestUrl, data).then(res=>
         {
             localStorage.setItem('accessToken', res.data.accessToken);
             localStorage.setItem('refreshToken', res.data.refreshToken);
             localStorage.setItem('isAuthenticated', true);
+
+            navigate("/");
         });
     }
 

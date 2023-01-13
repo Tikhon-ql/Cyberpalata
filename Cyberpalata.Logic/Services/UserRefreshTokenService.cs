@@ -32,9 +32,5 @@ namespace Cyberpalata.Logic.Services
             return _mapper.Map<UserRefreshTokenDto>(await _repository.ReadAsync(refreshToken));
         }
 
-        public async Task DeleteAsync(string refreshToken)
-        {
-            await _repository.DeleteAsync(refreshToken);
-        }
     }
 }

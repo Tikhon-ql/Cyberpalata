@@ -45,8 +45,8 @@ namespace Cyberpalata.WebApi.Controllers
             return await ReturnSuccess();
         }
 
-        [HttpPost("authenticate")]
-        public async Task<IActionResult> Authenticate(AuthenticateRequest request)
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(AuthenticateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -60,6 +60,17 @@ namespace Cyberpalata.WebApi.Controllers
 
             return await ReturnSuccess(token);
         }
+
+        [HttpPost("logout")]
+        [Authorize]
+        public async Task<IActionResult> Logout([FromBody] TokenDto tokenDto)
+        {
+            var res = await _authenticationService.LogoutAsync(tokenDto);
+            if (res.IsFailure) return BadRequest(res.Error);
+            return await ReturnSuccess();
+        }
+
+
 
         [AllowAnonymous]
         [HttpPost("refresh")]

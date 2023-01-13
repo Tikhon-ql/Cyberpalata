@@ -13,5 +13,6 @@ namespace Cyberpalata.Logic.Interfaces
         Task<Result<ApiUserDto>> ValidateUserAsync(AuthenticateRequest request);
         Task<TokenDto> GenerateTokenAsync(ApiUserDto user);
         Task<Result<TokenDto>> RefreshTokenAsync(TokenDto tokenDto);
+        Task<Result> LogoutAsync(TokenDto tokenDto);
     }
 }

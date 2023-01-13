@@ -3,28 +3,30 @@ import {Link} from 'react-router-dom'
 import axios, {AxiosError} from "axios";
 import { LoginComponent } from './Identity/LoginComponent';
 import { Logo } from './LogoComponent';
-
-// import {isAcessTokenExpired} from './../../../../isAcessTokenExpired';
-// import { LoginLogoutComponent } from './css/LoginLogoutComponent';
+import { AuthVerify } from '../../Components/AuthVerify';
+import jwtDecode from 'jwt-decode';
+// import { Logout } from './Identity/Logout';
+import { useNavigate } from 'react-router-dom';
+import { LogoutComponent } from './Identity/LogoutComponent';
 
 export const Header = () => {
-
-    function refreshToken(event)
+    let accessToken = false;
+    if(localStorage.getItem('accessToken') != null)
     {
-
-      
+        accessToken = jwtDecode(localStorage.getItem('accessToken'));
     }
 
+    console.dir(accessToken);
     return <>
-     <div>
-          <Link to='/'><Logo/></Link>
-        </div>
-        <div>
-
-            {/* <Link to='/login' class="d-flex flex-row-reverse m-3 p-2"><b>Login</b></Link> */}
-            {/* <LoginLogoutComponent/> */}
-            <Link to='/login' class="d-flex flex-row-reverse m-3 p-2"><b>Login</b></Link>
-            <button onClick={refreshToken}>Refresh</button>
-        </div>
-    </>
+        <nav id="navbar-example2" class="navbar navbar-light bg-transparent">
+            <Link to='/' className='navbar-brand'><Logo/></Link>
+            <ul class="nav nav-pills d-flex justify-content-center">
+                {(AuthVerify() && accessToken) && <li class='nav-item mt-3'>{accessToken.na}</li>}
+                <li class="nav-item m-3">
+                    {AuthVerify() ? <Link to="/logout">Logout</Link> : <Link to="/login">Login</Link>}
+                </li>
+            </ul>
+        </nav>
+   </>
 }
+

@@ -68,19 +68,29 @@ namespace Cyberpalata.Logic.Services
             try
             {
 
-                //????????????
                 var handler = new JwtSecurityTokenHandler();
                 var jwtSecurityToken = handler.ReadJwtToken(tokenDto.AccessToken);
-                var userId = new Guid(jwtSecurityToken.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value);
-                //????????????
+
+                var claimId = jwtSecurityToken.Claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Sid);
+
+                if (claimId == null)
+                    return (Result<TokenDto>)Result.Fail("Id claim missed.");
+
+                if (!Guid.TryParse(claimId.Value, out var userId))
+                {
+                    return (Result<TokenDto>)Result.Fail("Cannot parse id");
+                }
 
                 //Maybe
                 UserRefreshToken refreshTokenOrNothing = await _refreshTokenRepository.ReadAsync(tokenDto.RefreshToken);
 
-                if(refreshTokenOrNothing.User.Id != userId)
-                    throw new ArgumentException("Invalid user's id!", nameof(userId));
 
-                var isExpired = DateTime.Now.AddMinutes(5) >= refreshTokenOrNothing.Expiration;
+                if (userId != refreshTokenOrNothing.User.Id)
+                {
+                    return (Result<TokenDto>)Result.Fail("Your aren't owner of the refresh token");
+                }
+
+                var isExpired = DateTime.Now.AddMinutes(30) >= refreshTokenOrNothing.Expiration;
                 if (isExpired)
                     return Result.Ok(await GenerateTokenAsync(_mapper.Map<ApiUserDto>(refreshTokenOrNothing.User)));
                 else
@@ -104,17 +114,17 @@ namespace Cyberpalata.Logic.Services
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecurityKey"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            //JwtRegisteredClaimNames
             var claims = new[]
             {
-                //???? 
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name,user.Username),
-                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Sid, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Name,user.Username),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
             };
             var accessToken = new JwtSecurityToken(_configuration["Jwt:Issuer"],
                 _configuration["Jwt:Audience"],
                 claims,
-                expires: DateTime.Now.AddMinutes(1),
+                expires: DateTime.Now.AddMinutes(5),
                 signingCredentials: credentials);
            
             return new JwtSecurityTokenHandler().WriteToken(accessToken);
@@ -128,6 +138,33 @@ namespace Cyberpalata.Logic.Services
                 rng.GetBytes(randomNumber);
                 return Convert.ToBase64String(randomNumber);
             }
+        }
+
+        public async Task<Result> LogoutAsync(TokenDto tokenDto)
+        {
+            var userRefreshToken = await _refreshTokenRepository.ReadAsync(tokenDto.RefreshToken);
+
+            var handler = new JwtSecurityTokenHandler();
+            var jwtSecurityToken = handler.ReadJwtToken(tokenDto.AccessToken);
+            var claimId = jwtSecurityToken.Claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Sid);
+
+            if (claimId == null)
+                return Result.Fail("Id claim missed.");
+
+            if (Guid.TryParse(claimId.Value, out Guid userId))
+            {
+                return Result.Fail("Cannot parse id");
+            }
+
+
+            if(userId != userRefreshToken.User.Id)
+            {
+                return Result.Fail("Your aren't owner of the refresh token");
+            }
+
+            _refreshTokenRepository.Delete(userRefreshToken);
+
+            return Result.Ok();
         }
     }
 }

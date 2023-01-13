@@ -30,10 +30,9 @@ namespace Cyberpalata.DataProvider.Repositories
             return await _context.RefreshTokens.Include(i => i.User).SingleAsync(rt=>rt.RefreshToken == refreshToken);
         }
 
-        public async Task DeleteAsync(string refreshToken)
+        public void Delete(UserRefreshToken refreshToken)
         {
-            var entity = await _context.RefreshTokens.SingleAsync(t => t.RefreshToken == refreshToken);
-            _context.RefreshTokens.Remove(entity);
+            _context.RefreshTokens.Remove(refreshToken);
         }
 
         public async Task<Result<ApiUser>> GetUserByRefreshToken(string refreshToken)
