@@ -42,5 +42,11 @@ namespace Cyberpalata.Logic.Services
             //Добавить проверки
             return await _userRepository.CreateAsync(ApiUserMapper.MapToApiUser(request));
         }
+
+        public async Task<Result<ApiUserDto>> ReadAsync(Guid id)
+        {
+            var user = _mapper.Map<ApiUserDto>(await _userRepository.ReadAsync(id));
+            return Result<ApiUserDto>.Ok(user);
+        }
     }
 }

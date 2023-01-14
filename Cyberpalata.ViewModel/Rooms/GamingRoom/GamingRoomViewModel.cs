@@ -8,7 +8,7 @@ namespace Cyberpalata.ViewModel.Rooms.GamingRoom
 {
     public class GamingRoomViewModel
     {
-        public List<PcInfo> PcInfos { get; set; } = new();
+        public PcInfo PcInfo { get; set; }
         public List<Periphery> Peripheries { get; set; } = new();
         public List<Price> Prices { get; set; } = new();
     }

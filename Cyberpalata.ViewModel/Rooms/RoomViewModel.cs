@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cyberpalata.ViewModel.Rooms.GameConsoleRoom
+namespace Cyberpalata.ViewModel.Rooms
 {
-    public class GameConsoleRoomsViewModel
+    public class RoomViewModel
     {
         //public List<string> Names { get; set; } = new();
         //public List<string> Ids { get; set; } = new();
-        public List<GameConsoleRoomInfo> Infos { get; set; } = new();
+        public List<RoomListItemInfo> Infos { get; set; } = new();
     }
 }

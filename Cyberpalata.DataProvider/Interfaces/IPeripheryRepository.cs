@@ -9,6 +9,6 @@ namespace Cyberpalata.DataProvider.Interfaces
 {
     public interface IPeripheryRepository : IRepository<Periphery>
     {
-        List<Periphery> GetByGamingRoomId(Guid roomId);
+        Task<List<Periphery>> GetByGamingRoomId(Guid roomId);
     }
 }

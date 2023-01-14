@@ -9,5 +9,6 @@ namespace Cyberpalata.Logic.Interfaces
 {
     public interface IPcService : IService<PcDto>
     {
+        Task<PcDto> GetByGamingRoomId(Guid roomId);
     }
 }

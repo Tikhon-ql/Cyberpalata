@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 
 namespace Cyberpalata.DataProvider.Models.Devices
 {
-    public class GameConsole : Device
+    public class GameConsole
     {
+        [Key][Required] public Guid Id { get; set; }
         [MaxLength(50)] [Required] public string ConsoleName { get; set; }
-        [Required] public Room ConsoleRoom { get; set; }
+        [Required] public virtual Room ConsoleRoom { get; set; }
     }
 }

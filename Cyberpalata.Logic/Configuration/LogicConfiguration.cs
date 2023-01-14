@@ -26,8 +26,8 @@ namespace Cyberpalata.Logic.Configuration
             services.AddTransient<IGameConsoleService, GameConsoleService>();
             services.AddTransient<IUserRefreshTokenService, UserRefreshTokenService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
-            //services.AddTransient<IPcService, PcService>();
-            //services.AddTransient<IPeripheryService, PeripheryService>();
+            services.AddTransient<IPcService, PcService>();
+            services.AddTransient<IPeripheryService, PeripheryService>();
             //services.AddTransient<ISeatService, SeatService>();
             //services.AddTransient<IMenuItemService, MenuItemService>();
         }

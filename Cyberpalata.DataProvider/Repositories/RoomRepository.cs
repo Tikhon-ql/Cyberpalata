@@ -1,4 +1,5 @@
 ﻿using Cyberpalata.Common;
+using Cyberpalata.Common.Enums;
 using Cyberpalata.DataProvider.Context;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
@@ -47,6 +48,17 @@ namespace Cyberpalata.DataProvider.Repositories
         public async Task<PagedList<Room>> GetPageListAsync(int pageNumber)
         {
             return await Task.Run(() => GetPageList(pageNumber));
+        }
+
+        private PagedList<Room> GetPageList(int pageNumber, RoomType type)
+        {
+            var list = _context.Rooms.Where(r=>r.Type == type).Skip((pageNumber - 1) * 10).Take(10).ToList();
+            return new PagedList<Room>(list, pageNumber, 10, _context.Rooms.Count());
+        }
+
+        public async Task<PagedList<Room>> GetPageListAsync(int pageNumber, RoomType type)
+        {
+            return await Task.Run(() => GetPageList(pageNumber, type));
         }
     }
 }

@@ -24,13 +24,12 @@ namespace Cyberpalata.WebApi.Controllers
             _refreshTokenService = refreshTokenService;
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> Get(string userName, string password)
-        //{ 
-        //    await _userService.LoginAsync(userName, password,false);
-        //    Console.WriteLine(User.Identity.Name);
-        //    return Ok();
-        //}
+        [HttpGet("id")]
+        public async Task<IActionResult> Get(Guid id)
+        {
+            var user = await _userService.ReadAsync(id);
+            return await ReturnSuccess(user.Value);
+        }
 
         [HttpPost("register")]
         public async Task<IActionResult> Post(AuthorizationRequest request)

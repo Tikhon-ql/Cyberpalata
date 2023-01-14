@@ -40,6 +40,7 @@ namespace Cyberpalata.DataProvider.Context
             modelBuilder.Entity<Room>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<ApiUser>().Property(a => a.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<UserRefreshToken>().Property(t => t.Id).HasDefaultValueSql("NEWID()");
+
             //modelBuilder.Entity<GameConsoleRoom>().Property(g => g.Id).HasDefaultValueSql("NEWID()");
 
             //modelBuilder.Entity<GameConsoleRoom>().HasMany(g=>g.Consoles).WithOne(gc=>gc.ConsoleRoom);

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Cyberpalata.Common;
+using Cyberpalata.Common.Enums;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
 using Cyberpalata.Logic.Interfaces;
@@ -7,6 +8,7 @@ using Cyberpalata.Logic.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -41,6 +43,11 @@ namespace Cyberpalata.Logic.Services
         public async Task<PagedList<RoomDto>> GetPagedListAsync(int pageNumber)
         {
             return _mapper.Map<PagedList<RoomDto>>(await _repository.GetPageListAsync(pageNumber));
+        }
+
+        public async Task<PagedList<RoomDto>> GetPagedListAsync(int pageNumber, RoomType type)
+        {
+            return _mapper.Map<PagedList<RoomDto>>(await _repository.GetPageListAsync(pageNumber, type));
         }
     }
 }

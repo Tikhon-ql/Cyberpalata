@@ -11,7 +11,7 @@ import {LoginComponent} from './../pages/header/Identity/LoginComponent';
 import {RegistrationComponent} from './../pages/header/Identity/RegistrationComponent';
 import { AccessTokenVerify } from './AccessTokenVerify';
 import { LogoutComponent } from '../pages/header/Identity/LogoutComponent';
-
+import { ProfileComponent } from '../pages/body/ProfileComponent';
 
 export const Index = () => {
     return (
@@ -26,7 +26,8 @@ export const Index = () => {
                 <Route path="/gamesLibrary" element = {<GameLibrary/>}/>          
                 <Route path="/login" element = {<LoginComponent/>}/>                
                 <Route path="/logout" element = {<LogoutComponent/>}/>                
-                <Route path="/register" element = {<RegistrationComponent/>}/>      
+                <Route path="/register" element = {<RegistrationComponent/>}/>
+                <Route path="/profile" element={<ProfileComponent/>}/>
             </Routes>
             <AccessTokenVerify/>          
         </BrowserRouter>

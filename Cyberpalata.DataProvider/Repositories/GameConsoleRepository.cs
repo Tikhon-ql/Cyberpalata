@@ -52,7 +52,7 @@ namespace Cyberpalata.DataProvider.Repositories
 
         public async Task<List<GameConsole>> GetByGameConsoleRoomIdAsync(Guid roomId)
         {
-            return await Task.Run(() => { return _context.GameConsoles.Where(gc => gc.ConsoleRoom.Id == roomId).ToList(); });
+            return await _context.GameConsoles.Where(gc => gc.ConsoleRoom.Id == roomId).ToListAsync();
         }
     }
 }

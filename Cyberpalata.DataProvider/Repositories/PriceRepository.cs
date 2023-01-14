@@ -51,7 +51,7 @@ namespace Cyberpalata.DataProvider.Repositories
 
         public async Task<List<Price>> GetByRoomIdAsync(Guid roomId)
         {
-            return await Task.Run(() => { return _context.Prices.Where(p => p.Room.Id == roomId).ToList(); });
+            return await _context.Prices.Where(p => p.Room.Id == roomId).ToListAsync();
         }
     }
 }

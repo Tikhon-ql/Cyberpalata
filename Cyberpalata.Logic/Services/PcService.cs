@@ -48,5 +48,10 @@ namespace Cyberpalata.Logic.Services
         {
             return _mapper.Map<PagedList<PcDto>>(await _repository.GetPageListAsync(pageNumber));
         }
+
+        public async Task<PcDto> GetByGamingRoomId(Guid roomId)
+        {
+            return _mapper.Map<PcDto>(await _repository.GetByGamingRoomId(roomId));
+        }
     }
 }

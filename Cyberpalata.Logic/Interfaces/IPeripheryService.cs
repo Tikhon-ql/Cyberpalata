@@ -9,5 +9,6 @@ namespace Cyberpalata.Logic.Interfaces
 {
     public interface IPeripheryService : IService<PeripheryDto>
     {
+        Task<List<PeripheryDto>> GetByGamingRoomId(Guid roomId);
     }
 }

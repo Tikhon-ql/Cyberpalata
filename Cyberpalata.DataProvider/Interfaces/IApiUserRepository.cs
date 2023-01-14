@@ -12,6 +12,7 @@ namespace Cyberpalata.DataProvider.Interfaces
     {
         Task<Result> CreateAsync(ApiUser entity);
         Task<ApiUser> ReadAsync(string email);
+        Task<ApiUser> ReadAsync(Guid id);
         Task<PagedList<ApiUser>> GetPageListAsync(int pageNumber);
     }
 }

@@ -21,7 +21,10 @@ export const Header = () => {
         <nav id="navbar-example2" class="navbar navbar-light bg-transparent">
             <Link to='/' className='navbar-brand'><Logo/></Link>
             <ul class="nav nav-pills d-flex justify-content-center">
-                {(AuthVerify() && accessToken) && <li class='nav-item mt-3'>{accessToken.na}</li>}
+                <li class='nav-item mt-3'>
+                    <Link to="/gamesLibrary">Games library</Link>
+                </li>
+                {(AuthVerify() && accessToken) && <Link to="/profile"><li class='nav-item m-3'>{accessToken.name}</li></Link>}
                 <li class="nav-item m-3">
                     {AuthVerify() ? <Link to="/logout">Logout</Link> : <Link to="/login">Login</Link>}
                 </li>

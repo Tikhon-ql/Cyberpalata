@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Cyberpalata.DataProvider.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class IntialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,19 +21,6 @@ namespace Cyberpalata.DataProvider.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Games", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Pcs",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
-                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Pcs", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -54,7 +41,8 @@ namespace Cyberpalata.DataProvider.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -91,6 +79,29 @@ namespace Cyberpalata.DataProvider.Migrations
                     table.ForeignKey(
                         name: "FK_GameConsoles_Rooms_ConsoleRoomId",
                         column: x => x.ConsoleRoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Pcs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
+                    Gpu = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Cpu = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Ram = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Hdd = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Ssd = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    GamingRoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pcs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Pcs_Rooms_GamingRoomId",
+                        column: x => x.GamingRoomId,
                         principalTable: "Rooms",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -185,6 +196,11 @@ namespace Cyberpalata.DataProvider.Migrations
                 name: "IX_GameConsoles_ConsoleRoomId",
                 table: "GameConsoles",
                 column: "ConsoleRoomId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pcs_GamingRoomId",
+                table: "Pcs",
+                column: "GamingRoomId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Peripheries_GamingRoomId",

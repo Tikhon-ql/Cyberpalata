@@ -34,11 +34,6 @@ namespace Cyberpalata.Logic.Services
             return _mapper.Map<PeripheryDto>(await _repository.ReadAsync(id));
         }
 
-        public Task UpdateAsync(PeripheryDto entity)
-        {
-            //_repository.Update(_mapper.Map<Periphery>(entity));
-            throw new NotImplementedException();
-        }
 
         public async Task DeleteAsync(Guid id)
         {
@@ -48,6 +43,11 @@ namespace Cyberpalata.Logic.Services
         public async Task<PagedList<PeripheryDto>> GetPagedListAsync(int pageNumber)
         {
             return _mapper.Map<PagedList<PeripheryDto>>(await _repository.GetPageListAsync(pageNumber));
+        }
+
+        public async Task<List<PeripheryDto>> GetByGamingRoomId(Guid roomId)
+        {
+            return _mapper.Map<List<PeripheryDto>>(await _repository.GetByGamingRoomId(roomId));
         }
     }
 }

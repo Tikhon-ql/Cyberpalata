@@ -10,6 +10,6 @@ namespace Cyberpalata.DataProvider.Interfaces
 {
     public interface IPcRepository : IRepository<Pc>
     {
-        List<Pc> GetByGamingRoomId(Guid roomId);
+        Task<Pc> GetByGamingRoomId(Guid roomId);
     }
 }
