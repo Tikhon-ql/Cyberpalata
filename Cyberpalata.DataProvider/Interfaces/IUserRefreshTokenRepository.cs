@@ -10,7 +10,7 @@ namespace Cyberpalata.DataProvider.Interfaces
 {
     public interface IUserRefreshTokenRepository
     {
-        Task CreateAsync(UserRefreshToken entity);
+        Task<Result> CreateAsync(UserRefreshToken entity);
         Task<UserRefreshToken> ReadAsync(string refreshToken);
         void Delete(UserRefreshToken refreshToken);
         Task<Result<ApiUser>> GetUserByRefreshToken(string refreshToken);

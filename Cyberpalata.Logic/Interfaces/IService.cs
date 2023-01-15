@@ -9,7 +9,7 @@ namespace Cyberpalata.Logic.Interfaces
 {
     public interface IService<T> where T : class
     {
-        Task CreateAsync(T entity);
+        Task<Result> CreateAsync(T entity);
         Task<T> ReadAsync(Guid id);
         Task DeleteAsync(Guid id);
         Task<PagedList<T>> GetPagedListAsync(int pageNumber);

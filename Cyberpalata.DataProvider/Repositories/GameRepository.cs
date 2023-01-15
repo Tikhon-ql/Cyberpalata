@@ -19,11 +19,12 @@ namespace Cyberpalata.DataProvider.Repositories
         {
             this._context = context;
         }
-        public async Task CreateAsync(Game entity)
+        public async Task<Result> CreateAsync(Game entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
             await _context.Games.AddAsync(entity);
+            return Result.Ok();
         }
 
         public async Task<Game> ReadAsync(Guid id)

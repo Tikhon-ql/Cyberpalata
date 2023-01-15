@@ -55,5 +55,11 @@ namespace Cyberpalata.DataProvider.Repositories
         {
             return await Task.Run(() => GetPageList(pageNumber));
         }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            var user = await ReadAsync(id);
+            _context.Users.Remove(user);
+        }
     }
 }

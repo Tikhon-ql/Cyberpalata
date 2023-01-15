@@ -18,11 +18,12 @@ namespace Cyberpalata.DataProvider.Repositories
         {
             this._context = context;
         }
-        public async Task CreateAsync(Price entity)
+        public async Task<Result> CreateAsync(Price entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
             await _context.Prices.AddAsync(entity);
+            return Result.Ok();
         }
 
         public async Task<Price> ReadAsync(Guid id)

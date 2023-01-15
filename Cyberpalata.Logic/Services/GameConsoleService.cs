@@ -22,9 +22,9 @@ namespace Cyberpalata.Logic.Services
             _mapper = mapper;
         }
 
-        public async Task CreateAsync(GameConsoleDto entity)
+        public async Task<Result> CreateAsync(GameConsoleDto entity)
         {
-            await _repository.CreateAsync(_mapper.Map<GameConsole>(entity));
+            return await _repository.CreateAsync(_mapper.Map<GameConsole>(entity));
         }
         public async Task<GameConsoleDto> ReadAsync(Guid id)
         {

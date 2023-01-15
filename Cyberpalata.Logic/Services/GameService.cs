@@ -24,9 +24,9 @@ namespace Cyberpalata.Logic.Services
             _repository = repository;
         }
 
-        public Task CreateAsync(GameDto entity)
+        public async Task<Result> CreateAsync(GameDto entity)
         { 
-            return _repository.CreateAsync(_mapper.Map<Game>(entity));
+            return await _repository.CreateAsync(_mapper.Map<Game>(entity));
         }
 
         public Task<GameDto> ReadAsync(Guid id)

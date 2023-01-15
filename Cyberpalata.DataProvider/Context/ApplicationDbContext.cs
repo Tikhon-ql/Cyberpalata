@@ -40,13 +40,6 @@ namespace Cyberpalata.DataProvider.Context
             modelBuilder.Entity<Room>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<ApiUser>().Property(a => a.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<UserRefreshToken>().Property(t => t.Id).HasDefaultValueSql("NEWID()");
-
-            //modelBuilder.Entity<GameConsoleRoom>().Property(g => g.Id).HasDefaultValueSql("NEWID()");
-
-            //modelBuilder.Entity<GameConsoleRoom>().HasMany(g=>g.Consoles).WithOne(gc=>gc.ConsoleRoom);
-
-            //modelBuilder.Entity<GameConsoleRoom>().HasData(new GameConsoleRoom { Id = new Guid("399ce32f-1610-44dd-b634-4ffdc223038b"),Name = "ConsoleRoom1" });
-
             base.OnModelCreating(modelBuilder);
         }
     }

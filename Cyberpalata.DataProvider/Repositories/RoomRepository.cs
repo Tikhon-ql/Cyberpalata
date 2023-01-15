@@ -22,10 +22,11 @@ namespace Cyberpalata.DataProvider.Repositories
             _context = context;
         }
 
-        public async Task CreateAsync(Room entity)
+        public async Task<Result> CreateAsync(Room entity)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
             await _context.Rooms.AddAsync(entity);
+            return Result.Ok();
         }
 
         public async Task<Room> ReadAsync(Guid id)

@@ -24,9 +24,9 @@ namespace Cyberpalata.Logic.Services
             _repository = repository;
         }
 
-        public async Task CreateAsync(PriceDto entity)
+        public async Task<Result> CreateAsync(PriceDto entity)
         {
-            _repository.CreateAsync(_mapper.Map<Price>(entity));
+             return await _repository.CreateAsync(_mapper.Map<Price>(entity));
         }
 
         public async Task<PriceDto> ReadAsync(Guid id)

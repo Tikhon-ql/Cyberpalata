@@ -24,9 +24,9 @@ namespace Cyberpalata.Logic.Services
             _repository = repository;
         }
 
-        public async Task CreateAsync(PeripheryDto entity)
+        public async Task<Result> CreateAsync(PeripheryDto entity)
         {
-            await _repository.CreateAsync(_mapper.Map<Periphery>(entity));
+            return await _repository.CreateAsync(_mapper.Map<Periphery>(entity));
         }
 
         public async Task<PeripheryDto> ReadAsync(Guid id)

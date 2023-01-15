@@ -66,7 +66,7 @@ export const GamingRoom = () => {
                             })}
                         </tbody>
                     </table>
-                    <Link to={`/gameConsoleRoom`} className="btn btn-outline-dark btn-sm mt-2">Back</Link>
+                    <Link to={`/gamingRooms`} className="btn btn-outline-dark btn-sm mt-2">Back</Link>
                 </div>
            </>
 }

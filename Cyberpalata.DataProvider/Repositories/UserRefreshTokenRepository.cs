@@ -19,10 +19,11 @@ namespace Cyberpalata.DataProvider.Repositories
             _context = context;
         }
 
-        public async Task CreateAsync(UserRefreshToken entity)
+        public async Task<Result> CreateAsync(UserRefreshToken entity)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
             await _context.RefreshTokens.AddAsync(entity);
+            return Result.Ok();
         }
 
         public async Task<UserRefreshToken> ReadAsync(string refreshToken)

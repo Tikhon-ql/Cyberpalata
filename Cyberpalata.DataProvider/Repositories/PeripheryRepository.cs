@@ -18,11 +18,12 @@ namespace Cyberpalata.DataProvider.Repositories
         {
             this._context = context;
         }
-        public async Task CreateAsync(Periphery entity)
+        public async Task<Result> CreateAsync(Periphery entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
             await _context.Peripheries.AddAsync(entity);
+            return Result.Ok();
         }
 
         public async Task<Periphery> ReadAsync(Guid id)

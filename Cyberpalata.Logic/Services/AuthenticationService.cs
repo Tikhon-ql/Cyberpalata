@@ -47,7 +47,6 @@ namespace Cyberpalata.Logic.Services
             var accessToken = GenerateAccessToken(user);
             var refreshToken = GenerateRefreshToken();
 
-            // to get by email / automapper doesn't work
             var apiUser = await _userRepository.ReadAsync(user.Email);
 
             await _refreshTokenRepository.CreateAsync(new UserRefreshToken { User = apiUser,Expiration = DateTime.Now.AddDays(2), RefreshToken = refreshToken });
@@ -58,10 +57,6 @@ namespace Cyberpalata.Logic.Services
                 RefreshToken = refreshToken
             };
         }
-
-        //Maybe
-        //add read by refreshToken 
-        //
 
         public async Task<Result<TokenDto>> RefreshTokenAsync(TokenDto tokenDto)
         {
@@ -84,14 +79,14 @@ namespace Cyberpalata.Logic.Services
                 //Maybe
                 UserRefreshToken refreshTokenOrNothing = await _refreshTokenRepository.ReadAsync(tokenDto.RefreshToken);
 
-
+                //?????????
                 if (userId != refreshTokenOrNothing.User.Id)
                 {
                     return (Result<TokenDto>)Result.Fail("Your aren't owner of the refresh token");
                 }
 
-                var isExpired = DateTime.Now.AddMinutes(30) >= refreshTokenOrNothing.Expiration;
-                if (isExpired)
+                var isRefreshTokenExpired = DateTime.Now.AddMinutes(30) >= refreshTokenOrNothing.Expiration;
+                if (isRefreshTokenExpired)
                     return Result.Ok(await GenerateTokenAsync(_mapper.Map<ApiUserDto>(refreshTokenOrNothing.User)));
                 else
                 {

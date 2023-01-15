@@ -24,9 +24,9 @@ namespace Cyberpalata.Logic.Services
             _mapper = mapper;
         }
 
-        public async Task CreateAsync(PcDto entity)
+        public async Task<Result> CreateAsync(PcDto entity)
         {
-            await _repository.CreateAsync(_mapper.Map<Pc>(entity));
+            return await _repository.CreateAsync(_mapper.Map<Pc>(entity));
         }
 
         public async Task<PcDto> ReadAsync(Guid id)

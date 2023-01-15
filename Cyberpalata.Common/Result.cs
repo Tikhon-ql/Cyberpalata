@@ -26,7 +26,6 @@ namespace Cyberpalata.Common
         public static Result<T> Fail<T>(string errorMessage) => new Result<T>(default(T), false, errorMessage);
         public new static Result<T> Ok<T>(T value) => new Result<T>(value, true);
         public static Result Ok() => new Result(true);
-
     }
 
     public class Result<T> : Result
