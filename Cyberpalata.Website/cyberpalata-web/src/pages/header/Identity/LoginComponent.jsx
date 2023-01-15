@@ -1,4 +1,3 @@
-import { createBrowserHistory } from "@remix-run/router";
 import axios  from 'axios';
 import {Link} from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
@@ -41,8 +40,11 @@ export const LoginComponent = () => {
             <label for="exampleInputPassword1" class="form-label">Password</label>
             <input type="password" name="password" class="form-control" id="exampleInputPassword1"/>
         </div>
-        <Link to='/register'>Register</Link>
-        <button type="submit" class="btn btn-primary" >Submit</button>
+        <div className="d-flex justify-content-around">
+            <button type="submit" class="btn btn-outline-dark mr-3 w-25">Login</button>
+            <Link to='/register' className="btn btn-outline-dark ml-3 w-25">Register</Link>
+            <Link to='/' className="btn btn-outline-dark ml-3 w-25">Cancel</Link>
+        </div>
     </form>
     </div>
 }

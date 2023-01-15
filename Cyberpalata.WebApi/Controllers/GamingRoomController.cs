@@ -42,9 +42,20 @@ namespace Cyberpalata.WebApi.Controllers
             var pc = await _pcService.GetByGamingRoomId(id);
             var peripheries = await _peripheryService.GetByGamingRoomId(id);
 
+            var pcInfos = new List<PcInfo>();
+            foreach(var item in pc.GetType().GetProperties())
+            {
+                if(item.Name != "Id")
+                {
+                    string type = item.Name;
+                    string name = item.GetValue(pc).ToString();
+                    pcInfos.Add(new PcInfo(type, name));
+                }             
+            }
+
             var viewModel = new GamingRoomViewModel
             {
-                PcInfo = new PcInfo(pc.Gpu, pc.Cpu, pc.Ram, pc.Hdd, pc.Ssd),
+                PcInfos = pcInfos/* new PcInfo(pc.Gpu, pc.Cpu, pc.Ram, pc.Hdd, pc.Ssd)*/,
                 Peripheries = peripheries.Select(p => new Periphery(p.Name, p.Type.Name)).ToList(),
                 Prices = prices.Select(p => new Price(p.Hours, p.Cost)).ToList()
             };

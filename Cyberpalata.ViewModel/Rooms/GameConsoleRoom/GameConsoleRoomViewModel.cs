@@ -8,6 +8,7 @@ namespace Cyberpalata.ViewModel.Rooms.GameConsoleRoom
 {
     public class GameConsoleRoomViewModel
     {
+        public string Name { get; set; }
         public List<string> GameConsoles { get; set; } = new();
         public List<Price> Prices { get; set; } = new();
     }

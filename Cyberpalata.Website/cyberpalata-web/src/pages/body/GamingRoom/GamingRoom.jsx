@@ -10,17 +10,19 @@ import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 import { PriceInfo } from './../PriceInfo';
 import { useParams } from 'react-router-dom'
 
-export const GameConsoleRoom = () => {
+export const GamingRoom = () => {
     const {id} = useParams();
     const {name} = useParams();
-    const [deviceInfo, setDevice] = useState([]);
+    const [peripheriesInfo, setPeripheries] = useState([]);
+    const [deviceInfo, setDevices] = useState([]);
     const [priceInfo, setPrices] = useState([]);
     {
         //399CE32F-1610-44DD-B634-4FFDC223038B
-        axios.get(`https://localhost:7227/gameConsoleRoom/id?id=${id}`).then(res => {
-            //console.dir(res);
-            setDevice(res.data.gameConsoles);
+        axios.get(`https://localhost:7227/gamingRooms/id?id=${id}`).then(res => {
+            console.dir(res);
+            setDevices(res.data.pcInfos);
             setPrices(res.data.prices);
+            setPeripheries(res.data.peripheries);
         })
     }
     //console.dir(deviceInfo);
@@ -28,12 +30,30 @@ export const GameConsoleRoom = () => {
                  <div className="mt-5 p-5" style={{"margin":"auto","width":"50%", "border" : "3px solid black", "padding" : "10px"}}>
                     <h1>{name}</h1>
                     <hr></hr>
-                    <h2>Consoles</h2>
-                    <ul class="list-group list-group-flush">
+                    <h2>Devices</h2>
+                    <table className='table'>
+                        <thead>
+                            <th scope='col'>Type</th>
+                            <th scope='col'>Name</th>
+                        </thead>
+                        <tbody>
                         {deviceInfo.map((item)=>{
-                            return <li class="list-group-item">{item}</li>
+                            return <tr><td>{item.type}</td><td>{item.name}</td></tr>
                         })}
-                    </ul>
+                        </tbody>
+                    </table>
+                    <h2>Peripheries</h2>
+                    <table className='table'>
+                        <thead>
+                            <th scope='col'>Type</th>
+                            <th scope='col'>Name</th>
+                        </thead>
+                        <tbody>
+                        {peripheriesInfo.map((item)=>{
+                            return <tr><td>{item.typeName}</td><td>{item.name}</td></tr>
+                        })}
+                        </tbody>
+                    </table>
                     <h2>Prices</h2>
                     <table className='table'>
                         <thead className='thead-dark'>

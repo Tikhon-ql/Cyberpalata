@@ -8,28 +8,33 @@ import jwtDecode from 'jwt-decode';
 // import { Logout } from './Identity/Logout';
 import { useNavigate } from 'react-router-dom';
 import { LogoutComponent } from './Identity/LogoutComponent';
+import { useState } from 'react';
 
-export const Header = () => {
+
+export const Header = (props) => {
     let accessToken = false;
     if(localStorage.getItem('accessToken') != null)
     {
         accessToken = jwtDecode(localStorage.getItem('accessToken'));
     }
 
+    const [state, setState] = useState(0);
+
+  
+
     console.dir(accessToken);
     return <>
-        <nav id="navbar-example2" class="navbar navbar-light bg-transparent">
+        <nav id="headerId" class="navbar navbar-light bg-transparent">
             <Link to='/' className='navbar-brand'><Logo/></Link>
             <ul class="nav nav-pills d-flex justify-content-center">
-                <li class='nav-item mt-3'>
-                    <Link to="/gamesLibrary">Games library</Link>
+                <li className='nav-item m-3 text-dark'>
+                    <Link to="/gamesLibrary" className='text-decoration-none text-dark'>Games library</Link>
                 </li>
-                {(AuthVerify() && accessToken) && <Link to="/profile"><li class='nav-item m-3'>{accessToken.name}</li></Link>}
-                <li class="nav-item m-3">
-                    {AuthVerify() ? <Link to="/logout">Logout</Link> : <Link to="/login">Login</Link>}
+                {(AuthVerify() && accessToken) ? <li className='nav-item mt-3 text-dark'><Link to="/profile" className='text-decoration-none text-dark'>{accessToken.name}</Link></li> : <li class='nav-item m-3'><Link to="/profile" className='text-decoration-none text-dark'>Guest</Link></li>}
+                <li className="nav-item m-3 text-dark">
+                    {AuthVerify() ? <Link to="/logout" className='text-decoration-none text-dark'>Logout</Link> : <Link to="/login" className='text-decoration-none text-dark'>Login</Link>}
                 </li>
             </ul>
         </nav>
    </>
 }
-

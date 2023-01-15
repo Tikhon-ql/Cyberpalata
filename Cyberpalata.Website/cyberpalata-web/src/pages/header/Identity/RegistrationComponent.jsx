@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const RegistrationComponent = ()=>{
 
@@ -60,7 +61,10 @@ export const RegistrationComponent = ()=>{
             <label for="passwordConfirm" class="form-label">Password confirm</label>
             <input type="password" class="form-control" name="passwordConfirm" id="passwordConfirm"/>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <div className="d-flex justify-content-around">
+            <button type="submit" class="btn btn-outline-dark mr-3 w-25">Register</button>
+            <Link to='/' className="btn btn-outline-dark ml-3 w-25">Cancel</Link>
+        </div>
     </form>
     </div>
 }

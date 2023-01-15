@@ -12,17 +12,19 @@ import {RegistrationComponent} from './../pages/header/Identity/RegistrationComp
 import { AccessTokenVerify } from './AccessTokenVerify';
 import { LogoutComponent } from '../pages/header/Identity/LogoutComponent';
 import { ProfileComponent } from '../pages/body/ProfileComponent';
+import { GamingRoomList } from '../pages/body/GamingRoom/GamingRoomList';
+import {GamingRoom} from '../pages/body/GamingRoom/GamingRoom'
 
 export const Index = () => {
     return (
         <BrowserRouter basename='/'>
-          
+           
             <Routes>
                 <Route path='/' element={<Home />} />
-                {/* <Route path="/lounge" element = {<LoungeInfo/>}/> */}
-                {/* <Route path="/gamingRoom" element = {<GamingRoomInfo/>}/> */}
                 <Route path="/gameConsoleRoom" element = {<GameConsoleRoomList/>}/>
-                <Route path="/gameConsoleRoom/:id" element = {<GameConsoleRoom/>}/>
+                <Route path="/gameConsoleRoom/:id/:name" element = {<GameConsoleRoom/>}/>
+                <Route path="/gamingRooms" element = {<GamingRoomList/>}/>
+                <Route path="/gamingRooms/:id/:name" element = {<GamingRoom/>}/>
                 <Route path="/gamesLibrary" element = {<GameLibrary/>}/>          
                 <Route path="/login" element = {<LoginComponent/>}/>                
                 <Route path="/logout" element = {<LogoutComponent/>}/>                
