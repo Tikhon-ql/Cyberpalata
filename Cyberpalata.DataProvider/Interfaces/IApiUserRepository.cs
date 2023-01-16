@@ -10,9 +10,6 @@ namespace Cyberpalata.DataProvider.Interfaces
 {
     public interface IApiUserRepository : IRepository<ApiUser>
     {
-        //Task<Result> CreateAsync(ApiUser entity);
-        Task<ApiUser> ReadAsync(string email);
-        //Task<ApiUser> ReadAsync(Guid id);
-        //Task<PagedList<ApiUser>> GetPageListAsync(int pageNumber);
+        Task<Maybe<ApiUser>> ReadAsync(string email);
     }
 }

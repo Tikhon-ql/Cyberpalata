@@ -24,13 +24,13 @@ export const Header = (props) => {
 
     console.dir(accessToken);
     return <>
-        <nav id="headerId" class="navbar navbar-light bg-transparent">
+        <nav id="headerId" className="navbar navbar-light bg-transparent">
             <Link to='/' className='navbar-brand'><Logo/></Link>
             <ul class="nav nav-pills d-flex justify-content-center">
                 <li className='nav-item m-3 text-dark'>
                     <Link to="/gamesLibrary" className='text-decoration-none text-dark'>Games library</Link>
                 </li>
-                {(AuthVerify() && accessToken) ? <li className='nav-item mt-3 text-dark'><Link to="/profile" className='text-decoration-none text-dark'>{accessToken.name}</Link></li> : <li class='nav-item m-3'><Link to="/profile" className='text-decoration-none text-dark'>Guest</Link></li>}
+                {(AuthVerify() && accessToken) && <li className='nav-item mt-3 text-dark'><Link to="/profile" className='text-decoration-none text-dark'>{accessToken.name}</Link></li>}
                 <li className="nav-item m-3 text-dark">
                     {AuthVerify() ? <Link to="/logout" className='text-decoration-none text-dark'>Logout</Link> : <Link to="/login" className='text-decoration-none text-dark'>Login</Link>}
                 </li>

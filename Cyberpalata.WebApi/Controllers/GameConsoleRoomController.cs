@@ -43,7 +43,7 @@ namespace Cyberpalata.WebApi.Controllers
 
             var viewModel = new RoomViewModel
             {
-                Infos = infos.Select(x => new RoomListItemInfo { Id = x.Id.ToString(), Name = x.Name }).ToList()
+                Infos = infos.Select(x => new RoomListItemInfo { Id = x.Value.Id.ToString(), Name = x.Value.Name }).ToList()
             };
             return await ReturnSuccess(viewModel);
         }
@@ -56,8 +56,8 @@ namespace Cyberpalata.WebApi.Controllers
             var consoles = await _gameConsoleService.GetByGameConsoleRoomId(id);
             var viewModel = new GameConsoleRoomViewModel
             {
-                GameConsoles = consoles.Select(c => c.ConsoleName).ToList(),
-                Prices = prices.Select(p => new Price(p.Hours, p.Cost)).ToList(),
+                GameConsoles = consoles.Select(c => c.Value.ConsoleName).ToList(),
+                Prices = prices.Select(p => new Price(p.Value.Hours, p.Value.Cost)).ToList(),
             };
             return await ReturnSuccess(viewModel);
         }

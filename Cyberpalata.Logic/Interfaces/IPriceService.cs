@@ -1,4 +1,5 @@
-﻿using Cyberpalata.Logic.Models;
+﻿using Cyberpalata.Common;
+using Cyberpalata.Logic.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace Cyberpalata.Logic.Interfaces
 {
     public interface IPriceService : IService<PriceDto>
     {
-        Task<List<PriceDto>> GetByRoomIdAsync(Guid roomId);
+        Task<List<Maybe<PriceDto>>> GetByRoomIdAsync(Guid roomId);
     }
 }

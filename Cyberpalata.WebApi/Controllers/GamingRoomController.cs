@@ -26,11 +26,11 @@ namespace Cyberpalata.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var infos = (await _roomService.GetPagedListAsync(1, RoomType.GamingRoom)).Items;
+            var rooms = await _roomService.GetPagedListAsync(1, RoomType.GamingRoom);
 
             var viewModel = new RoomViewModel
             {
-                Infos = infos.Select(x => new RoomListItemInfo { Id = x.Id.ToString(), Name = x.Name }).ToList()
+                Infos = rooms.Items.Select(x => new RoomListItemInfo { Id = x.Value.Id.ToString(), Name = x.Value.Name }).ToList()
             };
             return await ReturnSuccess(viewModel);
         }
@@ -39,25 +39,27 @@ namespace Cyberpalata.WebApi.Controllers
         public async Task<IActionResult> Get(Guid id)
         {
             var prices = await _priceService.GetByRoomIdAsync(id);
-            var pc = await _pcService.GetByGamingRoomId(id);
+            var roomsPc = await _pcService.GetByGamingRoomId(id);
             var peripheries = await _peripheryService.GetByGamingRoomId(id);
 
-            var pcInfos = new List<PcInfo>();
-            foreach(var item in pc.GetType().GetProperties())
+            var pcInfo = roomsPc.Value;
+
+            var pcInfoList = new List<PcInfo>();
+            foreach(var item in pcInfo.GetType().GetProperties())
             {
                 if(item.Name != "Id")
                 {
                     string type = item.Name;
-                    string name = item.GetValue(pc).ToString();
-                    pcInfos.Add(new PcInfo(type, name));
+                    string name = item.GetValue(pcInfo).ToString();
+                    pcInfoList.Add(new PcInfo(type, name));
                 }             
             }
 
             var viewModel = new GamingRoomViewModel
             {
-                PcInfos = pcInfos/* new PcInfo(pc.Gpu, pc.Cpu, pc.Ram, pc.Hdd, pc.Ssd)*/,
-                Peripheries = peripheries.Select(p => new Periphery(p.Name, p.Type.Name)).ToList(),
-                Prices = prices.Select(p => new Price(p.Hours, p.Cost)).ToList()
+                PcInfos = pcInfoList,
+                Peripheries = peripheries.Select(p => new Periphery(p.Value.Name, p.Value.Type.Name)).ToList(),
+                Prices = prices.Select(p => new Price(p.Value.Hours, p.Value.Cost)).ToList()
             };
             return await ReturnSuccess(viewModel);
         }

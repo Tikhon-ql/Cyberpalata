@@ -19,32 +19,28 @@ namespace Cyberpalata.DataProvider.Repositories
         {
             this._context = context;
         }
-        public async Task<Result> CreateAsync(Game entity)
+        public async Task CreateAsync(Game entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
             await _context.Games.AddAsync(entity);
-            return Result.Ok();
         }
 
-        public async Task<Game> ReadAsync(Guid id)
+        public async Task<Maybe<Game>> ReadAsync(Guid id)
         {
             var game = await _context.Games.SingleAsync(f => f.Id == id);
             return game;
         }
-        public async Task DeleteAsync(Guid id)
+        public void Delete(Game game)
         {
-            var game = await _context.Games.SingleAsync(g => g.Id == id);
             _context.Games.Remove(game);
         }
             
-        private PagedList<Game> GetPageList(int pageNumber)
+        private PagedList<Maybe<Game>> GetPageList(int pageNumber)
         {
-            var list = _context.Games.Skip((pageNumber - 1) * 10).Take(10);
-            return new PagedList<Game>(list.ToList(), pageNumber, 10, _context.Games.Count());
+            var list = _context.Games.Skip((pageNumber - 1) * 10).Take(10).Select(item=>(Maybe<Game>)item);
+            return new PagedList<Maybe<Game>>(list.ToList(), pageNumber, 10, _context.Games.Count());
         }
 
-        public async Task<PagedList<Game>> GetPageListAsync(int pageNumber)
+        public async Task<PagedList<Maybe<Game>>> GetPageListAsync(int pageNumber)
         {
             return await Task.Run(() => GetPageList(pageNumber));
         }

@@ -1,4 +1,5 @@
-﻿using Cyberpalata.DataProvider.Models;
+﻿using Cyberpalata.Common;
+using Cyberpalata.DataProvider.Models;
 using Cyberpalata.DataProvider.Models.Devices;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,6 @@ namespace Cyberpalata.DataProvider.Interfaces
 {
     public interface IMenuItemRepository : IRepository<MenuItem>
     {
-        List<MenuItem> GetByLoungeId(Guid roomId);
+        List<Maybe<MenuItem>> GetByLoungeId(Guid roomId);
     }
 }

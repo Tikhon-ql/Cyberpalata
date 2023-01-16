@@ -11,6 +11,6 @@ namespace Cyberpalata.DataProvider.Interfaces
 {
     public interface IRoomRepository : IRepository<Room>
     {
-        Task<PagedList<Room>> GetPageListAsync(int pageNumber, RoomType type);
+        Task<PagedList<Maybe<Room>>> GetPageListAsync(int pageNumber, RoomType type);
     }
 }

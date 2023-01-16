@@ -19,14 +19,12 @@ namespace Cyberpalata.DataProvider.Repositories
             _context = context;
         }
 
-        public async Task<Result> CreateAsync(UserRefreshToken entity)
+        public async Task CreateAsync(UserRefreshToken entity)
         {
-            if (entity == null) throw new ArgumentNullException(nameof(entity));
             await _context.RefreshTokens.AddAsync(entity);
-            return Result.Ok();
         }
 
-        public async Task<UserRefreshToken> ReadAsync(string refreshToken)
+        public async Task<Maybe<UserRefreshToken>> ReadAsync(string refreshToken)
         {
             return await _context.RefreshTokens.Include(i => i.User).SingleAsync(rt=>rt.RefreshToken == refreshToken);
         }
@@ -36,10 +34,10 @@ namespace Cyberpalata.DataProvider.Repositories
             _context.RefreshTokens.Remove(refreshToken);
         }
 
-        public async Task<Result<ApiUser>> GetUserByRefreshToken(string refreshToken)
+        public async Task<Maybe<ApiUser>> GetUserByRefreshToken(string refreshToken)
         {
             var token = await _context.RefreshTokens.SingleAsync(rt => rt.RefreshToken == refreshToken);
-            return Result.Ok(token.User);
+            return token.User;
         }
     }
 }

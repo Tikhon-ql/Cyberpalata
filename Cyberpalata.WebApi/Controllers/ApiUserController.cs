@@ -3,6 +3,7 @@ using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mail;
 using System.Security.Claims;
@@ -22,9 +23,11 @@ namespace Cyberpalata.WebApi.Controllers
             _userService = userService;
             _authenticationService = authenticationService;
             _refreshTokenService = refreshTokenService;
+           
         }
 
-        [HttpGet("id")]
+        [Authorize]
+        [HttpGet]
         public async Task<IActionResult> Get(Guid id)
         {
             var user = await _userService.ReadAsync(id);
@@ -57,7 +60,8 @@ namespace Cyberpalata.WebApi.Controllers
 
             var token = await _authenticationService.GenerateTokenAsync(result.Value);
 
-            return await ReturnSuccess(token);
+            
+            return await ReturnSuccess(token.Value);
         }
 
         [HttpPost("logout")]
@@ -69,14 +73,10 @@ namespace Cyberpalata.WebApi.Controllers
             return await ReturnSuccess();
         }
 
-
-
         [AllowAnonymous]
         [HttpPost("refresh")]
         public async Task<IActionResult> RefreshToken([FromBody]TokenDto tokenDto)
         {
-            ////Add result 
-            /////send accessToken
             var res = await _authenticationService.RefreshTokenAsync(tokenDto);
             if (res.IsFailure)
                 return BadRequest(res.Error);
@@ -84,4 +84,3 @@ namespace Cyberpalata.WebApi.Controllers
         }
     }
 }
- 

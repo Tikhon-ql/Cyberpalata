@@ -9,6 +9,7 @@ using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Devices;
 using Cyberpalata.Logic.Interfaces;
+using Cyberpalata.Logic.Models;
 using Cyberpalata.Logic.Models.Devices;
 
 namespace Cyberpalata.Logic.Services
@@ -24,34 +25,45 @@ namespace Cyberpalata.Logic.Services
             _mapper = mapper;
         }
 
-        public async Task<Result> CreateAsync(PcDto entity)
+        public async Task CreateAsync(PcDto entity)
         {
-            return await _repository.CreateAsync(_mapper.Map<Pc>(entity));
+            await _repository.CreateAsync(_mapper.Map<Pc>(entity));
         }
 
-        public async Task<PcDto> ReadAsync(Guid id)
+        public async Task<Maybe<PcDto>> ReadAsync(Guid id)
         {
-            return _mapper.Map<PcDto>(await _repository.ReadAsync(id));
+            return _mapper.Map<PcDto>((await _repository.ReadAsync(id)).Value);
         }
 
-        public Task UpdateAsync(PcDto entity)
+        public async Task<Result> DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var res = await SearchAsync(id);
+
+            if (res.IsFailure)
+                return Result.Fail(res.Error);
+
+            _repository.Delete(_mapper.Map<Pc>(res.Value));
+
+            return Result.Ok();
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task<Result<PcDto>> SearchAsync(Guid id)
         {
-            await _repository.DeleteAsync(id);
+            var pc = await _repository.ReadAsync(id);
+            if (!pc.HasValue)
+                return (Result<PcDto>)Result.Fail($"Pc with id {id} doesn't exist");
+            return Result.Ok(_mapper.Map<PcDto>(pc.Value));
         }
 
-        public async Task<PagedList<PcDto>> GetPagedListAsync(int pageNumber)
+        public async Task<PagedList<Maybe<PcDto>>> GetPagedListAsync(int pageNumber)
         {
-            return _mapper.Map<PagedList<PcDto>>(await _repository.GetPageListAsync(pageNumber));
+            var list = await _repository.GetPageListAsync(pageNumber);
+            return _mapper.Map<PagedList<Maybe<PcDto>>>(list);
         }
 
-        public async Task<PcDto> GetByGamingRoomId(Guid roomId)
+        public async Task<Maybe<PcDto>> GetByGamingRoomId(Guid roomId)
         {
-            return _mapper.Map<PcDto>(await _repository.GetByGamingRoomId(roomId));
-        }
+            return _mapper.Map<PcDto>((await _repository.GetByGamingRoomId(roomId)).Value);
+        }   
     }
 }

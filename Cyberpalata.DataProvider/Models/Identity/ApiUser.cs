@@ -21,7 +21,6 @@ namespace Cyberpalata.DataProvider.Models.Identity
         [RegularExpression(pattern: "^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$")]
         public string Phone { get; set; }
 
-        [Required]
-        public string Password { get; set; }
+        [Required] public string Password { get; set; }
     }
 }

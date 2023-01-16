@@ -4,6 +4,7 @@ using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models;
+using Cyberpalata.Logic.Models.Devices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,30 +25,37 @@ namespace Cyberpalata.Logic.Services
             _repository = repository;
         }
 
-        public async Task<Result> CreateAsync(GameDto entity)
+        public async Task CreateAsync(GameDto entity)
         { 
-            return await _repository.CreateAsync(_mapper.Map<Game>(entity));
+            await _repository.CreateAsync(_mapper.Map<Game>(entity));
         }
 
-        public Task<GameDto> ReadAsync(Guid id)
+        public async Task<Maybe<GameDto>> ReadAsync(Guid id)
         {
-            return Task.Run(async()=> _mapper.Map<GameDto>(await _repository.ReadAsync(id)));
+            return _mapper.Map<GameDto>((await _repository.ReadAsync(id)).Value);
         }
 
-        public Task UpdateAsync(GameDto entity)
+        public async Task<Result> DeleteAsync(Guid id)
         {
-            //_repository.Update(_mapper.Map<Game>(entity));
-            return Task.CompletedTask;
+            var res = await SearchAsync(id);
+            if (res.IsFailure)
+                return Result.Fail(res.Error);
+            _repository.Delete(_mapper.Map<Game>(res.Value));
+            return Result.Ok();
         }
 
-        public Task DeleteAsync(Guid id)
+        public async Task<Result<GameDto>> SearchAsync(Guid id)
         {
-            return _repository.DeleteAsync(id);
+            var game = await _repository.ReadAsync(id);
+            if (!game.HasValue)
+                return (Result<GameDto>)Result.Fail($"Game with id {id} doesn't exist");
+            return Result.Ok(_mapper.Map<GameDto>(game.Value));
         }
 
-        public Task<PagedList<GameDto>> GetPagedListAsync(int pageNumber)
+        public async Task<PagedList<Maybe<GameDto>>> GetPagedListAsync(int pageNumber)
         {
-            return Task.Run(async ()=> _mapper.Map<PagedList<GameDto>>( await _repository.GetPageListAsync(pageNumber))) ;
-        }
+            var list = await _repository.GetPageListAsync(pageNumber);
+            return _mapper.Map<PagedList<Maybe<GameDto>>>(list);
+        }    
     }
 }

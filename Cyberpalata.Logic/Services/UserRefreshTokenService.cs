@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.Logic.Interfaces;
@@ -22,14 +23,9 @@ namespace Cyberpalata.Logic.Services
             _mapper = mapper;
         }
 
-        //public async Task CreateAsync(UserRefreshTokenDto entity)
-        //{
-        //    await _repository.CreateAsync(_mapper.Map<UserRefreshToken>(entity));
-        //}
-
-        public async Task<UserRefreshTokenDto> ReadAsync(string refreshToken)
+        public async Task<Maybe<UserRefreshTokenDto>> ReadAsync(string refreshToken)
         {
-            return _mapper.Map<UserRefreshTokenDto>(await _repository.ReadAsync(refreshToken));
+            return _mapper.Map<UserRefreshTokenDto>((await _repository.ReadAsync(refreshToken)).Value);
         }
 
     }

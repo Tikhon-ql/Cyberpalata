@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Models.Devices;
 
 namespace Cyberpalata.DataProvider.Interfaces
 {
     public interface IGameConsoleRepository : IRepository<GameConsole>
     {
-        //TODO: add pagination
-        Task<List<GameConsole>> GetByGameConsoleRoomIdAsync(Guid roomId);
+        Task<List<Maybe<GameConsole>>> GetByGameConsoleRoomIdAsync(Guid roomId);
     }
 }

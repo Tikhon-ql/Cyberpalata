@@ -8,7 +8,7 @@ namespace Cyberpalata.Common
 {
     public class PagedList<T> where T : class
     {
-        public PagedList(List<T>? items, int currentPageNumber, int pageSize, int totalItemsCount)
+        public PagedList(List<T> items, int currentPageNumber, int pageSize, int totalItemsCount)
         {
             Items = items;
             CurrentPageNumber = currentPageNumber;
@@ -17,7 +17,7 @@ namespace Cyberpalata.Common
         }
 
 
-        public List<T>? Items { get; set; }
+        public List<T> Items { get; set; }
         public int CurrentPageNumber { get; set; }
         public int PageSize { get; set; }
         public int TotalItemsCount { get; set; }

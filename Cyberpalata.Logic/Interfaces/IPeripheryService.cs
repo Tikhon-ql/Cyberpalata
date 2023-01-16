@@ -1,4 +1,5 @@
-﻿using Cyberpalata.Logic.Models.Peripheral;
+﻿using Cyberpalata.Common;
+using Cyberpalata.Logic.Models.Peripheral;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace Cyberpalata.Logic.Interfaces
 {
     public interface IPeripheryService : IService<PeripheryDto>
     {
-        Task<List<PeripheryDto>> GetByGamingRoomId(Guid roomId);
+        Task<List<Maybe<PeripheryDto>>> GetByGamingRoomId(Guid roomId);
     }
 }

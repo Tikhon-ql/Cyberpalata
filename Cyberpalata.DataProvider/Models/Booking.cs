@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace Cyberpalata.DataProvider.Models
 {
-    //TODO: Add user
     public class Booking
     {
         public Guid Id { get; set; }

@@ -25,29 +25,45 @@ namespace Cyberpalata.Logic.Services
             _mapper = mapper;
         }
 
-        public async Task<Result> CreateAsync(RoomDto entity)
+        public async Task CreateAsync(RoomDto entity)
         {
-            return await _repository.CreateAsync(_mapper.Map<Room>(entity));
+            await _repository.CreateAsync(_mapper.Map<Room>(entity));
         }
 
-        public async Task<RoomDto> ReadAsync(Guid id)
+        public async Task<Maybe<RoomDto>> ReadAsync(Guid id)
         {
-            return _mapper.Map<RoomDto>(await _repository.ReadAsync(id));
+            return _mapper.Map<RoomDto>((await _repository.ReadAsync(id)).Value);
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task<Result> DeleteAsync(Guid id)
         {
-            await _repository.DeleteAsync(id);
+            var res = await SearchAsync(id);
+            if (res.IsFailure)
+                return Result.Fail(res.Error);
+
+            _repository.Delete(_mapper.Map<Room>(res.Value));
+
+            return Result.Ok();
         }
 
-        public async Task<PagedList<RoomDto>> GetPagedListAsync(int pageNumber)
+        public async Task<Result<RoomDto>> SearchAsync(Guid id)
         {
-            return _mapper.Map<PagedList<RoomDto>>(await _repository.GetPageListAsync(pageNumber));
+            var room = await _repository.ReadAsync(id);
+            if (!room.HasValue)
+                return (Result<RoomDto>)Result.Fail($"Room with id {id} doesn't exist");
+            return Result.Ok(_mapper.Map<RoomDto>(room.Value));
         }
 
-        public async Task<PagedList<RoomDto>> GetPagedListAsync(int pageNumber, RoomType type)
+        public async Task<PagedList<Maybe<RoomDto>>> GetPagedListAsync(int pageNumber)
         {
-            return _mapper.Map<PagedList<RoomDto>>(await _repository.GetPageListAsync(pageNumber, type));
+            var list = await _repository.GetPageListAsync(pageNumber);
+            return _mapper.Map<PagedList<Maybe<RoomDto>>>(list);
+        }
+
+        public async Task<PagedList<Maybe<RoomDto>>> GetPagedListAsync(int pageNumber, RoomType type)
+        {
+            var list = await _repository.GetPageListAsync(pageNumber, type);
+            return _mapper.Map<PagedList<Maybe<RoomDto>>>(list);
         }
     }
 }

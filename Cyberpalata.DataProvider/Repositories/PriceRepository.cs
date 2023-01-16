@@ -18,41 +18,37 @@ namespace Cyberpalata.DataProvider.Repositories
         {
             this._context = context;
         }
-        public async Task<Result> CreateAsync(Price entity)
+        public async Task CreateAsync(Price entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
             await _context.Prices.AddAsync(entity);
-            return Result.Ok();
         }
 
-        public async Task<Price> ReadAsync(Guid id)
+        public async Task<Maybe<Price>> ReadAsync(Guid id)
         {
             var price = await _context.Prices.SingleAsync(p => p.Id == id);
             return price;
         }
 
 
-        public async Task DeleteAsync(Guid id)
+        public void Delete(Price price)
         {
-            var price = await _context.Prices.SingleAsync(p => p.Id == id);
             _context.Prices.Remove(price);
         }
 
-        private PagedList<Price> GetPageList(int pageNumber)
+        private PagedList<Maybe<Price>> GetPageList(int pageNumber)
         {
-            var list = _context.Prices.Skip((pageNumber - 1) * 10).Take(10);
-            return new PagedList<Price>(list.ToList(), pageNumber, 10, _context.Prices.Count());
+            var list = _context.Prices.Skip((pageNumber - 1) * 10).Take(10).Select(item=>(Maybe<Price>)item);
+            return new PagedList<Maybe<Price>>(list.ToList(), pageNumber, 10, _context.Prices.Count());
         }
 
-        public async Task<PagedList<Price>> GetPageListAsync(int pageNumber)
+        public async Task<PagedList<Maybe<Price>>> GetPageListAsync(int pageNumber)
         {
             return await Task.Run(() => GetPageList(pageNumber));
         }
 
-        public async Task<List<Price>> GetByRoomIdAsync(Guid roomId)
+        public async Task<List<Maybe<Price>>> GetByRoomIdAsync(Guid roomId)
         {
-            return await _context.Prices.Where(p => p.Room.Id == roomId).ToListAsync();
+            return await _context.Prices.Where(p => p.Room.Id == roomId).Select(item=>(Maybe<Price>)item).ToListAsync();
         }
     }
 }

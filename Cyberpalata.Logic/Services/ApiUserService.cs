@@ -32,21 +32,27 @@ namespace Cyberpalata.Logic.Services
             _mapper = mapper;
         }
 
-        /// <summary>
-        /// Должен что-то возвращать для проверки добавился ли пользователь?
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
         public async Task<Result> CreateAsync(AuthorizationRequest request)
         {
-            //Добавить проверки
-            return await _userRepository.CreateAsync(ApiUserMapper.MapToApiUser(request));
+            var res = await ValidateUserAsync(request);
+            if (res.IsFailure)
+                return Result.Fail(res.Error);
+            await _userRepository.CreateAsync(_mapper.Map<ApiUser>(request));
+            return Result.Ok();
         }
 
-        public async Task<Result<ApiUserDto>> ReadAsync(Guid id)
+        public async Task<Result> ValidateUserAsync(AuthorizationRequest request)
         {
-            var user = _mapper.Map<ApiUserDto>(await _userRepository.ReadAsync(id));
-            return Result<ApiUserDto>.Ok(user);
+            var user = await _userRepository.ReadAsync(request.Email);
+            if (user.Value != null)
+                return Result.Fail("User is already exist!");
+            return Result.Ok();
+        }
+
+        public async Task<Maybe<ApiUserDto>> ReadAsync(Guid id)
+        {
+            var user = _mapper.Map<ApiUserDto>((await _userRepository.ReadAsync(id)).Value);
+            return user;
         }
     }
 }

@@ -11,6 +11,6 @@ namespace Cyberpalata.Logic.Interfaces
 {
     public interface IRoomService : IService<RoomDto>
     {
-        Task<PagedList<RoomDto>> GetPagedListAsync(int pageNumber, RoomType type);
+        Task<PagedList<Maybe<RoomDto>>> GetPagedListAsync(int pageNumber, RoomType type);
     }
 }

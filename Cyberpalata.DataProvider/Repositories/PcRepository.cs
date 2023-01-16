@@ -20,38 +20,34 @@ namespace Cyberpalata.DataProvider.Repositories
             _context = context;
         }
 
-        public async Task<Result> CreateAsync(Pc entity)
+        public async Task CreateAsync(Pc entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
             await _context.Pcs.AddAsync(entity);
-            return Result.Ok();
         }
 
-        public async Task<Pc> ReadAsync(Guid id)
+        public async Task<Maybe<Pc>> ReadAsync(Guid id)
         {
             var pc = await _context.Pcs.SingleAsync();
             return pc;
         }
 
-        public async Task DeleteAsync(Guid id)
+        public void Delete(Pc pc)
         {
-            var pc = await ReadAsync(id);
             _context.Pcs.Remove(pc);
         }
 
-        private PagedList<Pc> GetPageList(int pageNumber)
+        private PagedList<Maybe<Pc>> GetPageList(int pageNumber)
         {
-            var list = _context.Pcs.Skip((pageNumber - 1) * 10).Take(10).ToList();
-            return new PagedList<Pc>(list, pageNumber, 10, _context.Pcs.Count());
+            var list = _context.Pcs.Skip((pageNumber - 1) * 10).Take(10).Select(item=>(Maybe<Pc>)item).ToList();
+            return new PagedList<Maybe<Pc>>(list, pageNumber, 10, _context.Pcs.Count());
         }
 
-        public Task<PagedList<Pc>> GetPageListAsync(int pageNumber)
+        public Task<PagedList<Maybe<Pc>>> GetPageListAsync(int pageNumber)
         {
             return Task.Run(() => GetPageList(pageNumber));
         }
 
-        public async Task<Pc> GetByGamingRoomId(Guid roomId)
+        public async Task<Maybe<Pc>> GetByGamingRoomId(Guid roomId)
         {
             return await _context.Pcs.SingleAsync(pc => pc.GamingRoom.Id == roomId);
         }

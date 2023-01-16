@@ -21,39 +21,35 @@ namespace Cyberpalata.DataProvider.Repositories
         {
             _context = context;
         }
-        public async Task<Result> CreateAsync(GameConsole entity)
+        public async Task CreateAsync(GameConsole entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
             await _context.GameConsoles.AddAsync(entity);
-            return Result.Ok();
         }
 
-        public async Task<GameConsole> ReadAsync(Guid id)
+        public async Task<Maybe<GameConsole>> ReadAsync(Guid id)
         {
             return await _context.GameConsoles.SingleAsync(gc => gc.Id == id);
         }
 
-        public async Task DeleteAsync(Guid id)
+        public void Delete(GameConsole console)
         {
-            var console = await _context.GameConsoles.SingleAsync(gc => gc.Id == id);
             _context.GameConsoles.Remove(console);
         }
 
-        private PagedList<GameConsole> GetPageList(int pageNumber)
+        private PagedList<Maybe<GameConsole>> GetPageList(int pageNumber)
         {
-            var list = _context.GameConsoles.Skip((pageNumber - 1) * 10).Take(10);
-            return new PagedList<GameConsole>(list.ToList(), pageNumber, 10, _context.GameConsoles.Count());
+            var list = _context.GameConsoles.Skip((pageNumber - 1) * 10).Take(10).Select(item=>(Maybe<GameConsole>)item);
+            return new PagedList<Maybe<GameConsole>>(list.ToList(), pageNumber, 10, _context.GameConsoles.Count());
         }
 
-        public async Task<PagedList<GameConsole>> GetPageListAsync(int pageNumber)
+        public async Task<PagedList<Maybe<GameConsole>>> GetPageListAsync(int pageNumber)
         {
             return await Task.Run(() => GetPageList(pageNumber));
         }
 
-        public async Task<List<GameConsole>> GetByGameConsoleRoomIdAsync(Guid roomId)
+        public async Task<List<Maybe<GameConsole>>> GetByGameConsoleRoomIdAsync(Guid roomId)
         {
-            return await _context.GameConsoles.Where(gc => gc.ConsoleRoom.Id == roomId).ToListAsync();
+            return await _context.GameConsoles.Where(gc => gc.ConsoleRoom.Id == roomId).Select(item=>(Maybe<GameConsole>)item).ToListAsync();
         }
     }
 }

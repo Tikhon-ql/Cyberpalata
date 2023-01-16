@@ -16,9 +16,9 @@ export const GameConsoleRoomList = () =>{
     return (
         <div className="mt-5 p-5" style={{"margin":"auto","width":"50%", "border" : "3px solid black", "padding" : "10px"}}>
             <h1>Game console rooms</h1>
-            <ul class="list-group list-group-flush">
+            <ul className="list-group list-group-flush">
                 {gameConsoleRoomsInfo.map(item=>{
-                    return <li class="list-group-item" key={item.id}><Link to={`/gameConsoleRoom/${item.id}/${item.name}`} className="text-decoration-none text-dark">{item.name}</Link></li>
+                    return <li className="list-group-item" key={item.id}><Link to={`/gameConsoleRoom/${item.id}/${item.name}`} className="text-decoration-none text-dark">{item.name}</Link></li>
                 })}
             </ul>
             <Link to='/' className="btn btn-outline-dark btn-sm mt-2">Home page</Link>

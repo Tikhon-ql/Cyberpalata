@@ -24,41 +24,35 @@ namespace Cyberpalata.DataProvider.Repositories
             _context = context;
         }
 
-        public async Task<Result> CreateAsync(ApiUser entity)
+        public async Task CreateAsync(ApiUser entity)
         {
-            if(entity == null)
-                throw new ArgumentNullException(nameof(entity));
-            if (_context.Users.Count(c => c.Email == entity.Email) > 0)
-                return Result.Fail("User already exist");
             await _context.Users.AddAsync(entity);
-            return Result.Ok();
         }
 
-        public async Task<ApiUser> ReadAsync(string email)
+        public async Task<Maybe<ApiUser>> ReadAsync(string email)
         {
-            var entity = await _context.Users.SingleAsync(u => u.Email == email);
+            var entity = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
             return entity;
         }
-        public async Task<ApiUser> ReadAsync(Guid id)
+        public async Task<Maybe<ApiUser>> ReadAsync(Guid id)
         {
             var entity = await _context.Users.SingleAsync(u => u.Id == id);
             return entity;
         }
 
-        private PagedList<ApiUser> GetPageList(int pageNumber)
+        private PagedList<Maybe<ApiUser>> GetPageList(int pageNumber)
         {
-            var list = _context.Users.Skip((pageNumber - 1) * 10).Take(10).ToList();
-            return new PagedList<ApiUser>(list, pageNumber,10,_context.Users.Count());
+            var list = _context.Users.Skip((pageNumber - 1) * 10).Take(10).Select(user=>(Maybe<ApiUser>)user).ToList();
+            return new PagedList<Maybe<ApiUser>>(list,pageNumber,10,_context.Users.Count());
         }
 
-        public async Task<PagedList<ApiUser>> GetPageListAsync(int pageNumber)
+        public async Task<PagedList<Maybe<ApiUser>>> GetPageListAsync(int pageNumber)
         {
             return await Task.Run(() => GetPageList(pageNumber));
         }
 
-        public async Task DeleteAsync(Guid id)
+        public void Delete(ApiUser user)
         {
-            var user = await ReadAsync(id);
             _context.Users.Remove(user);
         }
     }

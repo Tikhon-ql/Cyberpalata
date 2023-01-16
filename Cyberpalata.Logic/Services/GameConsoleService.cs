@@ -22,27 +22,44 @@ namespace Cyberpalata.Logic.Services
             _mapper = mapper;
         }
 
-        public async Task<Result> CreateAsync(GameConsoleDto entity)
+        public async Task CreateAsync(GameConsoleDto entity)
         {
-            return await _repository.CreateAsync(_mapper.Map<GameConsole>(entity));
-        }
-        public async Task<GameConsoleDto> ReadAsync(Guid id)
-        {
-            return _mapper.Map<GameConsoleDto>(await _repository.ReadAsync(id));
-        }
-        public async Task DeleteAsync(Guid id)
-        {
-            await _repository.DeleteAsync(id);
+            await _repository.CreateAsync(_mapper.Map<GameConsole>(entity));
         }
 
-        public Task<PagedList<GameConsoleDto>> GetPagedListAsync(int pageNumber)
+
+        public async Task<Maybe<GameConsoleDto>> ReadAsync(Guid id)
         {
-            return Task.Run( async() => _mapper.Map<PagedList<GameConsoleDto>>(await _repository.GetPageListAsync(pageNumber)));
+            return _mapper.Map<GameConsoleDto>((await _repository.ReadAsync(id)).Value);
         }
 
-        public async Task<List<GameConsoleDto>> GetByGameConsoleRoomId(Guid roomId)
+        public async Task<Result> DeleteAsync(Guid id)
         {
-            return _mapper.Map<List<GameConsoleDto>>(await _repository.GetByGameConsoleRoomIdAsync(roomId));
+            var res = await SearchAsync(id);
+            if (res.IsFailure)
+                return Result.Fail(res.Error);
+            _repository.Delete(_mapper.Map<GameConsole>(res.Value));
+            return Result.Ok();
+        }
+
+        public async Task<Result<GameConsoleDto>> SearchAsync(Guid id)
+        {
+            var console = await _repository.ReadAsync(id);
+            if (!console.HasValue)
+                return (Result<GameConsoleDto>)Result.Fail($"Game console with id {id} doesn't exist");
+            return Result.Ok(_mapper.Map<GameConsoleDto>(console.Value));
+        }
+
+        public async Task<PagedList<Maybe<GameConsoleDto>>> GetPagedListAsync(int pageNumber)
+        {
+            var list = await _repository.GetPageListAsync(pageNumber);
+            return _mapper.Map<PagedList<Maybe<GameConsoleDto>>>(list);
+        }
+
+        public async Task<List<Maybe<GameConsoleDto>>> GetByGameConsoleRoomId(Guid roomId)
+        {
+            var list = await _repository.GetByGameConsoleRoomIdAsync(roomId);
+            return _mapper.Map<List<Maybe<GameConsoleDto>>>(list);
         }
     }
 }

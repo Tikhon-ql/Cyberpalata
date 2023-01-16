@@ -22,7 +22,7 @@ namespace Cyberpalata.WebApi.Controllers
         public async Task<IActionResult> Get()
         {
             var games = _gameService.GetPagedListAsync(1).Result;
-            var viewModel = new GameLibraryViewModel { Games = games.Items.Select(g => g.GameName).ToList() };
+            var viewModel = new GameLibraryViewModel { Games = games.Items.Select(g => g.Value.GameName).ToList() };
             return await ReturnSuccess(viewModel);
         }
     }

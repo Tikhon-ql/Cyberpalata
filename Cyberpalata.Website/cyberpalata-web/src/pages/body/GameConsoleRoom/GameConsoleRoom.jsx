@@ -29,7 +29,7 @@ export const GameConsoleRoom = () => {
                     <h1>{name}</h1>
                     <hr></hr>
                     <h2>Consoles</h2>
-                    <ul class="list-group list-group-flush">
+                    <ul className="list-group list-group-flush">
                         {deviceInfo.map((item)=>{
                             return <li class="list-group-item">{item}</li>
                         })}

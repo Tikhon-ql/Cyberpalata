@@ -15,9 +15,13 @@ export const ProfileComponent = () => {
     let state = true;
     if(accessToken != null)
     {
-        const apiRequestUrl = `https://localhost:7227/users/id` + '?id=' + jwtDecode(accessToken).sid;
+        const apiRequestUrl = `https://localhost:7227/users` + '?id=' + jwtDecode(accessToken).sid;
 
-        axios.get(apiRequestUrl).then(res =>{
+        const config = {
+            headers: { Authorization: `Bearer ${accessToken}` }
+        };
+
+        axios.get(apiRequestUrl,config).then(res =>{
             console.dir(res);
             setName(res.data.username);
             setSurname(res.data.surname);

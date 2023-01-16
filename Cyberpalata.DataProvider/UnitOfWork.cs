@@ -7,6 +7,7 @@ using Cyberpalata.Common.Intefaces;
 using Cyberpalata.DataProvider.Context;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Repositories;
+using NullGuard;
 
 namespace Cyberpalata.DataProvider
 {

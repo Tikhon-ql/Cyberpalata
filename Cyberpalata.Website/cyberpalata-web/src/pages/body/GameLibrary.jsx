@@ -15,9 +15,9 @@ const GameLibrary = () => {
 
         <div className="mt-5 p-5" style={{"margin":"auto","width":"50%", "border" : "3px solid black", "padding" : "10px"}}>
             <h1>Game library</h1>
-            <ul class="list-group list-group-flush">
+            <ul className="list-group list-group-flush">
             {games.map(game=>{
-                return <li class="list-group-item">{game}</li>
+                return <li className="list-group-item">{game}</li>
             })}
             </ul>
           

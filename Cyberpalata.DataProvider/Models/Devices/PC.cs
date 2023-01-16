@@ -9,12 +9,9 @@ using Cyberpalata.Common.Enums;
 
 namespace Cyberpalata.DataProvider.Models.Devices
 {
-    //TODO: Have to store gaming room type
     public class Pc
     {
         [Key][Required] public Guid Id { get; set; }
-        //[Required] [MaxLength(20)] public string Name { get; set; }
-        //[Required] [MaxLength(50)] public string Value { get; set; }
         [Required][MaxLength(50)] public string Gpu { get; set; }
         [Required][MaxLength(50)] public string Cpu { get; set; }
         [Required][MaxLength(50)] public string Ram { get; set; }
