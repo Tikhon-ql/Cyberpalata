@@ -25,20 +25,24 @@ namespace Cyberpalata.Logic.Services
         private readonly IUserRefreshTokenRepository _refreshTokenRepository;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
+        private readonly IHashGenerator _hashGenerator;
 
-        public AuthenticationService(IApiUserRepository userRepository, IUserRefreshTokenRepository refreshTokenRepository, IConfiguration configuration, IMapper mapper)
+        public AuthenticationService(IApiUserRepository userRepository, IUserRefreshTokenRepository refreshTokenRepository,IHashGenerator hashGenerator, IConfiguration configuration, IMapper mapper)
         {
             _userRepository = userRepository;
             _refreshTokenRepository = refreshTokenRepository;
             _configuration = configuration;
             _mapper = mapper;
+            _hashGenerator = hashGenerator;
         }
 
         public async Task<Result<ApiUserDto>> ValidateUserAsync(AuthenticateRequest request)
         {
-            var user = (await _userRepository.ReadAsync(request.Email)).Value;
-            if (user.Password == request.Password)
-                return Result.Ok(_mapper.Map<ApiUserDto>(user));
+            var user = await _userRepository.ReadAsync(request.Email);
+            string requestHashedPassword = _hashGenerator.HashPassword($"{request.Password}{user.Value.Salt}");
+
+            if (user.Value.Password == requestHashedPassword)
+                return Result.Ok(_mapper.Map<ApiUserDto>(user.Value));
             return (Result<ApiUserDto>)Result.Fail("Email or password is incorrect!!!");
         }
 

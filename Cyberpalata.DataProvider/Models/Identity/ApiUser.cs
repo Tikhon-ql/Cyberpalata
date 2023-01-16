@@ -22,5 +22,6 @@ namespace Cyberpalata.DataProvider.Models.Identity
         public string Phone { get; set; }
 
         [Required] public string Password { get; set; }
+        [Required] public string Salt { get; set; }
     }
 }

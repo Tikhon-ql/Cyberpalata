@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cyberpalata.DataProvider.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230116192509_InitialCreate")]
+    [Migration("20230116225434_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -156,6 +156,10 @@ namespace Cyberpalata.DataProvider.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Salt")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

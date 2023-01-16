@@ -24,12 +24,14 @@ namespace Cyberpalata.Logic.Services
         private readonly IApiUserRepository _userRepository;
         private readonly IUserRefreshTokenRepository _refreshTokenRepository;
         private readonly IMapper _mapper;
+        private readonly IHashGenerator _hashGenerator;
 
-        public ApiUserService(IApiUserRepository userRepository, IUserRefreshTokenRepository refreshTokenRepository, IMapper mapper)
+        public ApiUserService(IApiUserRepository userRepository, IUserRefreshTokenRepository refreshTokenRepository, IMapper mapper, IHashGenerator hashGenerator)
         {
             _userRepository = userRepository;
             _refreshTokenRepository = refreshTokenRepository;
             _mapper = mapper;
+            _hashGenerator = hashGenerator;
         }
 
         public async Task<Result> CreateAsync(AuthorizationRequest request)
@@ -37,7 +39,21 @@ namespace Cyberpalata.Logic.Services
             var res = await ValidateUserAsync(request);
             if (res.IsFailure)
                 return Result.Fail(res.Error);
-            await _userRepository.CreateAsync(_mapper.Map<ApiUser>(request));
+
+            var newUser = new ApiUser
+            {
+                Email = request.Email,
+                Username = request.Username,
+                Surname = request.Surname,
+                Phone = request.Phone,
+                Salt = _hashGenerator.GenerateSalt()
+            };
+
+            var password = $"{request.Password}{newUser.Salt}";
+
+            newUser.Password = _hashGenerator.HashPassword(password);
+
+            await _userRepository.CreateAsync(newUser);
             return Result.Ok();
         }
 

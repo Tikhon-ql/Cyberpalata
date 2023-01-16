@@ -22,7 +22,7 @@ namespace Cyberpalata.Logic.Configuration
     {
         public AppMappingProfile()
         {
-            CreateMap<ApiUser, ApiUserDto>();
+            
 
             CreateMap<Game, GameDto>();
             CreateMap<PagedList<Game>, PagedList<GameDto>>();
@@ -73,6 +73,8 @@ namespace Cyberpalata.Logic.Configuration
                 .ForMember(dst => dst.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dst => dst.Phone, opt => opt.MapFrom(src => src.Phone))
                 .ForMember(dst => dst.Password, opt => opt.MapFrom(src => src.Password));
+
+            CreateMap<ApiUser, ApiUserDto>();
         }
     }
 }
