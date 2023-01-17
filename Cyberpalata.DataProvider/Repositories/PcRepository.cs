@@ -26,10 +26,10 @@ namespace Cyberpalata.DataProvider.Repositories
             await _context.Pcs.AddAsync(entity);
         }
 
-        public async Task<Maybe<Pc>> ReadAsync(Guid id)
+        public async Task<Pc> ReadAsync(Guid id)
         {
             var pc = await _context.Pcs.SingleAsync();
-            return pc.ToMaybe();
+            return pc;
         }
 
         public void Delete(Pc pc)
@@ -37,21 +37,15 @@ namespace Cyberpalata.DataProvider.Repositories
             _context.Pcs.Remove(pc);
         }
 
-        private PagedList<Maybe<Pc>> GetPageList(int pageNumber)
+        public async Task<PagedList<Pc>> GetPageListAsync(int pageNumber)
         {
-            var list = _context.Pcs.Skip((pageNumber - 1) * 10).Take(10).Select(item=>item.ToMaybe()).ToList();
-            return new PagedList<Maybe<Pc>>(list, pageNumber, 10, _context.Pcs.Count());
+            var list = await _context.Pcs.Skip((pageNumber - 1) * 10).Take(10).ToListAsync();
+            return new PagedList<Pc>(list, pageNumber, 10, _context.Pcs.Count());
         }
 
-        public Task<PagedList<Maybe<Pc>>> GetPageListAsync(int pageNumber)
-        {
-            return Task.Run(() => GetPageList(pageNumber));
-        }
-
-        public async Task<Maybe<Pc>> GetByGamingRoomId(Guid roomId)
-        {
-            var res = await _context.Pcs.SingleAsync(pc => pc.GamingRoom.Id == roomId);
-            return res.ToMaybe();
+        public async Task<Pc> GetByGamingRoomId(Guid roomId)
+        { 
+            return await _context.Pcs.SingleAsync(pc => pc.GamingRoom.Id == roomId);
         }
     }
 }
