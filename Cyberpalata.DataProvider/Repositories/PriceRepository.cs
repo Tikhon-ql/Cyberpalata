@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Cyberpalata.DataProvider.Context;
 using Microsoft.EntityFrameworkCore;
 using Cyberpalata.DataProvider.Models;
+using Functional.Maybe;
 
 namespace Cyberpalata.DataProvider.Repositories
 {
@@ -23,7 +24,7 @@ namespace Cyberpalata.DataProvider.Repositories
             await _context.Prices.AddAsync(entity);
         }
 
-        public async Task<Maybe<Price>> ReadAsync(Guid id)
+        public async Task<Price> ReadAsync(Guid id)
         {
             var price = await _context.Prices.SingleAsync(p => p.Id == id);
             return price;
@@ -35,20 +36,16 @@ namespace Cyberpalata.DataProvider.Repositories
             _context.Prices.Remove(price);
         }
 
-        private PagedList<Maybe<Price>> GetPageList(int pageNumber)
+        public async Task<PagedList<Price>> GetPageListAsync(int pageNumber)
         {
-            var list = _context.Prices.Skip((pageNumber - 1) * 10).Take(10).Select(item=>(Maybe<Price>)item);
-            return new PagedList<Maybe<Price>>(list.ToList(), pageNumber, 10, _context.Prices.Count());
+            var list = await _context.Prices.Skip((pageNumber - 1) * 10).Take(10).ToListAsync();
+            return new PagedList<Price>(list, pageNumber, 10, _context.Prices.Count());
         }
 
-        public async Task<PagedList<Maybe<Price>>> GetPageListAsync(int pageNumber)
+        public async Task<Maybe<List<Price>>> GetByRoomIdAsync(Guid roomId)
         {
-            return await Task.Run(() => GetPageList(pageNumber));
-        }
-
-        public async Task<List<Maybe<Price>>> GetByRoomIdAsync(Guid roomId)
-        {
-            return await _context.Prices.Where(p => p.Room.Id == roomId).Select(item=>(Maybe<Price>)item).ToListAsync();
+            var roomPrices = await _context.Prices.Where(p => p.Room.Id == roomId).ToListAsync();
+            return roomPrices.ToMaybe();
         }
     }
 }
