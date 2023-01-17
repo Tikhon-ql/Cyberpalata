@@ -5,6 +5,7 @@ using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.Logic.Configuration;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models.Identity;
+using Functional.Maybe;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -65,9 +66,9 @@ namespace Cyberpalata.Logic.Services
             return Result.Ok();
         }
 
-        public async Task<Maybe<ApiUserDto>> ReadAsync(Guid id)
+        public async Task<ApiUserDto> ReadAsync(Guid id)
         {
-            var user = _mapper.Map<ApiUserDto>((await _userRepository.ReadAsync(id)).Value);
+            var user = _mapper.Map<ApiUserDto>(await _userRepository.ReadAsync(id));
             return user;
         }
     }

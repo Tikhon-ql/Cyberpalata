@@ -1,5 +1,6 @@
 ﻿using Cyberpalata.Common;
 using Cyberpalata.Logic.Models.Identity;
+using Functional.Maybe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
