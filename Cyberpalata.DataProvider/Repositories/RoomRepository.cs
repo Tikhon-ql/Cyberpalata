@@ -46,11 +46,11 @@ namespace Cyberpalata.DataProvider.Repositories
             return new PagedList<Room>(list, pageNumber, 10, _context.Rooms.Count());
         }
 
-        public async Task<Maybe<PagedList<Room>>> GetPageListAsync(int pageNumber, RoomType type)
+        public async Task<PagedList<Room>> GetPageListAsync(int pageNumber, RoomType type)
         {
             var list = await _context.Rooms.Where(r => r.Type.Name == type.Name).Skip((pageNumber - 1) * 10).Take(10).ToListAsync();
             var pagedList = new PagedList<Room>(list, pageNumber, 10, _context.Rooms.Count());
-            return pagedList.ToMaybe();
+            return pagedList;
         }
     }
 }
