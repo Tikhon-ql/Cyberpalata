@@ -16,7 +16,7 @@ namespace Cyberpalata.DataProvider.Models
         [Key] public Guid Id { get; set; }
         [Required] [MaxLength(50)] public string Name { get; set; }
         [Required] public RoomType Type { get; set; }
-        [Required] public virtual List<Price> Prices { get; set; } = new();
-        [Required] public virtual List<Seat> Seats { get; set; } = new();
+        public virtual List<Price> Prices { get; set; } = new();
+        public virtual List<Seat> Seats { get; set; } = new();
     }
 }

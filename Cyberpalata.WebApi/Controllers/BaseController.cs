@@ -9,7 +9,7 @@ namespace Cyberpalata.WebApi.Controllers
 
         public BaseController(IUnitOfWork uinOfWork)
         {
-                _unitOfWork = uinOfWork;
+            _unitOfWork = uinOfWork;
         }
 
         protected async Task<IActionResult> ReturnSuccess<T>(T data)

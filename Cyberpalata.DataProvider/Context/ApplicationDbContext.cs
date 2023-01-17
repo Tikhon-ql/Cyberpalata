@@ -21,12 +21,10 @@ namespace Cyberpalata.DataProvider.Context
         }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Pc> Pcs { get; set; }
-
         public DbSet<Game> Games { get; set; }
         public DbSet<Price> Prices { get; set; }
         public DbSet<Periphery> Peripheries { get; set; }  
         public DbSet<GameConsole> GameConsoles { get; set; }
-
         public DbSet<ApiUser> Users { get; set; }
         public DbSet<UserRefreshToken> RefreshTokens { get; set; }
 
@@ -42,5 +40,7 @@ namespace Cyberpalata.DataProvider.Context
             modelBuilder.Entity<UserRefreshToken>().Property(t => t.Id).HasDefaultValueSql("NEWID()");
             base.OnModelCreating(modelBuilder);
         }
+
+
     }
 }

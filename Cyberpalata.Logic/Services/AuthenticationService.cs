@@ -51,7 +51,6 @@ namespace Cyberpalata.Logic.Services
             var accessToken = GenerateAccessToken(user);
             var refreshToken = GenerateRefreshToken();
 
-            //??????
             var apiUser = (await _userRepository.ReadAsync(user.Email)).Value;
 
             await _refreshTokenRepository.CreateAsync(new UserRefreshToken { User = apiUser, Expiration = DateTime.Now.AddDays(2), RefreshToken = refreshToken });
@@ -71,12 +70,13 @@ namespace Cyberpalata.Logic.Services
 
             if (claimId == null)
                 return (Result<TokenDto>)Result.Fail("Id claim missed.");
+
             if (!Guid.TryParse(claimId.Value, out var userId))
             {
                 return (Result<TokenDto>)Result.Fail("Cannot parse id");
             }
 
-            Maybe<UserRefreshToken> refreshTokenOrNothing = (await _refreshTokenRepository.ReadAsync(tokenDto.RefreshToken));
+            Maybe<UserRefreshToken> refreshTokenOrNothing = await _refreshTokenRepository.ReadAsync(tokenDto.RefreshToken);
 
             if (userId != refreshTokenOrNothing.Value.User.Id)
             {
@@ -101,7 +101,7 @@ namespace Cyberpalata.Logic.Services
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecurityKey"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            //JwtRegisteredClaimNames
+            
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sid, user.Id.ToString()),
