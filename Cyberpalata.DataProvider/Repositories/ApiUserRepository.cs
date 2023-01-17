@@ -2,6 +2,7 @@
 using Cyberpalata.DataProvider.Context;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Identity;
+using Functional.Maybe;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -32,9 +33,9 @@ namespace Cyberpalata.DataProvider.Repositories
         public async Task<Maybe<ApiUser>> ReadAsync(string email)
         {
             var entity = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-            return entity;
+            return entity.ToMaybe();
         }
-        public async Task<Maybe<ApiUser>> ReadAsync(Guid id)
+        public async Task<ApiUser> ReadAsync(Guid id)
         {
             var entity = await _context.Users.SingleAsync(u => u.Id == id);
             return entity;
@@ -42,7 +43,7 @@ namespace Cyberpalata.DataProvider.Repositories
 
         private PagedList<Maybe<ApiUser>> GetPageList(int pageNumber)
         {
-            var list = _context.Users.Skip((pageNumber - 1) * 10).Take(10).Select(user=>(Maybe<ApiUser>)user).ToList();
+            var list = _context.Users.Skip((pageNumber - 1) * 10).Take(10).Select(user=>user.ToMaybe()).ToList();
             return new PagedList<Maybe<ApiUser>>(list,pageNumber,10,_context.Users.Count());
         }
 

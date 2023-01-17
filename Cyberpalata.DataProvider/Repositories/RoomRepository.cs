@@ -3,6 +3,7 @@ using Cyberpalata.Common.Enums;
 using Cyberpalata.DataProvider.Context;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
+using Functional.Maybe;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,8 @@ namespace Cyberpalata.DataProvider.Repositories
 
         public async Task<Maybe<Room>> ReadAsync(Guid id)
         {
-            return await _context.Rooms.SingleAsync(r => r.Id == id);
+            var res = await _context.Rooms.SingleAsync(r => r.Id == id);
+            return res.ToMaybe();
         }
 
         public void Delete(Room room)
@@ -39,7 +41,7 @@ namespace Cyberpalata.DataProvider.Repositories
 
         private PagedList<Maybe<Room>> GetPageList(int pageNumber)
         {
-            var list = _context.Rooms.Skip((pageNumber - 1) * 10).Take(10).Select(item=>(Maybe<Room>)item).ToList();
+            var list = _context.Rooms.Skip((pageNumber - 1) * 10).Take(10).Select(item=>item.ToMaybe()).ToList();
             return new PagedList<Maybe<Room>>(list, pageNumber, 10, _context.Rooms.Count());
         }
 
@@ -50,7 +52,7 @@ namespace Cyberpalata.DataProvider.Repositories
 
         private PagedList<Maybe<Room>> GetPageList(int pageNumber, RoomType type)
         {
-            var list = _context.Rooms.Where(r=>r.Type.Name == type.Name).Skip((pageNumber - 1) * 10).Take(10).Select(item=>(Maybe<Room>)item).ToList();
+            var list = _context.Rooms.Where(r=>r.Type.Name == type.Name).Skip((pageNumber - 1) * 10).Take(10).Select(item=>item.ToMaybe()).ToList();
             return new PagedList<Maybe<Room>>(list, pageNumber, 10, _context.Rooms.Count());
         }
 

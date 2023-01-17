@@ -2,6 +2,7 @@
 using Cyberpalata.DataProvider.Context;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Identity;
+using Functional.Maybe;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,8 @@ namespace Cyberpalata.DataProvider.Repositories
 
         public async Task<Maybe<UserRefreshToken>> ReadAsync(string refreshToken)
         {
-            return await _context.RefreshTokens.Include(i => i.User).SingleAsync(rt=>rt.RefreshToken == refreshToken);
+            var res = await _context.RefreshTokens.Include(i => i.User).SingleAsync(rt => rt.RefreshToken == refreshToken);
+            return res.ToMaybe();
         }
 
         public void Delete(UserRefreshToken refreshToken)
@@ -37,7 +39,7 @@ namespace Cyberpalata.DataProvider.Repositories
         public async Task<Maybe<ApiUser>> GetUserByRefreshToken(string refreshToken)
         {
             var token = await _context.RefreshTokens.SingleAsync(rt => rt.RefreshToken == refreshToken);
-            return token.User;
+            return token.User.ToMaybe();
         }
     }
 }

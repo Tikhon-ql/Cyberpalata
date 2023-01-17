@@ -7,6 +7,7 @@ using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Context;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Devices;
+using Functional.Maybe;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cyberpalata.DataProvider.Repositories
@@ -28,7 +29,7 @@ namespace Cyberpalata.DataProvider.Repositories
         public async Task<Maybe<Pc>> ReadAsync(Guid id)
         {
             var pc = await _context.Pcs.SingleAsync();
-            return pc;
+            return pc.ToMaybe();
         }
 
         public void Delete(Pc pc)
@@ -38,7 +39,7 @@ namespace Cyberpalata.DataProvider.Repositories
 
         private PagedList<Maybe<Pc>> GetPageList(int pageNumber)
         {
-            var list = _context.Pcs.Skip((pageNumber - 1) * 10).Take(10).Select(item=>(Maybe<Pc>)item).ToList();
+            var list = _context.Pcs.Skip((pageNumber - 1) * 10).Take(10).Select(item=>item.ToMaybe()).ToList();
             return new PagedList<Maybe<Pc>>(list, pageNumber, 10, _context.Pcs.Count());
         }
 
@@ -49,7 +50,8 @@ namespace Cyberpalata.DataProvider.Repositories
 
         public async Task<Maybe<Pc>> GetByGamingRoomId(Guid roomId)
         {
-            return await _context.Pcs.SingleAsync(pc => pc.GamingRoom.Id == roomId);
+            var res = await _context.Pcs.SingleAsync(pc => pc.GamingRoom.Id == roomId);
+            return res.ToMaybe();
         }
     }
 }

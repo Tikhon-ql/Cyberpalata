@@ -4,6 +4,7 @@ using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Devices;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models.Devices;
+using Functional.Maybe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,8 +30,8 @@ namespace Cyberpalata.Logic.Services
 
 
         public async Task<Maybe<GameConsoleDto>> ReadAsync(Guid id)
-        {
-            return _mapper.Map<GameConsoleDto>((await _repository.ReadAsync(id)).Value);
+        { 
+            return _mapper.Map<Maybe<GameConsoleDto>>((await _repository.ReadAsync(id)).Value);
         }
 
         public async Task<Result> DeleteAsync(Guid id)

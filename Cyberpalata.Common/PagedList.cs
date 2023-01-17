@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cyberpalata.Common
 {
-    public class PagedList<T> where T : class
+    public class PagedList<T>
     {
         public PagedList(List<T> items, int currentPageNumber, int pageSize, int totalItemsCount)
         {
