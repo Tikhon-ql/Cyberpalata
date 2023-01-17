@@ -38,9 +38,16 @@ namespace Cyberpalata.DataProvider.Context
             modelBuilder.Entity<Room>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<ApiUser>().Property(a => a.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<UserRefreshToken>().Property(t => t.Id).HasDefaultValueSql("NEWID()");
+
+            UniqueIndexesCreating(modelBuilder);
+
             base.OnModelCreating(modelBuilder);
         }
 
-
+        private void UniqueIndexesCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UserRefreshToken>().HasIndex(urf => urf.RefreshToken).IsUnique();
+            modelBuilder.Entity<ApiUser>().HasIndex(user=>user.Email).IsUnique();
+        }
     }
 }

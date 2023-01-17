@@ -24,10 +24,10 @@ namespace Cyberpalata.DataProvider.Repositories
             await _context.Prices.AddAsync(entity);
         }
 
-        public async Task<Price> ReadAsync(Guid id)
+        public async Task<Maybe<Price>> ReadAsync(Guid id)
         {
-            var price = await _context.Prices.SingleAsync(p => p.Id == id);
-            return price;
+            var price = await _context.Prices.FirstOrDefaultAsync(p => p.Id == id);
+            return price.ToMaybe();
         }
 
 

@@ -24,10 +24,10 @@ namespace Cyberpalata.DataProvider.Repositories
             await _context.Peripheries.AddAsync(entity);
         }
 
-        public async Task<Periphery> ReadAsync(Guid id)
+        public async Task<Maybe<Periphery>> ReadAsync(Guid id)
         {
-            var periphery = await _context.Peripheries.SingleAsync(h => h.Id == id);
-            return periphery;
+            var periphery = await _context.Peripheries.FirstOrDefaultAsync(h => h.Id == id);
+            return periphery.ToMaybe();
         }
 
 

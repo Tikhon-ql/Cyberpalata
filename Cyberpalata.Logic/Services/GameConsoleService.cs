@@ -29,9 +29,9 @@ namespace Cyberpalata.Logic.Services
         }
 
 
-        public async Task<Maybe<GameConsoleDto>> ReadAsync(Guid id)
+        public async Task<GameConsoleDto> ReadAsync(Guid id)
         { 
-            return _mapper.Map<Maybe<GameConsoleDto>>((await _repository.ReadAsync(id)).Value);
+            return _mapper.Map<GameConsoleDto>(await _repository.ReadAsync(id));
         }
 
         public async Task<Result> DeleteAsync(Guid id)
@@ -51,16 +51,16 @@ namespace Cyberpalata.Logic.Services
             return Result.Ok(_mapper.Map<GameConsoleDto>(console.Value));
         }
 
-        public async Task<PagedList<Maybe<GameConsoleDto>>> GetPagedListAsync(int pageNumber)
+        public async Task<PagedList<GameConsoleDto>> GetPagedListAsync(int pageNumber)
         {
             var list = await _repository.GetPageListAsync(pageNumber);
-            return _mapper.Map<PagedList<Maybe<GameConsoleDto>>>(list);
+            return _mapper.Map<PagedList<GameConsoleDto>>(list);
         }
 
-        public async Task<List<Maybe<GameConsoleDto>>> GetByGameConsoleRoomId(Guid roomId)
+        public async Task<List<GameConsoleDto>> GetByGameConsoleRoomId(Guid roomId)
         {
             var list = await _repository.GetByGameConsoleRoomIdAsync(roomId);
-            return _mapper.Map<List<Maybe<GameConsoleDto>>>(list);
+            return _mapper.Map<List<GameConsoleDto>>(list);
         }
     }
 }

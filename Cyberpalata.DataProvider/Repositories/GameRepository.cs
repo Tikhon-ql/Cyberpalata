@@ -25,10 +25,10 @@ namespace Cyberpalata.DataProvider.Repositories
             await _context.Games.AddAsync(entity);
         }
 
-        public async Task<Game> ReadAsync(Guid id)
+        public async Task<Maybe<Game>> ReadAsync(Guid id)
         {
-            var game = await _context.Games.SingleAsync(f => f.Id == id);
-            return game;
+            var game = await _context.Games.FirstOrDefaultAsync(f => f.Id == id);
+            return game.ToMaybe();
         }
         public void Delete(Game game)
         {

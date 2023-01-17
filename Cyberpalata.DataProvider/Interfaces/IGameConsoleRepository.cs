@@ -5,11 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Models.Devices;
+using Functional.Maybe;
 
 namespace Cyberpalata.DataProvider.Interfaces
 {
     public interface IGameConsoleRepository : IRepository<GameConsole>
     {
-        Task<List<Maybe<GameConsole>>> GetByGameConsoleRoomIdAsync(Guid roomId);
+        Task<Maybe<List<GameConsole>>> GetByGameConsoleRoomIdAsync(Guid roomId);
     }
 }

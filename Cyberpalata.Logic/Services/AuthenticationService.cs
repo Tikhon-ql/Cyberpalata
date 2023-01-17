@@ -6,6 +6,7 @@ using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.Logic.Configuration;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models.Identity;
+using Functional.Maybe;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -39,11 +40,16 @@ namespace Cyberpalata.Logic.Services
         public async Task<Result<ApiUserDto>> ValidateUserAsync(AuthenticateRequest request)
         {
             var user = await _userRepository.ReadAsync(request.Email);
+
+            if (!user.HasValue)
+                return Result.Fail<ApiUserDto>("Email or password is incorrect!!!");
+
             string requestHashedPassword = _hashGenerator.HashPassword($"{request.Password}{user.Value.Salt}");
 
             if (user.Value.Password == requestHashedPassword)
                 return Result.Ok(_mapper.Map<ApiUserDto>(user.Value));
-            return (Result<ApiUserDto>)Result.Fail("Email or password is incorrect!!!");
+
+            return Result.Fail<ApiUserDto>("Email or password is incorrect!!!");
         }
 
         public async Task<Maybe<TokenDto>> GenerateTokenAsync(ApiUserDto user)
@@ -51,46 +57,62 @@ namespace Cyberpalata.Logic.Services
             var accessToken = GenerateAccessToken(user);
             var refreshToken = GenerateRefreshToken();
 
-            var apiUser = (await _userRepository.ReadAsync(user.Email)).Value;
+            var apiUser = await _userRepository.ReadAsync(user.Email);
 
-            await _refreshTokenRepository.CreateAsync(new UserRefreshToken { User = apiUser, Expiration = DateTime.Now.AddDays(2), RefreshToken = refreshToken });
+            if (!apiUser.HasValue)
+                return Maybe<TokenDto>.Nothing;
+
+            await _refreshTokenRepository.CreateAsync(new UserRefreshToken { User = apiUser.Value, Expiration = DateTime.Now.AddDays(2), RefreshToken = refreshToken });
 
             return new TokenDto
             {
                 AccessToken = accessToken,
                 RefreshToken = refreshToken
-            };
+            }.ToMaybe();
         }
 
         public async Task<Result<TokenDto>> RefreshTokenAsync(TokenDto tokenDto)
         {
             var handler = new JwtSecurityTokenHandler();
-            var jwtSecurityToken = handler.ReadJwtToken(tokenDto.AccessToken);
+            JwtSecurityToken jwtSecurityToken;
+
+            try
+            {
+                jwtSecurityToken = handler.ReadJwtToken(tokenDto.AccessToken);
+            }
+            catch(Exception ex)
+            {
+                return Result.Fail<TokenDto>(ex.Message);
+            }
+
             var claimId = jwtSecurityToken.Claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Sid);
 
             if (claimId == null)
-                return (Result<TokenDto>)Result.Fail("Id claim missed.");
+                return Result.Fail<TokenDto>("Id claim missed.");
 
             if (!Guid.TryParse(claimId.Value, out var userId))
             {
-                return (Result<TokenDto>)Result.Fail("Cannot parse id");
+                return Result.Fail<TokenDto>("Cannot parse id");
             }
 
-            Maybe<UserRefreshToken> refreshTokenOrNothing = await _refreshTokenRepository.ReadAsync(tokenDto.RefreshToken);
+            Maybe<UserRefreshToken> refreshToken = await _refreshTokenRepository.ReadAsync(tokenDto.RefreshToken);
 
-            if (userId != refreshTokenOrNothing.Value.User.Id)
+            if (!refreshToken.HasValue)
+                return Result.Fail<TokenDto>("Refresh token doesn't exist!");
+
+            if (userId != refreshToken.Value.User.Id)
             {
-                return (Result<TokenDto>)Result.Fail("Your aren't owner of the refresh token");
+                return Result.Fail<TokenDto>("Your aren't owner of the refresh token");
             }
 
-            var isRefreshTokenExpired = DateTime.Now.AddMinutes(30) >= refreshTokenOrNothing.Value.Expiration;
+            var isRefreshTokenExpired = DateTime.Now.AddMinutes(30) >= refreshToken.Value.Expiration;
             if (isRefreshTokenExpired)
-                return Result.Ok((await GenerateTokenAsync(_mapper.Map<ApiUserDto>(refreshTokenOrNothing.Value.User))).Value);
+                return Result.Ok((await GenerateTokenAsync(_mapper.Map<ApiUserDto>(refreshToken.Value.User))).Value);
             else
             {
                 return Result.Ok(new TokenDto
                 {
-                    AccessToken = GenerateAccessToken(_mapper.Map<ApiUserDto>(refreshTokenOrNothing.Value.User)),
+                    AccessToken = GenerateAccessToken(_mapper.Map<ApiUserDto>(refreshToken.Value.User)),
                     RefreshToken = tokenDto.RefreshToken
                 });
             }
@@ -131,8 +153,20 @@ namespace Cyberpalata.Logic.Services
         {
             var userRefreshToken = await _refreshTokenRepository.ReadAsync(tokenDto.RefreshToken);
 
+            if (!userRefreshToken.HasValue)
+                return Result.Fail("Refresh token doesn't exist in database!");
+
             var handler = new JwtSecurityTokenHandler();
-            var jwtSecurityToken = handler.ReadJwtToken(tokenDto.AccessToken);
+            JwtSecurityToken jwtSecurityToken;
+            try
+            {
+                jwtSecurityToken = handler.ReadJwtToken(tokenDto.AccessToken);
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail(ex.Message);
+            }
+       
             var claimId = jwtSecurityToken.Claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Sid);
 
             if (claimId == null)

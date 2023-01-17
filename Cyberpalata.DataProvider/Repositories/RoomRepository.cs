@@ -29,10 +29,10 @@ namespace Cyberpalata.DataProvider.Repositories
             await _context.Rooms.AddAsync(entity);
         }
 
-        public async Task<Room> ReadAsync(Guid id)
+        public async Task<Maybe<Room>> ReadAsync(Guid id)
         {
-            var room = await _context.Rooms.SingleAsync(r => r.Id == id);
-            return room;
+            var room = await _context.Rooms.FirstOrDefaultAsync(r => r.Id == id);
+            return room.ToMaybe();
         }
 
         public void Delete(Room room)

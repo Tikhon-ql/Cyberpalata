@@ -28,10 +28,10 @@ namespace Cyberpalata.DataProvider.Repositories
             await _context.GameConsoles.AddAsync(entity);
         }
 
-        public async Task<GameConsole> ReadAsync(Guid id)
+        public async Task<Maybe<GameConsole>> ReadAsync(Guid id)
         {
-            var res = await _context.GameConsoles.SingleAsync(gc => gc.Id == id);
-            return res;
+            var res = await _context.GameConsoles.FirstOrDefaultAsync(gc => gc.Id == id);
+            return res.ToMaybe();
         }
 
         public void Delete(GameConsole console)

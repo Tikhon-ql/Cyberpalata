@@ -1,5 +1,6 @@
 ﻿using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Models.Peripheral;
+using Functional.Maybe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,6 @@ namespace Cyberpalata.DataProvider.Interfaces
 {
     public interface IPeripheryRepository : IRepository<Periphery>
     {
-        Task<List<Maybe<Periphery>>> GetByGamingRoomId(Guid roomId);
+        Task<Maybe<List<Periphery>>> GetByGamingRoomId(Guid roomId);
     }
 }

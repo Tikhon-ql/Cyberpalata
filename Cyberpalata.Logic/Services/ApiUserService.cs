@@ -38,6 +38,7 @@ namespace Cyberpalata.Logic.Services
         public async Task<Result> CreateAsync(AuthorizationRequest request)
         {
             var res = await ValidateUserAsync(request);
+
             if (res.IsFailure)
                 return Result.Fail(res.Error);
 
@@ -61,14 +62,19 @@ namespace Cyberpalata.Logic.Services
         public async Task<Result> ValidateUserAsync(AuthorizationRequest request)
         {
             var user = await _userRepository.ReadAsync(request.Email);
-            if (user.Value != null)
+
+            if (user.HasValue)
                 return Result.Fail("User is already exist!");
+
             return Result.Ok();
         }
 
-        public async Task<ApiUserDto> ReadAsync(Guid id)
+        public async Task<Maybe<ApiUserDto>> ReadAsync(Guid id)
         {
-            var user = _mapper.Map<ApiUserDto>(await _userRepository.ReadAsync(id));
+
+            //?? Maybe i should to check Maybe.HasValue here???
+
+            var user = _mapper.Map<Maybe<ApiUserDto>>(await _userRepository.ReadAsync(id));
             return user;
         }
     }

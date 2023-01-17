@@ -1,5 +1,6 @@
 ﻿using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Models;
+using Functional.Maybe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,6 @@ namespace Cyberpalata.DataProvider.Interfaces
 {
     public interface IPriceRepository : IRepository<Price>
     {
-        Task<List<Maybe<Price>>> GetByRoomIdAsync(Guid roomId);
+        Task<Maybe<List<Price>>> GetByRoomIdAsync(Guid roomId);
     }
 }

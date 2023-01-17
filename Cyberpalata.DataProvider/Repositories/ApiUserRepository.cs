@@ -35,21 +35,16 @@ namespace Cyberpalata.DataProvider.Repositories
             var entity = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
             return entity.ToMaybe();
         }
-        public async Task<ApiUser> ReadAsync(Guid id)
+        public async Task<Maybe<ApiUser>> ReadAsync(Guid id)
         {
-            var entity = await _context.Users.SingleAsync(u => u.Id == id);
-            return entity;
+            var entity = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            return entity.ToMaybe();
         }
 
-        private PagedList<Maybe<ApiUser>> GetPageList(int pageNumber)
+        public async Task<PagedList<ApiUser>> GetPageListAsync(int pageNumber)
         {
-            var list = _context.Users.Skip((pageNumber - 1) * 10).Take(10).Select(user=>user.ToMaybe()).ToList();
-            return new PagedList<Maybe<ApiUser>>(list,pageNumber,10,_context.Users.Count());
-        }
-
-        public async Task<PagedList<Maybe<ApiUser>>> GetPageListAsync(int pageNumber)
-        {
-            return await Task.Run(() => GetPageList(pageNumber));
+            var list = await _context.Users.Skip((pageNumber - 1) * 10).Take(10).ToListAsync();
+            return new PagedList<ApiUser>(list, pageNumber, 10, _context.Users.Count());
         }
 
         public void Delete(ApiUser user)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cyberpalata.Common;
+using Functional.Maybe;
 
 namespace Cyberpalata.DataProvider.Interfaces
 {
@@ -12,6 +13,6 @@ namespace Cyberpalata.DataProvider.Interfaces
         Task CreateAsync(T entity);
         Task<Maybe<T>> ReadAsync(Guid id);
         void Delete(T entity);
-        Task<PagedList<Maybe<T>>> GetPageListAsync(int pageNumber);
+        Task<PagedList<T>> GetPageListAsync(int pageNumber);
     }
 }

@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Models;
 using Cyberpalata.DataProvider.Models.Devices;
+using Functional.Maybe;
 
 namespace Cyberpalata.DataProvider.Interfaces
 {
     public interface IPcRepository : IRepository<Pc>
     {
-        Task<Maybe<Pc>> GetByGamingRoomId(Guid roomId);
+        Task<Pc> GetByGamingRoomId(Guid roomId);
     }
 }

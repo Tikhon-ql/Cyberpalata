@@ -26,10 +26,10 @@ namespace Cyberpalata.DataProvider.Repositories
             await _context.Pcs.AddAsync(entity);
         }
 
-        public async Task<Pc> ReadAsync(Guid id)
+        public async Task<Maybe<Pc>> ReadAsync(Guid id)
         {
-            var pc = await _context.Pcs.SingleAsync();
-            return pc;
+            var pc = await _context.Pcs.FirstOrDefaultAsync();
+            return pc.ToMaybe();
         }
 
         public void Delete(Pc pc)

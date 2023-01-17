@@ -11,6 +11,7 @@ using Cyberpalata.DataProvider.Models.Devices;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models;
 using Cyberpalata.Logic.Models.Devices;
+using Functional.Maybe;
 
 namespace Cyberpalata.Logic.Services
 {
@@ -32,7 +33,7 @@ namespace Cyberpalata.Logic.Services
 
         public async Task<Maybe<PcDto>> ReadAsync(Guid id)
         {
-            return _mapper.Map<PcDto>((await _repository.ReadAsync(id)).Value);
+            return _mapper.Map<Maybe<PcDto>>((await _repository.ReadAsync(id)));
         }
 
         public async Task<Result> DeleteAsync(Guid id)
@@ -51,7 +52,7 @@ namespace Cyberpalata.Logic.Services
         {
             var pc = await _repository.ReadAsync(id);
             if (!pc.HasValue)
-                return (Result<PcDto>)Result.Fail($"Pc with id {id} doesn't exist");
+                return Result.Fail<PcDto>($"Pc with id {id} doesn't exist");
             return Result.Ok(_mapper.Map<PcDto>(pc.Value));
         }
 
@@ -63,7 +64,7 @@ namespace Cyberpalata.Logic.Services
 
         public async Task<Maybe<PcDto>> GetByGamingRoomId(Guid roomId)
         {
-            return _mapper.Map<PcDto>((await _repository.GetByGamingRoomId(roomId)).Value);
+            return _mapper.Map<Maybe<PcDto>>(await _repository.GetByGamingRoomId(roomId));
         }   
     }
 }

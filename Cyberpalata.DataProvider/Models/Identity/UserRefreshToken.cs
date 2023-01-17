@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,9 +10,13 @@ namespace Cyberpalata.DataProvider.Models.Identity
 {
     public class UserRefreshToken
     {
-        [Key] public Guid Id { get; set; }
-        [Required] public ApiUser User { get; set; }
-        [Required] public string RefreshToken { get; set; }
-        [Required] public DateTime Expiration { get; set; }
+        [Key] 
+        public Guid Id { get; set; }
+        [Required] 
+        public ApiUser User { get; set; }
+        [Required]
+        public string RefreshToken { get; set; }
+        [Required] 
+        public DateTime Expiration { get; set; }
     }
 }

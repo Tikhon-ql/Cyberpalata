@@ -6,6 +6,6 @@ namespace Cyberpalata.Logic.Interfaces
 {
     public interface IUserRefreshTokenService
     {
-        Task<UserRefreshTokenDto> ReadAsync(string refreshToken);
+        Task<Maybe<UserRefreshTokenDto>> ReadAsync(string refreshToken);
     }
 }

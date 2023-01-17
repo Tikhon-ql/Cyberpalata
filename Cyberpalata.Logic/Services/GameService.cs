@@ -5,6 +5,7 @@ using Cyberpalata.DataProvider.Models;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models;
 using Cyberpalata.Logic.Models.Devices;
+using Functional.Maybe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,9 +31,9 @@ namespace Cyberpalata.Logic.Services
             await _repository.CreateAsync(_mapper.Map<Game>(entity));
         }
 
-        public async Task<Maybe<GameDto>> ReadAsync(Guid id)
+        public async Task<GameDto> ReadAsync(Guid id)
         {
-            return _mapper.Map<GameDto>((await _repository.ReadAsync(id)).Value);
+            return _mapper.Map<GameDto>(await _repository.ReadAsync(id));
         }
 
         public async Task<Result> DeleteAsync(Guid id)
@@ -52,10 +53,10 @@ namespace Cyberpalata.Logic.Services
             return Result.Ok(_mapper.Map<GameDto>(game.Value));
         }
 
-        public async Task<PagedList<Maybe<GameDto>>> GetPagedListAsync(int pageNumber)
+        public async Task<PagedList<GameDto>> GetPagedListAsync(int pageNumber)
         {
             var list = await _repository.GetPageListAsync(pageNumber);
-            return _mapper.Map<PagedList<Maybe<GameDto>>>(list);
+            return _mapper.Map<PagedList<GameDto>>(list);
         }    
     }
 }
