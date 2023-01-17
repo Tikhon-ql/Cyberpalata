@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,10 +29,10 @@ namespace Cyberpalata.DataProvider.Repositories
             await _context.Rooms.AddAsync(entity);
         }
 
-        public async Task<Maybe<Room>> ReadAsync(Guid id)
+        public async Task<Room> ReadAsync(Guid id)
         {
-            var res = await _context.Rooms.SingleAsync(r => r.Id == id);
-            return res.ToMaybe();
+            var room = await _context.Rooms.SingleAsync(r => r.Id == id);
+            return room;
         }
 
         public void Delete(Room room)
@@ -39,26 +40,17 @@ namespace Cyberpalata.DataProvider.Repositories
             _context.Rooms.Remove(room);
         }
 
-        private PagedList<Maybe<Room>> GetPageList(int pageNumber)
+        public async Task<PagedList<Room>> GetPageListAsync(int pageNumber)
         {
-            var list = _context.Rooms.Skip((pageNumber - 1) * 10).Take(10).Select(item=>item.ToMaybe()).ToList();
-            return new PagedList<Maybe<Room>>(list, pageNumber, 10, _context.Rooms.Count());
+            var list = await _context.Rooms.Skip((pageNumber - 1) * 10).Take(10).ToListAsync();
+            return new PagedList<Room>(list, pageNumber, 10, _context.Rooms.Count());
         }
 
-        public async Task<PagedList<Maybe<Room>>> GetPageListAsync(int pageNumber)
+        public async Task<Maybe<PagedList<Room>>> GetPageListAsync(int pageNumber, RoomType type)
         {
-            return await Task.Run(() => GetPageList(pageNumber));
-        }
-
-        private PagedList<Maybe<Room>> GetPageList(int pageNumber, RoomType type)
-        {
-            var list = _context.Rooms.Where(r=>r.Type.Name == type.Name).Skip((pageNumber - 1) * 10).Take(10).Select(item=>item.ToMaybe()).ToList();
-            return new PagedList<Maybe<Room>>(list, pageNumber, 10, _context.Rooms.Count());
-        }
-
-        public async Task<PagedList<Maybe<Room>>> GetPageListAsync(int pageNumber, RoomType type)
-        {
-            return await Task.Run(() => GetPageList(pageNumber, type));
+            var list = await _context.Rooms.Where(r => r.Type.Name == type.Name).Skip((pageNumber - 1) * 10).Take(10).ToListAsync();
+            var pagedList = new PagedList<Room>(list, pageNumber, 10, _context.Rooms.Count());
+            return pagedList.ToMaybe();
         }
     }
 }
