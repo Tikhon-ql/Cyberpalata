@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Cyberpalata.DataProvider.Context;
 using Microsoft.EntityFrameworkCore;
 using Cyberpalata.DataProvider.Models;
+using Functional.Maybe;
 
 namespace Cyberpalata.DataProvider.Repositories
 {
@@ -24,7 +25,7 @@ namespace Cyberpalata.DataProvider.Repositories
             await _context.Games.AddAsync(entity);
         }
 
-        public async Task<Maybe<Game>> ReadAsync(Guid id)
+        public async Task<Game> ReadAsync(Guid id)
         {
             var game = await _context.Games.SingleAsync(f => f.Id == id);
             return game;
@@ -34,15 +35,10 @@ namespace Cyberpalata.DataProvider.Repositories
             _context.Games.Remove(game);
         }
             
-        private PagedList<Maybe<Game>> GetPageList(int pageNumber)
+        public async Task<PagedList<Game>> GetPageListAsync(int pageNumber)
         {
-            var list = _context.Games.Skip((pageNumber - 1) * 10).Take(10).Select(item=>(Maybe<Game>)item);
-            return new PagedList<Maybe<Game>>(list.ToList(), pageNumber, 10, _context.Games.Count());
-        }
-
-        public async Task<PagedList<Maybe<Game>>> GetPageListAsync(int pageNumber)
-        {
-            return await Task.Run(() => GetPageList(pageNumber));
+            var list = await _context.Games.Skip((pageNumber - 1) * 10).Take(10).ToListAsync();
+            return new PagedList<Game>(list, pageNumber, 10, _context.Games.Count());
         }
     }
 }
