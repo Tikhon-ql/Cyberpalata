@@ -25,10 +25,10 @@ namespace Cyberpalata.DataProvider.Repositories
             await _context.RefreshTokens.AddAsync(entity);
         }
 
-        public async Task<Maybe<UserRefreshToken>> ReadAsync(string refreshToken)
+        public async Task<UserRefreshToken> ReadAsync(string refreshToken)
         {
-            var res = await _context.RefreshTokens.Include(i => i.User).SingleAsync(rt => rt.RefreshToken == refreshToken);
-            return res.ToMaybe();
+            var userRefreshToken = await _context.RefreshTokens.Include(i => i.User).SingleAsync(rt => rt.RefreshToken == refreshToken);
+            return userRefreshToken;
         }
 
         public void Delete(UserRefreshToken refreshToken)
@@ -36,10 +36,10 @@ namespace Cyberpalata.DataProvider.Repositories
             _context.RefreshTokens.Remove(refreshToken);
         }
 
-        public async Task<Maybe<ApiUser>> GetUserByRefreshToken(string refreshToken)
+        public async Task<ApiUser> GetUserByRefreshToken(string refreshToken)
         {
             var token = await _context.RefreshTokens.SingleAsync(rt => rt.RefreshToken == refreshToken);
-            return token.User.ToMaybe();
+            return token.User;
         }
     }
 }
