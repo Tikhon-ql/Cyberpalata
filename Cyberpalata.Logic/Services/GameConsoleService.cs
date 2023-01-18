@@ -29,16 +29,19 @@ namespace Cyberpalata.Logic.Services
         }
 
 
-        public async Task<GameConsoleDto> ReadAsync(Guid id)
-        { 
-            return _mapper.Map<GameConsoleDto>(await _repository.ReadAsync(id));
+        public async Task<Maybe<GameConsoleDto>> ReadAsync(Guid id)
+        {
+            var gameConsole = await _repository.ReadAsync(id);
+            return _mapper.Map<Maybe<GameConsoleDto>>(gameConsole);
         }
 
         public async Task<Result> DeleteAsync(Guid id)
         {
             var res = await SearchAsync(id);
+
             if (res.IsFailure)
                 return Result.Fail(res.Error);
+
             _repository.Delete(_mapper.Map<GameConsole>(res.Value));
             return Result.Ok();
         }
@@ -47,7 +50,7 @@ namespace Cyberpalata.Logic.Services
         {
             var console = await _repository.ReadAsync(id);
             if (!console.HasValue)
-                return (Result<GameConsoleDto>)Result.Fail($"Game console with id {id} doesn't exist");
+                return Result.Fail<GameConsoleDto>($"Game console with id {id} doesn't exist");
             return Result.Ok(_mapper.Map<GameConsoleDto>(console.Value));
         }
 
@@ -57,10 +60,10 @@ namespace Cyberpalata.Logic.Services
             return _mapper.Map<PagedList<GameConsoleDto>>(list);
         }
 
-        public async Task<List<GameConsoleDto>> GetByGameConsoleRoomId(Guid roomId)
+        public async Task<Maybe<List<GameConsoleDto>>> GetByGameConsoleRoomId(Guid roomId)
         {
             var list = await _repository.GetByGameConsoleRoomIdAsync(roomId);
-            return _mapper.Map<List<GameConsoleDto>>(list);
+            return _mapper.Map<Maybe<List<GameConsoleDto>>>(list);
         }
     }
 }
