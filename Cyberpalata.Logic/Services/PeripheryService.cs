@@ -5,6 +5,7 @@ using Cyberpalata.DataProvider.Models.Peripheral;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models.Devices;
 using Cyberpalata.Logic.Models.Peripheral;
+using Functional.Maybe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,13 +33,15 @@ namespace Cyberpalata.Logic.Services
 
         public async Task<Maybe<PeripheryDto>> ReadAsync(Guid id)
         {
-            return _mapper.Map<PeripheryDto>((await _repository.ReadAsync(id)).Value);
+            var periphery = await _repository.ReadAsync(id);
+            return _mapper.Map<Maybe<PeripheryDto>>(periphery);
         }
 
 
         public async Task<Result> DeleteAsync(Guid id)
         {
             var res = await SearchAsync(id);
+
             if (res.IsFailure)
                 return Result.Fail(res.Error);
 
@@ -50,21 +53,23 @@ namespace Cyberpalata.Logic.Services
         public async Task<Result<PeripheryDto>> SearchAsync(Guid id)
         {
             var periphery = await _repository.ReadAsync(id);
+
             if (!periphery.HasValue)
-                return (Result<PeripheryDto>)Result.Fail($"Periphery with id {id} doesn't exist");
+                return Result.Fail<PeripheryDto>($"Periphery with id {id} doesn't exist");
+
             return Result.Ok(_mapper.Map<PeripheryDto>(periphery.Value));
         }
 
-        public async Task<PagedList<Maybe<PeripheryDto>>> GetPagedListAsync(int pageNumber)
+        public async Task<PagedList<PeripheryDto>> GetPagedListAsync(int pageNumber)
         {
             var list = await _repository.GetPageListAsync(pageNumber);
-            return _mapper.Map<PagedList<Maybe<PeripheryDto>>>(list);
+            return _mapper.Map<PagedList<PeripheryDto>>(list);
         }
 
-        public async Task<List<Maybe<PeripheryDto>>> GetByGamingRoomId(Guid roomId)
+        public async Task<Maybe<List<PeripheryDto>>> GetByGamingRoomId(Guid roomId)
         {
             var list = await _repository.GetByGamingRoomId(roomId);
-            return _mapper.Map<List<Maybe<PeripheryDto>>>(list);
+            return _mapper.Map<Maybe<List<PeripheryDto>>>(list);
         }
     }
 }

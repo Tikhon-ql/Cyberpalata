@@ -21,8 +21,8 @@ namespace Cyberpalata.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var games = _gameService.GetPagedListAsync(1).Result;
-            var viewModel = new GameLibraryViewModel { Games = games.Items.Select(g => g.Value.GameName).ToList() };
+            var games = await _gameService.GetPagedListAsync(1);
+            var viewModel = new GameLibraryViewModel { Games = games.Items.Select(g => g.GameName).ToList() };
             return await ReturnSuccess(viewModel);
         }
     }

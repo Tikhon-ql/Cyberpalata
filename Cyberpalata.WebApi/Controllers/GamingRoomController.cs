@@ -30,7 +30,7 @@ namespace Cyberpalata.WebApi.Controllers
 
             var viewModel = new RoomViewModel
             {
-                Infos = rooms.Items.Select(x => new RoomListItemInfo { Id = x.Value.Id.ToString(), Name = x.Value.Name }).ToList()
+                Infos = rooms.Items.Select(x => new RoomListItemInfo { Id = x.Id.ToString(), Name = x.Name }).ToList()
             };
             return await ReturnSuccess(viewModel);
         }
@@ -58,8 +58,8 @@ namespace Cyberpalata.WebApi.Controllers
             var viewModel = new GamingRoomViewModel
             {
                 PcInfos = pcInfoList,
-                Peripheries = peripheries.Select(p => new Periphery(p.Value.Name, p.Value.Type.Name)).ToList(),
-                Prices = prices.Select(p => new Price(p.Value.Hours, p.Value.Cost)).ToList()
+                Peripheries = peripheries.Value.Select(p => new Periphery(p.Name, p.Type.Name)).ToList(),
+                Prices = prices.Value.Select(p => new Price(p.Hours, p.Cost)).ToList()
             };
             return await ReturnSuccess(viewModel);
         }

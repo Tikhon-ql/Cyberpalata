@@ -31,7 +31,11 @@ namespace Cyberpalata.WebApi.Controllers
         public async Task<IActionResult> Get(Guid id)
         {
             var user = await _userService.ReadAsync(id);
-            return await ReturnSuccess(user.Value);
+
+            if (!user.HasValue)
+                return BadRequest("User isn't exist");
+
+            return Ok(user.Value);
         }
 
         [HttpPost("register")]
@@ -54,6 +58,7 @@ namespace Cyberpalata.WebApi.Controllers
             {
                 return BadRequest("Bad request");
             }
+
             var result = await _authenticationService.ValidateUserAsync(request);
             if (result.IsFailure)
                 return BadRequest(result.Error);
@@ -69,7 +74,10 @@ namespace Cyberpalata.WebApi.Controllers
         public async Task<IActionResult> Logout([FromBody] TokenDto tokenDto)
         {
             var res = await _authenticationService.LogoutAsync(tokenDto);
-            if (res.IsFailure) return BadRequest(res.Error);
+
+            if (res.IsFailure)
+                return BadRequest(res.Error);
+
             return await ReturnSuccess();
         }
 
@@ -78,8 +86,10 @@ namespace Cyberpalata.WebApi.Controllers
         public async Task<IActionResult> RefreshToken([FromBody]TokenDto tokenDto)
         {
             var res = await _authenticationService.RefreshTokenAsync(tokenDto);
+
             if (res.IsFailure)
                 return BadRequest(res.Error);
+
             return await ReturnSuccess(res.Value);
         }
     }

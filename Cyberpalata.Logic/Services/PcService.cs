@@ -33,7 +33,8 @@ namespace Cyberpalata.Logic.Services
 
         public async Task<Maybe<PcDto>> ReadAsync(Guid id)
         {
-            return _mapper.Map<Maybe<PcDto>>((await _repository.ReadAsync(id)));
+            var pc = await _repository.ReadAsync(id);
+            return _mapper.Map<Maybe<PcDto>>(pc);
         }
 
         public async Task<Result> DeleteAsync(Guid id)
@@ -51,20 +52,23 @@ namespace Cyberpalata.Logic.Services
         public async Task<Result<PcDto>> SearchAsync(Guid id)
         {
             var pc = await _repository.ReadAsync(id);
+
             if (!pc.HasValue)
                 return Result.Fail<PcDto>($"Pc with id {id} doesn't exist");
+
             return Result.Ok(_mapper.Map<PcDto>(pc.Value));
         }
 
-        public async Task<PagedList<Maybe<PcDto>>> GetPagedListAsync(int pageNumber)
+        public async Task<PagedList<PcDto>> GetPagedListAsync(int pageNumber)
         {
             var list = await _repository.GetPageListAsync(pageNumber);
-            return _mapper.Map<PagedList<Maybe<PcDto>>>(list);
+            return _mapper.Map<PagedList<PcDto>>(list);
         }
 
         public async Task<Maybe<PcDto>> GetByGamingRoomId(Guid roomId)
         {
-            return _mapper.Map<Maybe<PcDto>>(await _repository.GetByGamingRoomId(roomId));
+            var pc = await _repository.GetByGamingRoomId(roomId);
+            return _mapper.Map<Maybe<PcDto>>(pc);
         }   
     }
 }

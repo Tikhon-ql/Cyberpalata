@@ -5,6 +5,7 @@ using Cyberpalata.DataProvider.Models;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models;
 using Cyberpalata.Logic.Models.Peripheral;
+using Functional.Maybe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,12 +33,14 @@ namespace Cyberpalata.Logic.Services
 
         public async Task<Maybe<PriceDto>> ReadAsync(Guid id)
         {
-            return _mapper.Map<PriceDto>((await _repository.ReadAsync(id)).Value);
+            var price = await _repository.ReadAsync(id);
+            return _mapper.Map<Maybe<PriceDto>>(price);
         }
 
         public async Task<Result> DeleteAsync(Guid id)
         {
             var res = await SearchAsync(id);
+
             if (res.IsFailure)
                 return Result.Fail(res.Error);
 
@@ -49,21 +52,23 @@ namespace Cyberpalata.Logic.Services
         public async Task<Result<PriceDto>> SearchAsync(Guid id)
         {
             var price = await _repository.ReadAsync(id);
+
             if (!price.HasValue)
-                return (Result<PriceDto>)Result.Fail($"Price with id {id} doesn't exist");
+                return Result.Fail<PriceDto>($"Price with id {id} doesn't exist");
+
             return Result.Ok(_mapper.Map<PriceDto>(price.Value));
         }
 
-        public async Task<PagedList<Maybe<PriceDto>>> GetPagedListAsync(int pageNumber)
+        public async Task<PagedList<PriceDto>> GetPagedListAsync(int pageNumber)
         {
             var list = await _repository.GetPageListAsync(pageNumber);
-            return _mapper.Map<PagedList<Maybe<PriceDto>>>(list);
+            return _mapper.Map<PagedList<PriceDto>>(list);
         }
 
-        public async Task<List<Maybe<PriceDto>>> GetByRoomIdAsync(Guid roomId)
+        public async Task<Maybe<List<PriceDto>>> GetByRoomIdAsync(Guid roomId)
         {
             var list = await _repository.GetByRoomIdAsync(roomId);
-            return _mapper.Map<List<Maybe<PriceDto>>>(list);
+            return _mapper.Map<Maybe<List<PriceDto>>>(list);
         }
     }
 }
