@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Cyberpalata.DataProvider.Models
 {
@@ -13,6 +7,6 @@ namespace Cyberpalata.DataProvider.Models
         [Key] [Required] public Guid Id { get; set; }
         [Required] public int Hours { get; set; }
         [Required] public decimal Cost { get; set; }
-        [Required] public Room Room { get; set; }
+        public Room Room { get; set; }
     }
 }

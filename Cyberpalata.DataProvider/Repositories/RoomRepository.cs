@@ -5,12 +5,6 @@ using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
 using Functional.Maybe;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cyberpalata.DataProvider.Repositories
 {

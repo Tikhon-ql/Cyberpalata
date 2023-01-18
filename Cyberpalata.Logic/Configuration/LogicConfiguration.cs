@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Cyberpalata.DataProvider.Configuration;
+﻿using Cyberpalata.DataProvider.Configuration;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Services;
 using Microsoft.Extensions.Configuration;

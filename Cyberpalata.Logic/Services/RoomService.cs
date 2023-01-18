@@ -6,12 +6,6 @@ using Cyberpalata.DataProvider.Models;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models;
 using Functional.Maybe;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cyberpalata.Logic.Services
 {
@@ -26,9 +20,12 @@ namespace Cyberpalata.Logic.Services
             _mapper = mapper;
         }
 
-        public async Task CreateAsync(RoomDto entity)
+        public async Task<Result> CreateAsync(Maybe<RoomDto> entity)
         {
+            if (entity.HasValue)
+                return Result.Fail("Invalid room creation request!");
             await _repository.CreateAsync(_mapper.Map<Room>(entity));
+            return Result.Ok();
         }
 
         public async Task<Maybe<RoomDto>> ReadAsync(Guid id)

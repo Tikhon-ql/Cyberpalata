@@ -1,13 +1,5 @@
 ﻿using Cyberpalata.Common.Enums;
-using Cyberpalata.DataProvider.Models.Devices;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cyberpalata.DataProvider.Models
 {
@@ -16,7 +8,7 @@ namespace Cyberpalata.DataProvider.Models
         [Key] public Guid Id { get; set; }
         [Required] [MaxLength(50)] public string Name { get; set; }
         [Required] public RoomType Type { get; set; }
-        public virtual List<Price> Prices { get; set; } = new();
-        public virtual List<Seat> Seats { get; set; } = new();
+        public virtual List<Price> Prices { get; set; }
+        public virtual List<Seat> Seats { get; set; }
     }
 }

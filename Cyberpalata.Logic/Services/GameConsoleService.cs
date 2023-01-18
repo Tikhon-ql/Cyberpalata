@@ -5,11 +5,6 @@ using Cyberpalata.DataProvider.Models.Devices;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models.Devices;
 using Functional.Maybe;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cyberpalata.Logic.Services
 {
@@ -23,9 +18,12 @@ namespace Cyberpalata.Logic.Services
             _mapper = mapper;
         }
 
-        public async Task CreateAsync(GameConsoleDto entity)
+        public async Task<Result> CreateAsync(Maybe<GameConsoleDto> entity)
         {
+            if (!entity.HasValue)
+                return Result.Fail("Invalid game console creation request!");
             await _repository.CreateAsync(_mapper.Map<GameConsole>(entity));
+            return Result.Ok();
         }
 
 

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cyberpalata.DataProvider.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230116225434_InitialCreate")]
+    [Migration("20230118163115_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -149,7 +149,7 @@ namespace Cyberpalata.DataProvider.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -173,6 +173,9 @@ namespace Cyberpalata.DataProvider.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.ToTable("Users");
                 });
 
@@ -188,12 +191,15 @@ namespace Cyberpalata.DataProvider.Migrations
 
                     b.Property<string>("RefreshToken")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RefreshToken")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 

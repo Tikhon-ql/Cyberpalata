@@ -2,21 +2,9 @@
 using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Identity;
-using Cyberpalata.Logic.Configuration;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models.Identity;
 using Functional.Maybe;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cyberpalata.Logic.Services
 {
@@ -35,23 +23,26 @@ namespace Cyberpalata.Logic.Services
             _hashGenerator = hashGenerator;
         }
 
-        public async Task<Result> CreateAsync(AuthorizationRequest request)
+        public async Task<Result> CreateAsync(Maybe<AuthorizationRequest> request)
         {
-            var res = await ValidateUserAsync(request);
+            if (!request.HasValue)
+                return Result.Fail("Invalid request!");
+
+            var res = await ValidateUserAsync(request.Value);
 
             if (res.IsFailure)
                 return Result.Fail(res.Error);
 
             var newUser = new ApiUser
             {
-                Email = request.Email,
-                Username = request.Username,
-                Surname = request.Surname,
-                Phone = request.Phone,
+                Email = request.Value.Email,
+                Username = request.Value.Username,
+                Surname = request.Value.Surname,
+                Phone = request.Value.Phone,
                 Salt = _hashGenerator.GenerateSalt()
             };
 
-            var password = $"{request.Password}{newUser.Salt}";
+            var password = $"{request.Value.Password}{newUser.Salt}";
 
             newUser.Password = _hashGenerator.HashPassword(password);
 
@@ -71,9 +62,6 @@ namespace Cyberpalata.Logic.Services
 
         public async Task<Maybe<ApiUserDto>> ReadAsync(Guid id)
         {
-
-            //?? Maybe i should to check Maybe.HasValue here???
-
             var user = _mapper.Map<Maybe<ApiUserDto>>(await _userRepository.ReadAsync(id));
             return user;
         }

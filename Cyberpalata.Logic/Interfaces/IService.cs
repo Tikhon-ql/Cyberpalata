@@ -1,16 +1,11 @@
 ﻿using Cyberpalata.Common;
 using Functional.Maybe;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cyberpalata.Logic.Interfaces
 {
     public interface IService<T> where T : class
     {
-        Task CreateAsync(T entity);
+        Task<Result> CreateAsync(Maybe<T> entity);
         Task<Maybe<T>> ReadAsync(Guid id);
         Task<Result> DeleteAsync(Guid id);
         Task<Result<T>> SearchAsync(Guid id);

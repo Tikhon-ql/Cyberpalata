@@ -4,13 +4,7 @@ using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models;
-using Cyberpalata.Logic.Models.Peripheral;
 using Functional.Maybe;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cyberpalata.Logic.Services
 {
@@ -26,9 +20,12 @@ namespace Cyberpalata.Logic.Services
             _repository = repository;
         }
 
-        public async Task CreateAsync(PriceDto entity)
+        public async Task<Result> CreateAsync(Maybe<PriceDto> entity)
         {
-             await _repository.CreateAsync(_mapper.Map<Price>(entity));
+            if (!entity.HasValue)
+                return Result.Fail("Invalid price creation request");
+            await _repository.CreateAsync(_mapper.Map<Price>(entity));
+            return Result.Ok();
         }
 
         public async Task<Maybe<PriceDto>> ReadAsync(Guid id)

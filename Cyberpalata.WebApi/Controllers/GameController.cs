@@ -1,7 +1,5 @@
-﻿using Cyberpalata.Common;
-using Cyberpalata.Common.Intefaces;
+﻿using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Interfaces;
-using Cyberpalata.Logic.Models;
 using Cyberpalata.ViewModel.GameLibrary;
 using Microsoft.AspNetCore.Mvc;
 

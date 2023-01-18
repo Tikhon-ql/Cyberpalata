@@ -1,5 +1,4 @@
-﻿using Cyberpalata.Common;
-using Cyberpalata.Logic.Models.Identity;
+﻿using Cyberpalata.Logic.Models.Identity;
 using Functional.Maybe;
 
 namespace Cyberpalata.Logic.Interfaces

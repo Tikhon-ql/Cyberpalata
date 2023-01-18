@@ -1,14 +1,8 @@
 ﻿using Cyberpalata.DataProvider.Models.Devices;
 using Cyberpalata.DataProvider.Models.Peripheral;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Cyberpalata.DataProvider.Models;
 using Cyberpalata.DataProvider.Models.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Policy;
 
 namespace Cyberpalata.DataProvider.Context
 {
@@ -30,6 +24,28 @@ namespace Cyberpalata.DataProvider.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            ConfigureIdAutoGeneration(modelBuilder);
+            UniqueIndexesCreating(modelBuilder);
+            ConfigureRelationships(modelBuilder);
+            base.OnModelCreating(modelBuilder);
+        }
+
+        private void ConfigureRelationships(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Room>().HasMany(r => r.Prices).WithOne(p => p.Room);
+            modelBuilder.Entity<Room>().HasMany(r => r.Seats).WithOne(s => s.Room);
+            modelBuilder.Entity<Room>().HasOne(r => r.Type).WithMany();
+
+            modelBuilder.Entity<Pc>().HasOne(pc => pc.GamingRoom).WithMany();
+            modelBuilder.Entity<Periphery>().HasOne(p => p.GamingRoom).WithMany();
+            modelBuilder.Entity<GameConsole>().HasOne(gc => gc.ConsoleRoom).WithMany();
+
+            modelBuilder.Entity<UserRefreshToken>().HasOne(urt => urt.User).WithMany();
+            modelBuilder.Entity<Periphery>().HasOne(p => p.Type).WithMany();
+        }
+
+        private void ConfigureIdAutoGeneration(ModelBuilder modelBuilder)
+        {
             modelBuilder.Entity<Game>().Property(g => g.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<Pc>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<Periphery>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
@@ -38,10 +54,6 @@ namespace Cyberpalata.DataProvider.Context
             modelBuilder.Entity<Room>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<ApiUser>().Property(a => a.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<UserRefreshToken>().Property(t => t.Id).HasDefaultValueSql("NEWID()");
-
-            UniqueIndexesCreating(modelBuilder);
-
-            base.OnModelCreating(modelBuilder);
         }
 
         private void UniqueIndexesCreating(ModelBuilder modelBuilder)

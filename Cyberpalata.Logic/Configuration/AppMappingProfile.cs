@@ -5,16 +5,9 @@ using Cyberpalata.DataProvider.Models.Peripheral;
 using Cyberpalata.Logic.Models;
 using Cyberpalata.Logic.Models.Devices;
 using Cyberpalata.Logic.Models.Peripheral;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.Logic.Models.Identity;
-using System.Reflection.Metadata;
-using System.Globalization;
 using Functional.Maybe;
 
 namespace Cyberpalata.Logic.Configuration

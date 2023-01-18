@@ -3,8 +3,6 @@ using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.ViewModel.Rooms;
 using Cyberpalata.ViewModel.Rooms.GameConsoleRoom;
-using Cyberpalata.ViewModel.Rooms.GamingRoom;
-using Cyberpalata.ViewModel.Rooms;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cyberpalata.WebApi.Controllers

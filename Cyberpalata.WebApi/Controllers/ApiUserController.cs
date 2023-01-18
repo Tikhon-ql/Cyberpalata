@@ -1,12 +1,9 @@
 ﻿using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models.Identity;
+using Functional.Maybe;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
-using System.ComponentModel.DataAnnotations;
-using System.Net.Mail;
-using System.Security.Claims;
 
 namespace Cyberpalata.WebApi.Controllers
 {
@@ -45,7 +42,7 @@ namespace Cyberpalata.WebApi.Controllers
             {
                 return BadRequest("Bad request");
             }
-            var result = await _userService.CreateAsync(request);
+            var result = await _userService.CreateAsync(request.ToMaybe());
             if (result.IsFailure)
                 return BadRequest(result.Error);
             return await ReturnSuccess();
@@ -59,7 +56,7 @@ namespace Cyberpalata.WebApi.Controllers
                 return BadRequest("Bad request");
             }
 
-            var result = await _authenticationService.ValidateUserAsync(request);
+            var result = await _authenticationService.ValidateUserAsync(request.ToMaybe());
             if (result.IsFailure)
                 return BadRequest(result.Error);
 
@@ -73,7 +70,7 @@ namespace Cyberpalata.WebApi.Controllers
         [Authorize]
         public async Task<IActionResult> Logout([FromBody] TokenDto tokenDto)
         {
-            var res = await _authenticationService.LogoutAsync(tokenDto);
+            var res = await _authenticationService.LogoutAsync(tokenDto.ToMaybe());
 
             if (res.IsFailure)
                 return BadRequest(res.Error);
@@ -85,7 +82,7 @@ namespace Cyberpalata.WebApi.Controllers
         [HttpPost("refresh")]
         public async Task<IActionResult> RefreshToken([FromBody]TokenDto tokenDto)
         {
-            var res = await _authenticationService.RefreshTokenAsync(tokenDto);
+            var res = await _authenticationService.RefreshTokenAsync(tokenDto.ToMaybe());
 
             if (res.IsFailure)
                 return BadRequest(res.Error);

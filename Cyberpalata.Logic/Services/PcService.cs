@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Formats.Asn1;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Devices;
 using Cyberpalata.Logic.Interfaces;
-using Cyberpalata.Logic.Models;
 using Cyberpalata.Logic.Models.Devices;
 using Functional.Maybe;
 
@@ -26,9 +19,12 @@ namespace Cyberpalata.Logic.Services
             _mapper = mapper;
         }
 
-        public async Task CreateAsync(PcDto entity)
+        public async Task<Result> CreateAsync(Maybe<PcDto> entity)
         {
+            if (!entity.HasValue)
+                return Result.Fail("Invalid pc creation request!");
             await _repository.CreateAsync(_mapper.Map<Pc>(entity));
+            return Result.Ok();
         }
 
         public async Task<Maybe<PcDto>> ReadAsync(Guid id)

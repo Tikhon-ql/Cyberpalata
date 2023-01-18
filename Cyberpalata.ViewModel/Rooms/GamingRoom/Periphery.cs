@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Cyberpalata.Common.Enums;
-
-namespace Cyberpalata.ViewModel.Rooms.GamingRoom
+﻿namespace Cyberpalata.ViewModel.Rooms.GamingRoom
 {
     public class Periphery
     {
