@@ -1,8 +1,8 @@
-﻿using Cyberpalata.Common;
+﻿using CSharpFunctionalExtensions;
+using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Context;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Devices;
-using Functional.Maybe;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cyberpalata.DataProvider.Repositories
@@ -24,7 +24,7 @@ namespace Cyberpalata.DataProvider.Repositories
         public async Task<Maybe<Pc>> ReadAsync(Guid id)
         {
             var pc = await _context.Pcs.FirstOrDefaultAsync();
-            return pc.ToMaybe();
+            return pc;
         }
 
         public void Delete(Pc pc)
@@ -41,7 +41,7 @@ namespace Cyberpalata.DataProvider.Repositories
         public async Task<Maybe<Pc>> GetByGamingRoomId(Guid roomId)
         { 
             var pc = await _context.Pcs.FirstOrDefaultAsync(pc => pc.GamingRoom.Id == roomId);
-            return pc.ToMaybe();
+            return pc;
         }
     }
 }
