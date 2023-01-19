@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
+using CSharpFunctionalExtensions;
 using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Devices;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models.Devices;
-using Functional.Maybe;
 
 namespace Cyberpalata.Logic.Services
 {
@@ -22,9 +22,9 @@ namespace Cyberpalata.Logic.Services
         public async Task<Result> CreateAsync(Maybe<PcDto> entity)
         {
             if (!entity.HasValue)
-                return Result.Fail("Invalid pc creation request!");
+                return Result.Failure("Invalid pc creation request!");
             await _repository.CreateAsync(_mapper.Map<Pc>(entity));
-            return Result.Ok();
+            return Result.Success();
         }
 
         public async Task<Maybe<PcDto>> ReadAsync(Guid id)
@@ -38,11 +38,11 @@ namespace Cyberpalata.Logic.Services
             var res = await SearchAsync(id);
 
             if (res.IsFailure)
-                return Result.Fail(res.Error);
+                return Result.Failure(res.Error);
 
             _repository.Delete(_mapper.Map<Pc>(res.Value));
 
-            return Result.Ok();
+            return Result.Success();
         }
 
         public async Task<Result<PcDto>> SearchAsync(Guid id)
@@ -50,9 +50,9 @@ namespace Cyberpalata.Logic.Services
             var pc = await _repository.ReadAsync(id);
 
             if (!pc.HasValue)
-                return Result.Fail<PcDto>($"Pc with id {id} doesn't exist");
+                return Result.Failure<PcDto>($"Pc with id {id} doesn't exist");
 
-            return Result.Ok(_mapper.Map<PcDto>(pc.Value));
+            return Result.Success(_mapper.Map<PcDto>(pc.Value));
         }
 
         public async Task<PagedList<PcDto>> GetPagedListAsync(int pageNumber)
