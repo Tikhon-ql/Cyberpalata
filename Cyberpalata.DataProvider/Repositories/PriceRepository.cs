@@ -3,7 +3,7 @@ using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Context;
 using Microsoft.EntityFrameworkCore;
 using Cyberpalata.DataProvider.Models;
-using Functional.Maybe;
+using CSharpFunctionalExtensions;
 
 namespace Cyberpalata.DataProvider.Repositories
 {
@@ -22,7 +22,7 @@ namespace Cyberpalata.DataProvider.Repositories
         public async Task<Maybe<Price>> ReadAsync(Guid id)
         {
             var price = await _context.Prices.FirstOrDefaultAsync(p => p.Id == id);
-            return price.ToMaybe();
+            return price;
         }
 
 
@@ -40,7 +40,7 @@ namespace Cyberpalata.DataProvider.Repositories
         public async Task<Maybe<List<Price>>> GetByRoomIdAsync(Guid roomId)
         {
             var roomPrices = await _context.Prices.Where(p => p.Room.Id == roomId).ToListAsync();
-            return roomPrices.ToMaybe();
+            return roomPrices;
         }
     }
 }
