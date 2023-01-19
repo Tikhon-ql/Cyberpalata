@@ -1,8 +1,8 @@
-﻿using Cyberpalata.Common;
+﻿using CSharpFunctionalExtensions;
+using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Context;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Identity;
-using Functional.Maybe;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cyberpalata.DataProvider.Repositories
@@ -25,12 +25,12 @@ namespace Cyberpalata.DataProvider.Repositories
         public async Task<Maybe<ApiUser>> ReadAsync(string email)
         {
             var entity = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-            return entity.ToMaybe();
+            return entity;
         }
         public async Task<Maybe<ApiUser>> ReadAsync(Guid id)
         {
             var entity = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-            return entity.ToMaybe();
+            return entity;
         }
 
         public async Task<PagedList<ApiUser>> GetPageListAsync(int pageNumber)
