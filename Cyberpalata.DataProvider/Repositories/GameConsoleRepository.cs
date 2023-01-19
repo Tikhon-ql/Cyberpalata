@@ -1,8 +1,8 @@
-﻿using Cyberpalata.Common;
+﻿using CSharpFunctionalExtensions;
+using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Context;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Devices;
-using Functional.Maybe;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cyberpalata.DataProvider.Repositories
@@ -24,7 +24,7 @@ namespace Cyberpalata.DataProvider.Repositories
         public async Task<Maybe<GameConsole>> ReadAsync(Guid id)
         {
             var res = await _context.GameConsoles.FirstOrDefaultAsync(gc => gc.Id == id);
-            return res.ToMaybe();
+            return res;
         }
 
         public void Delete(GameConsole console)
@@ -41,7 +41,7 @@ namespace Cyberpalata.DataProvider.Repositories
         public async Task<Maybe<List<GameConsole>>> GetByGameConsoleRoomIdAsync(Guid roomId)
         {
             var res = await _context.GameConsoles.Where(gc => gc.ConsoleRoom.Id == roomId).ToListAsync();
-            return res.ToMaybe();
+            return res;
         }
     }
 }
