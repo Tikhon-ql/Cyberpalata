@@ -1,9 +1,9 @@
-﻿using Cyberpalata.Common;
+﻿using CSharpFunctionalExtensions;
+using Cyberpalata.Common;
 using Cyberpalata.Common.Enums;
 using Cyberpalata.DataProvider.Context;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
-using Functional.Maybe;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cyberpalata.DataProvider.Repositories
@@ -26,7 +26,7 @@ namespace Cyberpalata.DataProvider.Repositories
         public async Task<Maybe<Room>> ReadAsync(Guid id)
         {
             var room = await _context.Rooms.FirstOrDefaultAsync(r => r.Id == id);
-            return room.ToMaybe();
+            return room;
         }
 
         public void Delete(Room room)
