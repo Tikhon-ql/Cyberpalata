@@ -3,7 +3,7 @@ using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Context;
 using Microsoft.EntityFrameworkCore;
 using Cyberpalata.DataProvider.Models;
-using Functional.Maybe;
+using CSharpFunctionalExtensions;
 
 namespace Cyberpalata.DataProvider.Repositories
 {
@@ -22,7 +22,7 @@ namespace Cyberpalata.DataProvider.Repositories
         public async Task<Maybe<Game>> ReadAsync(Guid id)
         {
             var game = await _context.Games.FirstOrDefaultAsync(f => f.Id == id);
-            return game.ToMaybe();
+            return game;
         }
         public void Delete(Game game)
         {
