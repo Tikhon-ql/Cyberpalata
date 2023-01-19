@@ -3,7 +3,7 @@ using Cyberpalata.DataProvider.Models.Peripheral;
 using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Context;
 using Microsoft.EntityFrameworkCore;
-using Functional.Maybe;
+using CSharpFunctionalExtensions;
 
 namespace Cyberpalata.DataProvider.Repositories
 {
@@ -22,7 +22,7 @@ namespace Cyberpalata.DataProvider.Repositories
         public async Task<Maybe<Periphery>> ReadAsync(Guid id)
         {
             var periphery = await _context.Peripheries.FirstOrDefaultAsync(h => h.Id == id);
-            return periphery.ToMaybe();
+            return periphery;
         }
 
 
@@ -40,7 +40,7 @@ namespace Cyberpalata.DataProvider.Repositories
         public async Task<Maybe<List<Periphery>>> GetByGamingRoomId(Guid roomId)
         {
             var roomPeripheries = await _context.Peripheries.Include(p => p.Type).Where(p => p.GamingRoom.Id == roomId).ToListAsync();
-            return roomPeripheries.ToMaybe();
+            return roomPeripheries;
         }
     }
 }
