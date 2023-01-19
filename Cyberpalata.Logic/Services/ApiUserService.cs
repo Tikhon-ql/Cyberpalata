@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
+using CSharpFunctionalExtensions;
 using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models.Identity;
-using Functional.Maybe;
 
 namespace Cyberpalata.Logic.Services
 {
@@ -26,12 +26,12 @@ namespace Cyberpalata.Logic.Services
         public async Task<Result> CreateAsync(Maybe<AuthorizationRequest> request)
         {
             if (!request.HasValue)
-                return Result.Fail("Invalid request!");
+                return Result.Failure("Invalid request!");
 
             var res = await ValidateUserAsync(request.Value);
 
             if (res.IsFailure)
-                return Result.Fail(res.Error);
+                return Result.Failure(res.Error);
 
             var newUser = new ApiUser
             {
@@ -47,7 +47,7 @@ namespace Cyberpalata.Logic.Services
             newUser.Password = _hashGenerator.HashPassword(password);
 
             await _userRepository.CreateAsync(newUser);
-            return Result.Ok();
+            return Result.Success();
         }
 
         public async Task<Result> ValidateUserAsync(AuthorizationRequest request)
@@ -55,9 +55,9 @@ namespace Cyberpalata.Logic.Services
             var user = await _userRepository.ReadAsync(request.Email);
 
             if (user.HasValue)
-                return Result.Fail("User is already exist!");
+                return Result.Failure("User is already exist!");
 
-            return Result.Ok();
+            return Result.Success();
         }
 
         public async Task<Maybe<ApiUserDto>> ReadAsync(Guid id)
