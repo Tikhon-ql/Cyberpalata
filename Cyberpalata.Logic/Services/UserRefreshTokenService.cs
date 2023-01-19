@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using CSharpFunctionalExtensions;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models.Identity;
-using Functional.Maybe;
 
 namespace Cyberpalata.Logic.Services
 {
@@ -22,6 +22,5 @@ namespace Cyberpalata.Logic.Services
             var userRefreshToken = await _repository.ReadAsync(refreshToken);
             return _mapper.Map<Maybe<UserRefreshTokenDto>>(userRefreshToken);
         }
-
     }
 }
