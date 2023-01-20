@@ -3,6 +3,7 @@ using Cyberpalata.DataProvider.Models.Peripheral;
 using Cyberpalata.DataProvider.Models;
 using Cyberpalata.DataProvider.Models.Identity;
 using Microsoft.EntityFrameworkCore;
+using Cyberpalata.DataProvider.Models.Rooms;
 
 namespace Cyberpalata.DataProvider.Context
 {

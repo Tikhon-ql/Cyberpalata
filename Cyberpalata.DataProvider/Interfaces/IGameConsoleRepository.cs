@@ -1,5 +1,5 @@
-﻿using Cyberpalata.DataProvider.Models.Devices;
-using Functional.Maybe;
+﻿using CSharpFunctionalExtensions;
+using Cyberpalata.DataProvider.Models.Devices;
 
 namespace Cyberpalata.DataProvider.Interfaces
 {

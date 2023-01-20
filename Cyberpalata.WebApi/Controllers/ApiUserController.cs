@@ -1,7 +1,6 @@
 ﻿using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models.Identity;
-using Functional.Maybe;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -42,7 +41,7 @@ namespace Cyberpalata.WebApi.Controllers
             {
                 return BadRequest("Bad request");
             }
-            var result = await _userService.CreateAsync(request.ToMaybe());
+            var result = await _userService.CreateAsync(request);
             if (result.IsFailure)
                 return BadRequest(result.Error);
             return await ReturnSuccess();
@@ -56,7 +55,7 @@ namespace Cyberpalata.WebApi.Controllers
                 return BadRequest("Bad request");
             }
 
-            var result = await _authenticationService.ValidateUserAsync(request.ToMaybe());
+            var result = await _authenticationService.ValidateUserAsync(request);
             if (result.IsFailure)
                 return BadRequest(result.Error);
 
@@ -70,7 +69,7 @@ namespace Cyberpalata.WebApi.Controllers
         [Authorize]
         public async Task<IActionResult> Logout([FromBody] TokenDto tokenDto)
         {
-            var res = await _authenticationService.LogoutAsync(tokenDto.ToMaybe());
+            var res = await _authenticationService.LogoutAsync(tokenDto);
 
             if (res.IsFailure)
                 return BadRequest(res.Error);
@@ -82,7 +81,7 @@ namespace Cyberpalata.WebApi.Controllers
         [HttpPost("refresh")]
         public async Task<IActionResult> RefreshToken([FromBody]TokenDto tokenDto)
         {
-            var res = await _authenticationService.RefreshTokenAsync(tokenDto.ToMaybe());
+            var res = await _authenticationService.RefreshTokenAsync(tokenDto);
 
             if (res.IsFailure)
                 return BadRequest(res.Error);

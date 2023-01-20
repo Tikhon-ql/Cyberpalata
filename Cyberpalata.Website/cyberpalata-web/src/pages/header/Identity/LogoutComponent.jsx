@@ -10,7 +10,8 @@ export const LogoutComponent = () => {
 
         if(localStorage.getItem('accessToken') != null && localStorage.getItem('refreshToken') != null)
         {
-            const apiUrl = `https://localhost:7227/users/logout`;
+            const baseUrl = `http://dotnetinternship2022.norwayeast.cloudapp.azure.com:83`;
+            const apiUrl = `${baseUrl}/users/logout`;
     
             let accessToken = localStorage.getItem('accessToken');
             let refreshToken = localStorage.getItem('refreshToken');

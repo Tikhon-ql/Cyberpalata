@@ -8,7 +8,8 @@ using Cyberpalata.Logic.Models.Peripheral;
 using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.Logic.Models.Identity;
-using Functional.Maybe;
+using CSharpFunctionalExtensions;
+using Cyberpalata.DataProvider.Models.Rooms;
 
 namespace Cyberpalata.Logic.Configuration
 {

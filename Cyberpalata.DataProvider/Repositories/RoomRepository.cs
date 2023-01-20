@@ -3,7 +3,7 @@ using Cyberpalata.Common;
 using Cyberpalata.Common.Enums;
 using Cyberpalata.DataProvider.Context;
 using Cyberpalata.DataProvider.Interfaces;
-using Cyberpalata.DataProvider.Models;
+using Cyberpalata.DataProvider.Models.Rooms;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cyberpalata.DataProvider.Repositories

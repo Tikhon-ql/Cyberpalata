@@ -1,5 +1,5 @@
-﻿using Cyberpalata.Common;
-using Functional.Maybe;
+﻿using CSharpFunctionalExtensions;
+using Cyberpalata.Common;
 
 namespace Cyberpalata.DataProvider.Interfaces
 {

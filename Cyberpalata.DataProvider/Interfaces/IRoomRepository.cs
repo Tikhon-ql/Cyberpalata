@@ -1,6 +1,6 @@
 ﻿using Cyberpalata.Common;
 using Cyberpalata.Common.Enums;
-using Cyberpalata.DataProvider.Models;
+using Cyberpalata.DataProvider.Models.Rooms;
 
 namespace Cyberpalata.DataProvider.Interfaces
 {

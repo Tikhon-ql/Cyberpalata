@@ -23,5 +23,16 @@ namespace Cyberpalata.WebApi.Controllers
             var viewModel = new GameLibraryViewModel { Games = games.Items.Select(g => g.GameName).ToList() };
             return await ReturnSuccess(viewModel);
         }
+        [HttpGet("count")]
+        public int[] Get(int count)
+        {
+            var rnd = new Random(DateTime.Now.Millisecond);
+            var arr = new int[count];
+            for(int i = 0;i < count; i++)
+            {
+                arr[i] = rnd.Next();
+            }
+            return arr;
+        }
     }
 }

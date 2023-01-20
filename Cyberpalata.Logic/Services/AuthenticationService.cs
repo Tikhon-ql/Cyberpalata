@@ -48,7 +48,7 @@ namespace Cyberpalata.Logic.Services
             return Result.Failure<ApiUserDto>("Email or password is incorrect!!!");
         }
 
-        public async Task<Maybe<TokenDto>> GenerateTokenAsync(ApiUserDto user)//ApiUser maybe????
+        public async Task<Maybe<TokenDto>> GenerateTokenAsync(ApiUserDto user)
         {
             var accessToken = GenerateAccessToken(user);
 
@@ -211,7 +211,7 @@ namespace Cyberpalata.Logic.Services
             var claimIdResult = GetClaim(tokenDto.Value.AccessToken, JwtRegisteredClaimNames.Sid);
             if (claimIdResult.IsFailure)
                 return Result.Failure(claimIdResult.Error);
-            var claimId = claimIdResult.Value;            
+            var claimId = claimIdResult.Value;
 
             if (Guid.TryParse(claimId.Value, out Guid userId))
                 return Result.Failure("Cannot parse id");

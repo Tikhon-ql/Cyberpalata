@@ -15,7 +15,9 @@ export const LoginComponent = () => {
 
         // console.dir(data);
 
-        const apiRequestUrl = `https://localhost:7227/users/login`;
+        const baseUrl = `http://dotnetinternship2022.norwayeast.cloudapp.azure.com:83`;
+
+        const apiRequestUrl = `${baseUrl}/users/login`;
         
         const res = axios.post(apiRequestUrl, data).then(res=>
         {

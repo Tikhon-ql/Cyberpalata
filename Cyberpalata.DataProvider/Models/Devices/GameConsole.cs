@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Cyberpalata.DataProvider.Models.Rooms;
 
 namespace Cyberpalata.DataProvider.Models.Devices
 {

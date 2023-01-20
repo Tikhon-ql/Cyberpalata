@@ -1,5 +1,5 @@
-﻿using Cyberpalata.Logic.Models.Devices;
-using Functional.Maybe;
+﻿using CSharpFunctionalExtensions;
+using Cyberpalata.Logic.Models.Devices;
 
 namespace Cyberpalata.Logic.Interfaces
 {

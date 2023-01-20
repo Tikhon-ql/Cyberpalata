@@ -1,6 +1,5 @@
-﻿using Cyberpalata.Common;
+﻿using CSharpFunctionalExtensions;
 using Cyberpalata.Logic.Models.Identity;
-using Functional.Maybe;
 
 namespace Cyberpalata.Logic.Interfaces
 {
