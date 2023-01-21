@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Cyberpalata.Common.Enums;
-using Cyberpalata.DataProvider.Models.Rooms;
 
 namespace Cyberpalata.DataProvider.Models.Peripheral
 {

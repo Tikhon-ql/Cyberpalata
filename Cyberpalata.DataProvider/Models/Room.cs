@@ -1,7 +1,7 @@
 ﻿using Cyberpalata.Common.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace Cyberpalata.DataProvider.Models.Rooms
+namespace Cyberpalata.DataProvider.Models
 {
     public class Room
     {
