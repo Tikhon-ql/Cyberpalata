@@ -21,6 +21,7 @@ namespace Cyberpalata.DataProvider.Context
         public DbSet<GameConsole> GameConsoles { get; set; }
         public DbSet<ApiUser> Users { get; set; }
         public DbSet<UserRefreshToken> RefreshTokens { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,6 +36,7 @@ namespace Cyberpalata.DataProvider.Context
             modelBuilder.Entity<Room>().HasMany(r => r.Prices).WithOne(p => p.Room);
             modelBuilder.Entity<Room>().HasMany(r => r.Seats).WithOne(s => s.Room);
             modelBuilder.Entity<Room>().HasOne(r => r.Type).WithMany();
+            modelBuilder.Entity<Room>().HasMany(r => r.Bookings).WithOne();
 
             modelBuilder.Entity<Pc>().HasOne(pc => pc.GamingRoom).WithMany();
             modelBuilder.Entity<Periphery>().HasOne(p => p.GamingRoom).WithMany();
@@ -42,6 +44,10 @@ namespace Cyberpalata.DataProvider.Context
 
             modelBuilder.Entity<UserRefreshToken>().HasOne(urt => urt.User).WithMany();
             modelBuilder.Entity<Periphery>().HasOne(p => p.Type).WithMany();
+
+            modelBuilder.Entity<Booking>().HasMany(b => b.Seats).WithMany();
+            modelBuilder.Entity<Booking>().HasMany(b=>b.GamesToDownloadBefore).WithMany();
+            modelBuilder.Entity<Booking>().HasOne(b => b.Tariff).WithOne();   
         }
 
         private void ConfigureIdAutoGeneration(ModelBuilder modelBuilder)
@@ -54,6 +60,7 @@ namespace Cyberpalata.DataProvider.Context
             modelBuilder.Entity<Room>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<ApiUser>().Property(a => a.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<UserRefreshToken>().Property(t => t.Id).HasDefaultValueSql("NEWID()");
+            modelBuilder.Entity<Booking>().Property(t => t.Id).HasDefaultValueSql("NEWID()");
         }
 
         private void UniqueIndexesCreating(ModelBuilder modelBuilder)
