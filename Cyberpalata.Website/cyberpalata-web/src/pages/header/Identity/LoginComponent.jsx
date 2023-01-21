@@ -14,7 +14,6 @@ export const LoginComponent = () => {
         }
 
         // console.dir(data);
-
         const baseUrl = `http://dotnetinternship2022.norwayeast.cloudapp.azure.com:83`;
 
         const apiRequestUrl = `${baseUrl}/users/login`;

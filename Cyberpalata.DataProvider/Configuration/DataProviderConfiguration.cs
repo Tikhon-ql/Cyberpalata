@@ -5,6 +5,7 @@ using Cyberpalata.DataProvider.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Cyberpalata.DataProvider.Configuration
 {
@@ -12,7 +13,11 @@ namespace Cyberpalata.DataProvider.Configuration
     {
         public static void ConfigureDataProvider(this IServiceCollection services, IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString("CyberpalataConnectionString");
+            //. options.UseSqlServer(connection, b => b.MigrationsAssembly("Cyberpalata.WebApi")). By default,
+            //the migrations assembly is the assembly containing the DbContext.
+            //Change your target project to the migrations project by using the Package Mana
+
+                        var connectionString = configuration.GetConnectionString("CyberpalataConnectionString");
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {

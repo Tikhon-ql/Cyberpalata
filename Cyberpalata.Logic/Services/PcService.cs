@@ -19,12 +19,9 @@ namespace Cyberpalata.Logic.Services
             _mapper = mapper;
         }
 
-        public async Task<Result> CreateAsync(Maybe<PcDto> entity)
+        public async Task CreateAsync(PcDto entity)
         {
-            if (!entity.HasValue)
-                return Result.Failure("Invalid pc creation request!");
             await _repository.CreateAsync(_mapper.Map<Pc>(entity));
-            return Result.Success();
         }
 
         public async Task<Maybe<PcDto>> ReadAsync(Guid id)

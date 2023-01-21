@@ -34,6 +34,7 @@ namespace Cyberpalata.WebApi.Controllers
         //    return ReturnSuccess(viewModel);
         //}
 
+        // 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -46,6 +47,7 @@ namespace Cyberpalata.WebApi.Controllers
             return await ReturnSuccess(viewModel);
         }
 
+        //contraint vip | Pc | Periphery | GameConsole | In logic layer delete maybe in params. Get id from accessToken
 
         [HttpGet("id")]
         public async Task<IActionResult> Get(Guid id)

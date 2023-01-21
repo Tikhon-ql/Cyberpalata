@@ -7,7 +7,8 @@ const GameLibrary = () => {
     const [games, setGames] = useState([]);
 
     useEffect(()=>{
-        axios.get(`https://localhost:7227/games`).then(res => {
+        const baseUrl = `http://dotnetinternship2022.norwayeast.cloudapp.azure.com:83`;
+        axios.get(`${baseUrl}/games`).then(res => {
             setGames(res.data.games);
         });
     },[]);

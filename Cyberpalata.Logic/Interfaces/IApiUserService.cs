@@ -5,7 +5,7 @@ namespace Cyberpalata.Logic.Interfaces
 {
     public interface IApiUserService
     {
-        Task<Result> CreateAsync(Maybe<AuthorizationRequest> request);
+        Task<Result> CreateAsync(AuthorizationRequest request);
         Task<Maybe<ApiUserDto>> ReadAsync(Guid id);
         Task<Result> ValidateUserAsync(AuthorizationRequest request);
     }

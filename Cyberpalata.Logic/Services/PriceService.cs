@@ -20,12 +20,9 @@ namespace Cyberpalata.Logic.Services
             _repository = repository;
         }
 
-        public async Task<Result> CreateAsync(Maybe<PriceDto> entity)
+        public async Task CreateAsync(PriceDto entity)
         {
-            if (!entity.HasValue)
-                return Result.Failure("Invalid price creation request");
             await _repository.CreateAsync(_mapper.Map<Price>(entity));
-            return Result.Success();
         }
 
         public async Task<Maybe<PriceDto>> ReadAsync(Guid id)

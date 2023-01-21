@@ -15,7 +15,8 @@ export const ProfileComponent = () => {
     let state = true;
     if(accessToken != null)
     {
-        const apiRequestUrl = `https://localhost:7227/users` + '?id=' + jwtDecode(accessToken).sid;
+        const baseUrl = `http://dotnetinternship2022.norwayeast.cloudapp.azure.com:83`;
+        const apiRequestUrl = `${baseUrl}/users`;
 
         const config = {
             headers: { Authorization: `Bearer ${accessToken}` }

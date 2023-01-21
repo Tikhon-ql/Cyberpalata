@@ -23,26 +23,23 @@ namespace Cyberpalata.Logic.Services
             _hashGenerator = hashGenerator;
         }
 
-        public async Task<Result> CreateAsync(Maybe<AuthorizationRequest> request)
+        public async Task<Result> CreateAsync(AuthorizationRequest request)
         {
-            if (!request.HasValue)
-                return Result.Failure("Invalid request!");
-
-            var res = await ValidateUserAsync(request.Value);
+            var res = await ValidateUserAsync(request);
 
             if (res.IsFailure)
                 return Result.Failure(res.Error);
 
             var newUser = new ApiUser
             {
-                Email = request.Value.Email,
-                Username = request.Value.Username,
-                Surname = request.Value.Surname,
-                Phone = request.Value.Phone,
+                Email = request.Email,
+                Username = request.Username,
+                Surname = request.Surname,
+                Phone = request.Phone,
                 Salt = _hashGenerator.GenerateSalt()
             };
 
-            var password = $"{request.Value.Password}{newUser.Salt}";
+            var password = $"{request.Password}{newUser.Salt}";
 
             newUser.Password = _hashGenerator.HashPassword(password);
 
@@ -62,8 +59,9 @@ namespace Cyberpalata.Logic.Services
 
         public async Task<Maybe<ApiUserDto>> ReadAsync(Guid id)
         {
-            var user = _mapper.Map<Maybe<ApiUserDto>>(await _userRepository.ReadAsync(id));
-            return user;
+            var user = await _userRepository.ReadAsync(id);
+            var result = _mapper.Map<ApiUserDto>(user.Value);
+            return result;
         }
     }
 }

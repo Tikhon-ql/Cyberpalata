@@ -20,12 +20,9 @@ namespace Cyberpalata.Logic.Services
             _mapper = mapper;
         }
 
-        public async Task<Result> CreateAsync(Maybe<RoomDto> entity)
+        public async Task CreateAsync(RoomDto entity)
         {
-            if (entity.HasValue)
-                return Result.Failure("Invalid room creation request!");
             await _repository.CreateAsync(_mapper.Map<Room>(entity));
-            return Result.Success();
         }
 
         public async Task<Maybe<RoomDto>> ReadAsync(Guid id)

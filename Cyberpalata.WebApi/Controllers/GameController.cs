@@ -2,6 +2,7 @@
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.ViewModel.GameLibrary;
 using Microsoft.AspNetCore.Mvc;
+using System.Data.OleDb;
 
 namespace Cyberpalata.WebApi.Controllers
 {
@@ -28,7 +29,7 @@ namespace Cyberpalata.WebApi.Controllers
         {
             var rnd = new Random(DateTime.Now.Millisecond);
             var arr = new int[count];
-            for(int i = 0;i < count; i++)
+            for (int i = 0; i < count; i++)
             {
                 arr[i] = rnd.Next();
             }

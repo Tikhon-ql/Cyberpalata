@@ -9,5 +9,6 @@ namespace Cyberpalata.DataProvider.Models
         public DateTime Begining { get; set; }
         public DateTime Ending { get; set; }
         public Price? Tariff { get; set; }
+
     }
 }

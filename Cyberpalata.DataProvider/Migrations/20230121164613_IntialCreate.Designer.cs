@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cyberpalata.DataProvider.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230118163115_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230121164613_IntialCreate")]
+    partial class IntialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -256,7 +256,7 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.ToTable("Prices");
                 });
 
-            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Room", b =>
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Rooms.Room", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -299,7 +299,7 @@ namespace Cyberpalata.DataProvider.Migrations
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Devices.GameConsole", b =>
                 {
-                    b.HasOne("Cyberpalata.DataProvider.Models.Room", "ConsoleRoom")
+                    b.HasOne("Cyberpalata.DataProvider.Models.Rooms.Room", "ConsoleRoom")
                         .WithMany()
                         .HasForeignKey("ConsoleRoomId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -310,7 +310,7 @@ namespace Cyberpalata.DataProvider.Migrations
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Devices.Pc", b =>
                 {
-                    b.HasOne("Cyberpalata.DataProvider.Models.Room", "GamingRoom")
+                    b.HasOne("Cyberpalata.DataProvider.Models.Rooms.Room", "GamingRoom")
                         .WithMany()
                         .HasForeignKey("GamingRoomId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -332,7 +332,7 @@ namespace Cyberpalata.DataProvider.Migrations
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Peripheral.Periphery", b =>
                 {
-                    b.HasOne("Cyberpalata.DataProvider.Models.Room", "GamingRoom")
+                    b.HasOne("Cyberpalata.DataProvider.Models.Rooms.Room", "GamingRoom")
                         .WithMany()
                         .HasForeignKey("GamingRoomId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -351,7 +351,7 @@ namespace Cyberpalata.DataProvider.Migrations
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Price", b =>
                 {
-                    b.HasOne("Cyberpalata.DataProvider.Models.Room", "Room")
+                    b.HasOne("Cyberpalata.DataProvider.Models.Rooms.Room", "Room")
                         .WithMany("Prices")
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -360,7 +360,7 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.Navigation("Room");
                 });
 
-            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Room", b =>
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Rooms.Room", b =>
                 {
                     b.HasOne("Cyberpalata.Common.Enums.RoomType", "Type")
                         .WithMany()
@@ -373,7 +373,7 @@ namespace Cyberpalata.DataProvider.Migrations
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Seat", b =>
                 {
-                    b.HasOne("Cyberpalata.DataProvider.Models.Room", "Room")
+                    b.HasOne("Cyberpalata.DataProvider.Models.Rooms.Room", "Room")
                         .WithMany("Seats")
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -382,7 +382,7 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.Navigation("Room");
                 });
 
-            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Room", b =>
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Rooms.Room", b =>
                 {
                     b.Navigation("Prices");
 

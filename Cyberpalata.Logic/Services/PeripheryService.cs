@@ -20,12 +20,9 @@ namespace Cyberpalata.Logic.Services
             _repository = repository;
         }
 
-        public async Task<Result> CreateAsync(Maybe<PeripheryDto> entity)
+        public async Task CreateAsync(PeripheryDto entity)
         {
-            if (!entity.HasValue)
-                return Result.Failure("Invalid entity creation request!");
             await _repository.CreateAsync(_mapper.Map<Periphery>(entity));
-            return Result.Success();
         }
 
         public async Task<Maybe<PeripheryDto>> ReadAsync(Guid id)

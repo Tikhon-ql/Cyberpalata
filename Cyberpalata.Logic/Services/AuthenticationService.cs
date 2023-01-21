@@ -30,17 +30,14 @@ namespace Cyberpalata.Logic.Services
             _hashGenerator = hashGenerator;
         }
 
-        public async Task<Result<ApiUserDto>> ValidateUserAsync(Maybe<AuthenticateRequest> request)
+        public async Task<Result<ApiUserDto>> ValidateUserAsync(AuthenticateRequest request)
         {
-            if (!request.HasValue)
-                return Result.Failure<ApiUserDto>("Invalid request!");
-
-            var user = await _userRepository.ReadAsync(request.Value.Email);
+            var user = await _userRepository.ReadAsync(request.Email);
 
             if (!user.HasValue)
                 return Result.Failure<ApiUserDto>("Email or password is incorrect!!!");
 
-            string requestHashedPassword = _hashGenerator.HashPassword($"{request.Value.Password}{user.Value.Salt}");
+            string requestHashedPassword = _hashGenerator.HashPassword($"{request.Password}{user.Value.Salt}");
 
             if (user.Value.Password == requestHashedPassword)
                 return Result.Success(_mapper.Map<ApiUserDto>(user.Value));
@@ -73,16 +70,11 @@ namespace Cyberpalata.Logic.Services
                 RefreshToken = refreshToken
             };//???????????????
         }
-
-        public async Task<Result<TokenDto>> RefreshTokenAsync(Maybe<TokenDto> tokenDto)
+        //Maybe = valid null
+        public async Task<Result<TokenDto>> RefreshTokenAsync(TokenDto tokenDto)
         {
 
-            if (!tokenDto.HasValue)
-            {
-                return Result.Failure<TokenDto>("Invalid request");
-            }
-
-            var claimIdResult = GetClaim(tokenDto.Value.AccessToken, JwtRegisteredClaimNames.Sid);
+            var claimIdResult = GetClaim(tokenDto.AccessToken, JwtRegisteredClaimNames.Sid);
             if (claimIdResult.IsFailure)
                 return Result.Failure<TokenDto>(claimIdResult.Error);
 
@@ -93,7 +85,7 @@ namespace Cyberpalata.Logic.Services
                 return Result.Failure<TokenDto>("Cannot parse id");
             }
 
-            Maybe<UserRefreshToken> refreshToken = await _refreshTokenRepository.ReadAsync(tokenDto.Value.RefreshToken);
+            Maybe<UserRefreshToken> refreshToken = await _refreshTokenRepository.ReadAsync(tokenDto.RefreshToken);
 
             if (!refreshToken.HasValue)
                 return Result.Failure<TokenDto>("Refresh token doesn't exist!");
@@ -103,7 +95,7 @@ namespace Cyberpalata.Logic.Services
                 return Result.Failure<TokenDto>("Your aren't owner of the refresh token");
             }
 
-            if(!int.TryParse(_configuration["RefreshTokenSettings:TimeToCheckBeforeRefreshTokenExpired"],out int beforeMinutes))
+            if(!int.TryParse(_configuration["RefreshTokenSettings:TimeToCheckBeforeRefreshTokenExpiredMin"],out int beforeMinutes))//Parse
             {
                 return Result.Failure<TokenDto>("Wrong refresh token settings");
             }
@@ -124,7 +116,7 @@ namespace Cyberpalata.Logic.Services
                 return Result.Success(new TokenDto
                 {
                     AccessToken = accessToken.Value,
-                    RefreshToken = tokenDto.Value.RefreshToken
+                    RefreshToken = tokenDto.RefreshToken
                 });
             }
         }
@@ -176,7 +168,7 @@ namespace Cyberpalata.Logic.Services
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
             };
 
-            if (!int.TryParse(_configuration["AccessTokenSettings:ExpirationTime"], out int accessTokenExpirationTimeInMinutes))
+            if (!int.TryParse(_configuration["AccessTokenSettings:ExpirationTimeMin"], out int accessTokenExpirationTimeInMinutes))
                 return Maybe.None;
 
             var accessToken = new JwtSecurityToken(_configuration["Jwt:Issuer"],
@@ -198,17 +190,14 @@ namespace Cyberpalata.Logic.Services
             }
         }
 
-        public async Task<Result> LogoutAsync(Maybe<TokenDto> tokenDto)
+        public async Task<Result> LogoutAsync(TokenDto tokenDto)
         {
-            if (!tokenDto.HasValue)
-                return Result.Failure("Invalid token request!");
-
-            var userRefreshToken = await _refreshTokenRepository.ReadAsync(tokenDto.Value.RefreshToken);
+            var userRefreshToken = await _refreshTokenRepository.ReadAsync(tokenDto.RefreshToken);
 
             if (!userRefreshToken.HasValue)
                 return Result.Failure("Refresh token doesn't exist in database!");
 
-            var claimIdResult = GetClaim(tokenDto.Value.AccessToken, JwtRegisteredClaimNames.Sid);
+            var claimIdResult = GetClaim(tokenDto.AccessToken, JwtRegisteredClaimNames.Sid);
             if (claimIdResult.IsFailure)
                 return Result.Failure(claimIdResult.Error);
             var claimId = claimIdResult.Value;

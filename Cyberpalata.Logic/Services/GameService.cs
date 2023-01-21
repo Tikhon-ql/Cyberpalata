@@ -20,12 +20,9 @@ namespace Cyberpalata.Logic.Services
             _repository = repository;
         }
 
-        public async Task<Result> CreateAsync(Maybe<GameDto> entity)
+        public async Task CreateAsync(GameDto entity)
         {
-            if (!entity.HasValue)
-                return Result.Failure("Invalid game creation request!");
             await _repository.CreateAsync(_mapper.Map<Game>(entity));
-            return Result.Success();
         }
 
         public async Task<Maybe<GameDto>> ReadAsync(Guid id)

@@ -18,12 +18,9 @@ namespace Cyberpalata.Logic.Services
             _mapper = mapper;
         }
 
-        public async Task<Result> CreateAsync(Maybe<GameConsoleDto> entity)
+        public async Task CreateAsync(GameConsoleDto entity)
         {
-            if (!entity.HasValue)
-                return Result.Failure("Invalid game console creation request!");
             await _repository.CreateAsync(_mapper.Map<GameConsole>(entity));
-            return Result.Success();
         }
 
 

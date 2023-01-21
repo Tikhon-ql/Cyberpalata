@@ -3,6 +3,8 @@ using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.JsonWebTokens;
+using System.Security.Claims;
 
 namespace Cyberpalata.WebApi.Controllers
 {
@@ -14,30 +16,27 @@ namespace Cyberpalata.WebApi.Controllers
         private readonly IAuthenticationService _authenticationService;
         private readonly IUserRefreshTokenService _refreshTokenService;
 
-        public ApiUserController(IApiUserService userService,IAuthenticationService authenticationService,IUserRefreshTokenService refreshTokenService, IUnitOfWork uinOfWork) : base(uinOfWork)
+        public ApiUserController(IApiUserService userService, IAuthenticationService authenticationService, IUserRefreshTokenService refreshTokenService, IUnitOfWork uinOfWork) : base(uinOfWork)
         {
             _userService = userService;
             _authenticationService = authenticationService;
             _refreshTokenService = refreshTokenService;
-           
-        }
 
+        }
+        //User locates in token get id from accessToken
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> Get(Guid id)
+        public async Task<IActionResult> Get()
         {
+            var id = new Guid(User.Claims.Single(claim => claim.Type == JwtRegisteredClaimNames.Sid).ToString());
             var user = await _userService.ReadAsync(id);
-
-            if (!user.HasValue)
-                return BadRequest("User isn't exist");
-
             return Ok(user.Value);
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Post(AuthorizationRequest request)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest("Bad request");
             }
@@ -52,7 +51,7 @@ namespace Cyberpalata.WebApi.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("Bad request");
+                return BadRequest($"Bad request {ModelState.ToString()}");
             }
 
             var result = await _authenticationService.ValidateUserAsync(request);
@@ -61,7 +60,7 @@ namespace Cyberpalata.WebApi.Controllers
 
             var token = await _authenticationService.GenerateTokenAsync(result.Value);
 
-            
+
             return await ReturnSuccess(token.Value);
         }
 
@@ -79,7 +78,7 @@ namespace Cyberpalata.WebApi.Controllers
 
         [AllowAnonymous]
         [HttpPost("refresh")]
-        public async Task<IActionResult> RefreshToken([FromBody]TokenDto tokenDto)
+        public async Task<IActionResult> RefreshToken([FromBody] TokenDto tokenDto)
         {
             var res = await _authenticationService.RefreshTokenAsync(tokenDto);
 
