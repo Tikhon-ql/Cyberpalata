@@ -36,7 +36,7 @@ namespace Cyberpalata.DataProvider.Context
             modelBuilder.Entity<Room>().HasMany(r => r.Prices).WithOne(p => p.Room);
             modelBuilder.Entity<Room>().HasMany(r => r.Seats).WithOne(s => s.Room);
             modelBuilder.Entity<Room>().HasOne(r => r.Type).WithMany();
-            modelBuilder.Entity<Room>().HasMany(r => r.Bookings).WithOne();
+            modelBuilder.Entity<Room>().HasMany(r => r.Bookings).WithOne().OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Pc>().HasOne(pc => pc.GamingRoom).WithMany();
             modelBuilder.Entity<Periphery>().HasOne(p => p.GamingRoom).WithMany();
@@ -45,9 +45,15 @@ namespace Cyberpalata.DataProvider.Context
             modelBuilder.Entity<UserRefreshToken>().HasOne(urt => urt.User).WithMany();
             modelBuilder.Entity<Periphery>().HasOne(p => p.Type).WithMany();
 
-            modelBuilder.Entity<Booking>().HasMany(b => b.Seats).WithMany();
+            modelBuilder.Entity<Booking>().HasMany(b => b.Seats).WithMany()
+                .UsingEntity<Dictionary<string, object>>("SeatsBookings",
+                j => j.HasOne<Seat>().WithMany().OnDelete(DeleteBehavior.NoAction),
+                j => j.HasOne<Booking>().WithMany().OnDelete(DeleteBehavior.NoAction));
+
             modelBuilder.Entity<Booking>().HasMany(b=>b.GamesToDownloadBefore).WithMany();
-            modelBuilder.Entity<Booking>().HasOne(b => b.Tariff).WithOne();   
+            modelBuilder.Entity<Booking>().HasOne(b => b.Tariff).WithOne().HasForeignKey<Booking>();
+            //modelBuilder.Entity<Booking>().HasOne().WithMany(r => r.Bookings);
+          
         }
 
         private void ConfigureIdAutoGeneration(ModelBuilder modelBuilder)

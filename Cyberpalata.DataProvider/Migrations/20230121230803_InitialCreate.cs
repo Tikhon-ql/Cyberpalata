@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Cyberpalata.DataProvider.Migrations
 {
     /// <inheritdoc />
-    public partial class IntialCreate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -212,6 +212,87 @@ namespace Cyberpalata.DataProvider.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Bookings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
+                    Begining = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Ending = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bookings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Bookings_Prices_Id",
+                        column: x => x.Id,
+                        principalTable: "Prices",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Bookings_Rooms_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BookingGame",
+                columns: table => new
+                {
+                    BookingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    GamesToDownloadBeforeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookingGame", x => new { x.BookingId, x.GamesToDownloadBeforeId });
+                    table.ForeignKey(
+                        name: "FK_BookingGame_Bookings_BookingId",
+                        column: x => x.BookingId,
+                        principalTable: "Bookings",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BookingGame_Games_GamesToDownloadBeforeId",
+                        column: x => x.GamesToDownloadBeforeId,
+                        principalTable: "Games",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SeatsBookings",
+                columns: table => new
+                {
+                    BookingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SeatsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SeatsBookings", x => new { x.BookingId, x.SeatsId });
+                    table.ForeignKey(
+                        name: "FK_SeatsBookings_Bookings_BookingId",
+                        column: x => x.BookingId,
+                        principalTable: "Bookings",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_SeatsBookings_Seat_SeatsId",
+                        column: x => x.SeatsId,
+                        principalTable: "Seat",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookingGame_GamesToDownloadBeforeId",
+                table: "BookingGame",
+                column: "GamesToDownloadBeforeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookings_RoomId",
+                table: "Bookings",
+                column: "RoomId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_GameConsoles_ConsoleRoomId",
                 table: "GameConsoles",
@@ -259,6 +340,11 @@ namespace Cyberpalata.DataProvider.Migrations
                 column: "RoomId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SeatsBookings_SeatsId",
+                table: "SeatsBookings",
+                column: "SeatsId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
                 table: "Users",
                 column: "Email",
@@ -269,10 +355,10 @@ namespace Cyberpalata.DataProvider.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "GameConsoles");
+                name: "BookingGame");
 
             migrationBuilder.DropTable(
-                name: "Games");
+                name: "GameConsoles");
 
             migrationBuilder.DropTable(
                 name: "Pcs");
@@ -281,19 +367,28 @@ namespace Cyberpalata.DataProvider.Migrations
                 name: "Peripheries");
 
             migrationBuilder.DropTable(
-                name: "Prices");
-
-            migrationBuilder.DropTable(
                 name: "RefreshTokens");
 
             migrationBuilder.DropTable(
-                name: "Seat");
+                name: "SeatsBookings");
+
+            migrationBuilder.DropTable(
+                name: "Games");
 
             migrationBuilder.DropTable(
                 name: "PeripheryType");
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Bookings");
+
+            migrationBuilder.DropTable(
+                name: "Seat");
+
+            migrationBuilder.DropTable(
+                name: "Prices");
 
             migrationBuilder.DropTable(
                 name: "Rooms");

@@ -3,7 +3,7 @@ using CSharpFunctionalExtensions;
 using Cyberpalata.Common;
 using Cyberpalata.Common.Enums;
 using Cyberpalata.DataProvider.Interfaces;
-using Cyberpalata.DataProvider.Models.Rooms;
+using Cyberpalata.DataProvider.Models;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models;
 

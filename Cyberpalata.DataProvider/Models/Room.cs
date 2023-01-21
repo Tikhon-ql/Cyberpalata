@@ -10,5 +10,6 @@ namespace Cyberpalata.DataProvider.Models
         [Required] public RoomType Type { get; set; }
         public virtual List<Price> Prices { get; set; }
         public virtual List<Seat> Seats { get; set; }
+        public virtual List<Booking> Bookings { get; set; }
     }
 }

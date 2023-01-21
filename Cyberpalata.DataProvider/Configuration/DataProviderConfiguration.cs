@@ -17,7 +17,7 @@ namespace Cyberpalata.DataProvider.Configuration
             //the migrations assembly is the assembly containing the DbContext.
             //Change your target project to the migrations project by using the Package Mana
 
-                        var connectionString = configuration.GetConnectionString("CyberpalataConnectionString");
+            var connectionString = configuration.GetConnectionString("CyberpalataConnectionString");
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cyberpalata.DataProvider.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230121164613_IntialCreate")]
-    partial class IntialCreate
+    [Migration("20230121230803_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace Cyberpalata.DataProvider.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("BookingGame", b =>
+                {
+                    b.Property<Guid>("BookingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("GamesToDownloadBeforeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("BookingId", "GamesToDownloadBeforeId");
+
+                    b.HasIndex("GamesToDownloadBeforeId");
+
+                    b.ToTable("BookingGame");
+                });
 
             modelBuilder.Entity("Cyberpalata.Common.Enums.PeripheryType", b =>
                 {
@@ -57,6 +72,29 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RoomType");
+                });
+
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Booking", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<DateTime>("Begining")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Ending")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("RoomId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoomId");
+
+                    b.ToTable("Bookings");
                 });
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Devices.GameConsole", b =>
@@ -256,7 +294,7 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.ToTable("Prices");
                 });
 
-            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Rooms.Room", b =>
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Room", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -297,9 +335,55 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.ToTable("Seat");
                 });
 
+            modelBuilder.Entity("SeatsBookings", b =>
+                {
+                    b.Property<Guid>("BookingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SeatsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("BookingId", "SeatsId");
+
+                    b.HasIndex("SeatsId");
+
+                    b.ToTable("SeatsBookings");
+                });
+
+            modelBuilder.Entity("BookingGame", b =>
+                {
+                    b.HasOne("Cyberpalata.DataProvider.Models.Booking", null)
+                        .WithMany()
+                        .HasForeignKey("BookingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Cyberpalata.DataProvider.Models.Game", null)
+                        .WithMany()
+                        .HasForeignKey("GamesToDownloadBeforeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Booking", b =>
+                {
+                    b.HasOne("Cyberpalata.DataProvider.Models.Price", "Tariff")
+                        .WithOne()
+                        .HasForeignKey("Cyberpalata.DataProvider.Models.Booking", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Cyberpalata.DataProvider.Models.Room", null)
+                        .WithMany("Bookings")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Tariff");
+                });
+
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Devices.GameConsole", b =>
                 {
-                    b.HasOne("Cyberpalata.DataProvider.Models.Rooms.Room", "ConsoleRoom")
+                    b.HasOne("Cyberpalata.DataProvider.Models.Room", "ConsoleRoom")
                         .WithMany()
                         .HasForeignKey("ConsoleRoomId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -310,7 +394,7 @@ namespace Cyberpalata.DataProvider.Migrations
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Devices.Pc", b =>
                 {
-                    b.HasOne("Cyberpalata.DataProvider.Models.Rooms.Room", "GamingRoom")
+                    b.HasOne("Cyberpalata.DataProvider.Models.Room", "GamingRoom")
                         .WithMany()
                         .HasForeignKey("GamingRoomId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -332,7 +416,7 @@ namespace Cyberpalata.DataProvider.Migrations
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Peripheral.Periphery", b =>
                 {
-                    b.HasOne("Cyberpalata.DataProvider.Models.Rooms.Room", "GamingRoom")
+                    b.HasOne("Cyberpalata.DataProvider.Models.Room", "GamingRoom")
                         .WithMany()
                         .HasForeignKey("GamingRoomId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -351,7 +435,7 @@ namespace Cyberpalata.DataProvider.Migrations
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Price", b =>
                 {
-                    b.HasOne("Cyberpalata.DataProvider.Models.Rooms.Room", "Room")
+                    b.HasOne("Cyberpalata.DataProvider.Models.Room", "Room")
                         .WithMany("Prices")
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -360,7 +444,7 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.Navigation("Room");
                 });
 
-            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Rooms.Room", b =>
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Room", b =>
                 {
                     b.HasOne("Cyberpalata.Common.Enums.RoomType", "Type")
                         .WithMany()
@@ -373,7 +457,7 @@ namespace Cyberpalata.DataProvider.Migrations
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Seat", b =>
                 {
-                    b.HasOne("Cyberpalata.DataProvider.Models.Rooms.Room", "Room")
+                    b.HasOne("Cyberpalata.DataProvider.Models.Room", "Room")
                         .WithMany("Seats")
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -382,8 +466,25 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.Navigation("Room");
                 });
 
-            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Rooms.Room", b =>
+            modelBuilder.Entity("SeatsBookings", b =>
                 {
+                    b.HasOne("Cyberpalata.DataProvider.Models.Booking", null)
+                        .WithMany()
+                        .HasForeignKey("BookingId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Cyberpalata.DataProvider.Models.Seat", null)
+                        .WithMany()
+                        .HasForeignKey("SeatsId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Room", b =>
+                {
+                    b.Navigation("Bookings");
+
                     b.Navigation("Prices");
 
                     b.Navigation("Seats");

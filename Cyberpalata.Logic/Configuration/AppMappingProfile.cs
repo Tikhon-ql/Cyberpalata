@@ -9,7 +9,6 @@ using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.Logic.Models.Identity;
 using CSharpFunctionalExtensions;
-using Cyberpalata.DataProvider.Models.Rooms;
 
 namespace Cyberpalata.Logic.Configuration
 {
