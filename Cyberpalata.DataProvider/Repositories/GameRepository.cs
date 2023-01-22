@@ -18,12 +18,17 @@ namespace Cyberpalata.DataProvider.Repositories
         {
             await _context.Games.AddAsync(entity);
         }
+        public async Task CreateRangeAsync(List<Game> games)
+        {
+            await _context.Games.AddRangeAsync(games);
+        }
 
         public async Task<Maybe<Game>> ReadAsync(Guid id)
         {
             var game = await _context.Games.FirstOrDefaultAsync(f => f.Id == id);
             return game;
         }
+
         public void Delete(Game game)
         {
             _context.Games.Remove(game);

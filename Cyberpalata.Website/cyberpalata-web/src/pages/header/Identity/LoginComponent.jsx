@@ -17,7 +17,8 @@ export const LoginComponent = () => {
         const baseUrl = `http://dotnetinternship2022.norwayeast.cloudapp.azure.com:83`;
 
         const apiRequestUrl = `${baseUrl}/users/login`;
-        
+        //const apiRequestUrl = `https://localhost:7227/users/login`;
+
         const res = axios.post(apiRequestUrl, data).then(res=>
         {
             localStorage.setItem('accessToken', res.data.accessToken);

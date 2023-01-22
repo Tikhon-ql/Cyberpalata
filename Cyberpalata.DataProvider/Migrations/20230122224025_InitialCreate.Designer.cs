@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cyberpalata.DataProvider.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230122173612_InitialCreate")]
+    [Migration("20230122224025_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -323,7 +323,8 @@ namespace Cyberpalata.DataProvider.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<int>("Number")
                         .HasColumnType("int");
@@ -335,7 +336,7 @@ namespace Cyberpalata.DataProvider.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("Seat");
+                    b.ToTable("Seats");
                 });
 
             modelBuilder.Entity("SeatsBookings", b =>

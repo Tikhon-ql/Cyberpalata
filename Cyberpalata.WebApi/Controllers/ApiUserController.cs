@@ -15,6 +15,7 @@ namespace Cyberpalata.WebApi.Controllers
         private readonly IApiUserService _userService;
         private readonly IAuthenticationService _authenticationService;
         private readonly IUserRefreshTokenService _refreshTokenService;
+        private readonly ILoggerManager _logger;
 
         public ApiUserController(IApiUserService userService, IAuthenticationService authenticationService, IUserRefreshTokenService refreshTokenService, IUnitOfWork uinOfWork) : base(uinOfWork)
         {
@@ -51,16 +52,19 @@ namespace Cyberpalata.WebApi.Controllers
         {
             if (!ModelState.IsValid)
             {
+                _logger.LogError("Validation error");
                 return BadRequest($"Bad request {ModelState.ToString()}");
             }
 
             var result = await _authenticationService.ValidateUserAsync(request);
             if (result.IsFailure)
+            {
+                _logger.LogError(result.Error);
                 return BadRequest(result.Error);
+            }
+               
 
             var token = await _authenticationService.GenerateTokenAsync(result.Value);
-
-
             return await ReturnSuccess(token.Value);
         }
 

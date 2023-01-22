@@ -21,6 +21,7 @@ export const RegistrationComponent = ()=>{
         //console.dir(data);
         const baseUrl = `http://dotnetinternship2022.norwayeast.cloudapp.azure.com:83`;
         const apiRequestUrl = `${baseUrl}/users/register`;
+        //const apiRequestUrl = `https://localhost:7227/users/register`;
         
         const res = axios.post(apiRequestUrl, data).then(res=>
         {

@@ -6,6 +6,6 @@ namespace Cyberpalata.DataProvider.Interfaces
     public interface ISeatRepository : IRepository<Seat>
     {
         Task<List<Seat>> GetByRoomIdAsync(Guid roomId);
-        Task AddRange(List<Seat> seats);
+        Task CreateRangeAsync(List<Seat> seats);
     }
 }

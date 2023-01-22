@@ -1,13 +1,12 @@
-﻿namespace Cyberpalata.Logic.Models
+﻿using Cyberpalata.DataProvider.Models;
+using System.ComponentModel.DataAnnotations;
+
+namespace Cyberpalata.Logic.Models
 {
     public class SeatDto
     {
-        public SeatDto(int number)
-        {
-            Number = number;
-        }
-
         public Guid Id { get; set; }
-        public int Number { get; set; }
+        [Required] public int Number { get; set; }
+        [Required] public RoomDto Room { get; set; }
     }
 }

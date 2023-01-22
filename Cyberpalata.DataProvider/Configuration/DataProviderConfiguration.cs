@@ -44,6 +44,7 @@ namespace Cyberpalata.DataProvider.Configuration
             services.AddTransient<IPcRepository, PcRepository>();
             services.AddTransient<IPeripheryRepository, PeripheryRepository>();
             services.AddTransient<IBookingRepository, BookingRepository>();
+            services.AddTransient<ISeatRepository, SeatRepository>();
             //services.AddTransient<IGameConsoleRoomRepository, GameConsoleRoomRepository>();
             //services.AddTransient<ISeatRepository, SeatRepository>();
             //services.AddTransient<IMenuItemRepository, MenuItemRepository>();

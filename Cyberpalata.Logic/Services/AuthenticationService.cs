@@ -59,7 +59,7 @@ namespace Cyberpalata.Logic.Services
             if (!apiUser.HasValue)
                 return Maybe.None;
 
-            if (!int.TryParse(_configuration["RefreshTokenSettings:ExpirationTime"], out int refreshTokenExpirationTimeInMinutes))
+            if (!int.TryParse(_configuration["RefreshTokenSettings:ExpirationTimeMin"], out int refreshTokenExpirationTimeInMinutes))
                 return Maybe.None;
 
             await _refreshTokenRepository.CreateAsync(new UserRefreshToken { User = apiUser.Value, Expiration = DateTime.Now.AddMinutes(refreshTokenExpirationTimeInMinutes), RefreshToken = refreshToken });
@@ -202,7 +202,7 @@ namespace Cyberpalata.Logic.Services
                 return Result.Failure(claimIdResult.Error);
             var claimId = claimIdResult.Value;
 
-            if (Guid.TryParse(claimId.Value, out Guid userId))
+            if (!Guid.TryParse(claimId.Value, out Guid userId))
                 return Result.Failure("Cannot parse id");
 
             if (userId != userRefreshToken.Value.User.Id)

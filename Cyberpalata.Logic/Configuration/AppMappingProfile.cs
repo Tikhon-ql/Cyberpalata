@@ -71,9 +71,10 @@ namespace Cyberpalata.Logic.Configuration
             CreateMap<ApiUser, ApiUserDto>();
             CreateMap<Maybe<ApiUser>,Maybe<ApiUserDto>>();
 
-            CreateMap<Seat, SeatDto>();
-            CreateMap<PagedList<Seat>,PagedList<SeatDto>>();
-            CreateMap<List<Seat>, List<SeatDto>>();
+            //CreateMap<Seat, SeatDto>();
+            //CreateMap<PagedList<Seat>,PagedList<SeatDto>>();
+            //CreateMap<List<Seat>, List<SeatDto>>();
+            //CreateMap<Maybe<Seat>, Maybe<SeatDto>>();
 
             CreateMap<Booking, BookingDto>();
             CreateMap<PagedList<Booking>,PagedList<BookingDto>>();            

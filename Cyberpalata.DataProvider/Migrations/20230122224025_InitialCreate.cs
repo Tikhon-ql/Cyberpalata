@@ -195,18 +195,18 @@ namespace Cyberpalata.DataProvider.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Seat",
+                name: "Seats",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
                     Number = table.Column<int>(type: "int", nullable: false),
                     RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Seat", x => x.Id);
+                    table.PrimaryKey("PK_Seats", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Seat_Rooms_RoomId",
+                        name: "FK_Seats_Rooms_RoomId",
                         column: x => x.RoomId,
                         principalTable: "Rooms",
                         principalColumn: "Id",
@@ -278,9 +278,9 @@ namespace Cyberpalata.DataProvider.Migrations
                         principalTable: "Bookings",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_SeatsBookings_Seat_SeatsId",
+                        name: "FK_SeatsBookings_Seats_SeatsId",
                         column: x => x.SeatsId,
-                        principalTable: "Seat",
+                        principalTable: "Seats",
                         principalColumn: "Id");
                 });
 
@@ -336,8 +336,8 @@ namespace Cyberpalata.DataProvider.Migrations
                 column: "TypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Seat_RoomId",
-                table: "Seat",
+                name: "IX_Seats_RoomId",
+                table: "Seats",
                 column: "RoomId");
 
             migrationBuilder.CreateIndex(
@@ -386,7 +386,7 @@ namespace Cyberpalata.DataProvider.Migrations
                 name: "Bookings");
 
             migrationBuilder.DropTable(
-                name: "Seat");
+                name: "Seats");
 
             migrationBuilder.DropTable(
                 name: "Prices");

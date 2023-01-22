@@ -9,6 +9,5 @@ namespace Cyberpalata.Logic.Interfaces
 {
     public interface IBookingService : IService<BookingDto>
     {
-        Task CreateRangeAsync(List<BookingDto> bookings);
     }
 }
