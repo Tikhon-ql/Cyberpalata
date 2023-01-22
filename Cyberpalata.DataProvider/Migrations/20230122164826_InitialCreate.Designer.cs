@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cyberpalata.DataProvider.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230122150923_RoomVipPropertyWithConstraintAdding")]
-    partial class RoomVipPropertyWithConstraintAdding
+    [Migration("20230122164826_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -316,10 +316,7 @@ namespace Cyberpalata.DataProvider.Migrations
 
                     b.HasIndex("TypeId");
 
-                    b.ToTable("Rooms", t =>
-                        {
-                            t.HasCheckConstraint("IsVip", "Type = 3");
-                        });
+                    b.ToTable("Rooms");
                 });
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Seat", b =>

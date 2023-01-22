@@ -73,7 +73,7 @@ namespace Cyberpalata.DataProvider.Context
 
         private void ConstraintsConfiguration(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Room>().HasCheckConstraint("IsVip","TypeId = 3");
+            //modelBuilder.Entity<Room>().HasCheckConstraint("IsVip", "IsVip is True and TypeId between 1 and 2");
         }
 
         private void UniqueIndexesCreating(ModelBuilder modelBuilder)

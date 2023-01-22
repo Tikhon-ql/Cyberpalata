@@ -72,7 +72,8 @@ namespace Cyberpalata.DataProvider.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    TypeId = table.Column<int>(type: "int", nullable: false)
+                    TypeId = table.Column<int>(type: "int", nullable: false),
+                    IsVip = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

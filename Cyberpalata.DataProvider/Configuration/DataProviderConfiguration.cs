@@ -1,5 +1,6 @@
 ﻿using Cyberpalata.Common.Intefaces;
 using Cyberpalata.DataProvider.Context;
+using Cyberpalata.DataProvider.Context.Triggers;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,13 @@ namespace Cyberpalata.DataProvider.Configuration
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(connectionString);
+                options.UseTriggers(triggerOptions =>
+                {
+                    triggerOptions.AddTrigger<CheckRoomTypeForIsVipPropertyTrigger>();
+                    triggerOptions.AddTrigger<CheckGameConsoleRoomTypeTrigger>();
+                    triggerOptions.AddTrigger<CheckPcRoomTypeTrigger>();
+                    triggerOptions.AddTrigger<CheckPeripheryRoomTypeTrigger>();
+                });
             });
 
          

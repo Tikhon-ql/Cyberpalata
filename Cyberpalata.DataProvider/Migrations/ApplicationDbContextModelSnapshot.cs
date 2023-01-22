@@ -313,10 +313,7 @@ namespace Cyberpalata.DataProvider.Migrations
 
                     b.HasIndex("TypeId");
 
-                    b.ToTable("Rooms", t =>
-                        {
-                            t.HasCheckConstraint("IsVip", "TypeId = 3");
-                        });
+                    b.ToTable("Rooms");
                 });
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Seat", b =>
