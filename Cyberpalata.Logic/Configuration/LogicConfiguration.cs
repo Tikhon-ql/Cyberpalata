@@ -24,6 +24,7 @@ namespace Cyberpalata.Logic.Configuration
             services.AddTransient<IPcService, PcService>();
             services.AddTransient<IPeripheryService, PeripheryService>();
             services.AddTransient<IHashGenerator,HashGenerator>();
+            services.AddScoped<ILoggerManager, LoggerManager>();
             //services.AddTransient<ISeatService, SeatService>();
             //services.AddTransient<IMenuItemService, MenuItemService>();
         }
