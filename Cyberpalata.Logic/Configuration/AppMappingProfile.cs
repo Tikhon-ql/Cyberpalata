@@ -74,6 +74,9 @@ namespace Cyberpalata.Logic.Configuration
             CreateMap<Seat, SeatDto>();
             CreateMap<PagedList<Seat>,PagedList<SeatDto>>();
             CreateMap<List<Seat>, List<SeatDto>>();
+
+            CreateMap<Booking, BookingDto>();
+            CreateMap<PagedList<Booking>,PagedList<BookingDto>>();            
         }
     }
 }
