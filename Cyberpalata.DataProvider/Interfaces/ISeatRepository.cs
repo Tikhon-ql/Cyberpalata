@@ -5,6 +5,7 @@ namespace Cyberpalata.DataProvider.Interfaces
 {
     public interface ISeatRepository : IRepository<Seat>
     {
-        Task<Maybe<List<Seat>>> GetByRoomIdAsync(Guid roomId);
+        Task<List<Seat>> GetByRoomIdAsync(Guid roomId);
+        Task AddRange(List<Seat> seats);
     }
 }

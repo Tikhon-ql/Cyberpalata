@@ -23,6 +23,7 @@ namespace Cyberpalata.DataProvider.Context
         public DbSet<ApiUser> Users { get; set; }
         public DbSet<UserRefreshToken> RefreshTokens { get; set; }
         public DbSet<Booking> Bookings { get; set; }
+        public DbSet<Seat> Seats { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -69,6 +70,7 @@ namespace Cyberpalata.DataProvider.Context
             modelBuilder.Entity<ApiUser>().Property(a => a.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<UserRefreshToken>().Property(t => t.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<Booking>().Property(t => t.Id).HasDefaultValueSql("NEWID()");
+            modelBuilder.Entity<Seat>().Property(s => s.Id).HasDefaultValueSql("NEWID()");
         }
 
         private void ConstraintsConfiguration(ModelBuilder modelBuilder)

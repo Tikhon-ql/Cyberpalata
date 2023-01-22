@@ -9,6 +9,7 @@ import { useState } from 'react';
 import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 import { PriceInfo } from './../PriceInfo';
 import { useParams } from 'react-router-dom'
+import { BookingComponent } from '../BookingComponent';
 
 export const GameConsoleRoom = () => {
     const {id} = useParams();
@@ -46,6 +47,7 @@ export const GameConsoleRoom = () => {
                             })}
                         </tbody>
                     </table>
+                    <BookingComponent></BookingComponent>
                     <Link to={`/gameConsoleRoom`} className="btn btn-outline-dark btn-sm mt-2">Back</Link>
                 </div>
            </>
