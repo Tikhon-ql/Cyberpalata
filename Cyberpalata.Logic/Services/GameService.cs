@@ -24,6 +24,10 @@ namespace Cyberpalata.Logic.Services
         {
             await _repository.CreateAsync(_mapper.Map<Game>(entity));
         }
+        public async Task CreateRange(List<GameDto> games)
+        {
+            await _repository.CreateRangeAsync(_mapper.Map<List<Game>>(games));
+        }
 
         public async Task<Maybe<GameDto>> ReadAsync(Guid id)
         {
@@ -57,6 +61,6 @@ namespace Cyberpalata.Logic.Services
         {
             var list = await _repository.GetPageListAsync(pageNumber);
             return _mapper.Map<PagedList<GameDto>>(list);
-        }    
+        }
     }
 }

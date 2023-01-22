@@ -70,6 +70,10 @@ namespace Cyberpalata.Logic.Configuration
 
             CreateMap<ApiUser, ApiUserDto>();
             CreateMap<Maybe<ApiUser>,Maybe<ApiUserDto>>();
+
+            CreateMap<Seat, SeatDto>();
+            CreateMap<PagedList<Seat>,PagedList<SeatDto>>();
+            CreateMap<List<Seat>, List<SeatDto>>();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CSharpFunctionalExtensions;
 using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
@@ -12,41 +13,55 @@ using System.Threading.Tasks;
 
 namespace Cyberpalata.Logic.Services
 {
-    //public class SeatService : ISeatService
-    //{
+    internal class SeatService : ISeatService
+    {
+        private readonly ISeatRepository _repository;
+        private readonly IMapper _mapper;
 
-    //    private readonly IMapper _mapper;
-    //    private readonly ISeatRepository _repository;
+        public SeatService(ISeatRepository repository, IMapper mapper)
+        {
+            _repository = repository;
+            _mapper = mapper;
+        }
 
-    //    public SeatService(IMapper mapper, ISeatRepository repository)
-    //    {
-    //        _mapper = mapper;
-    //        _repository = repository;
-    //    }
+        public async Task CreateAsync(SeatDto entity)
+        {
+            await _repository.CreateAsync(_mapper.Map<Seat>(entity));
+        }
 
-    //    public void Create(SeatDto entity)
-    //    {
-    //        _repository.Create(_mapper.Map<Seat>(entity));
-    //    }
+        public async Task CreateRangeAsync(List<SeatDto> seats)
+        {
+            await _repository.CreateRangeAsync(_mapper.Map<List<Seat>>(seats));
+        }
 
-    //    public SeatDto Read(Guid id)
-    //    {
-    //        return _mapper.Map<SeatDto>(_repository.Read(id));
-    //    }
+        public async Task<Maybe<SeatDto>> ReadAsync(Guid id)
+        {
+            var seat = await _repository.ReadAsync(id);
+            return _mapper.Map<Maybe<SeatDto>>(seat);
+        }
 
-    //    public void Update(SeatDto entity)
-    //    {
-    //        _repository.Update(_mapper.Map<Seat>(entity));
-    //    }
+        public async Task<Result> DeleteAsync(Guid id)
+        {
+            var result = await SearchAsync(id);
 
-    //    public void Delete(Guid id)
-    //    {
-    //        _repository.Delete(id);
-    //    }
+            if (result.IsFailure)
+                return Result.Failure(result.Error);
 
-    //    public PagedList<SeatDto> GetPagedList(int pageNumber)
-    //    {
-    //        return _mapper.Map<PagedList<SeatDto>>(_repository.GetPageList(pageNumber));
-    //    } 
-    //}
+            _repository.Delete(_mapper.Map<Seat>(result.Value));
+
+            return Result.Success();
+        }
+        public async Task<Result<SeatDto>> SearchAsync(Guid id)
+        {
+            var seat = await _repository.ReadAsync(id);
+            if (!seat.HasValue)
+                return Result.Failure<SeatDto>($"Seat with id {id} doesn't exist");
+            return Result.Success(_mapper.Map<SeatDto>(seat.Value));
+        }
+
+        public Task<PagedList<SeatDto>> GetPagedListAsync(int pageNumber)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
