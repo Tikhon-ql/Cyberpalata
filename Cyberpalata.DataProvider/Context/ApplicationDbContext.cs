@@ -3,6 +3,7 @@ using Cyberpalata.DataProvider.Models.Peripheral;
 using Cyberpalata.DataProvider.Models;
 using Cyberpalata.DataProvider.Models.Identity;
 using Microsoft.EntityFrameworkCore;
+using Cyberpalata.Common.Enums;
 
 namespace Cyberpalata.DataProvider.Context
 {
@@ -28,6 +29,7 @@ namespace Cyberpalata.DataProvider.Context
             ConfigureIdAutoGeneration(modelBuilder);
             UniqueIndexesCreating(modelBuilder);
             ConfigureRelationships(modelBuilder);
+            ConstraintsConfiguration(modelBuilder);
             base.OnModelCreating(modelBuilder);
         }
 
@@ -67,6 +69,11 @@ namespace Cyberpalata.DataProvider.Context
             modelBuilder.Entity<ApiUser>().Property(a => a.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<UserRefreshToken>().Property(t => t.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<Booking>().Property(t => t.Id).HasDefaultValueSql("NEWID()");
+        }
+
+        private void ConstraintsConfiguration(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Room>().HasCheckConstraint("IsVip","TypeId = 3");
         }
 
         private void UniqueIndexesCreating(ModelBuilder modelBuilder)

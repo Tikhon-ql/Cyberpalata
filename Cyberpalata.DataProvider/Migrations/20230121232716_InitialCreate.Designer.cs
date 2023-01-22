@@ -4,6 +4,7 @@ using Cyberpalata.DataProvider.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cyberpalata.DataProvider.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230121232716_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -298,9 +301,6 @@ namespace Cyberpalata.DataProvider.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
-                    b.Property<bool>("IsVip")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -313,10 +313,7 @@ namespace Cyberpalata.DataProvider.Migrations
 
                     b.HasIndex("TypeId");
 
-                    b.ToTable("Rooms", t =>
-                        {
-                            t.HasCheckConstraint("IsVip", "TypeId = 3");
-                        });
+                    b.ToTable("Rooms");
                 });
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Seat", b =>
