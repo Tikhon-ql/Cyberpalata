@@ -46,5 +46,18 @@ namespace Cyberpalata.DataProvider.Repositories
             var pagedList = new PagedList<Room>(list, pageNumber, 10, _context.Rooms.Count());
             return pagedList;
         }
+
+        public async Task<PagedList<Room>> GetVipRoomsAsync(int pageNumber, RoomType type)
+        {
+            var list = await _context.Rooms.Where(r => r.Type.Name == type.Name && r.IsVip).Skip((pageNumber - 1) * 10).Take(10).ToListAsync();
+            var pagedList = new PagedList<Room>(list, pageNumber, 10, _context.Rooms.Count());
+            return pagedList;
+        }
+        public async Task<PagedList<Room>> GetCommonRoomsAsync(int pageNumber, RoomType type)
+        {
+            var list = await _context.Rooms.Where(r => r.Type.Name == type.Name && !r.IsVip).Skip((pageNumber - 1) * 10).Take(10).ToListAsync();
+            var pagedList = new PagedList<Room>(list, pageNumber, 10, _context.Rooms.Count());
+            return pagedList;
+        }
     }
 }

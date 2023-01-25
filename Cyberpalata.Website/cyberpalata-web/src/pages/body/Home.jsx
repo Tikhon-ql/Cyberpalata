@@ -13,7 +13,7 @@ export const Home = () => {
                 <Link to='/lounge'><label className='labelRoomVert'>Lounge</label></Link>
             </div>
             <div style={{"justifyContent":"right"}}>
-                <Link to='/gamingRooms'><div className='gamingRoomLink'><label className='labelRoomHoriz'>Gaming room</label></div></Link>
+                <Link to='/gamingRoomTypeChoosing'><div className='gamingRoomLink'><label className='labelRoomHoriz'>Gaming room</label></div></Link>
                 <Link to='/gameConsoleRoom'><div className='gameConsoleRoomLink'><label className='labelRoomHoriz'>Game console room</label></div></Link>
             </div>
         </div>
