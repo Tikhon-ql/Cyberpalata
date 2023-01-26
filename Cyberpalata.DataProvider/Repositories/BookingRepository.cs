@@ -39,6 +39,15 @@ namespace Cyberpalata.DataProvider.Repositories
         {
             var list = await _context.Bookings.Skip((pageNumber - 1) * 20).Take(20).ToListAsync();
             return new PagedList<Booking>(list, pageNumber, 20,_context.Bookings.Count());
-        } 
+        }
+
+        //????????????????????/shit code
+        public async Task<bool> CheckIsSeatFreeAsync(Seat seat)
+        {
+            var result = await _context.Bookings.FirstOrDefaultAsync(b => !b.IsExpired && b.Seats.Contains(seat));
+            if (result == null)
+                return true;
+            return false;
+        }
     }
 }
