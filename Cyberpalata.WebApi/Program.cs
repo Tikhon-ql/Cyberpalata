@@ -1,19 +1,31 @@
 using Cyberpalata.Logic.Configuration;
 using Cyberpalata.Logic.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using NLog;
+using NLog.Web;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
+//LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
+
+var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+
+builder.Host.UseNLog();
 
 builder.Services.AddControllers().AddNewtonsoftJson();
 
 builder.Services.AddCors();
 
+
+builder.Services.AddLogging(logginBuilder =>
+{
+    logginBuilder.AddConsole().AddFilter(DbLoggerCategory.Database.Command.Name, Microsoft.Extensions.Logging.LogLevel.Information);
+    logginBuilder.AddDebug();
+});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
