@@ -26,7 +26,7 @@ namespace Cyberpalata.Logic.Configuration
             services.AddTransient<IHashGenerator,HashGenerator>();
             services.AddTransient<IBookingService, BookingService>();
             services.AddTransient<ISeatService, SeatService>();
-            services.AddScoped<ILoggerManager, LoggerManager>();
+            //services.AddScoped<ILoggerManager, LoggerManager>();
             //services.AddTransient<IMenuItemService, MenuItemService>();
         }
     }
