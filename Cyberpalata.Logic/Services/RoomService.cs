@@ -76,5 +76,11 @@ namespace Cyberpalata.Logic.Services
             var list = await _repository.GetCommonRoomsAsync(pageNumber, type);
             return _mapper.Map<PagedList<RoomDto>>(list);
         }
+
+        public async Task<Maybe<List<SeatDto>>> GetRoomFreeSeats(Guid roomId)
+        {
+            var list = await _repository.GetRoomFreeSeats(roomId);
+            return _mapper.Map<Maybe<List<SeatDto>>>(list);
+        }
     }
 }
