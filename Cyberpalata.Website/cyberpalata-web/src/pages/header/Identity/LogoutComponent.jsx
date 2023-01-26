@@ -34,12 +34,15 @@ export const LogoutComponent = () => {
     }
 
     return <>
-    <div className="mt-5 pt-5">
-        <div className="d-flex justify-content-around mb-5"><h2>You really want logout?</h2></div>
-        <div className="d-flex justify-content-center mt-5">
+    <div className="pt-5" style={{"height":"100vh","width":"100vw","display":"flex","alignItems":"center","justifyContent":"center"}}>
+        <div>
+        <h2>You really want logout?</h2>
+        <div style={{'display': 'flex'}}>
             <Link onClick={Logout} className="btn btn-outline-dark w-25 m-5">Ok</Link>
             <Link to="/" className="btn btn-outline-dark ml-3 w-25 h-25 m-5">Cancel</Link>
         </div>
+        </div>
+        
     </div>
     </>
 }
