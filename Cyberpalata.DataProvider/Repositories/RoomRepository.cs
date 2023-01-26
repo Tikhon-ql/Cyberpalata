@@ -12,10 +12,12 @@ namespace Cyberpalata.DataProvider.Repositories
     {
 
         private readonly ApplicationDbContext _context;
+        private readonly IBookingRepository _bookingRepository;
 
-        public RoomRepository(ApplicationDbContext context)
+        public RoomRepository(ApplicationDbContext context, IBookingRepository bookingRepository)
         {
             _context = context;
+            _bookingRepository = bookingRepository;
         }
 
         public async Task CreateAsync(Room entity)
@@ -58,6 +60,24 @@ namespace Cyberpalata.DataProvider.Repositories
             var list = await _context.Rooms.Where(r => r.Type.Name == type.Name && !r.IsVip).Skip((pageNumber - 1) * 10).Take(10).ToListAsync();
             var pagedList = new PagedList<Room>(list, pageNumber, 10, _context.Rooms.Count());
             return pagedList;
+        }
+
+        public async Task<Maybe<List<Seat>>> GetRoomFreeSeats(Guid roomId)
+        {
+            var room = await _context.Rooms.Include(r=>r.Seats).FirstOrDefaultAsync(r => r.Id == roomId);
+
+            if (room == null)//?????????? can it return null?
+                return Maybe.None;
+            var result = new List<Seat>();
+            foreach(var seat in room.Seats)
+            {
+                if(await _bookingRepository.CheckIsSeatFreeAsync(seat))
+                {
+                    result.Add(seat);
+                }
+            }
+
+            return result;
         }
     }
 }
