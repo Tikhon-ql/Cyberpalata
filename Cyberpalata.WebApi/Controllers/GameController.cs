@@ -12,7 +12,7 @@ namespace Cyberpalata.WebApi.Controllers
     {
         private readonly IGameService _gameService;
 
-        public GameController(IGameService gameService, IUnitOfWork unitOfWork) : base(unitOfWork)
+        public GameController(IGameService gameService, IUnitOfWork unitOfWork, ILogger logger) : base(unitOfWork,logger)
         {
             _gameService = gameService;
         }
@@ -20,6 +20,10 @@ namespace Cyberpalata.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest($"Bad request: {ModelState.ToString()}");
+            }
             var games = await _gameService.GetPagedListAsync(1);
             var viewModel = new GameLibraryViewModel { Games = games.Items.Select(g => g.GameName).ToList() };
             return await ReturnSuccess(viewModel);

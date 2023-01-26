@@ -1,4 +1,5 @@
-﻿using Cyberpalata.Common.Enums;
+﻿using CSharpFunctionalExtensions;
+using Cyberpalata.Common.Enums;
 using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.ViewModel.Rooms;
@@ -15,7 +16,7 @@ namespace Cyberpalata.WebApi.Controllers
         private readonly IPeripheryService _peripheryService;
         private readonly IPriceService _priceService;
         private readonly IRoomService _roomService;
-        public GamingRoomController(IPcService pcService, IPeripheryService peripheryService, IPriceService priceService,IRoomService roomService, IUnitOfWork uinOfWork) : base(uinOfWork)
+        public GamingRoomController(IPcService pcService, IPeripheryService peripheryService, IPriceService priceService, IRoomService roomService, IUnitOfWork uinOfWork,ILogger logger) : base(uinOfWork,logger)
         {
             _pcService = pcService;
             _peripheryService = peripheryService;
@@ -26,6 +27,10 @@ namespace Cyberpalata.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest($"Bad request: {ModelState.ToString()}");
+            }
             var rooms = await _roomService.GetPagedListAsync(1, RoomType.GamingRoom);
 
             var viewModel = new RoomViewModel
@@ -38,37 +43,40 @@ namespace Cyberpalata.WebApi.Controllers
         [HttpGet("id")]
         public async Task<IActionResult> Get(Guid id)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                var prices = await _priceService.GetByRoomIdAsync(id);
-                var roomsPc = await _pcService.GetByGamingRoomId(id);
-                var peripheries = await _peripheryService.GetByGamingRoomId(id);
+                return BadRequest($"Bad request: {ModelState.ToString()}");
+            }
+            var prices = await _priceService.GetByRoomIdAsync(id);
+            var roomsPc = await _pcService.GetByGamingRoomId(id);
+            var peripheries = await _peripheryService.GetByGamingRoomId(id);
+            var seats = await _roomService.GetRoomFreeSeats(id);
 
-                var pcInfo = roomsPc.Value;
 
-                var pcInfoList = new List<PcInfo>();
-                foreach (var item in pcInfo.GetType().GetProperties())
+            var pcInfo = roomsPc.Value;
+
+            var pcInfoList = new List<PcInfo>();
+            foreach (var item in pcInfo.GetType().GetProperties())
+            {
+                if (item.Name != "Id")
                 {
-                    if (item.Name != "Id")
-                    {
-                        string type = item.Name;
-                        string name = item.GetValue(pcInfo).ToString();
-                        pcInfoList.Add(new PcInfo(type, name));
-                    }
+                    string type = item.Name;
+                    string name = item.GetValue(pcInfo).ToString();
+                    pcInfoList.Add(new PcInfo(type, name));
                 }
+            }
 
-                var viewModel = new GamingRoomViewModel
-                {
-                    PcInfos = pcInfoList,
-                    Peripheries = peripheries.Value.Select(p => new Periphery(p.Name, p.Type.Name)).ToList(),
-                    Prices = prices.Value.Select(p => new Price(p.Hours, p.Cost)).ToList()
-                };
-                return await ReturnSuccess(viewModel);
-            }
-          catch(Exception ex)
+            var viewModel = new GamingRoomViewModel
             {
-                return Ok(ex.ToString());
+                PcInfos = pcInfoList,
+                Peripheries = peripheries.Value.Select(p => new Periphery(p.Name, p.Type.Name)).ToList(),
+                Prices = prices.Value.Select(p => new Price(p.Hours, p.Cost)).ToList(),
+            };
+            if (seats.HasValue)
+            {
+                viewModel.Seats = seats.Value.Select(s => s.Number).ToList();
             }
+            return await ReturnSuccess(viewModel);
         }
     }
 }

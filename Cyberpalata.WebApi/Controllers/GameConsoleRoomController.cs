@@ -16,7 +16,7 @@ namespace Cyberpalata.WebApi.Controllers
         private readonly IGameConsoleService _gameConsoleService;
         private readonly IPriceService _priceService;
 
-        public GameConsoleRoomController(IRoomService gameConsoleRoomService, IGameConsoleService gameConsoleService, IPriceService priceService, IUnitOfWork uinOfWork) : base(uinOfWork)
+        public GameConsoleRoomController(IRoomService gameConsoleRoomService, IGameConsoleService gameConsoleService, IPriceService priceService, IUnitOfWork uinOfWork,ILogger logger) : base(uinOfWork,logger)
         {
             _gameConsoleRoomService = gameConsoleRoomService;
             _gameConsoleService = gameConsoleService;
@@ -38,6 +38,10 @@ namespace Cyberpalata.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest($"Bad request: {ModelState.ToString()}");
+            }
             var infos = (await _gameConsoleRoomService.GetPagedListAsync(1,RoomType.GameConsoleRoom)).Items;
 
             var viewModel = new RoomViewModel
@@ -52,6 +56,10 @@ namespace Cyberpalata.WebApi.Controllers
         [HttpGet("id")]
         public async Task<IActionResult> Get(Guid id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest($"Bad request: {ModelState.ToString()}");
+            }
             var prices = await _priceService.GetByRoomIdAsync(id);
             var consoles = await _gameConsoleService.GetByGameConsoleRoomId(id);
             var viewModel = new GameConsoleRoomViewModel
