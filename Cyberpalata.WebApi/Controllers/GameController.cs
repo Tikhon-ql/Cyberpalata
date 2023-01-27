@@ -3,6 +3,7 @@ using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.ViewModel.GameLibrary;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.OleDb;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Cyberpalata.WebApi.Controllers
 {
@@ -11,10 +12,12 @@ namespace Cyberpalata.WebApi.Controllers
     public class GameController : BaseController
     {
         private readonly IGameService _gameService;
+        private readonly ILogger<GameController> _logger;
 
-        public GameController(IGameService gameService, IUnitOfWork unitOfWork, ILogger logger) : base(unitOfWork,logger)
+        public GameController(IGameService gameService, IUnitOfWork unitOfWork, ILogger<GameController> logger) : base(unitOfWork)
         {
             _gameService = gameService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -24,6 +27,7 @@ namespace Cyberpalata.WebApi.Controllers
             {
                 return BadRequest($"Bad request: {ModelState.ToString()}");
             }
+            _logger.LogInformation("Loggin");
             var games = await _gameService.GetPagedListAsync(1);
             var viewModel = new GameLibraryViewModel { Games = games.Items.Select(g => g.GameName).ToList() };
             return await ReturnSuccess(viewModel);

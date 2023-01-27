@@ -15,12 +15,14 @@ namespace Cyberpalata.WebApi.Controllers
 
         private readonly IGameConsoleService _gameConsoleService;
         private readonly IPriceService _priceService;
+        private readonly ILogger<GameConsoleRoomController> _logger;
 
-        public GameConsoleRoomController(IRoomService gameConsoleRoomService, IGameConsoleService gameConsoleService, IPriceService priceService, IUnitOfWork uinOfWork,ILogger logger) : base(uinOfWork,logger)
+        public GameConsoleRoomController(IRoomService gameConsoleRoomService, IGameConsoleService gameConsoleService, IPriceService priceService, IUnitOfWork uinOfWork, ILogger<GameConsoleRoomController> logger) : base(uinOfWork)
         {
             _gameConsoleRoomService = gameConsoleRoomService;
             _gameConsoleService = gameConsoleService;
             _priceService = priceService;
+            _logger = logger;
         }
 
         //[HttpGet]

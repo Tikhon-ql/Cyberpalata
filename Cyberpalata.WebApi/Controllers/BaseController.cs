@@ -6,12 +6,10 @@ namespace Cyberpalata.WebApi.Controllers
     public class BaseController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-        protected readonly ILogger _logger;
 
-        public BaseController(IUnitOfWork uinOfWork, ILogger logger)
+        public BaseController(IUnitOfWork uinOfWork)
         {
             _unitOfWork = uinOfWork;
-            _logger = logger;
         }
 
         protected async Task<IActionResult> ReturnSuccess<T>(T data)

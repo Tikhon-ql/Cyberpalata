@@ -12,13 +12,15 @@ namespace Cyberpalata.WebApi.Controllers
     public class ApiUserController : BaseController
     {
         private readonly IApiUserService _userService;
+        private readonly ILogger<ApiUserController> _logger;
 
-        public ApiUserController(IApiUserService userService,ILogger logger,IUnitOfWork uinOfWork) : base(uinOfWork,logger)
+        public ApiUserController(IApiUserService userService, ILogger<ApiUserController> logger, IUnitOfWork uinOfWork) : base(uinOfWork)
         {
             _userService = userService;
+            _logger = logger;
         }
         [Authorize]
-        [HttpGet]
+        [HttpGet("profile")]
         public async Task<IActionResult> Get()
         {
             if(!ModelState.IsValid)

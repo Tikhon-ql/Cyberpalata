@@ -15,12 +15,14 @@ namespace Cyberpalata.WebApi.Controllers
         private readonly IApiUserService _userService;
         private readonly IAuthenticationService _authenticationService;
         private readonly IUserRefreshTokenService _refreshTokenService;
+        private readonly ILogger<AuthenticationController> _logger;
 
-        public AuthenticationController(IApiUserService userService, IAuthenticationService authenticationService, IUserRefreshTokenService refreshTokenService,ILogger logger, IUnitOfWork uinOfWork) : base(uinOfWork,logger)
+        public AuthenticationController(IApiUserService userService, IAuthenticationService authenticationService, IUserRefreshTokenService refreshTokenService,ILogger<AuthenticationController> logger, IUnitOfWork uinOfWork) : base(uinOfWork)
         {
             _userService = userService;
             _authenticationService = authenticationService;
             _refreshTokenService = refreshTokenService;
+            _logger = logger;
         }
         //User locates in token get id from accessToken
       
