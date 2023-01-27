@@ -44,7 +44,7 @@ namespace Cyberpalata.DataProvider.Repositories
 
         public async Task<PagedList<Room>> GetPageListAsync(int pageNumber, RoomType type)
         {
-            var list = await _context.Rooms.Where(r => r.Type.Name == type.Name).Skip((pageNumber - 1) * 10).Take(10).ToListAsync();
+            var list = await _context.Rooms.Include(r => r.Type).Where(r => r.Type.Name == type.Name).Skip((pageNumber - 1) * 10).Take(10).ToListAsync();
             var pagedList = new PagedList<Room>(list, pageNumber, 10, _context.Rooms.Count());
             return pagedList;
         }
