@@ -18,8 +18,8 @@ namespace Cyberpalata.Logic.Models
         [Required]
         public PriceDto Tariff { get; set; }
         [Required]
-        public virtual List<SeatDto> Seats { get; set; }
-        public virtual List<GameDto> GamesToDownloadBefore { get; set; }//have to check is the game in the cyberclub games list
+        public List<SeatDto> Seats { get; set; }
+        public List<GameDto> GamesToDownloadBefore { get; set; }//have to check is the game in the cyberclub games list
         public bool IsExpired { get; set; } // trigger
     }
 }
