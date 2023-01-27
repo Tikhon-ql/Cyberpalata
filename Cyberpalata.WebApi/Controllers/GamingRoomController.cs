@@ -2,9 +2,11 @@
 using Cyberpalata.Common.Enums;
 using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Interfaces;
+using Cyberpalata.Logic.Models;
 using Cyberpalata.ViewModel.Rooms;
 using Cyberpalata.ViewModel.Rooms.GamingRoom;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
 namespace Cyberpalata.WebApi.Controllers
 {
@@ -16,23 +18,32 @@ namespace Cyberpalata.WebApi.Controllers
         private readonly IPeripheryService _peripheryService;
         private readonly IPriceService _priceService;
         private readonly IRoomService _roomService;
-        public GamingRoomController(IPcService pcService, IPeripheryService peripheryService, IPriceService priceService, IRoomService roomService, IUnitOfWork uinOfWork,ILogger logger) : base(uinOfWork,logger)
+        private readonly ILogger<GamingRoomController> _logger;
+        public GamingRoomController(IPcService pcService, IPeripheryService peripheryService, IPriceService priceService, IRoomService roomService, IUnitOfWork uinOfWork,ILogger<GamingRoomController> logger) : base(uinOfWork)
         {
             _pcService = pcService;
             _peripheryService = peripheryService;
             _priceService = priceService;
             _roomService = roomService;
+            _logger = logger;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get()
+        [HttpGet("type")]
+        public async Task<IActionResult> Get(string type)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest($"Bad request: {ModelState.ToString()}");
             }
-            var rooms = await _roomService.GetPagedListAsync(1, RoomType.GamingRoom);
 
+            if (type != "vip" && type != "common")
+                return BadRequest("Bad type query parametr");
+
+            var rooms = type == "vip" 
+                ? await _roomService.GetVipRoomsAsync(1, RoomType.GamingRoom) 
+                : await _roomService.GetCommonRoomsAsync(1, RoomType.GamingRoom);
+
+            // should i pretend to get vip rooms with type lounge?
             var viewModel = new RoomViewModel
             {
                 Infos = rooms.Items.Select(x => new RoomListItemInfo { Id = x.Id.ToString(), Name = x.Name }).ToList()
@@ -50,7 +61,7 @@ namespace Cyberpalata.WebApi.Controllers
             var prices = await _priceService.GetByRoomIdAsync(id);
             var roomsPc = await _pcService.GetByGamingRoomId(id);
             var peripheries = await _peripheryService.GetByGamingRoomId(id);
-            var seats = await _roomService.GetRoomFreeSeats(id);
+            //var seats = await _roomService.GetRoomFreeSeats(id);
 
 
             var pcInfo = roomsPc.Value;
@@ -72,10 +83,6 @@ namespace Cyberpalata.WebApi.Controllers
                 Peripheries = peripheries.Value.Select(p => new Periphery(p.Name, p.Type.Name)).ToList(),
                 Prices = prices.Value.Select(p => new Price(p.Hours, p.Cost)).ToList(),
             };
-            if (seats.HasValue)
-            {
-                viewModel.Seats = seats.Value.Select(s => s.Number).ToList();
-            }
             return await ReturnSuccess(viewModel);
         }
     }
