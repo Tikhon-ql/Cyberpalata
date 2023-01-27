@@ -12,9 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 //LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
 
-var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
-
 builder.Host.UseNLog();
+
+var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
 
 builder.Services.AddControllers().AddNewtonsoftJson();
 
