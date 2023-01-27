@@ -39,11 +39,12 @@ namespace Cyberpalata.WebApi.Controllers
             if (type != "vip" && type != "common")
                 return BadRequest("Bad type query parametr");
 
-            var rooms = type == "vip" 
-                ? await _roomService.GetVipRoomsAsync(1, RoomType.GamingRoom) 
+            var rooms = type == "vip"
+                ? await _roomService.GetVipRoomsAsync(1, RoomType.GamingRoom)
                 : await _roomService.GetCommonRoomsAsync(1, RoomType.GamingRoom);
+            //var rooms = await _roomService.GetPagedListAsync(1, RoomType.GamingRoom);
 
-            // should i pretend to get vip rooms with type lounge?
+            // should i pretend to get vip rologoms with type lounge?
             var viewModel = new RoomViewModel
             {
                 Infos = rooms.Items.Select(x => new RoomListItemInfo { Id = x.Id.ToString(), Name = x.Name }).ToList()
