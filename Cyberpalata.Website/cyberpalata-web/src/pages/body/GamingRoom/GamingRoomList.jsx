@@ -1,12 +1,13 @@
 import axios from 'axios';
 import { useState } from 'react';
 import {Link} from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 export const GamingRoomList = () =>{
 
     const [gamingRoomsInfo, setGamingRoomsInfo] = useState([]);
-
-    axios.get(`https://localhost:7227/gamingRooms`).then(res => {
+    const {type} = useParams();
+    axios.get(`https://localhost:7227/gamingRooms/type?type=${type}`).then(res => {
         setGamingRoomsInfo(res.data.infos);
     })
     //console.dir(gameConsoleRoomsInfo);
