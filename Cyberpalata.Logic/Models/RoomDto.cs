@@ -8,10 +8,10 @@ namespace Cyberpalata.Logic.Models
     {
         [Key] public Guid Id { get; set; }
         [Required][MaxLength(50)] public string Name { get; set; }
-        [Required] public RoomType Type { get; set; }
+        //[Required] public RoomType Type { get; set; }
         public bool IsVip { get; set; }
-        public virtual List<PriceDto> Prices { get; set; }
-        public virtual List<SeatDto> Seats { get; set; }
-        public virtual List<BookingDto> Bookings { get; set; }
+        public List<PriceDto> Prices { get; set; } = new List<PriceDto>();
+        public List<SeatDto> Seats { get; set; } = new List<SeatDto>();
+        public List<BookingDto> Bookings { get; set; } = new List<BookingDto>();
     }
 }
