@@ -37,10 +37,10 @@ namespace Cyberpalata.DataProvider.Repositories
             return new PagedList<Periphery>(list, pageNumber, 10, _context.Peripheries.Count());
         }
 
-        public async Task<Maybe<List<Periphery>>> GetByGamingRoomId(Guid roomId)
-        {
-            var roomPeripheries = await _context.Peripheries.Include(p => p.Type).Where(p => p.GamingRoom.Id == roomId).ToListAsync();
-            return roomPeripheries;
-        }
+        //public async Task<Maybe<List<Periphery>>> GetByGamingRoomId(Guid roomId)
+        //{
+        //    var roomPeripheries = await _context.Peripheries.Include(p => p.Type).Where(p => p.GamingRoom.Id == roomId).ToListAsync();
+        //    return roomPeripheries;
+        //}
     }
 }

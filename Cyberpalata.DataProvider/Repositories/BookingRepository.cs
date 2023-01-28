@@ -42,12 +42,12 @@ namespace Cyberpalata.DataProvider.Repositories
         }
 
         //????????????????????/shit code
-        public async Task<bool> CheckIsSeatFreeAsync(Seat seat)
-        {
-            var result = await _context.Bookings.Where(b=>b.Ending < DateTime.Now).FirstOrDefaultAsync(b => b.Seats.Contains(seat));
-            if (result == null)
-                return true;
-            return false;
-        }
+        //public async Task<bool> CheckIsSeatFreeAsync(Seat seat)
+        //{
+        //    var result = await _context.Bookings.Where(b=>b.Ending < DateTime.Now).FirstOrDefaultAsync(b => b.Seats.Contains(seat));
+        //    if (result == null)
+        //        return true;
+        //    return false;
+        //}
     }
 }

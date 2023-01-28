@@ -38,10 +38,10 @@ namespace Cyberpalata.DataProvider.Repositories
             return new PagedList<Pc>(list, pageNumber, 10, _context.Pcs.Count());
         }
 
-        public async Task<Maybe<Pc>> GetByGamingRoomId(Guid roomId)
-        { 
-            var pc = await _context.Pcs.FirstOrDefaultAsync(pc => pc.GamingRoom.Id == roomId);
-            return pc;
-        }
+        //public async Task<Maybe<Pc>> GetByGamingRoomId(Guid roomId)
+        //{ 
+        //    var pc = await _context.Pcs.FirstOrDefaultAsync(pc => pc.GamingRoom.Id == roomId);
+        //    return pc;
+        //}
     }
 }

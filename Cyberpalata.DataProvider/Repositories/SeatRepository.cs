@@ -46,10 +46,10 @@ namespace Cyberpalata.DataProvider.Repositories
             return new PagedList<Seat>(list, pageNumber, 50, _context.Seats.Count());
         }
 
-        public async Task<List<Seat>> GetByRoomIdAsync(Guid roomId)
-        {
-            var list = await _context.Seats.Where(s=>s.Room.Id == roomId).ToListAsync();
-            return list;
-        }
+        //public async Task<List<Seat>> GetByRoomIdAsync(Guid roomId)
+        //{
+        //    var list = await _context.Seats.Where(s=>s.Room.Id == roomId).ToListAsync();
+        //    return list;
+        //}
     }
 }

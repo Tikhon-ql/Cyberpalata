@@ -43,42 +43,43 @@ namespace Cyberpalata.DataProvider.Repositories
             return new PagedList<Room>(list, pageNumber, 10, _context.Rooms.Count());
         }
 
-        public async Task<PagedList<Room>> GetPageListAsync(int pageNumber, RoomType type)
-        {
-            var list = await _context.Rooms.Include(r => r.Type).Where(r => r.Type.Name == type.Name).Skip((pageNumber - 1) * 10).Take(10).ToListAsync();
-            var pagedList = new PagedList<Room>(list, pageNumber, 10, _context.Rooms.Count());
-            return pagedList;
-        }
+        //public async Task<PagedList<Room>> GetPageListAsync(int pageNumber, RoomType type)
+        //{
+        //    var list = await _context.Rooms.Include(r => r.Type).Where(r => r.Type.Name == type.Name).Skip((pageNumber - 1) * 10).Take(10).ToListAsync();
+        //    var pagedList = new PagedList<Room>(list, pageNumber, 10, _context.Rooms.Count());
+        //    return pagedList;
+        //}
+        ///????????????????????????????
 
-        public async Task<PagedList<Room>> GetVipRoomsAsync(int pageNumber, RoomType type)
-        {
-            var list = await _context.Rooms.Where(r => r.Type.Name == type.Name && r.IsVip).Skip((pageNumber - 1) * 10).Take(10).ToListAsync();
-            var pagedList = new PagedList<Room>(list, pageNumber, 10, _context.Rooms.Count());
-            return pagedList;
-        }
-        public async Task<PagedList<Room>> GetCommonRoomsAsync(int pageNumber, RoomType type)
-        {
-            var list = await _context.Rooms.Where(r => r.Type.Name == type.Name && !r.IsVip).Skip((pageNumber - 1) * 10).Take(10).ToListAsync();
-            var pagedList = new PagedList<Room>(list, pageNumber, 10, _context.Rooms.Count());
-            return pagedList;
-        }
+        //public async Task<PagedList<Room>> GetVipRoomsAsync(int pageNumber, RoomType type)
+        //{
+        //    var list = await _context.Rooms.Where(r => r.Type.Name == type.Name && r.IsVip).Skip((pageNumber - 1) * 10).Take(10).ToListAsync();
+        //    var pagedList = new PagedList<Room>(list, pageNumber, 10, _context.Rooms.Count());
+        //    return pagedList;
+        //}
+        //public async Task<PagedList<Room>> GetCommonRoomsAsync(int pageNumber, RoomType type)
+        //{
+        //    var list = await _context.Rooms.Where(r => r.Type.Name == type.Name && !r.IsVip).Skip((pageNumber - 1) * 10).Take(10).ToListAsync();
+        //    var pagedList = new PagedList<Room>(list, pageNumber, 10, _context.Rooms.Count());
+        //    return pagedList;
+        //}
 
-        public async Task<Maybe<List<Seat>>> GetRoomFreeSeats(Guid roomId)
-        {
-            var room = await _context.Rooms.Include(r=>r.Seats).FirstOrDefaultAsync(r => r.Id == roomId);
+        //public async Task<Maybe<List<Seat>>> GetRoomFreeSeats(Guid roomId)
+        //{
+        //    var room = await _context.Rooms.Include(r=>r.Seats).FirstOrDefaultAsync(r => r.Id == roomId);
 
-            if (room == null)//?????????? can it return null?
-                return Maybe.None;
-            var result = new List<Seat>();
-            foreach(var seat in room.Seats)
-            {
-                if(await _bookingRepository.CheckIsSeatFreeAsync(seat))
-                {
-                    result.Add(seat);
-                }
-            }
+        //    if (room == null)//?????????? can it return null?
+        //        return Maybe.None;
+        //    var result = new List<Seat>();
+        //    foreach(var seat in room.Seats)
+        //    {
+        //        if(await _bookingRepository.CheckIsSeatFreeAsync(seat))
+        //        {
+        //            result.Add(seat);
+        //        }
+        //    }
 
-            return result;
-        }
+        //    return result;
+        //}
     }
 }
