@@ -52,6 +52,33 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PeripheryType");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Headphone"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Keypad"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Mouse"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Screen"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Chair"
+                        });
                 });
 
             modelBuilder.Entity("Cyberpalata.Common.Enums.RoomType", b =>
@@ -69,6 +96,23 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RoomType");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Lounge"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "GameConsoleRoom"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "GamingRoom"
+                        });
                 });
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Booking", b =>
@@ -83,9 +127,6 @@ namespace Cyberpalata.DataProvider.Migrations
 
                     b.Property<DateTime>("Ending")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsExpired")
-                        .HasColumnType("bit");
 
                     b.Property<Guid?>("RoomId")
                         .HasColumnType("uniqueidentifier");
@@ -318,7 +359,7 @@ namespace Cyberpalata.DataProvider.Migrations
 
                     b.ToTable("Rooms", t =>
                         {
-                            t.HasCheckConstraint("IsVip", "IsVip = 1 and TypeId between 1 and 2");
+                            t.HasCheckConstraint("IsVip", "IsVip = 0 or(IsVip = 1 and TypeId between 2 and 3)");
                         });
                 });
 
