@@ -27,6 +27,7 @@ namespace Cyberpalata.DataProvider.Repositories
 
         public async Task<Maybe<Room>> ReadAsync(Guid id)
         {
+            //Include everything?
             var room = await _context.Rooms.FirstOrDefaultAsync(r => r.Id == id);
             return room;
         }
