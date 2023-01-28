@@ -12,7 +12,11 @@ namespace Cyberpalata.Logic.Configuration
         {
             services.ConfigureDataProvider(configuration);
 
-            services.AddAutoMapper(typeof(AppMappingProfile));
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.AllowNullCollections= true;
+                cfg.AllowNullDestinationValues= true;
+            },typeof(AppMappingProfile));
 
             services.AddTransient<IRoomService, RoomService>();
             services.AddTransient<IGameService, GameService>();
