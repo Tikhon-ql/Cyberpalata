@@ -1,0 +1,16 @@
+
+.seat
+{
+    text-align: center;
+    vertical-align: auto;
+    margin: 5px;
+}
+.notFreeSeat
+{
+    background-color: black;
+    color: white;
+}
+table
+{
+    border-radius: 5px;
+}
