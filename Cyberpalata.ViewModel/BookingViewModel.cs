@@ -11,7 +11,7 @@ namespace Cyberpalata.ViewModel
     public class BookingViewModel
     {
         public string RoomName { get; set; }
-        public List<int> Seats { get; set; } = new();
+        public List<Seat> Seats { get; set; } = new();
         public List<Price> Tariffs { get; set; } = new();
     }
 }
