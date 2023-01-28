@@ -26,8 +26,8 @@ namespace Cyberpalata.WebApi.Controllers
             _logger = logger;
         }
 
-        [Authorize]
-        [HttpGet]
+        //[Authorize]
+        [HttpGet("seats")]
         public async Task<IActionResult> GetRoomFreeSeats(Guid roomId)
         {
             if(!ModelState.IsValid)
@@ -37,22 +37,40 @@ namespace Cyberpalata.WebApi.Controllers
             var room = await _roomService.ReadAsync(roomId);
             if(room.HasNoValue)
                 return BadRequest("Bad room id!");
-            var seats = await _roomService.GetRoomFreeSeats(roomId);
+            var freeSeats = await _roomService.GetRoomFreeSeats(roomId);
             // no metter to check is seats null, so probably Maybe isn't needed.
             var tarrifs = room.Value.Prices;
+
+            var resultSeats = new List<Seat>();
+
+            //или создать метод проверки места и здесь вызывать?
+            foreach(var item in room.Value.Seats)
+            {
+                if (freeSeats.Value.FirstOrDefault(i => i.Id == item.Id) == null)
+                    resultSeats.Add(new Seat {Number = item.Number, IsFree = false });
+                else
+                    resultSeats.Add(new Seat { Number = item.Number, IsFree = true });
+            }
+
+            resultSeats[0].IsFree = false;
+            resultSeats[2].IsFree = false;
+            resultSeats[4].IsFree = false;
+            resultSeats[10].IsFree = false;
+            resultSeats[15].IsFree = false;
+            resultSeats[18].IsFree = false;
 
             var viewModel = new BookingViewModel
             {
                 //??? why here is Maybe?? 
                 RoomName = room.Value.Name,
-                Seats = seats.Value.Select(s => s.Number).ToList(),
+                Seats = resultSeats,
                 Tariffs = tarrifs.Select(t => new Price(t.Hours, t.Cost)).ToList()
             };
 
             return await ReturnSuccess(viewModel);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost]
         public async Task<IActionResult> Post(BookingDto dto)
         {
