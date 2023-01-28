@@ -12,12 +12,14 @@ namespace Cyberpalata.Logic.Services
     {
 
         private readonly IMapper _mapper;
+        private readonly IRoomRepository _roomRepository;
         private readonly IPeripheryRepository _repository;
 
-        public PeripheryService(IMapper mapper, IPeripheryRepository repository)
+        public PeripheryService(IMapper mapper, IPeripheryRepository repository, IRoomRepository roomRepository)
         {
             _mapper = mapper;
             _repository = repository;
+            _roomRepository = roomRepository;
         }
 
         public async Task CreateAsync(PeripheryDto entity)
@@ -62,8 +64,11 @@ namespace Cyberpalata.Logic.Services
 
         public async Task<Maybe<List<PeripheryDto>>> GetByGamingRoomId(Guid roomId)
         {
-            var list = await _repository.GetByGamingRoomId(roomId);
-            return _mapper.Map<Maybe<List<PeripheryDto>>>(list);
+            var room = await _roomRepository.ReadAsync(roomId);
+            if (room.HasNoValue)
+                return Maybe.None;
+            var periphries = room.Value.Peripheries;
+            return _mapper.Map<Maybe<List<PeripheryDto>>>(periphries);
         }
     }
 }
