@@ -20,8 +20,8 @@ namespace Cyberpalata.WebApi.Controllers
             _logger = logger;
         }
         [Authorize]
-        [HttpGet("profile")]
-        public async Task<IActionResult> Get()
+        [HttpGet("/profile")]
+        public async Task<IActionResult> Profile()
         {
             if(!ModelState.IsValid)
             {
@@ -30,17 +30,6 @@ namespace Cyberpalata.WebApi.Controllers
             var id = new Guid(User.Claims.Single(claim => claim.Type == JwtRegisteredClaimNames.Sid).ToString());
             var user = await _userService.ReadAsync(id);
             return Ok(user.Value);
-        }
-        [Authorize]
-        [HttpGet]
-        public async Task<IActionResult> Book(BookingDto bookingDto)
-        {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest($"Bad request: {ModelState.ToString()}");
-            }
-
-            return await ReturnSuccess();
         }
     }
 }
