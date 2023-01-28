@@ -11,11 +11,13 @@ namespace Cyberpalata.Logic.Services
     public class PcService : IPcService
     {
         private readonly IPcRepository _repository;
+        private readonly IRoomRepository _roomRepository;
         private readonly IMapper _mapper;
 
-        public PcService(IPcRepository repository, IMapper mapper)
+        public PcService(IPcRepository repository,IRoomRepository roomRepository, IMapper mapper)
         {
             _repository = repository;
+            _roomRepository = roomRepository;
             _mapper = mapper;
         }
 
@@ -60,7 +62,10 @@ namespace Cyberpalata.Logic.Services
 
         public async Task<Maybe<PcDto>> GetByGamingRoomId(Guid roomId)
         {
-            var pc = await _repository.GetByGamingRoomId(roomId);
+            var room = await _roomRepository.ReadAsync(roomId);
+            if (room.HasNoValue)
+                return Maybe.None;
+            var pc = room.Value.Pcs;
             return _mapper.Map<Maybe<PcDto>>(pc);
         }   
     }
