@@ -84,6 +84,9 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.Property<DateTime>("Ending")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsExpired")
+                        .HasColumnType("bit");
+
                     b.Property<Guid?>("RoomId")
                         .HasColumnType("uniqueidentifier");
 
@@ -313,7 +316,10 @@ namespace Cyberpalata.DataProvider.Migrations
 
                     b.HasIndex("TypeId");
 
-                    b.ToTable("Rooms");
+                    b.ToTable("Rooms", t =>
+                        {
+                            t.HasCheckConstraint("IsVip", "IsVip = 1 and TypeId between 1 and 2");
+                        });
                 });
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Seat", b =>
