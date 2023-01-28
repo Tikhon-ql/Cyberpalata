@@ -31,6 +31,7 @@ namespace Cyberpalata.DataProvider.Context
             UniqueIndexesCreating(modelBuilder);
             ConfigureRelationships(modelBuilder);
             ConstraintsConfiguration(modelBuilder);
+            InitialData(modelBuilder);
             base.OnModelCreating(modelBuilder);
         }
 
@@ -75,7 +76,20 @@ namespace Cyberpalata.DataProvider.Context
 
         private void ConstraintsConfiguration(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Room>().HasCheckConstraint("IsVip", "IsVip = 1 and TypeId between 1 and 2");
+            modelBuilder.Entity<Room>().HasCheckConstraint("IsVip", "IsVip = 0 or(IsVip = 1 and TypeId between 2 and 3)");
+        }
+
+        private void InitialData(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<RoomType>().HasData(RoomType.Lounge);
+            modelBuilder.Entity<RoomType>().HasData(RoomType.GameConsoleRoom);
+            modelBuilder.Entity<RoomType>().HasData(RoomType.GamingRoom);
+
+            modelBuilder.Entity<PeripheryType>().HasData(PeripheryType.Headphone);
+            modelBuilder.Entity<PeripheryType>().HasData(PeripheryType.Keypad);
+            modelBuilder.Entity<PeripheryType>().HasData(PeripheryType.Mouse);
+            modelBuilder.Entity<PeripheryType>().HasData(PeripheryType.Screen);
+            modelBuilder.Entity<PeripheryType>().HasData(PeripheryType.Chair);
         }
 
         private void UniqueIndexesCreating(ModelBuilder modelBuilder)
