@@ -5,6 +5,6 @@ namespace Cyberpalata.DataProvider.Interfaces
 {
     public interface IMenuItemRepository : IRepository<MenuItem>
     {
-        List<Maybe<MenuItem>> GetByLoungeId(Guid roomId);
+        //List<Maybe<MenuItem>> GetByLoungeId(Guid roomId);
     }
 }

@@ -5,6 +5,6 @@ namespace Cyberpalata.DataProvider.Interfaces
 {
     public interface IPriceRepository : IRepository<Price>
     {
-        Task<Maybe<List<Price>>> GetByRoomIdAsync(Guid roomId);
+        //Task<Maybe<List<Price>>> GetByRoomIdAsync(Guid roomId);
     }
 }

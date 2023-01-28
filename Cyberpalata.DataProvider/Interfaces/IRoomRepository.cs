@@ -7,9 +7,9 @@ namespace Cyberpalata.DataProvider.Interfaces
 {
     public interface IRoomRepository : IRepository<Room>
     {
-        Task<PagedList<Room>> GetPageListAsync(int pageNumber, RoomType type);
-        Task<PagedList<Room>> GetVipRoomsAsync(int pageNumber, RoomType type);
-        Task<PagedList<Room>> GetCommonRoomsAsync(int pageNumber, RoomType type);
-        Task<Maybe<List<Seat>>> GetRoomFreeSeats(Guid roomId);
+        //Task<PagedList<Room>> GetPageListAsync(int pageNumber, RoomType type);
+        //Task<PagedList<Room>> GetVipRoomsAsync(int pageNumber, RoomType type);
+        //Task<PagedList<Room>> GetCommonRoomsAsync(int pageNumber, RoomType type);
+        //Task<Maybe<List<Seat>>> GetRoomFreeSeats(Guid roomId);
     }
 }

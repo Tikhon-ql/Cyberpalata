@@ -5,6 +5,6 @@ namespace Cyberpalata.DataProvider.Interfaces
 {
     public interface IGameConsoleRepository : IRepository<GameConsole>
     {
-        Task<Maybe<List<GameConsole>>> GetByGameConsoleRoomIdAsync(Guid roomId);//TODO: REMOVE MAYBE (CHECK OTHER REPS)
+        //Task<Maybe<List<GameConsole>>> GetByGameConsoleRoomIdAsync(Guid roomId);//TODO: REMOVE MAYBE (CHECK OTHER REPS)
     }
 }

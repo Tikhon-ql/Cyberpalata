@@ -9,6 +9,6 @@ namespace Cyberpalata.DataProvider.Interfaces
 {
     public interface IBookingRepository : IRepository<Booking>
     {
-        Task<bool> CheckIsSeatFreeAsync(Seat seat);
+        //Task<bool> CheckIsSeatFreeAsync(Seat seat);
     }
 }
