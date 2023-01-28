@@ -13,11 +13,13 @@ namespace Cyberpalata.Logic.Services
 
         private readonly IMapper _mapper;
         private readonly IPriceRepository _repository;
+        private readonly IRoomRepository _roomRepository;
 
-        public PriceService(IMapper mapper, IPriceRepository repository)
+        public PriceService(IMapper mapper, IPriceRepository repository, IRoomRepository roomRepository)
         {
             _mapper = mapper;
             _repository = repository;
+            _roomRepository = roomRepository;
         }
 
         public async Task CreateAsync(PriceDto entity)
@@ -61,8 +63,11 @@ namespace Cyberpalata.Logic.Services
 
         public async Task<Maybe<List<PriceDto>>> GetByRoomIdAsync(Guid roomId)
         {
-            var list = await _repository.GetByRoomIdAsync(roomId);
-            return _mapper.Map<Maybe<List<PriceDto>>>(list);
+            var room = await _roomRepository.ReadAsync(roomId);
+            if (room.HasNoValue)
+                return Maybe.None;
+            var prices = room.Value.Prices;
+            return _mapper.Map<Maybe<List<PriceDto>>>(prices);
         }
     }
 }
