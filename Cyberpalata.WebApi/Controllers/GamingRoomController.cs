@@ -51,9 +51,8 @@ namespace Cyberpalata.WebApi.Controllers
             };
             return await ReturnSuccess(viewModel);
         }
-
-        [HttpGet("id")]
-        public async Task<IActionResult> Get(Guid id)
+        [HttpGet("getRoomInfo")]
+        public async Task<IActionResult> GetRoomInfo(Guid id)
         {
             if (!ModelState.IsValid)
             {
