@@ -61,26 +61,31 @@ namespace Cyberpalata.Logic.Services
 
         public async Task<PagedList<RoomDto>> GetPagedListAsync(int pageNumber, RoomType type)
         {
-            var list = await _repository.GetPageListAsync(pageNumber, type);
-            return _mapper.Map<PagedList<RoomDto>>(list);
+            //var list = await _repository.GetPageListAsync(pageNumber);
+
+            //return _mapper.Map<PagedList<RoomDto>>();
+            return null;
         }
 
         public async Task<PagedList<RoomDto>> GetVipRoomsAsync(int pageNumber, RoomType type)
         {
-            var list = await _repository.GetVipRoomsAsync(pageNumber, type);
-            return _mapper.Map<PagedList<RoomDto>>(list);
+            //var list = await _repository.GetVipRoomsAsync(pageNumber, type);
+            //return _mapper.Map<PagedList<RoomDto>>(list);
+            throw new NotImplementedException();
         }
 
         public async Task<PagedList<RoomDto>> GetCommonRoomsAsync(int pageNumber, RoomType type)
         {
-            var list = await _repository.GetCommonRoomsAsync(pageNumber, type);
-            return _mapper.Map<PagedList<RoomDto>>(list);
+            //var list = await _repository.GetCommonRoomsAsync(pageNumber, type);
+            //return _mapper.Map<PagedList<RoomDto>>(list);
+            throw new NotImplementedException();
         }
 
         public async Task<Maybe<List<SeatDto>>> GetRoomFreeSeats(Guid roomId)
         {
-            var list = await _repository.GetRoomFreeSeats(roomId);
-            return _mapper.Map<Maybe<List<SeatDto>>>(list);
+            //var list = await _repository.GetRoomFreeSeats(roomId);
+            //return _mapper.Map<Maybe<List<SeatDto>>>(list);
+            throw new NotImplementedException();
         }
     }
 }
