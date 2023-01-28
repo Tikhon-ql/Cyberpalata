@@ -18,6 +18,5 @@ namespace Cyberpalata.DataProvider.Models
         [Required]
         public virtual List<Seat> Seats { get; set; }
         public virtual List<Game> GamesToDownloadBefore { get; set; }//have to check is the game in the cyberclub games list
-        public bool IsExpired { get; set; } // trigger
     }
 }
