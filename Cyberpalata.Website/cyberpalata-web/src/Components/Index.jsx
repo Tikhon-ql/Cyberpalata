@@ -15,6 +15,7 @@ import { ProfileComponent } from '../pages/body/ProfileComponent';
 import { GamingRoomList } from '../pages/body/GamingRoom/GamingRoomList';
 import {GamingRoom} from '../pages/body/GamingRoom/GamingRoom'
 import { GamingRoomTypeChoosing } from '../pages/body/GamingRoom/GamingRoomTypeChoosing';
+import { BookingComponent } from '../pages/body/Booking/BookingComponent';
 
 export const Index = () => {
     return (
@@ -26,12 +27,13 @@ export const Index = () => {
                 <Route path="/gameConsoleRoom/:id/:name" element = {<GameConsoleRoom/>}/>
                 <Route path="/gamingRoomTypeChoosing" element = {<GamingRoomTypeChoosing/>}/>
                 <Route path="/gamingRooms/:type" element = {<GamingRoomList/>}/>
-                <Route path="/gamingRooms/:id/:type/:name" element = {<GamingRoom/>}/>
+                <Route path="/gamingRooms/:id/:name" element = {<GamingRoom/>}/>
                 <Route path="/gamesLibrary" element = {<GameLibrary/>}/>          
                 <Route path="/login" element = {<LoginComponent/>}/>                
                 <Route path="/logout" element = {<LogoutComponent/>}/>                
                 <Route path="/register" element = {<RegistrationComponent/>}/>
                 <Route path="/profile" element={<ProfileComponent/>}/>
+                <Route path="/booking/:roomId/:roomName" element={<BookingComponent/>}/>
             </Routes>
             <AccessTokenVerify/>          
         </BrowserRouter>
