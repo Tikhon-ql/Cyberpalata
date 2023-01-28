@@ -26,15 +26,15 @@ namespace Cyberpalata.Logic.Configuration
 
             CreateMap<Price, PriceDto>();
             CreateMap<PriceDto, Price>();
-            //CreateMap<PagedList<Price>, PagedList<PriceDto>>();
-            //CreateMap<Maybe<Price>, Maybe<PriceDto>>();
-            //CreateMap<Maybe<List<Price>>, Maybe<List<PriceDto>>>();
+            CreateMap<PagedList<Price>, PagedList<PriceDto>>();
+            CreateMap<Maybe<Price>, Maybe<PriceDto>>();
+            CreateMap<Maybe<List<Price>>, Maybe<List<PriceDto>>>();
 
             CreateMap<Seat, SeatDto>();
             CreateMap<SeatDto, Seat>();
-            //CreateMap<PagedList<Seat>, PagedList<SeatDto>>();
-            //CreateMap<Maybe<Seat>, Maybe<SeatDto>>();
-            //CreateMap<Maybe<List<Seat>>, Maybe<List<SeatDto>>>();
+            CreateMap<PagedList<Seat>, PagedList<SeatDto>>();
+            CreateMap<Maybe<Seat>, Maybe<SeatDto>>();
+            CreateMap<Maybe<List<Seat>>, Maybe<List<SeatDto>>>();
 
             CreateMap<MenuItem, MenuItemDto>();
             CreateMap<MenuItemDto, MenuItem>();
@@ -72,8 +72,8 @@ namespace Cyberpalata.Logic.Configuration
 
             CreateMap<Booking, BookingDto>();
             CreateMap<BookingDto, Booking>();
-            //CreateMap<Maybe<Booking>, Maybe<BookingDto>>();
-            //CreateMap<PagedList<Booking>,PagedList<BookingDto>>();
+            CreateMap<Maybe<Booking>, Maybe<BookingDto>>();
+            CreateMap<PagedList<Booking>,PagedList<BookingDto>>();
 
             CreateMap<Room, RoomDto>();
             CreateMap<PagedList<Room>, PagedList<RoomDto>>();
