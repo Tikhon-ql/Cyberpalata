@@ -44,7 +44,7 @@ namespace Cyberpalata.DataProvider.Repositories
         //????????????????????/shit code
         public async Task<bool> CheckIsSeatFreeAsync(Seat seat)
         {
-            var result = await _context.Bookings.FirstOrDefaultAsync(b => !b.IsExpired && b.Seats.Contains(seat));
+            var result = await _context.Bookings.Where(b=>b.Ending < DateTime.Now).FirstOrDefaultAsync(b => b.Seats.Contains(seat));
             if (result == null)
                 return true;
             return false;
