@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cyberpalata.DataProvider.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230128122456_InitialCreate")]
+    [Migration("20230128202450_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -156,9 +156,14 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.Property<Guid>("ConsoleRoomId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("RoomId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ConsoleRoomId");
+
+                    b.HasIndex("RoomId");
 
                     b.ToTable("GameConsoles");
                 });
@@ -193,6 +198,9 @@ namespace Cyberpalata.DataProvider.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<Guid?>("RoomId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Ssd")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -201,6 +209,8 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("GamingRoomId");
+
+                    b.HasIndex("RoomId");
 
                     b.ToTable("Pcs");
                 });
@@ -303,12 +313,17 @@ namespace Cyberpalata.DataProvider.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<Guid?>("RoomId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("TypeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GamingRoomId");
+
+                    b.HasIndex("RoomId");
 
                     b.HasIndex("TypeId");
 
@@ -374,7 +389,10 @@ namespace Cyberpalata.DataProvider.Migrations
                         .HasDefaultValueSql("NEWID()");
 
                     b.Property<int>("Number")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Number"));
 
                     b.Property<Guid>("RoomId")
                         .HasColumnType("uniqueidentifier");
@@ -440,6 +458,10 @@ namespace Cyberpalata.DataProvider.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Cyberpalata.DataProvider.Models.Room", null)
+                        .WithMany("Consoles")
+                        .HasForeignKey("RoomId");
+
                     b.Navigation("ConsoleRoom");
                 });
 
@@ -450,6 +472,10 @@ namespace Cyberpalata.DataProvider.Migrations
                         .HasForeignKey("GamingRoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Cyberpalata.DataProvider.Models.Room", null)
+                        .WithMany("Pcs")
+                        .HasForeignKey("RoomId");
 
                     b.Navigation("GamingRoom");
                 });
@@ -472,6 +498,10 @@ namespace Cyberpalata.DataProvider.Migrations
                         .HasForeignKey("GamingRoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Cyberpalata.DataProvider.Models.Room", null)
+                        .WithMany("Peripheries")
+                        .HasForeignKey("RoomId");
 
                     b.HasOne("Cyberpalata.Common.Enums.PeripheryType", "Type")
                         .WithMany()
@@ -535,6 +565,12 @@ namespace Cyberpalata.DataProvider.Migrations
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Room", b =>
                 {
                     b.Navigation("Bookings");
+
+                    b.Navigation("Consoles");
+
+                    b.Navigation("Pcs");
+
+                    b.Navigation("Peripheries");
 
                     b.Navigation("Prices");
 
