@@ -19,13 +19,16 @@ namespace Cyberpalata.Logic.Configuration
     {
         public AppMappingProfile()
         {
-
+            AllowNullCollections = true;
+            AllowNullDestinationValues = true;
+         
             CreateMap<Game, GameDto>();
             CreateMap<PagedList<Game>, PagedList<GameDto>>();
             CreateMap<Maybe<Game>, Maybe<GameDto>>();
             CreateMap<Maybe<List<Game>>, Maybe<List<GameDto>>>();
 
             CreateMap<Price, PriceDto>();
+            CreateMap<PriceDto, Price>();
             CreateMap<PagedList<Price>, PagedList<PriceDto>>();
             CreateMap<Maybe<Price>, Maybe<PriceDto>>();
             CreateMap<Maybe<List<Price>>, Maybe<List<PriceDto>>>();
@@ -68,19 +71,35 @@ namespace Cyberpalata.Logic.Configuration
                 .ForMember(dst => dst.Password, opt => opt.MapFrom(src => src.Password));
 
             CreateMap<ApiUser, ApiUserDto>();
+            CreateMap<ApiUserDto, ApiUser>();
             CreateMap<Maybe<ApiUser>, Maybe<ApiUserDto>>();
 
             CreateMap<Booking, BookingDto>();
-            CreateMap<BookingDto, Booking>()
-                .ForMember(dst => dst.Begining, opt => opt.MapFrom(src => src.Begining))
-                .ForMember(dst => dst.Ending, opt => opt.MapFrom(src => src.Ending))
-                .ForMember(dst => dst.Tariff, opt => opt.MapFrom(src => src.Tariff))
-                .ForMember(dst => dst.Seats, opt => opt.MapFrom(src => src.Seats));
+            //.ForMember(dst => dst.User, opt => opt.MapFrom(src => src.User))
+            //.ForMember(dst => dst.Begining, opt => opt.MapFrom(src => src.Begining))
+            //.ForMember(dst => dst.Ending, opt => opt.MapFrom(src => src.Ending))
+            //.ForMember(dst => dst.Tariff, opt => opt.MapFrom(src => src.Tariff))
+            //.ForMember(dst => dst.Seats, opt => opt.MapFrom(src => src.Seats));
+            CreateMap<BookingDto, Booking>();
+                //.ForMember(dst=>dst.User,opt=>opt.MapFrom(src=>src.User))
+                //.ForMember(dst => dst.Begining, opt => opt.MapFrom(src => src.Begining))
+                //.ForMember(dst => dst.Ending, opt => opt.MapFrom(src => src.Ending))
+                //.ForMember(dst => dst.Tariff, opt => opt.MapFrom(src => src.Tariff))
+                //.ForMember(dst => dst.Seats, opt => opt.MapFrom(src => src.Seats));
 
             CreateMap<Maybe<Booking>, Maybe<BookingDto>>();
             CreateMap<PagedList<Booking>,PagedList<BookingDto>>();
 
-            CreateMap<Room, RoomDto>();
+            CreateMap<Room, RoomDto>()
+                .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dst => dst.Seats, opt => opt.MapFrom(src => src.Seats))
+                .ForMember(dst => dst.Bookings, opt => opt.MapFrom(src => src.Bookings))
+                .ForMember(dst => dst.Pcs, opt => opt.MapFrom(src => src.Pcs))
+                .ForMember(dst => dst.Peripheries, opt => opt.MapFrom(src => src.Peripheries))
+                .ForMember(dst => dst.Prices, opt => opt.MapFrom(src => src.Prices))
+                .ForMember(dst => dst.Consoles, opt => opt.MapFrom(src => src.Consoles))
+                .ForMember(dst => dst.IsVip, opt => opt.MapFrom(src => src.IsVip));
             CreateMap<PagedList<Room>, PagedList<RoomDto>>();
             CreateMap<RoomDto, Room>();
             CreateMap<Maybe<Room>, Maybe<RoomDto>>();
@@ -90,7 +109,7 @@ namespace Cyberpalata.Logic.Configuration
             CreateMap<BookingCreateRequest, BookingDto>()
                 .ForMember(dst => dst.Begining, opt => opt.MapFrom(src => src.Begining))
                 .ForMember(dst => dst.Ending, opt => opt.MapFrom(src => src.Ending))
-                .ForMember(dst => dst.Tariff, opt => opt.MapFrom(src => new PriceDto(src.Tariff)))
+                .ForMember(dst => dst.Tariff, opt => opt.MapFrom(src => src.Tariff))
                 .ForMember(dst => dst.Seats, opt => opt.MapFrom(src => src.Seats.Select(item=> new SeatDto { Number = item, IsFree = false})));
 
             //CreateMap<Maybe<List<Room>>, Maybe<List<RoomDto>>>();
