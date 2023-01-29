@@ -67,7 +67,7 @@ namespace Cyberpalata.WebApi.Controllers
             var viewModel = new GameConsoleRoomViewModel
             {
                 GameConsoles = consoles.Value.Select(c => c.ConsoleName).ToList(),
-                Prices = prices.Value.Select(p => new Price(p.Hours, p.Cost)).ToList(),
+                Prices = prices.Value.Select(p => new PriceViewModel(p.Hours, p.Cost)).ToList(),
             };
             return await ReturnSuccess(viewModel);
         }
