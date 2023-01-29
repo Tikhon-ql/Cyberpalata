@@ -2,9 +2,11 @@ import axios from "axios";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import "./BookingComponent.css";
+import { useNavigate } from "react-router-dom";
 
 export const BookingComponent = () => {
     
+    const navigate = useNavigate();
     const {roomId} = useParams()
     const {name} = useParams();
     const [seats,setSeats] = useState([]);
@@ -52,13 +54,19 @@ export const BookingComponent = () => {
         event.preventDefault();
         console.dir(event);
         const apiUrl = `https://localhost:7227/booking`;
+        let tariff = event.target.elements.tariff.value.split(':');
+
         let requestBody = {
             "begining": event.target.elements.begining.value,
             "ending": event.target.elements.ending.value,
-            "tariff": event.target.elements.tariff.value,
+            "tariff":
+            {
+                "hours":tariff[0],
+                "cost":tariff[1]
+            },
             "seats": clickedSeats,        
         }
-        axios.post(apiUrl, requestBody);
+        axios.post(apiUrl, requestBody).then(res=>navigate("/"));
     }
 
     const[clickedSeats, setClickedSeats] = useState([]);
