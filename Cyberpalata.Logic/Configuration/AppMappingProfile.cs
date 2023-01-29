@@ -11,6 +11,7 @@ using Cyberpalata.Logic.Models.Identity;
 using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Cyberpalata.Common.Enums;
+using Cyberpalata.Logic.Models.Booking;
 
 namespace Cyberpalata.Logic.Configuration
 {
@@ -25,7 +26,6 @@ namespace Cyberpalata.Logic.Configuration
             CreateMap<Maybe<List<Game>>, Maybe<List<GameDto>>>();
 
             CreateMap<Price, PriceDto>();
-            CreateMap<PriceDto, Price>();
             CreateMap<PagedList<Price>, PagedList<PriceDto>>();
             CreateMap<Maybe<Price>, Maybe<PriceDto>>();
             CreateMap<Maybe<List<Price>>, Maybe<List<PriceDto>>>();
@@ -71,7 +71,12 @@ namespace Cyberpalata.Logic.Configuration
             CreateMap<Maybe<ApiUser>, Maybe<ApiUserDto>>();
 
             CreateMap<Booking, BookingDto>();
-            CreateMap<BookingDto, Booking>();
+            CreateMap<BookingDto, Booking>()
+                .ForMember(dst => dst.Begining, opt => opt.MapFrom(src => src.Begining))
+                .ForMember(dst => dst.Ending, opt => opt.MapFrom(src => src.Ending))
+                .ForMember(dst => dst.Tariff, opt => opt.MapFrom(src => src.Tariff))
+                .ForMember(dst => dst.Seats, opt => opt.MapFrom(src => src.Seats));
+
             CreateMap<Maybe<Booking>, Maybe<BookingDto>>();
             CreateMap<PagedList<Booking>,PagedList<BookingDto>>();
 
@@ -82,6 +87,11 @@ namespace Cyberpalata.Logic.Configuration
             CreateMap<PagedList<Room>, PagedList<RoomDto>>();
             CreateMap<PagedList<RoomDto>, PagedList<Room>>();
 
+            CreateMap<BookingCreateRequest, BookingDto>()
+                .ForMember(dst => dst.Begining, opt => opt.MapFrom(src => src.Begining))
+                .ForMember(dst => dst.Ending, opt => opt.MapFrom(src => src.Ending))
+                .ForMember(dst => dst.Tariff, opt => opt.MapFrom(src => new PriceDto(src.Tariff)))
+                .ForMember(dst => dst.Seats, opt => opt.MapFrom(src => src.Seats.Select(item=> new SeatDto { Number = item, IsFree = false})));
 
             //CreateMap<Maybe<List<Room>>, Maybe<List<RoomDto>>>();
         }
