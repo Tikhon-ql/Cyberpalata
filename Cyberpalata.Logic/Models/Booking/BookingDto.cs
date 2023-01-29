@@ -12,7 +12,7 @@ namespace Cyberpalata.Logic.Models.Booking
     public class BookingDto
     {
         [Required]
-        public ApiUserDto User { get; set; }
+        public ApiUserDto User { get; set; } = new ApiUserDto();
         [Required]
         public DateTime Begining { get; set; }
         [Required]
