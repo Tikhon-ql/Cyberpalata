@@ -18,6 +18,9 @@ namespace Cyberpalata.DataProvider.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -131,9 +134,14 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.Property<Guid?>("RoomId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RoomId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Bookings");
                 });
@@ -444,7 +452,15 @@ namespace Cyberpalata.DataProvider.Migrations
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.NoAction);
 
+                    b.HasOne("Cyberpalata.DataProvider.Models.Identity.ApiUser", "User")
+                        .WithMany("Bookings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Tariff");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Devices.GameConsole", b =>
@@ -557,6 +573,11 @@ namespace Cyberpalata.DataProvider.Migrations
                         .HasForeignKey("SeatsId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Identity.ApiUser", b =>
+                {
+                    b.Navigation("Bookings");
                 });
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Room", b =>
