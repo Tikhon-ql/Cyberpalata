@@ -4,8 +4,12 @@ namespace Cyberpalata.DataProvider.Models
 {
     public class Seat
     {
-        [Key] [Required] public Guid Id { get; set; }
-        [Required] public int Number { get; set; }
-        [Required] public Room Room { get; set; }
+        [Key] 
+        [Required] 
+        public Guid Id { get; set; }
+        [Required]
+        public int Number { get; set; }
+        [Required] 
+        public virtual Room Room { get; set; }
     }
 }
