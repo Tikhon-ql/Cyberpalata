@@ -18,5 +18,6 @@ namespace Cyberpalata.DataProvider.Models.Identity
 
         [Required] public string Password { get; set; }
         [Required] public string Salt { get; set; }
+        public virtual List<Booking> Bookings { get; set; }
     }
 }
