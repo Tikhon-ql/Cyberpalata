@@ -81,14 +81,14 @@ namespace Cyberpalata.WebApi.Controllers
 
         //[Authorize]
         [HttpPost]
-        public async Task<IActionResult> Post(BookingDto dto)
+        public async Task<IActionResult> Post(BookingCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest($"Bad request: {ModelState.ToString()}");
             }
 
-            await _bookingService.CreateAsync(dto);
+            await _bookingService.CreateAsync(request);
             return await ReturnSuccess();
         }
     }
