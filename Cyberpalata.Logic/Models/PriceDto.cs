@@ -2,21 +2,18 @@
 {
     public class PriceDto
     {
-        public PriceDto(int hours, decimal cost)
+        public PriceDto()
+        {
+            Hours = 0;
+            Cost = 0;
+        }
+        public PriceDto(int hours, int cost)
         {
             Hours = hours;
             Cost = cost;
         }
 
-        public PriceDto(string value)
-        {
-            var strs = value.Split(':');
-            Hours = int.Parse(strs[0]);
-            Cost = decimal.Parse(strs[1]);
-        }
-
-        public Guid Id { get; set; }
         public int Hours { get; set; }
-        public decimal Cost { get; set; }
+        public int Cost { get; set; }
     }
 }
