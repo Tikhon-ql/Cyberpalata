@@ -19,7 +19,7 @@ export const BookingComponent = () => {
     };
 
     axios.get(apiUrl,{},config).then(res=>{
-        console.dir(res);
+        //console.dir(res);
         setSeats(res.data.seats);
         setTarrifs(res.data.tariffs);
     }).catch(console.log);
@@ -49,13 +49,37 @@ export const BookingComponent = () => {
 
     function sendBookToServer(event)
     {
+        event.preventDefault();
+        console.dir(event);
         const apiUrl = `https://localhost:7227/booking`;
-        let request = {
+        let requestBody = {
             "begining": event.target.elements.begining.value,
             "ending": event.target.elements.ending.value,
             "tariff": event.target.elements.tariff.value,
+            "seats": clickedSeats,        
         }
+        axios.post(apiUrl, requestBody);
     }
+
+    const[clickedSeats, setClickedSeats] = useState([]);
+    function onSeatClick(event)
+    {
+       
+        event.preventDefault();
+        console.dir(event);
+        if(event.target.className == "btn btn-dark")
+        {
+            setClickedSeats(clickedSeats.filter(item => item != event.target.textContent));
+            event.target.className = "btn btn-outline-dark";
+        }
+        else
+        {       
+            setClickedSeats([...clickedSeats,event.target.textContent])     
+            event.target.className = "btn btn-dark";
+        }         
+        console.dir(clickedSeats);
+    }
+    
 
     return <>
     <form method="post" onSubmit={sendBookToServer} className="mt-5 p-5" style={{"margin":"auto","width":"50%", "border" : "3px solid black", "padding" : "10px"}}>
@@ -73,80 +97,31 @@ export const BookingComponent = () => {
         </div>
         <h2>Seats</h2>
         <table className="table w-50 m-auto">
-            <tbody>
+            <tbody id = 'tbody'>
             {seatsPerRow.map(row=>{
                 return <tr>
                     {row.map(cell=>{
                         return <>
-                        {cell.isFree ? <td className="seat p-2">{cell.number}</td> : <td className="seat text-white bg-dark p-2">{cell.number}</td>}
+                        {cell.isFree ? <td className="seat p-2"><button id = {`button${cell.number}`} className="btn btn-outline-dark" onClick={onSeatClick}>{cell.number}</button></td> : <td className="seat text-white p-2"><button id = {`button${cell.number}`} className="btn btn-outline-dark disabled" onClick={onSeatClick}>{cell.number}</button></td>}
                         </>
                     })}
-                </tr>
+                </tr>   
             })}
             </tbody>         
         </table>
+        <div>
             <h2>Tarrifs</h2>
-            <div className="m-auto">
-                {tarrifs.map(item=>{
-                    console.dir(item);
-                    return <div>
-                        <label className="m-2">Hours:{item.hours}    -   Cost: {item.cost}</label>
-                        <input id ={`tariff${item.hours}`} name="tariff" type="radio" value={`${item.hours}:${item.cost}`}/>
-                        </div>
-                })}
-            </div>
-        <input type="submit" value="Book"/>
+                <div className="m-auto">
+                    {tarrifs.map(item=>{
+                        return <div>
+                            <label style={{"marginRight":"1vh"}}>Hours:{item.hours}    -   Cost: {item.cost}</label>
+                            <input id ={`tariff${item.hours}`} name="tariff" type="radio" className="form-check-input" value={`${item.hours}:${item.cost}`}/>
+                            </div>
+                    })}
+                </div>    
+            <input type="submit" style={{"marginTop":"1vh"}} className value="Book"/>
+            <input id="seats" name="seats" style={{"visibility":"hidden"}} type="text"/>
+        </div>      
     </form>
     </>
 }
-
-
-
-{/* <tr>
-<td><div className="m-1 seat" style={{"border":"1 px solid black"}}>1</div></td>
-<td><div className="m-1 seat notFreeSeat" style={{"border":"1 px solid black"}}>2</div></td>
-<td><div className="" style={{"border":"1 px solid black",}}>3</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>4</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>5</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>6</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>7</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>8</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>9</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>10</div></td>
-</tr>
-<tr>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>11</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>12</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>13</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>14</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>15</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>16</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>17</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>18</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>19</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>20</div></td>
-</tr>
-<tr>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>21</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>22</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>23</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>24</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>25</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>26</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>27</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>28</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>29</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>30</div></td>
-</tr>
-<tr>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>31</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>32</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>33</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>34</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>35</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>36</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>37</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>38</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>39</div></td>
-<td><div className="m-1" style={{"border":"1 px solid black"}}>40</div></td>
-</tr> */}
