@@ -25,6 +25,12 @@ namespace Cyberpalata.DataProvider.Context
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Seat> Seats { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseLazyLoadingProxies();
+            base.OnConfiguring(optionsBuilder);
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             ConfigureIdAutoGeneration(modelBuilder);
@@ -72,6 +78,7 @@ namespace Cyberpalata.DataProvider.Context
             modelBuilder.Entity<UserRefreshToken>().Property(t => t.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<Booking>().Property(t => t.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<Seat>().Property(s => s.Id).HasDefaultValueSql("NEWID()");
+            modelBuilder.Entity<Seat>().Property(s => s.Number).ValueGeneratedOnAdd();
         }
 
         private void ConstraintsConfiguration(ModelBuilder modelBuilder)
