@@ -27,7 +27,8 @@ namespace Cyberpalata.Logic.Services
         public async Task CreateAsync(BookingCreateRequest request)
         {
             var entity = _mapper.Map<BookingDto>(request);
-            await _repository.CreateAsync(_mapper.Map<Booking>(entity));
+            var ormModel = _mapper.Map<Booking>(entity);
+            await _repository.CreateAsync(ormModel);
         }
         public async Task<Maybe<BookingDto>> ReadAsync(Guid id)
         {
