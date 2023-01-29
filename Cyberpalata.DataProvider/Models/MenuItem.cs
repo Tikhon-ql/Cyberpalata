@@ -5,9 +5,15 @@ namespace Cyberpalata.DataProvider.Models
 {
     public class MenuItem
     {
-        [Key] [Required] public Guid Id { get; set; }
-        [Required] [MaxLength(50)] public string Name { get; set; }
-        [Required] public decimal Cost { get; set; }
-        [Required] public MenuItemType Type { get; set; }
+        [Key] 
+        [Required] 
+        public Guid Id { get; set; }
+        [Required] 
+        [MaxLength(50)] 
+        public string Name { get; set; }
+        [Required] 
+        public decimal Cost { get; set; }
+        [Required] 
+        public virtual MenuItemType Type { get; set; }
     }
 }
