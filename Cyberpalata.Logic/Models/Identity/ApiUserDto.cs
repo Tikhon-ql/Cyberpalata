@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Cyberpalata.Logic.Models.Booking;
+using System.ComponentModel.DataAnnotations;
 
 namespace Cyberpalata.Logic.Models.Identity
 {
@@ -18,5 +19,6 @@ namespace Cyberpalata.Logic.Models.Identity
 
         [Required]
         public string Password { get; set; }
+        public List<BookingDto> Bookings { get; set; }
     }
 }

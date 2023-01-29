@@ -7,7 +7,7 @@ namespace Cyberpalata.DataProvider.Models.Peripheral
     {
         [Key] [Required] public Guid Id { get; set; }
         [MaxLength(50)] [Required] public string? Name { get; set; }
-        [Required] public PeripheryType Type { get; set; }
-        public Room GamingRoom { get; set; }
+        [Required] public virtual PeripheryType Type { get; set; }
+        public virtual Room GamingRoom { get; set; }
     }
 }

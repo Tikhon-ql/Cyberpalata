@@ -16,11 +16,13 @@ namespace Cyberpalata.Logic.Services
     internal class SeatService : ISeatService
     {
         private readonly ISeatRepository _repository;
+        private readonly IRoomRepository _roomRepository;
         private readonly IMapper _mapper;
 
-        public SeatService(ISeatRepository repository, IMapper mapper)
+        public SeatService(ISeatRepository repository,IRoomRepository roomRepository, IMapper mapper)
         {
             _repository = repository;
+            _roomRepository = roomRepository;
             _mapper = mapper;
         }
 
@@ -62,6 +64,25 @@ namespace Cyberpalata.Logic.Services
         public Task<PagedList<SeatDto>> GetPagedListAsync(int pageNumber)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<Maybe<List<SeatDto>>> GetSeatsByRoomId(Guid roomId)
+        {
+            var room = await _roomRepository.ReadAsync(roomId);
+            if (room.HasNoValue)
+                return Maybe.None;
+            var list = room.Value.Seats;
+            var resultSeats = _mapper.Map<List<SeatDto>>(room.Value.Seats);
+            var bookings = room.Value.Bookings.Where(b=>b.Ending < DateTime.Now).ToList();
+            foreach (var seat in resultSeats)
+            {
+                var isSeatFree = bookings.FirstOrDefault(b => b.Seats.FirstOrDefault(s => s.Id == seat.Id) != null) == null;
+                if(isSeatFree)
+                {
+                    seat.IsFree = true;
+                }
+            }
+            return resultSeats;
         }
     }
 }

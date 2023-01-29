@@ -1,8 +1,8 @@
 ﻿namespace Cyberpalata.ViewModel.Rooms
 {
-    public class Price
+    public class PriceViewModel
     {
-        public Price(int hours, decimal cost)
+        public PriceViewModel(int hours, decimal cost)
         {
             Hours = hours;
             Cost = cost;

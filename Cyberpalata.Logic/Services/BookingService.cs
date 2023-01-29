@@ -4,7 +4,7 @@ using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
 using Cyberpalata.Logic.Interfaces;
-using Cyberpalata.Logic.Models;
+using Cyberpalata.Logic.Models.Booking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,8 +24,9 @@ namespace Cyberpalata.Logic.Services
             _mapper = mapper;
         }
 
-        public async Task CreateAsync(BookingDto entity)
+        public async Task CreateAsync(BookingCreateRequest request)
         {
+            var entity = _mapper.Map<BookingDto>(request);
             await _repository.CreateAsync(_mapper.Map<Booking>(entity));
         }
         public async Task<Maybe<BookingDto>> ReadAsync(Guid id)

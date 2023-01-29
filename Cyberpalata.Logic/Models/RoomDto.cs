@@ -1,5 +1,6 @@
 ﻿using Cyberpalata.Common.Enums;
 using Cyberpalata.DataProvider.Models;
+using Cyberpalata.Logic.Models.Booking;
 using System.ComponentModel.DataAnnotations;
 
 namespace Cyberpalata.Logic.Models

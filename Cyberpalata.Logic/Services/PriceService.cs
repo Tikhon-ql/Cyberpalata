@@ -67,7 +67,7 @@ namespace Cyberpalata.Logic.Services
             if (room.HasNoValue)
                 return Maybe.None;
             var prices = room.Value.Prices;
-            return _mapper.Map<Maybe<List<PriceDto>>>(prices);
+            return _mapper.Map<List<PriceDto>>(prices);
         }
     }
 }
