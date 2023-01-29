@@ -81,7 +81,7 @@ namespace Cyberpalata.WebApi.Controllers
             {
                 PcInfos = pcInfoList,
                 Peripheries = peripheries.Value.Select(p => new Periphery(p.Name, p.Type.Name)).ToList(),
-                Prices = prices.Value.Select(p => new Price(p.Hours, p.Cost)).ToList(),
+                Prices = prices.Value.Select(p => new PriceViewModel(p.Hours, p.Cost)).ToList(),
             };
             return await ReturnSuccess(viewModel);
         }
