@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cyberpalata.ViewModel.Rooms
 {
-    public class Seat
+    public class SeatViewModel
     {
         public int Number { get; set; }
         public bool IsFree { get; set; }
