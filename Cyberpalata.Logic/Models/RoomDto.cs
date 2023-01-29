@@ -1,6 +1,9 @@
 ﻿using Cyberpalata.Common.Enums;
 using Cyberpalata.DataProvider.Models;
+using Cyberpalata.DataProvider.Models.Devices;
 using Cyberpalata.Logic.Models.Booking;
+using Cyberpalata.Logic.Models.Devices;
+using Cyberpalata.Logic.Models.Peripheral;
 using System.ComponentModel.DataAnnotations;
 
 namespace Cyberpalata.Logic.Models
@@ -14,5 +17,8 @@ namespace Cyberpalata.Logic.Models
         public List<PriceDto> Prices { get; set; } = new List<PriceDto>();
         public List<SeatDto> Seats { get; set; } = new List<SeatDto>();
         public List<BookingDto> Bookings { get; set; } = new List<BookingDto>();
+        public List<GameConsoleDto> Consoles { get; set; }
+        public List<PcDto> Pcs { get; set; }
+        public List<PeripheryDto> Peripheries { get; set; }
     }
 }
