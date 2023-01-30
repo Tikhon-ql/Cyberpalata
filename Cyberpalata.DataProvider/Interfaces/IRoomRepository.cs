@@ -10,6 +10,7 @@ namespace Cyberpalata.DataProvider.Interfaces
         Task<PagedList<Room>> GetPageListAsync(int pageNumber, RoomType type);
         Task<PagedList<Room>> GetVipRoomsAsync(int pageNumber, RoomType type);
         Task<PagedList<Room>> GetCommonRoomsAsync(int pageNumber, RoomType type);
+        Task AddBookingToRoomAsync(Guid roomId,Booking booking);
         //Task<Maybe<List<Seat>>> GetRoomFreeSeats(Guid roomId);
     }
 }
