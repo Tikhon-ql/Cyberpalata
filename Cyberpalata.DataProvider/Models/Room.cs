@@ -1,4 +1,5 @@
-﻿using Cyberpalata.Common.Enums;
+﻿using CSharpFunctionalExtensions;
+using Cyberpalata.Common.Enums;
 using Cyberpalata.DataProvider.Models.Devices;
 using Cyberpalata.DataProvider.Models.Peripheral;
 using System.ComponentModel.DataAnnotations;
@@ -19,7 +20,7 @@ namespace Cyberpalata.DataProvider.Models
         public virtual List<Seat> Seats { get; set; }
         public virtual List<Booking> Bookings { get; set; }
         public virtual List<GameConsole> Consoles { get; set; }
-        public virtual List<Pc> Pcs { get; set; }
+        public virtual Pc Pc { get; set; } = new();
         public virtual List<Periphery> Peripheries { get; set; }
     }
 }
