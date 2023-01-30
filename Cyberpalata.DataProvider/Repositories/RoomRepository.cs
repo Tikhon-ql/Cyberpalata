@@ -5,6 +5,7 @@ using Cyberpalata.DataProvider.Context;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace Cyberpalata.DataProvider.Repositories
 {
@@ -13,11 +14,13 @@ namespace Cyberpalata.DataProvider.Repositories
 
         private readonly ApplicationDbContext _context;
         private readonly IBookingRepository _bookingRepository;
+        private readonly IApiUserRepository _userRepository;
 
-        public RoomRepository(ApplicationDbContext context, IBookingRepository bookingRepository)
+        public RoomRepository(ApplicationDbContext context, IBookingRepository bookingRepository, IApiUserRepository userRepository)
         {
             _context = context;
             _bookingRepository = bookingRepository;
+            _userRepository = userRepository;
         }
 
         public async Task CreateAsync(Room entity)
@@ -62,6 +65,24 @@ namespace Cyberpalata.DataProvider.Repositories
             var list = await _context.Rooms.Where(r => r.Type.Name == type.Name && !r.IsVip).Skip((pageNumber - 1) * 10).Take(10).ToListAsync();
             var pagedList = new PagedList<Room>(list, pageNumber, 10, _context.Rooms.Count());
             return pagedList;
+        }
+
+        public async Task AddBookingToRoomAsync(Guid roomId, Booking booking)
+        {
+            var room = await ReadAsync(roomId);
+
+            var price = room.Value.Prices.FirstOrDefault(p => p.Hours == booking.Tariff.Hours);
+
+            var seats = room.Value.Seats.Where(s => booking.Seats.FirstOrDefault(seat => seat.Number == s.Number) != null).ToList();
+
+            booking.Seats = seats;
+            booking.Tariff = price;
+
+            var user = await _userRepository.ReadAsync(booking.User.Id);
+            booking.User = user.Value;
+
+            await _bookingRepository.CreateAsync(booking);
+            room.Value.Bookings.Add(booking);
         }
 
         //public async Task<Maybe<List<Seat>>> GetRoomFreeSeats(Guid roomId)

@@ -23,7 +23,7 @@ export const AccessTokenVerify = (props) => {
                 if(refreshToken != null)
                 {
                     console.log("Access token has been refreshed.");
-                    const apiRequestUrl = `https://localhost:7227/users/refresh`;
+                    const apiRequestUrl = `https://localhost:7227/authentication/refresh`;
                     // const config = {
                     //     headers: { Authorization: `Bearer ${accessToken}` }
                     // };

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using NLog.LayoutRenderers.Wrappers;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Cyberpalata.WebApi.Controllers
 {
@@ -19,14 +20,16 @@ namespace Cyberpalata.WebApi.Controllers
         private readonly IBookingService _bookingService;
         private readonly ISeatService _seatService;
         private readonly IPriceService _priceService;
+        private readonly IRoomService _roomService;
         //private readonly IRoomService _roomService;
         private readonly ILogger<BookingController> _logger;
 
-        public BookingController(IBookingService bookingService, ISeatService seatService,IPriceService priceService, IUnitOfWork uinOfWork, ILogger<BookingController> logger) : base(uinOfWork)
+        public BookingController(IBookingService bookingService, ISeatService seatService,IPriceService priceService, IUnitOfWork uinOfWork, IRoomService roomService, ILogger<BookingController> logger) : base(uinOfWork)
         {
             _bookingService = bookingService;
             _seatService = seatService;
             _priceService = priceService;
+            _roomService = roomService;
             _logger = logger;
         }
 
@@ -62,13 +65,6 @@ namespace Cyberpalata.WebApi.Controllers
             var tariffs = await _priceService.GetByRoomIdAsync(roomId);
             if(tariffs.HasNoValue)
                 return BadRequest("Something wrong with room id or its tariffs");
-            //a9cce727-2b42-4034-9e2e-3ef3466f4af9
-            resultSeats.Value[0].IsFree = false;
-            resultSeats.Value[2].IsFree = false;
-            resultSeats.Value[4].IsFree = false;
-            resultSeats.Value[10].IsFree = false;
-            resultSeats.Value[15].IsFree = false;
-            resultSeats.Value[18].IsFree = false;
 
             var viewModel = new BookingViewModel
             {
@@ -88,7 +84,10 @@ namespace Cyberpalata.WebApi.Controllers
                 return BadRequest($"Bad request: {ModelState.ToString()}");
             }
 
-            await _bookingService.CreateAsync(request);
+            request.User.Id = new Guid(User.Claims.Single(claim => claim.Type == JwtRegisteredClaimNames.Sid).ToString());
+
+            //await _bookingService.CreateAsync(request);
+            await _roomService.AddBookingToRoom(request);
             return await ReturnSuccess();
         }
     }

@@ -3,6 +3,7 @@ using Cyberpalata.Common.Enums;
 using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models;
+using Cyberpalata.Logic.Models.Devices;
 using Cyberpalata.ViewModel.Rooms;
 using Cyberpalata.ViewModel.Rooms.GamingRoom;
 using Microsoft.AspNetCore.Mvc;
@@ -58,13 +59,15 @@ namespace Cyberpalata.WebApi.Controllers
             {
                 return BadRequest($"Bad request: {ModelState.ToString()}");
             }
-            var prices = await _priceService.GetByRoomIdAsync(id);
-            var roomsPc = await _pcService.GetByGamingRoomId(id);
+            var prices = await _priceService.GetByRoomIdAsync(id);   
             var peripheries = await _peripheryService.GetByGamingRoomId(id);
+            var roomsPc = await _pcService.GetByGamingRoomId(id);
             //var seats = await _roomService.GetRoomFreeSeats(id);
 
+            var pcInfo = default(PcDto);
 
-            var pcInfo = roomsPc.Value;
+            if (roomsPc.HasValue)
+                pcInfo = roomsPc.Value;        
 
             var pcInfoList = new List<PcInfo>();
             foreach (var item in pcInfo.GetType().GetProperties())
@@ -76,10 +79,9 @@ namespace Cyberpalata.WebApi.Controllers
                     pcInfoList.Add(new PcInfo(type, name));
                 }
             }
-
             var viewModel = new GamingRoomViewModel
             {
-                PcInfos = pcInfoList,
+                PcInfos= pcInfoList,
                 Peripheries = peripheries.Value.Select(p => new Periphery(p.Name, p.Type.Name)).ToList(),
                 Prices = prices.Value.Select(p => new PriceViewModel(p.Hours, p.Cost)).ToList(),
             };

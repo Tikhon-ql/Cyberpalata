@@ -68,7 +68,7 @@ namespace Cyberpalata.Logic.Services
             if (room.HasNoValue)
                 return Maybe.None;
             var periphries = room.Value.Peripheries;
-            return _mapper.Map<Maybe<List<PeripheryDto>>>(periphries);
+            return _mapper.Map<List<PeripheryDto>>(periphries).AsMaybe();
         }
     }
 }

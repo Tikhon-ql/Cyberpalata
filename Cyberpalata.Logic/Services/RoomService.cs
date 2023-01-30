@@ -6,6 +6,7 @@ using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models;
+using Cyberpalata.Logic.Models.Booking;
 
 namespace Cyberpalata.Logic.Services
 {
@@ -75,6 +76,16 @@ namespace Cyberpalata.Logic.Services
         {
             var list = await _repository.GetCommonRoomsAsync(pageNumber, type);
             return _mapper.Map<PagedList<RoomDto>>(list);
+        }
+
+        public async Task<Result> AddBookingToRoom(BookingCreateRequest request)
+        {
+            var room = await _repository.ReadAsync(request.RoomId);
+            if (room.HasNoValue)
+                return Result.Failure($"There aren't roo with id:{request.RoomId}");
+            var dto = _mapper.Map<BookingDto>(request);
+            await _repository.AddBookingToRoomAsync(request.RoomId, _mapper.Map<Booking>(dto));
+            return Result.Success();
         }
 
         //public async Task<Maybe<List<SeatDto>>> GetRoomFreeSeats(Guid roomId)

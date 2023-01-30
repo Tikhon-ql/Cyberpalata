@@ -18,7 +18,7 @@ export const GamingRoomList = () =>{
             <h1>Gaming rooms</h1>
             <ul class="list-group list-group-flush">
                 {gamingRoomsInfo.map(item=>{
-                    return <li class="list-group-item" key={item.id}><Link to={`/gamingRooms/${item.id}/${item.name}`} className="text-decoration-none text-dark">{item.name}</Link></li>
+                    return <li class="list-group-item" key={item.id}><Link to={`/gamingRooms/${item.id}/${item.name}/${type}`} className="text-decoration-none text-dark">{item.name}</Link></li>
                 })}
             </ul>
             <Link to='/' className="btn btn-outline-dark btn-sm mt-2">Home page</Link>

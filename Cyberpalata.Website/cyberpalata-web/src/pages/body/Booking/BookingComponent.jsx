@@ -1,14 +1,14 @@
 import axios from "axios";
+import jwtDecode from "jwt-decode";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import "./BookingComponent.css";
-import { useNavigate } from "react-router-dom";
 
 export const BookingComponent = () => {
     
-    const navigate = useNavigate();
     const {roomId} = useParams()
-    const {name} = useParams();
+    const {roomName} = useParams();
+    const {roomType} = useParams();
     const [seats,setSeats] = useState([]);
     const [tarrifs, setTarrifs] = useState([]);
     const apiUrl = `https://localhost:7227/booking/seats?roomId=${roomId}`;
@@ -54,19 +54,30 @@ export const BookingComponent = () => {
         event.preventDefault();
         console.dir(event);
         const apiUrl = `https://localhost:7227/booking`;
-        let tariff = event.target.elements.tariff.value.split(':');
-
-        let requestBody = {
-            "begining": event.target.elements.begining.value,
-            "ending": event.target.elements.ending.value,
-            "tariff":
-            {
-                "hours":tariff[0],
-                "cost":tariff[1]
-            },
-            "seats": clickedSeats,        
-        }
-        axios.post(apiUrl, requestBody).then(res=>navigate("/"));
+        if(localStorage.getItem('accessToken') != null)
+        {
+            let accessToken = jwtDecode(localStorage.getItem(`accessToken`));
+            let tariff = event.target.elements.tariff.value.split(":");
+            console.dir(accessToken);
+            let requestBody = {
+                "user":
+                {
+                    "id":accessToken.sid,
+                    "username":accessToken.name,
+                    "email":accessToken.email
+                },
+                "roomId":roomId,
+                "begining": event.target.elements.begining.value,
+                "ending": event.target.elements.ending.value,
+                "tariff": 
+                {
+                    "hours":tariff[0],
+                    "cost":tariff[1]
+                },
+                "seats": clickedSeats,        
+            }
+            axios.post(apiUrl, requestBody);
+        }    
     }
 
     const[clickedSeats, setClickedSeats] = useState([]);
@@ -91,7 +102,7 @@ export const BookingComponent = () => {
 
     return <>
     <form method="post" onSubmit={sendBookToServer} className="mt-5 p-5" style={{"margin":"auto","width":"50%", "border" : "3px solid black", "padding" : "10px"}}>
-        <h2 className="mx-auto">{name}</h2>
+        <h2 className="mx-auto">{roomName}</h2>
         <h2>Dates</h2>
         <div className="">
             <label htmlFor="begining" className="m-3">

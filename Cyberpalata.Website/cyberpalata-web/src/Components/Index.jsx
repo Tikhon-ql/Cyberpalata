@@ -27,13 +27,13 @@ export const Index = () => {
                 <Route path="/gameConsoleRoom/:id/:name" element = {<GameConsoleRoom/>}/>
                 <Route path="/gamingRoomTypeChoosing" element = {<GamingRoomTypeChoosing/>}/>
                 <Route path="/gamingRooms/:type" element = {<GamingRoomList/>}/>
-                <Route path="/gamingRooms/:id/:name" element = {<GamingRoom/>}/>
+                <Route path="/gamingRooms/:id/:name/:type" element = {<GamingRoom/>}/>
                 <Route path="/gamesLibrary" element = {<GameLibrary/>}/>          
                 <Route path="/login" element = {<LoginComponent/>}/>                
                 <Route path="/logout" element = {<LogoutComponent/>}/>                
                 <Route path="/register" element = {<RegistrationComponent/>}/>
                 <Route path="/profile" element={<ProfileComponent/>}/>
-                <Route path="/booking/:roomId/:roomName" element={<BookingComponent/>}/>
+                <Route path="/booking/:roomId/:roomName/:roomType" element={<BookingComponent/>}/>
             </Routes>
             <AccessTokenVerify/>          
         </BrowserRouter>

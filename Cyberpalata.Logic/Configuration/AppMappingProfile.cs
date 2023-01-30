@@ -45,7 +45,14 @@ namespace Cyberpalata.Logic.Configuration
             CreateMap<Maybe<MenuItem>, Maybe<MenuItemDto>>();
             CreateMap<Maybe<List<MenuItem>>, Maybe<List<MenuItemDto>>>();
 
-            CreateMap<Pc, PcDto>();
+            CreateMap<Pc, PcDto>()
+                .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dst => dst.Hdd, opt => opt.MapFrom(src => src.Hdd))
+                .ForMember(dst => dst.Ssd, opt => opt.MapFrom(src => src.Ssd))
+                .ForMember(dst => dst.Ram, opt => opt.MapFrom(src => src.Ram))
+                .ForMember(dst => dst.Cpu, opt => opt.MapFrom(src => src.Cpu))
+                .ForMember(dst => dst.Gpu, opt => opt.MapFrom(src => src.Gpu));
+            CreateMap<PcDto, Pc>();
             CreateMap<PagedList<Pc>, PagedList<PcDto>>();
             CreateMap<Maybe<Pc>, Maybe<PcDto>>();
             CreateMap<Maybe<List<Pc>>, Maybe<List<PcDto>>>();
@@ -74,42 +81,56 @@ namespace Cyberpalata.Logic.Configuration
             CreateMap<ApiUserDto, ApiUser>();
             CreateMap<Maybe<ApiUser>, Maybe<ApiUserDto>>();
 
-            CreateMap<Booking, BookingDto>();
             //.ForMember(dst => dst.User, opt => opt.MapFrom(src => src.User))
             //.ForMember(dst => dst.Begining, opt => opt.MapFrom(src => src.Begining))
             //.ForMember(dst => dst.Ending, opt => opt.MapFrom(src => src.Ending))
             //.ForMember(dst => dst.Tariff, opt => opt.MapFrom(src => src.Tariff))
             //.ForMember(dst => dst.Seats, opt => opt.MapFrom(src => src.Seats));
-            CreateMap<BookingDto, Booking>();
+          
                 //.ForMember(dst=>dst.User,opt=>opt.MapFrom(src=>src.User))
                 //.ForMember(dst => dst.Begining, opt => opt.MapFrom(src => src.Begining))
                 //.ForMember(dst => dst.Ending, opt => opt.MapFrom(src => src.Ending))
                 //.ForMember(dst => dst.Tariff, opt => opt.MapFrom(src => src.Tariff))
                 //.ForMember(dst => dst.Seats, opt => opt.MapFrom(src => src.Seats));
 
-            CreateMap<Maybe<Booking>, Maybe<BookingDto>>();
-            CreateMap<PagedList<Booking>,PagedList<BookingDto>>();
+         
 
             CreateMap<Room, RoomDto>()
                 .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dst => dst.Seats, opt => opt.MapFrom(src => src.Seats))
                 .ForMember(dst => dst.Bookings, opt => opt.MapFrom(src => src.Bookings))
-                .ForMember(dst => dst.Pcs, opt => opt.MapFrom(src => src.Pcs))
+                .ForMember(dst => dst.Pc, opt => opt.MapFrom(src => src.Pc))
                 .ForMember(dst => dst.Peripheries, opt => opt.MapFrom(src => src.Peripheries))
                 .ForMember(dst => dst.Prices, opt => opt.MapFrom(src => src.Prices))
                 .ForMember(dst => dst.Consoles, opt => opt.MapFrom(src => src.Consoles))
                 .ForMember(dst => dst.IsVip, opt => opt.MapFrom(src => src.IsVip));
             CreateMap<PagedList<Room>, PagedList<RoomDto>>();
-            CreateMap<RoomDto, Room>();
+            CreateMap<RoomDto, Room>()
+                .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dst => dst.Seats, opt => opt.MapFrom(src => src.Seats))
+                .ForMember(dst => dst.Bookings, opt => opt.MapFrom(src => src.Bookings))
+                .ForMember(dst => dst.Pc, opt => opt.MapFrom(src => src.Pc))
+                .ForMember(dst => dst.Peripheries, opt => opt.MapFrom(src => src.Peripheries))
+                .ForMember(dst => dst.Prices, opt => opt.MapFrom(src => src.Prices))
+                .ForMember(dst => dst.Consoles, opt => opt.MapFrom(src => src.Consoles))
+                .ForMember(dst => dst.IsVip, opt => opt.MapFrom(src => src.IsVip));
             CreateMap<Maybe<Room>, Maybe<RoomDto>>();
             CreateMap<PagedList<Room>, PagedList<RoomDto>>();
             CreateMap<PagedList<RoomDto>, PagedList<Room>>();
 
+            CreateMap<BookingDto, Booking>();
+            CreateMap<Booking, BookingDto>();
+            CreateMap<Maybe<Booking>, Maybe<BookingDto>>();
+            CreateMap<PagedList<Booking>, PagedList<BookingDto>>();
+
             CreateMap<BookingCreateRequest, BookingDto>()
+                .ForMember(dst => dst.User,opt=>opt.MapFrom(src=>src.User))
                 .ForMember(dst => dst.Begining, opt => opt.MapFrom(src => src.Begining))
                 .ForMember(dst => dst.Ending, opt => opt.MapFrom(src => src.Ending))
                 .ForMember(dst => dst.Tariff, opt => opt.MapFrom(src => src.Tariff))
+                .ForMember(dst=>dst.User,opt=>opt.MapFrom(src=>src.User))
                 .ForMember(dst => dst.Seats, opt => opt.MapFrom(src => src.Seats.Select(item=> new SeatDto { Number = item, IsFree = false})));
 
             //CreateMap<Maybe<List<Room>>, Maybe<List<RoomDto>>>();

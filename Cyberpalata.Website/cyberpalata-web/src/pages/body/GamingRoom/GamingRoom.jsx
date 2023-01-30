@@ -13,6 +13,7 @@ import { useParams } from 'react-router-dom'
 export const GamingRoom = () => {
     const {id} = useParams();
     const {name} = useParams();
+    const {type} = useParams();
     const [peripheriesInfo, setPeripheries] = useState([]);
     const [deviceInfo, setDevices] = useState([]);
     const [priceInfo, setPrices] = useState([]);
@@ -30,7 +31,7 @@ export const GamingRoom = () => {
                  <div className="mt-5 p-5" style={{"margin":"auto","width":"50%", "border" : "3px solid black", "padding" : "10px"}}>
                      <div style={{"display":"flex"}}>
                          <div><h1>{name}</h1></div>
-                         <div className="m-2"><Link to={`/booking/${id}/${name}`} className="btn btn-outline-dark btn-sm">Booking</Link></div>
+                         <div className="m-2"><Link to={`/booking/${id}/${name}/${type}`} className="btn btn-outline-dark btn-sm">Booking</Link></div>
                      </div>
                     
                     <hr></hr>
