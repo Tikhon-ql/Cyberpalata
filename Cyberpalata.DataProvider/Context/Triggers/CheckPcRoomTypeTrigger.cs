@@ -20,23 +20,23 @@ namespace Cyberpalata.DataProvider.Context.Triggers
 
         public Task BeforeSave(ITriggerContext<Pc> context, CancellationToken cancellationToken)
         {
-            if (context.ChangeType == ChangeType.Added || context.ChangeType == ChangeType.Modified)
-            {
-                if (context.Entity.GamingRoom.Type != RoomType.GamingRoom)
-                {
-                    if (context.ChangeType == ChangeType.Added)
-                        _context.Pcs.Remove(context.Entity);
-                    if (context.ChangeType == ChangeType.Modified)
-                    {
-                        _context.Entry(context.Entity).Property(p => p.Gpu).IsModified = false;
-                        _context.Entry(context.Entity).Property(p => p.Cpu).IsModified = false;
-                        _context.Entry(context.Entity).Property(p => p.Ram).IsModified = false;
-                        _context.Entry(context.Entity).Property(p => p.Ssd).IsModified = false;
-                        _context.Entry(context.Entity).Property(p => p.Hdd).IsModified = false;
-                        _context.Entry(context.Entity).Property(p => p.GamingRoom).IsModified = false;
-                    }
-                }
-            }    
+            //if (context.ChangeType == ChangeType.Added || context.ChangeType == ChangeType.Modified)
+            //{
+            //    if (context.Entity.GamingRoom.Type != RoomType.GamingRoom)
+            //    {
+            //        if (context.ChangeType == ChangeType.Added)
+            //            _context.Pcs.Remove(context.Entity);
+            //        if (context.ChangeType == ChangeType.Modified)
+            //        {
+            //            _context.Entry(context.Entity).Property(p => p.Gpu).IsModified = false;
+            //            _context.Entry(context.Entity).Property(p => p.Cpu).IsModified = false;
+            //            _context.Entry(context.Entity).Property(p => p.Ram).IsModified = false;
+            //            _context.Entry(context.Entity).Property(p => p.Ssd).IsModified = false;
+            //            _context.Entry(context.Entity).Property(p => p.Hdd).IsModified = false;
+            //            _context.Entry(context.Entity).Property(p => p.GamingRoom).IsModified = false;
+            //        }
+            //    }
+            //}    
             return Task.CompletedTask;
         }
     }
