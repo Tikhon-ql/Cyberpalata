@@ -66,7 +66,9 @@ export const BookingComponent = () => {
                     "username":accessToken.name,
                     "email":accessToken.email
                 },
-                "roomId":roomId,
+                "room":{
+                    "id" : roomId
+                },
                 "begining": event.target.elements.begining.value,
                 "ending": event.target.elements.ending.value,
                 "tariff": 
@@ -76,7 +78,10 @@ export const BookingComponent = () => {
                 },
                 "seats": clickedSeats,        
             }
-            axios.post(apiUrl, requestBody);
+            const config = {
+                headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
+            };
+            axios.post(apiUrl, requestBody,config);
         }    
     }
 

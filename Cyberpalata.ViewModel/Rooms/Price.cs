@@ -2,6 +2,7 @@
 {
     public class PriceViewModel
     {
+        public PriceViewModel() { }
         public PriceViewModel(int hours, decimal cost)
         {
             Hours = hours;

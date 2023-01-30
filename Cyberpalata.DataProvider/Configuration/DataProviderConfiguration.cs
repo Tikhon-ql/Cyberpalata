@@ -35,7 +35,7 @@ namespace Cyberpalata.DataProvider.Configuration
          
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IApiUserRepository, ApiUserRepository>();
-            services.AddTransient<IRoomRepository, RoomRepository>();
+            services.AddScoped<IRoomRepository, RoomRepository>();
             services.AddTransient<IGameRepository, GameRepository>();
             services.AddTransient<IPriceRepository, PriceRepository>();
             services.AddTransient<IApiUserRepository, ApiUserRepository>();

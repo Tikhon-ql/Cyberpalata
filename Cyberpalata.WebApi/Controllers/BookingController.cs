@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Cyberpalata.Common.Enums;
 using Cyberpalata.Common.Intefaces;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.Logic.Interfaces;
@@ -72,10 +73,10 @@ namespace Cyberpalata.WebApi.Controllers
                 Tariffs = tariffs.Value.Select(t => new PriceViewModel(t.Hours, t.Cost)).ToList()
             };
 
-            return await ReturnSuccess(viewModel);
+            return Ok(viewModel);
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Post(BookingCreateRequest request)
         {
@@ -84,8 +85,10 @@ namespace Cyberpalata.WebApi.Controllers
                 return BadRequest($"Bad request: {ModelState.ToString()}");
             }
 
-            request.User.Id = new Guid(User.Claims.Single(claim => claim.Type == JwtRegisteredClaimNames.Sid).ToString());
-
+            //request.User.Id = User.Claims.Single(claim => claim.Type == JwtRegisteredClaimNames.Sid);
+            request.User.Surname = "Grek";
+            request.Room.Type = RoomType.GamingRoom;
+            request.Room.Name = "Gaming room 1";
             //await _bookingService.CreateAsync(request);
             await _roomService.AddBookingToRoom(request);
             return await ReturnSuccess();

@@ -12,7 +12,7 @@ namespace Cyberpalata.Logic.Models.Booking
     {
         [JsonProperty("user")]
         public ApiUserDto User { get; set; } = new ApiUserDto();
-        public Guid RoomId { get; set; }
+        public RoomDto Room { get; set; } = new RoomDto();
         public DateTime Begining { get; set; }
         public DateTime Ending { get; set; }
         public PriceDto Tariff { get; set; } = new PriceDto();

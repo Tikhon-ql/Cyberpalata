@@ -16,18 +16,19 @@ namespace Cyberpalata.Logic.Services
     internal class BookingService : IBookingService
     {
         private readonly IBookingRepository _repository;
+        private readonly IApiUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public BookingService(IBookingRepository repository, IMapper mapper)
+        public BookingService(IBookingRepository repository, IApiUserRepository userRepository, IMapper mapper)
         {
             _repository = repository;
+            _userRepository = userRepository;
             _mapper = mapper;
         }
 
         public async Task CreateAsync(BookingCreateRequest request)
         {
-            var entity = _mapper.Map<BookingDto>(request);
-            var ormModel = _mapper.Map<Booking>(entity);
+            var ormModel = _mapper.Map<Booking>(request);
             await _repository.CreateAsync(ormModel);
         }
         public async Task<Maybe<BookingDto>> ReadAsync(Guid id)
@@ -57,6 +58,15 @@ namespace Cyberpalata.Logic.Services
         {
             var list = await _repository.GetPageListAsync(pageNumber);
             return _mapper.Map<PagedList<BookingDto>>(list);
+        }
+
+        public async Task<Maybe<List<BookingDto>>> GetBookingsByUserAsync(Guid userId)
+        {
+            var user = await _userRepository.ReadAsync(userId);
+            if (user.HasNoValue)
+                return Maybe.None;
+            var bookings = user.Value.Bookings;
+            return _mapper.Map<List<BookingDto>>(bookings).AsMaybe();
         }
     }
 }

@@ -80,11 +80,12 @@ namespace Cyberpalata.Logic.Services
 
         public async Task<Result> AddBookingToRoom(BookingCreateRequest request)
         {
-            var room = await _repository.ReadAsync(request.RoomId);
+            var room = await _repository.ReadAsync(request.Room.Id);
             if (room.HasNoValue)
-                return Result.Failure($"There aren't roo with id:{request.RoomId}");
-            var dto = _mapper.Map<BookingDto>(request);
-            await _repository.AddBookingToRoomAsync(request.RoomId, _mapper.Map<Booking>(dto));
+                return Result.Failure($"There aren't roo with id:{request.Room.Id}");
+            //var dto = _mapper.Map<BookingDto>(request);
+            request.Room = _mapper.Map<RoomDto>(room.Value);
+            await _repository.AddBookingToRoomAsync(request.Room.Id, _mapper.Map<Booking>(request));
             return Result.Success();
         }
 

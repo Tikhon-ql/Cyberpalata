@@ -14,7 +14,7 @@ namespace Cyberpalata.Logic.Models
         public Guid Id { get; set; }
         [MaxLength(50)]
         public string Name { get; set; } = String.Empty;
-        //[Required] public RoomType Type { get; set; }
+        [Required] public RoomType Type { get; set; } = new RoomType(0, "None");
         public bool IsVip { get; set; } = false;
         public List<PriceDto> Prices { get; set; } = new();
         public List<SeatDto> Seats { get; set; } = new();

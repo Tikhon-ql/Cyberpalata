@@ -7,7 +7,7 @@ namespace Cyberpalata.Logic.Models.Identity
     {
         public Guid Id { get; set; }
         [Required] public string Username { get; set; } = "";
-        //[Required] public string Surname { get; set; } = "";
+        public string Surname { get; set; } = "";
 
         [Required]
         [RegularExpression("^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$")]

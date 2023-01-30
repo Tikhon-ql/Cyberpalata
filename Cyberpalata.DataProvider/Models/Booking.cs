@@ -9,8 +9,8 @@ namespace Cyberpalata.DataProvider.Models
     {
         [Key]
         public Guid Id { get; set; }
-        //[Required]//constraint gaming room X game console room only
-        ///public Room Room { get; set; }
+        [Required]//constraint gaming room X game console room only
+        public virtual Room Room { get; set; }
         [Required]
         public virtual ApiUser User { get; set; }
         [Required]

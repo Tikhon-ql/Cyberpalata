@@ -15,8 +15,9 @@ export const ProfileComponent = () => {
     let state = true;
     if(accessToken != null)
     {
-        const baseUrl = `http://dotnetinternship2022.norwayeast.cloudapp.azure.com:83`;
-        const apiRequestUrl = `${baseUrl}/users`;
+        //const baseUrl = `http://dotnetinternship2022.norwayeast.cloudapp.azure.com:83`;
+        const baseUrl = `https://localhost:7227`;
+        const apiRequestUrl = `${baseUrl}/users/profile`;
 
         const config = {
             headers: { Authorization: `Bearer ${accessToken}` }

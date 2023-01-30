@@ -16,5 +16,6 @@ namespace Cyberpalata.Logic.Interfaces
         Task<Result> DeleteAsync(Guid id);
         Task<Result<BookingDto>> SearchAsync(Guid id);
         Task<PagedList<BookingDto>> GetPagedListAsync(int pageNumber);
+        Task<Maybe<List<BookingDto>>> GetBookingsByUserAsync(Guid userId);
     }
 }

@@ -47,10 +47,10 @@ export const AccessTokenVerify = (props) => {
     }
 
 
-    // useEffect(()=>{
-    //     setInterval(checkAccessTokenExpirationTime,10000);
-    //     //console.log(location);
+    useEffect(()=>{
+        setInterval(checkAccessTokenExpirationTime,10000);
+        //console.log(location);
        
-    // },[]);//[location, props]);
+    },[]);//[location, props]);
     return <></>;
 }

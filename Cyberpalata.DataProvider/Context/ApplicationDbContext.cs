@@ -47,7 +47,7 @@ namespace Cyberpalata.DataProvider.Context
             modelBuilder.Entity<Room>().HasMany(r => r.Seats).WithOne(s => s.Room);
             modelBuilder.Entity<Room>().HasOne(r => r.Type).WithMany();
             //modelBuilder.Entity<Room>().HasOne(r => r.Pc).WithOne(p=>p.Room).HasForeignKey<Pc>().OnDelete(DeleteBehavior.NoAction); ;
-            modelBuilder.Entity<Room>().HasMany(r => r.Bookings).WithOne().OnDelete(DeleteBehavior.NoAction);
+            //modelBuilder.Entity<Room>().HasMany(r => r.Bookings).WithOne().OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Periphery>().HasOne(p => p.GamingRoom).WithMany();
             modelBuilder.Entity<GameConsole>().HasOne(gc => gc.ConsoleRoom).WithMany();
@@ -62,7 +62,7 @@ namespace Cyberpalata.DataProvider.Context
 
             modelBuilder.Entity<Booking>().HasMany(b=>b.GamesToDownloadBefore).WithMany();
             modelBuilder.Entity<Booking>().HasOne(b => b.Tariff).WithOne().HasForeignKey<Booking>();
-            //modelBuilder.Entity<Booking>().HasOne().WithMany(r => r.Bookings);
+            modelBuilder.Entity<Booking>().HasOne(b=>b.Room).WithMany(r => r.Bookings).OnDelete(DeleteBehavior.NoAction);
           
         }
 

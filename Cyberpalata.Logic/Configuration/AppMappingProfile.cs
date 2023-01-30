@@ -101,6 +101,7 @@ namespace Cyberpalata.Logic.Configuration
                 .ForMember(dst => dst.Seats, opt => opt.MapFrom(src => src.Seats))
                 .ForMember(dst => dst.Bookings, opt => opt.MapFrom(src => src.Bookings))
                 .ForMember(dst => dst.Pc, opt => opt.MapFrom(src => src.Pc))
+                .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.Type))
                 .ForMember(dst => dst.Peripheries, opt => opt.MapFrom(src => src.Peripheries))
                 .ForMember(dst => dst.Prices, opt => opt.MapFrom(src => src.Prices))
                 .ForMember(dst => dst.Consoles, opt => opt.MapFrom(src => src.Consoles))
@@ -110,6 +111,7 @@ namespace Cyberpalata.Logic.Configuration
                 .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dst => dst.Seats, opt => opt.MapFrom(src => src.Seats))
+                .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.Type))
                 .ForMember(dst => dst.Bookings, opt => opt.MapFrom(src => src.Bookings))
                 .ForMember(dst => dst.Pc, opt => opt.MapFrom(src => src.Pc))
                 .ForMember(dst => dst.Peripheries, opt => opt.MapFrom(src => src.Peripheries))
@@ -125,8 +127,9 @@ namespace Cyberpalata.Logic.Configuration
             CreateMap<Maybe<Booking>, Maybe<BookingDto>>();
             CreateMap<PagedList<Booking>, PagedList<BookingDto>>();
 
-            CreateMap<BookingCreateRequest, BookingDto>()
+            CreateMap<BookingCreateRequest, Booking>()
                 .ForMember(dst => dst.User,opt=>opt.MapFrom(src=>src.User))
+                .ForMember(dst=>dst.Room, opt=>opt.MapFrom(src=>src.Room))
                 .ForMember(dst => dst.Begining, opt => opt.MapFrom(src => src.Begining))
                 .ForMember(dst => dst.Ending, opt => opt.MapFrom(src => src.Ending))
                 .ForMember(dst => dst.Tariff, opt => opt.MapFrom(src => src.Tariff))
