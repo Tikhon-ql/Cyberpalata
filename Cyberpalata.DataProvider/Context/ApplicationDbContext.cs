@@ -46,9 +46,9 @@ namespace Cyberpalata.DataProvider.Context
             modelBuilder.Entity<Room>().HasMany(r => r.Prices).WithOne(p => p.Room);
             modelBuilder.Entity<Room>().HasMany(r => r.Seats).WithOne(s => s.Room);
             modelBuilder.Entity<Room>().HasOne(r => r.Type).WithMany();
+            //modelBuilder.Entity<Room>().HasOne(r => r.Pc).WithOne(p=>p.Room).HasForeignKey<Pc>().OnDelete(DeleteBehavior.NoAction); ;
             modelBuilder.Entity<Room>().HasMany(r => r.Bookings).WithOne().OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<Pc>().HasOne(pc => pc.GamingRoom).WithMany();
             modelBuilder.Entity<Periphery>().HasOne(p => p.GamingRoom).WithMany();
             modelBuilder.Entity<GameConsole>().HasOne(gc => gc.ConsoleRoom).WithMany();
 
@@ -76,7 +76,7 @@ namespace Cyberpalata.DataProvider.Context
             modelBuilder.Entity<Room>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<ApiUser>().Property(a => a.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<UserRefreshToken>().Property(t => t.Id).HasDefaultValueSql("NEWID()");
-            modelBuilder.Entity<Booking>().Property(t => t.Id).HasDefaultValueSql("NEWID()");
+            //modelBuilder.Entity<Booking>().Property(t => t.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<Seat>().Property(s => s.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<Seat>().Property(s => s.Number).ValueGeneratedOnAdd();
         }
