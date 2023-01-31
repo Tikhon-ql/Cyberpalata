@@ -19,8 +19,7 @@ import { BookingComponent } from '../pages/body/Booking/BookingComponent';
 
 export const Index = () => {
     return (
-        <BrowserRouter basename='/'>
-           
+        <BrowserRouter basename='/'>   
             <Routes>
                 <Route path='/' element={<Home />} />
                 <Route path="/gameConsoleRoom" element = {<GameConsoleRoomList/>}/>

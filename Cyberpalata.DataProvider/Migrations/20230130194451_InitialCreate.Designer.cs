@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cyberpalata.DataProvider.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230130160304_InitialCreate")]
+    [Migration("20230130194451_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -408,13 +408,13 @@ namespace Cyberpalata.DataProvider.Migrations
 
             modelBuilder.Entity("SeatsBookings", b =>
                 {
-                    b.Property<Guid>("BookingId")
+                    b.Property<Guid>("BookingsId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("SeatsId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("BookingId", "SeatsId");
+                    b.HasKey("BookingsId", "SeatsId");
 
                     b.HasIndex("SeatsId");
 
@@ -560,7 +560,7 @@ namespace Cyberpalata.DataProvider.Migrations
                 {
                     b.HasOne("Cyberpalata.DataProvider.Models.Booking", null)
                         .WithMany()
-                        .HasForeignKey("BookingId")
+                        .HasForeignKey("BookingsId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 

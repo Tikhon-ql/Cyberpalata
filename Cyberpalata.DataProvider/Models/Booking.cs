@@ -19,8 +19,7 @@ namespace Cyberpalata.DataProvider.Models
         public DateTime Ending { get; set; }
         [Required]
         public virtual Price Tariff { get; set; }
-        [Required]
-        public virtual List<Seat> Seats { get; set; }
+        public virtual List<Seat>? Seats { get; set; }
         public virtual List<Game> GamesToDownloadBefore { get; set; }//have to check is the game in the cyberclub games list
     }
 }

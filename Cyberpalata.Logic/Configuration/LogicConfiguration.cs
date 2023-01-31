@@ -18,18 +18,18 @@ namespace Cyberpalata.Logic.Configuration
                 cfg.AllowNullDestinationValues= true;
             },typeof(AppMappingProfile));
 
-            services.AddTransient<IRoomService, RoomService>();
-            services.AddTransient<IGameService, GameService>();
-            services.AddTransient<IPriceService, PriceService>();
-            services.AddTransient<IApiUserService, ApiUserService>();
-            services.AddTransient<IGameConsoleService, GameConsoleService>();
-            services.AddTransient<IUserRefreshTokenService, UserRefreshTokenService>();
-            services.AddTransient<IAuthenticationService, AuthenticationService>();
-            services.AddTransient<IPcService, PcService>();
-            services.AddTransient<IPeripheryService, PeripheryService>();
-            services.AddTransient<IHashGenerator,HashGenerator>();
-            services.AddTransient<IBookingService, BookingService>();
-            services.AddTransient<ISeatService, SeatService>();
+            services.AddScoped<IRoomService, RoomService>();
+            services.AddScoped<IGameService, GameService>();
+            services.AddScoped<IPriceService, PriceService>();
+            services.AddScoped<IApiUserService, ApiUserService>();
+            services.AddScoped<IGameConsoleService, GameConsoleService>();
+            services.AddScoped<IUserRefreshTokenService, UserRefreshTokenService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IPcService, PcService>();
+            services.AddScoped<IPeripheryService, PeripheryService>();
+            services.AddScoped<IHashGenerator,HashGenerator>();
+            services.AddScoped<IBookingService, BookingService>();
+            services.AddScoped<ISeatService, SeatService>();
             //services.AddScoped<ILoggerManager, LoggerManager>();
             //services.AddTransient<IMenuItemService, MenuItemService>();
         }

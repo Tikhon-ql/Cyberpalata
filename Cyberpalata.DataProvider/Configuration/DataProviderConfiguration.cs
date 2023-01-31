@@ -23,28 +23,22 @@ namespace Cyberpalata.DataProvider.Configuration
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(connectionString);
-                options.UseTriggers(triggerOptions =>
-                {
-                    triggerOptions.AddTrigger<CheckRoomTypeForIsVipPropertyTrigger>();
-                    triggerOptions.AddTrigger<CheckGameConsoleRoomTypeTrigger>();
-                    triggerOptions.AddTrigger<CheckPcRoomTypeTrigger>();
-                    triggerOptions.AddTrigger<CheckPeripheryRoomTypeTrigger>();
-                });
+                options.EnableSensitiveDataLogging();
             });
 
          
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
-            services.AddTransient<IApiUserRepository, ApiUserRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IApiUserRepository, ApiUserRepository>();
             services.AddScoped<IRoomRepository, RoomRepository>();
-            services.AddTransient<IGameRepository, GameRepository>();
-            services.AddTransient<IPriceRepository, PriceRepository>();
-            services.AddTransient<IApiUserRepository, ApiUserRepository>();
-            services.AddTransient<IGameConsoleRepository, GameConsoleRepository>();
-            services.AddTransient<IUserRefreshTokenRepository, UserRefreshTokenRepository>();
-            services.AddTransient<IPcRepository, PcRepository>();
-            services.AddTransient<IPeripheryRepository, PeripheryRepository>();
-            services.AddTransient<IBookingRepository, BookingRepository>();
-            services.AddTransient<ISeatRepository, SeatRepository>();
+            services.AddScoped<IGameRepository, GameRepository>();
+            services.AddScoped<IPriceRepository, PriceRepository>();
+            services.AddScoped<IApiUserRepository, ApiUserRepository>();
+            services.AddScoped<IGameConsoleRepository, GameConsoleRepository>();
+            services.AddScoped<IUserRefreshTokenRepository, UserRefreshTokenRepository>();
+            services.AddScoped<IPcRepository, PcRepository>();
+            services.AddScoped<IPeripheryRepository, PeripheryRepository>();
+            services.AddScoped<IBookingRepository, BookingRepository>();
+            services.AddScoped<ISeatRepository, SeatRepository>();
             //services.AddTransient<IGameConsoleRoomRepository, GameConsoleRoomRepository>();
             //services.AddTransient<ISeatRepository, SeatRepository>();
             //services.AddTransient<IMenuItemRepository, MenuItemRepository>();

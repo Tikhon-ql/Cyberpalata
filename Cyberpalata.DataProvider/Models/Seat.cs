@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cyberpalata.DataProvider.Models
 {
@@ -11,5 +12,6 @@ namespace Cyberpalata.DataProvider.Models
         public int Number { get; set; }
         [Required] 
         public virtual Room Room { get; set; }
+        public virtual List<Booking>? Bookings { get; set; }
     }
 }

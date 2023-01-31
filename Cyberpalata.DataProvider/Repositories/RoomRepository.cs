@@ -75,14 +75,18 @@ namespace Cyberpalata.DataProvider.Repositories
 
             var seats = room.Value.Seats.Where(s => booking.Seats.FirstOrDefault(seat => seat.Number == s.Number) != null).ToList();
 
+            //booking.Room = room.Value;
+            booking.Id = Guid.NewGuid();
             booking.Seats = seats;
             booking.Tariff = price;
 
             var user = await _userRepository.ReadAsync(booking.User.Id);
             booking.User = user.Value;
-
-            await _bookingRepository.CreateAsync(booking);
             room.Value.Bookings.Add(booking);
+
+            //_context.ChangeTracker.Clear();
+
+            //await _bookingRepository.CreateAsync(booking);   
         }
 
         //public async Task<Maybe<List<Seat>>> GetRoomFreeSeats(Guid roomId)

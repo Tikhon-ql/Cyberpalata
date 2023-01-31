@@ -289,15 +289,15 @@ namespace Cyberpalata.DataProvider.Migrations
                 name: "SeatsBookings",
                 columns: table => new
                 {
-                    BookingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BookingsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SeatsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SeatsBookings", x => new { x.BookingId, x.SeatsId });
+                    table.PrimaryKey("PK_SeatsBookings", x => new { x.BookingsId, x.SeatsId });
                     table.ForeignKey(
-                        name: "FK_SeatsBookings_Bookings_BookingId",
-                        column: x => x.BookingId,
+                        name: "FK_SeatsBookings_Bookings_BookingsId",
+                        column: x => x.BookingsId,
                         principalTable: "Bookings",
                         principalColumn: "Id");
                     table.ForeignKey(

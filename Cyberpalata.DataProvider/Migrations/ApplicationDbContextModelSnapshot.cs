@@ -405,13 +405,13 @@ namespace Cyberpalata.DataProvider.Migrations
 
             modelBuilder.Entity("SeatsBookings", b =>
                 {
-                    b.Property<Guid>("BookingId")
+                    b.Property<Guid>("BookingsId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("SeatsId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("BookingId", "SeatsId");
+                    b.HasKey("BookingsId", "SeatsId");
 
                     b.HasIndex("SeatsId");
 
@@ -557,7 +557,7 @@ namespace Cyberpalata.DataProvider.Migrations
                 {
                     b.HasOne("Cyberpalata.DataProvider.Models.Booking", null)
                         .WithMany()
-                        .HasForeignKey("BookingId")
+                        .HasForeignKey("BookingsId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
