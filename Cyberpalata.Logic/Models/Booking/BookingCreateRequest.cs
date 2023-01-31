@@ -1,4 +1,4 @@
-﻿using Cyberpalata.Logic.Models.Identity;
+﻿using Cyberpalata.Logic.Models.Identity.User;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,8 @@ namespace Cyberpalata.Logic.Models.Booking
     {
         [JsonProperty("user")]
         public ApiUserDto User { get; set; } = new ApiUserDto();
-        public RoomDto Room { get; set; } = new RoomDto();
+        //public RoomDto Room { get; set; } = new RoomDto();
+        public Guid RoomId { get; set; }
         public DateTime Begining { get; set; }
         public DateTime Ending { get; set; }
         public PriceDto Tariff { get; set; } = new PriceDto();

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cyberpalata.DataProvider.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230130194451_InitialCreate")]
+    [Migration("20230131151921_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

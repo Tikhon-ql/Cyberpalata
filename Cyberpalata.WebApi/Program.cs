@@ -16,7 +16,7 @@ builder.Host.UseNLog();
 
 var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
 
-builder.Services.AddControllers().AddNewtonsoftJson();
+builder.Services.AddControllers();
 
 builder.Services.AddCors();
 

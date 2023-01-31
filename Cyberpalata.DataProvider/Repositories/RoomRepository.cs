@@ -77,13 +77,21 @@ namespace Cyberpalata.DataProvider.Repositories
 
             //booking.Room = room.Value;
             booking.Id = Guid.NewGuid();
+           
             booking.Seats = seats;
+
+            foreach(var seat in seats)
+            {
+                seat.Bookings.Add(booking);
+            }
+
             booking.Tariff = price;
 
             var user = await _userRepository.ReadAsync(booking.User.Id);
             booking.User = user.Value;
+            booking.Room = room.Value;
             room.Value.Bookings.Add(booking);
-
+            //_context.Bookings.Add(booking);
             //_context.ChangeTracker.Clear();
 
             //await _bookingRepository.CreateAsync(booking);   

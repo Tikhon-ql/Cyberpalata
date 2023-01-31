@@ -87,8 +87,6 @@ namespace Cyberpalata.WebApi.Controllers
 
             //request.User.Id = User.Claims.Single(claim => claim.Type == JwtRegisteredClaimNames.Sid);
             request.User.Surname = "Grek";
-            request.Room.Type = RoomType.GamingRoom;
-            request.Room.Name = "Gaming room 1";
             //await _bookingService.CreateAsync(request);
             await _roomService.AddBookingToRoom(request);
             return await ReturnSuccess();

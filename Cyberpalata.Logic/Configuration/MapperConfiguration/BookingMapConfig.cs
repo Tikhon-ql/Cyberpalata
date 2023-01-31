@@ -22,7 +22,6 @@ namespace Cyberpalata.Logic.Configuration.MapperConfiguration
 
             profile.CreateMap<BookingCreateRequest, Booking>()
                 .ForMember(dst => dst.User, opt => opt.MapFrom(src => src.User))
-                .ForMember(dst => dst.Room, opt => opt.MapFrom(src => src.Room))
                 .ForMember(dst => dst.Begining, opt => opt.MapFrom(src => src.Begining))
                 .ForMember(dst => dst.Ending, opt => opt.MapFrom(src => src.Ending))
                 .ForMember(dst => dst.Tariff, opt => opt.MapFrom(src => src.Tariff))

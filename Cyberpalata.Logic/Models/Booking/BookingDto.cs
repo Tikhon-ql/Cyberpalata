@@ -1,4 +1,4 @@
-﻿using Cyberpalata.Logic.Models.Identity;
+﻿using Cyberpalata.Logic.Models.Identity.User;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

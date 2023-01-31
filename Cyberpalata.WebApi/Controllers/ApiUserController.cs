@@ -1,6 +1,7 @@
 ﻿using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models;
+using Cyberpalata.Logic.Models.Identity.User;
 using Cyberpalata.ViewModel;
 using Cyberpalata.ViewModel.Rooms;
 using Cyberpalata.ViewModel.User;
@@ -30,65 +31,82 @@ namespace Cyberpalata.WebApi.Controllers
         [HttpGet("profile")]
         public async Task<IActionResult> Profile()
         {
-            if(!ModelState.IsValid)
+            //if(!ModelState.IsValid)
+            //{
+            //    return BadRequest($"Bad request: {ModelState.ToString()}");
+            //}
+            //var id = Guid.Parse(User.Claims.Single(claim => claim.Type == JwtRegisteredClaimNames.Sid).Value.ToString());
+            //var user = await _userService.ReadAsync(id);
+            //if (user.HasNoValue)
+            //    return BadRequest($"User with id: {id} doesn't exist!");          
+
+            //var viewModel = new ProfileViewModel
+            //{
+            //    User = new UserViewModel
+            //    {
+            //        Name = user.Value.Username,
+            //        Surname = user.Value.Surname,
+            //        Email = user.Value.Email,
+            //        Phone = user.Value.Phone
+            //    }
+            //};
+
+            //var bookings = await _bookingService.GetBookingsByUserAsync(id);
+
+            //if (bookings.HasValue)
+            //{
+            //    foreach(var booking in bookings.Value)
+            //    {
+            //        var resultSeats = new List<UserSeatViewModel>();
+            //        var seats = await _seatService.GetSeatsByRoomId(booking.Room.Id);
+            //        if (seats.HasNoValue)
+            //            continue;
+
+            //        seats.Value.ForEach(seat =>
+            //        {
+            //            resultSeats.Add(new UserSeatViewModel
+            //            {
+            //                Number = seat.Number,
+            //                Type = seat.IsFree ? SeatType.Free : SeatType.IsTaken
+            //            });
+            //        });
+
+            //        resultSeats.OrderBy(seat => seat.Number);
+            //        foreach(var bookingSeat in booking.Seats)
+            //        {
+            //            resultSeats[bookingSeat.Number - 1].Type = SeatType.UsersSeat;
+            //        }
+
+            //        var bookingViewModel = new UserBookingViewModel
+            //        {
+            //            RoomName = booking.Room.Name,
+            //            Begining = booking.Begining,
+            //            Ending = booking.Ending,
+            //            Tariff = new PriceViewModel(booking.Tariff.Hours, booking.Tariff.Cost),
+            //            Seats = resultSeats
+            //        };
+            //        viewModel.Bookings.Add(bookingViewModel);
+            //    }
+            //}
+            var id = Guid.Parse(User.Claims.Single(claim => claim.Type == JwtRegisteredClaimNames.Sid).Value.ToString());
+            var user = await _userService.ReadAsync(id);
+            //if (user.HasNoValue)
+            //    return BadRequest($"User with id: {id} doesn't exist!"); // we dont need it?
+
+            return Ok(new ProfileViewModel {Username = user.Value.Username, Surname = user.Value.Surname, Email = user.Value.Email, Phone = user.Value.Phone });
+        }
+
+        [Authorize]
+        [HttpPost("profileEditing")]
+        public async Task<IActionResult> EditProfile(UserUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
             {
                 return BadRequest($"Bad request: {ModelState.ToString()}");
             }
-            var id = Guid.Parse(User.Claims.Single(claim => claim.Type == JwtRegisteredClaimNames.Sid).Value.ToString());
-            var user = await _userService.ReadAsync(id);
-            if (user.HasNoValue)
-                return BadRequest($"User with id: {id} doesn't exist!");          
-
-            var viewModel = new ProfileViewModel
-            {
-                User = new UserViewModel
-                {
-                    Name = user.Value.Username,
-                    Surname = user.Value.Surname,
-                    Email = user.Value.Email,
-                    Phone = user.Value.Phone
-                }
-            };
-
-            var bookings = await _bookingService.GetBookingsByUserAsync(id);
-
-            if (bookings.HasValue)
-            {
-                foreach(var booking in bookings.Value)
-                {
-                    var resultSeats = new List<UserSeatViewModel>();
-                    var seats = await _seatService.GetSeatsByRoomId(booking.Room.Id);
-                    if (seats.HasNoValue)
-                        continue;
-
-                    seats.Value.ForEach(seat =>
-                    {
-                        resultSeats.Add(new UserSeatViewModel
-                        {
-                            Number = seat.Number,
-                            Type = seat.IsFree ? SeatType.Free : SeatType.IsTaken
-                        });
-                    });
-
-                    resultSeats.OrderBy(seat => seat.Number);
-                    foreach(var bookingSeat in booking.Seats)
-                    {
-                        resultSeats[bookingSeat.Number - 1].Type = SeatType.UsersSeat;
-                    }
-
-                    var bookingViewModel = new UserBookingViewModel
-                    {
-                        RoomName = booking.Room.Name,
-                        Begining = booking.Begining,
-                        Ending = booking.Ending,
-                        Tariff = new PriceViewModel(booking.Tariff.Hours, booking.Tariff.Cost),
-                        Seats = resultSeats
-                    };
-                    viewModel.Bookings.Add(bookingViewModel);
-                }
-            }
-
-            return Ok(viewModel);
+            request.UserId = Guid.Parse(User.Claims.Single(claim => claim.Type == JwtRegisteredClaimNames.Sid).Value.ToString());
+            await _userService.UpdateUserAsync(request);
+            return await ReturnSuccess();
         }
     }
 }

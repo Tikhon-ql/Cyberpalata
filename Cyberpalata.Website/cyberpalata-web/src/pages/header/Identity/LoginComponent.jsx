@@ -24,7 +24,6 @@ export const LoginComponent = () => {
             localStorage.setItem('accessToken', res.data.accessToken);
             localStorage.setItem('refreshToken', res.data.refreshToken);
             localStorage.setItem('isAuthenticated', true);
-
             navigate("/");
         });
     }

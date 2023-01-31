@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Models.Identity;
-using Cyberpalata.Logic.Models.Identity;
+using Cyberpalata.Logic.Models.Identity.User;
 using Cyberpalata.Logic.Models.Peripheral;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace Cyberpalata.Logic.Configuration.MapperConfiguration
     {
         public static void CreateMap(AppMappingProfile profile)
         {
-            profile.CreateMap<AuthorizationRequest, ApiUser>()
+            profile.CreateMap<UserCreateRequest, ApiUser>()
                 .ForMember(dst => dst.Username, opt => opt.MapFrom(src => src.Username))
                 .ForMember(dst => dst.Surname, opt => opt.MapFrom(src => src.Surname))
                 .ForMember(dst => dst.Email, opt => opt.MapFrom(src => src.Email))

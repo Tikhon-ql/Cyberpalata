@@ -1,6 +1,7 @@
 ﻿using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models.Identity;
+using Cyberpalata.Logic.Models.Identity.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -28,7 +29,7 @@ namespace Cyberpalata.WebApi.Controllers
       
 
         [HttpPost("register")]
-        public async Task<IActionResult> Registration(AuthorizationRequest request)
+        public async Task<IActionResult> Registration(UserCreateRequest request)
         {
             if (!ModelState.IsValid)
             {

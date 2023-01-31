@@ -13,6 +13,6 @@ namespace Cyberpalata.ViewModel.User
         public DateTime Begining { get; set; }
         public DateTime Ending { get; set; }
         public PriceViewModel Tariff { get; set; }
-        public List<UserSeatViewModel> Seats { get; set; } 
+        public List<UserSeatViewModel> Seats { get; set; }
     }
 }

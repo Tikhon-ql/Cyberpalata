@@ -4,7 +4,7 @@ using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.Logic.Interfaces;
-using Cyberpalata.Logic.Models.Identity;
+using Cyberpalata.Logic.Models.Identity.User;
 
 namespace Cyberpalata.Logic.Services
 {
@@ -23,7 +23,7 @@ namespace Cyberpalata.Logic.Services
             _hashGenerator = hashGenerator;
         }
 
-        public async Task<Result> CreateAsync(AuthorizationRequest request)
+        public async Task<Result> CreateAsync(UserCreateRequest request)
         {
             var res = await ValidateUserAsync(request);
 
@@ -47,7 +47,7 @@ namespace Cyberpalata.Logic.Services
             return Result.Success();
         }
 
-        public async Task<Result> ValidateUserAsync(AuthorizationRequest request)
+        public async Task<Result> ValidateUserAsync(UserCreateRequest request)
         {
             var user = await _userRepository.ReadAsync(request.Email);
 
@@ -62,6 +62,19 @@ namespace Cyberpalata.Logic.Services
             var user = await _userRepository.ReadAsync(id);
             var result = _mapper.Map<ApiUserDto>(user.Value);
             return result;
+        }
+
+        public async Task UpdateUserAsync(UserUpdateRequest request)
+        {
+            var user = await _userRepository.ReadAsync(request.UserId);
+            if(request.Username != String.Empty)
+                user.Value.Username = request.Username;
+            if(request.Surname != String.Empty)
+                user.Value.Surname = request.Surname;
+            if(request.Email != String.Empty)
+                user.Value.Email = request.Email;
+            if(request.Phone != String.Empty)
+                user.Value.Phone = request.Phone;
         }
     }
 }

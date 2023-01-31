@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Cyberpalata.Logic.Models.Identity
+namespace Cyberpalata.Logic.Models.Identity.User
 {
-    public class AuthorizationRequest
+    public class UserCreateRequest
     {
         [Required]
         public string Username { get; set; }
@@ -17,9 +17,9 @@ namespace Cyberpalata.Logic.Models.Identity
         //[Required]
         //[DataType(DataType.Password)]
         public string Password { get; set; }
-        
+
         //[DataType(DataType.Password)]
         //[Compare("Password")]
         public string PasswordConfirm { get; set; }
-}
+    }
 }

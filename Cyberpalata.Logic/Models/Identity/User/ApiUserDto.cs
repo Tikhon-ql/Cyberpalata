@@ -1,7 +1,7 @@
 ﻿using Cyberpalata.Logic.Models.Booking;
 using System.ComponentModel.DataAnnotations;
 
-namespace Cyberpalata.Logic.Models.Identity
+namespace Cyberpalata.Logic.Models.Identity.User
 {
     public class ApiUserDto
     {

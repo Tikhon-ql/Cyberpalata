@@ -4,6 +4,7 @@ using Cyberpalata.DataProvider.Models;
 using Cyberpalata.DataProvider.Models.Identity;
 using Microsoft.EntityFrameworkCore;
 using Cyberpalata.Common.Enums;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Cyberpalata.DataProvider.Context
 {
@@ -33,19 +34,16 @@ namespace Cyberpalata.DataProvider.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             ConfigureIdAutoGeneration(modelBuilder);
             UniqueIndexesCreating(modelBuilder);
             ConfigureRelationships(modelBuilder);
             ConstraintsConfiguration(modelBuilder);
             InitialData(modelBuilder);
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder);      
         }
 
         private void ConfigureRelationships(ModelBuilder modelBuilder)
         {
-
-
             modelBuilder.Entity<Room>().HasMany(r => r.Prices).WithOne(p => p.Room);
             modelBuilder.Entity<Room>().HasMany(r => r.Seats).WithOne(s => s.Room);
             modelBuilder.Entity<Room>().HasOne(r => r.Type).WithMany();
@@ -58,10 +56,10 @@ namespace Cyberpalata.DataProvider.Context
             modelBuilder.Entity<UserRefreshToken>().HasOne(urt => urt.User).WithMany();
             modelBuilder.Entity<Periphery>().HasOne(p => p.Type).WithMany();
 
-            modelBuilder.Entity<Booking>().HasMany(b => b.Seats).WithMany(s=>s.Bookings)
-                .UsingEntity<Dictionary<Guid, Guid>>("SeatsBookings",
-                j => j.HasOne<Seat>().WithMany().OnDelete(DeleteBehavior.NoAction),
-                j => j.HasOne<Booking>().WithMany().OnDelete(DeleteBehavior.NoAction));
+            modelBuilder.Entity<Booking>().HasMany(b => b.Seats).WithMany(s => s.Bookings)
+                    .UsingEntity<Dictionary<Guid, Guid>>("SeatsBookings",
+                    j => j.HasOne<Seat>().WithMany().OnDelete(DeleteBehavior.NoAction),
+                    j => j.HasOne<Booking>().WithMany().OnDelete(DeleteBehavior.NoAction));
 
             //modelBuilder.Entity<Booking>().HasMany(b => b.Seats).WithMany(s => s.Bookings);
             modelBuilder.Entity<Booking>().HasMany(b => b.GamesToDownloadBefore).WithMany();
