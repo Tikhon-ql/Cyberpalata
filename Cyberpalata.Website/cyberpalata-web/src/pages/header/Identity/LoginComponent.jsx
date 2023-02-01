@@ -42,7 +42,8 @@ export const LoginComponent = () => {
             <input type="password" name="password" className="form-control" id="exampleInputPassword1"/>
         </div>
         <div className="d-flex justify-content-around">
-            <button type="submit" className="btn btn-outline-dark mr-3 w-25">Login</button>
+            <button type="submit" className="btn btn-outline-dark mr-3 w-25">Login</button> 
+            <Link to='/passwordRecovering' className="btn btn-outline-dark ml-3 w-25">Forgot password</Link>
             <Link to='/register' className="btn btn-outline-dark ml-3 w-25">Register</Link>
             <Link to='/' className="btn btn-outline-dark ml-3 w-25">Cancel</Link>
         </div>

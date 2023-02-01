@@ -38,7 +38,8 @@ namespace Cyberpalata.WebApi.Controllers
             var result = await _userService.CreateAsync(request);
             if (result.IsFailure)
                 return BadRequest(result.Error);
-            return await ReturnSuccess();
+            
+            return Ok();
         }
 
         [HttpPost("login")]

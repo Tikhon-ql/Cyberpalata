@@ -5,6 +5,10 @@ using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models.Identity.User;
+using Microsoft.Extensions.Configuration;
+using System.ComponentModel.DataAnnotations;
+using System.Net;
+using System.Net.Mail;
 
 namespace Cyberpalata.Logic.Services
 {
@@ -12,14 +16,16 @@ namespace Cyberpalata.Logic.Services
     {
         private readonly IApiUserRepository _userRepository;
         private readonly IUserRefreshTokenRepository _refreshTokenRepository;
+        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private readonly IHashGenerator _hashGenerator;
 
-        public ApiUserService(IApiUserRepository userRepository, IUserRefreshTokenRepository refreshTokenRepository, IMapper mapper, IHashGenerator hashGenerator)
+        public ApiUserService(IApiUserRepository userRepository, IUserRefreshTokenRepository refreshTokenRepository, IMapper mapper, IHashGenerator hashGenerator, IConfiguration configuration)
         {
             _userRepository = userRepository;
             _refreshTokenRepository = refreshTokenRepository;
             _mapper = mapper;
+            _configuration = configuration;
             _hashGenerator = hashGenerator;
         }
 
@@ -75,6 +81,72 @@ namespace Cyberpalata.Logic.Services
                 user.Value.Email = request.Email;
             if(request.Phone != String.Empty)
                 user.Value.Phone = request.Phone;
+        }
+
+        public async Task PasswordRecoveryAsync([EmailAddress]string email)
+        {
+            var message = new MailMessage();
+            message.From = new MailAddress(_configuration["EmailSettings:EmailAddress"]);
+            message.To.Add(new MailAddress(email));
+
+            message.Subject = "Password recovering";
+            message.Body = @$"<html>
+                                <div>
+                                    <a href='http://localhost:3000/passwordReset/{email}'>Reset password</a>
+                                </div>
+                            </html>";
+            message.IsBodyHtml = true;
+            var smtpClient = new SmtpClient("smtp.gmail.com",587);
+            smtpClient.Credentials = new NetworkCredential(_configuration["EmailSettings:EmailAddress"], _configuration["EmailSettings:Password"]);
+            smtpClient.EnableSsl = true;
+            smtpClient.Send(message);
+        }
+
+        public async Task<Result> ResetPasswordAsync(PasswordResetRequest request)
+        {
+            var user = await _userRepository.ReadAsync(request.Email);
+            if (user.HasNoValue)
+                return Result.Failure($"User with email:{request.Email} doesn't exist");
+            user.Value.Salt = _hashGenerator.GenerateSalt();
+            user.Value.Password = _hashGenerator.HashPassword($"{request.Password}{user.Value.Salt}");
+            return Result.Success();
+        }
+
+        public Task<Result> MailConfirmAsync(string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<int> SendCodeToMailAsync(string email)
+        {
+            var rnd = new Random(DateTime.Now.Millisecond);
+            int code = rnd.Next(100000,9999999);
+            var message = new MailMessage();
+            message.From = new MailAddress(_configuration["EmailSettings:EmailAddress"]);
+            message.To.Add(new MailAddress(email));
+
+            message.Subject = "Password recovering";
+            message.Body = @$"<html>
+                                <div>
+                                    <h1>You code:</h1><br/>
+                                    <div><b>{code}</b></div>
+                                </div>
+                            </html>";
+            message.IsBodyHtml = true;
+            var smtpClient = new SmtpClient("smtp.gmail.com", 587);
+            smtpClient.Credentials = new NetworkCredential(_configuration["EmailSettings:EmailAddress"], _configuration["EmailSettings:Password"]);
+            smtpClient.EnableSsl = true;
+            await smtpClient.SendMailAsync(message);
+            return code;
+        }
+
+        public async Task<Result> DeleteAsync(string email)
+        {
+            var user = await _userRepository.ReadAsync(email);
+            if (user.HasNoValue)
+                return Result.Failure($"User with email: {email} doesn't exist");
+            _userRepository.Delete(user.Value);
+            return Result.Success();
         }
     }
 }

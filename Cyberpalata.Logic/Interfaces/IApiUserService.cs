@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Cyberpalata.Logic.Models.Identity.User;
+using System.ComponentModel.DataAnnotations;
 
 namespace Cyberpalata.Logic.Interfaces
 {
@@ -9,5 +10,10 @@ namespace Cyberpalata.Logic.Interfaces
         Task<Maybe<ApiUserDto>> ReadAsync(Guid id);
         Task<Result> ValidateUserAsync(UserCreateRequest request);
         Task UpdateUserAsync(UserUpdateRequest request);
+        Task PasswordRecoveryAsync([EmailAddress]string email);
+        Task<Result> ResetPasswordAsync(PasswordResetRequest request);
+        Task<Result> MailConfirmAsync(string email);
+        Task<int> SendCodeToMailAsync(string email);
+        Task<Result> DeleteAsync(string email);
     }
 }

@@ -16,6 +16,9 @@ import { GamingRoomList } from '../pages/body/GamingRoom/GamingRoomList';
 import {GamingRoom} from '../pages/body/GamingRoom/GamingRoom'
 import { GamingRoomTypeChoosing } from '../pages/body/GamingRoom/GamingRoomTypeChoosing';
 import { BookingComponent } from '../pages/body/Booking/BookingComponent';
+import { PasswordRecovering } from '../pages/header/Identity/PasswordRecovering';
+import { ResetPassword } from '../pages/header/Identity/ResetPassword';
+import { EmailConfirm } from '../pages/header/Identity/EmailConfirm';
 
 export const Index = () => {
     return (
@@ -29,10 +32,13 @@ export const Index = () => {
                 <Route path="/gamingRooms/:id/:name/:type" element = {<GamingRoom/>}/>
                 <Route path="/gamesLibrary" element = {<GameLibrary/>}/>          
                 <Route path="/login" element = {<LoginComponent/>}/>                
+                <Route path="/passwordRecovering" element = {<PasswordRecovering/>}/>                
+                <Route path="/passwordReset/:email" element = {<ResetPassword/>}/>                
                 <Route path="/logout" element = {<LogoutComponent/>}/>                
                 <Route path="/register" element = {<RegistrationComponent/>}/>
                 <Route path="/profile" element={<ProfileComponent/>}/>
                 <Route path="/booking/:roomId/:roomName/:roomType" element={<BookingComponent/>}/>
+                <Route path="/emailConfirm" element={<EmailConfirm/>}/>
             </Routes>
             <AccessTokenVerify/>          
         </BrowserRouter>

@@ -8,6 +8,7 @@ using Cyberpalata.ViewModel.User;
 using Cyberpalata.ViewModel.User.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Mail;
@@ -112,13 +113,44 @@ namespace Cyberpalata.WebApi.Controllers
         }
 
         [HttpGet("passwordRecovering")]
-        public async Task<IActionResult> PasswordRecovering(string email)
+        public async Task<IActionResult> PasswordRecovering([EmailAddress]string email)
         {
-            var smtpClint = new SmtpClient(email)
-            {
-                Port = 587,
-            };
+            await _userService.PasswordRecoveryAsync(email);
             return Ok();
+        }
+        [HttpPost("passwordRecovering")]
+        public async Task<IActionResult> PasswordRecovering(PasswordResetRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest($"Bad request: {ModelState.ToString()}");
+            }
+            var result = await _userService.ResetPasswordAsync(request);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+            return await ReturnSuccess();
+        }
+
+        [HttpPost("emailConfirm")]
+        public async Task<IActionResult> EmailConfrim(bool result,string email)
+        {
+            if (!result)
+            {
+                var deleteResult = await _userService.DeleteAsync(email);
+                if (deleteResult.IsFailure)
+                    return BadRequest(deleteResult.Error);
+            }     
+            return await ReturnSuccess();
+        }
+        [HttpPost("emailConfirm")]
+        public async Task<IActionResult> EmailConfrim([EmailAddress]string email)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest($"Bad request: {ModelState.ToString()}");
+            }
+            int code = await _userService.SendCodeToMailAsync(email);
+            return Ok(code);
         }
     }
 }
