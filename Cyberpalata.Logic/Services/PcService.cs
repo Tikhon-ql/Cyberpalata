@@ -65,7 +65,7 @@ namespace Cyberpalata.Logic.Services
             var room = await _roomRepository.ReadAsync(roomId);
             if (room.HasNoValue)
                 return Maybe.None;
-            Maybe<Pc> pc = room.Value.Pc;
+            Maybe<Pc> pc = Maybe.None;
             if(pc.HasNoValue) 
                 return Maybe.None;
             return _mapper.Map<PcDto>(pc.Value);

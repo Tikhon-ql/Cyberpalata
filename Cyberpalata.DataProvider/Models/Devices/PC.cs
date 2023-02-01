@@ -24,7 +24,8 @@ namespace Cyberpalata.DataProvider.Models.Devices
         [Required]
         [MaxLength(50)] 
         public string Ssd { get; set; } = String.Empty;
+        public Guid RoomId { get; set; }
         [ForeignKey("RoomId")]
-        public virtual Room Room { get; set; } 
+        public virtual Room Room { get; set; }
     }
 }

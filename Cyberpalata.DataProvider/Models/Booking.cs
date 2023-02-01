@@ -10,16 +10,22 @@ namespace Cyberpalata.DataProvider.Models
         [Key]
         public Guid Id { get; set; }
         [Required]//constraint gaming room X game console room only
+        public Guid RoomId { get; set; }
+        [ForeignKey("RoomId")]
         public virtual Room Room { get; set; }
         [Required]
+        public Guid UserId { get; set; }
+        [ForeignKey("UserId")]
         public virtual ApiUser User { get; set; }
         [Required]
         public DateTime Begining { get; set; }
         [Required]
         public DateTime Ending { get; set; }
         [Required]
+        public Guid PriceId { get; set; }
+        [ForeignKey("PriceId")]
         public virtual Price Tariff { get; set; }
-        public virtual List<Seat>? Seats { get; set; }
+        public virtual List<Seat> Seats { get; set; }
         public virtual List<Game> GamesToDownloadBefore { get; set; }//have to check is the game in the cyberclub games list
     }
 }

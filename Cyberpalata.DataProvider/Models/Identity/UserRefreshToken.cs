@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cyberpalata.DataProvider.Models.Identity
 {
@@ -6,7 +7,9 @@ namespace Cyberpalata.DataProvider.Models.Identity
     {
         [Key] 
         public Guid Id { get; set; }
-        [Required] 
+        [Required]
+        public Guid UserId { get; set; }
+        [ForeignKey("UserId")]
         public virtual ApiUser User { get; set; }
         [Required]
         public string RefreshToken { get; set; }

@@ -4,6 +4,7 @@ using Cyberpalata.DataProvider.Context.Triggers;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -22,7 +23,7 @@ namespace Cyberpalata.DataProvider.Configuration
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlServer(connectionString);
+                options.UseSqlServer(connectionString).UseLazyLoadingProxies();
                 options.EnableSensitiveDataLogging();
             });
 

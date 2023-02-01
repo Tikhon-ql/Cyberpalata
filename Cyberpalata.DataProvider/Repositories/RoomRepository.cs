@@ -31,7 +31,7 @@ namespace Cyberpalata.DataProvider.Repositories
         public async Task<Maybe<Room>> ReadAsync(Guid id)
         {
             //Include everything?
-            var room = await _context.Rooms.FirstOrDefaultAsync(r => r.Id == id);
+            var room = await _context.Rooms.AsTracking().FirstOrDefaultAsync(r => r.Id == id);
             return room;
         }
 
@@ -70,7 +70,8 @@ namespace Cyberpalata.DataProvider.Repositories
         public async Task AddBookingToRoomAsync(Guid roomId, Booking booking)
         {
             var room = await ReadAsync(roomId);
-
+            
+            //room.Value.Bookings.Add(new Booking());
             var price = room.Value.Prices.FirstOrDefault(p => p.Hours == booking.Tariff.Hours);
 
             var seats = room.Value.Seats.Where(s => booking.Seats.FirstOrDefault(seat => seat.Number == s.Number) != null).ToList();
@@ -91,10 +92,8 @@ namespace Cyberpalata.DataProvider.Repositories
             booking.User = user.Value;
             booking.Room = room.Value;
             room.Value.Bookings.Add(booking);
-            //_context.Bookings.Add(booking);
-            //_context.ChangeTracker.Clear();
-
-            //await _bookingRepository.CreateAsync(booking);   
+            _context.Bookings.Add(booking);
+            Console.WriteLine("Hello");
         }
 
         //public async Task<Maybe<List<Seat>>> GetRoomFreeSeats(Guid roomId)

@@ -14,18 +14,6 @@ namespace Cyberpalata.DataProvider.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Games",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
-                    GameName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Games", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "PeripheryType",
                 columns: table => new
                 {
@@ -115,23 +103,17 @@ namespace Cyberpalata.DataProvider.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
                     ConsoleName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    ConsoleRoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_GameConsoles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_GameConsoles_Rooms_ConsoleRoomId",
-                        column: x => x.ConsoleRoomId,
-                        principalTable: "Rooms",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_GameConsoles_Rooms_RoomId",
                         column: x => x.RoomId,
                         principalTable: "Rooms",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -164,8 +146,7 @@ namespace Cyberpalata.DataProvider.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     TypeId = table.Column<int>(type: "int", nullable: false),
-                    GamingRoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -177,16 +158,11 @@ namespace Cyberpalata.DataProvider.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Peripheries_Rooms_GamingRoomId",
-                        column: x => x.GamingRoomId,
-                        principalTable: "Rooms",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Peripheries_Rooms_RoomId",
                         column: x => x.RoomId,
                         principalTable: "Rooms",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -237,14 +213,15 @@ namespace Cyberpalata.DataProvider.Migrations
                     RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Begining = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Ending = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Ending = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PriceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Bookings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Bookings_Prices_Id",
-                        column: x => x.Id,
+                        name: "FK_Bookings_Prices_PriceId",
+                        column: x => x.PriceId,
                         principalTable: "Prices",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -262,27 +239,21 @@ namespace Cyberpalata.DataProvider.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BookingGame",
+                name: "Games",
                 columns: table => new
                 {
-                    BookingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    GamesToDownloadBeforeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
+                    GameName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    BookingId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BookingGame", x => new { x.BookingId, x.GamesToDownloadBeforeId });
+                    table.PrimaryKey("PK_Games", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BookingGame_Bookings_BookingId",
+                        name: "FK_Games_Bookings_BookingId",
                         column: x => x.BookingId,
                         principalTable: "Bookings",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_BookingGame_Games_GamesToDownloadBeforeId",
-                        column: x => x.GamesToDownloadBeforeId,
-                        principalTable: "Games",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -330,9 +301,9 @@ namespace Cyberpalata.DataProvider.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookingGame_GamesToDownloadBeforeId",
-                table: "BookingGame",
-                column: "GamesToDownloadBeforeId");
+                name: "IX_Bookings_PriceId",
+                table: "Bookings",
+                column: "PriceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bookings_RoomId",
@@ -345,25 +316,20 @@ namespace Cyberpalata.DataProvider.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GameConsoles_ConsoleRoomId",
-                table: "GameConsoles",
-                column: "ConsoleRoomId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_GameConsoles_RoomId",
                 table: "GameConsoles",
                 column: "RoomId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Games_BookingId",
+                table: "Games",
+                column: "BookingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Pcs_RoomId",
                 table: "Pcs",
                 column: "RoomId",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Peripheries_GamingRoomId",
-                table: "Peripheries",
-                column: "GamingRoomId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Peripheries_RoomId",
@@ -417,10 +383,10 @@ namespace Cyberpalata.DataProvider.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "BookingGame");
+                name: "GameConsoles");
 
             migrationBuilder.DropTable(
-                name: "GameConsoles");
+                name: "Games");
 
             migrationBuilder.DropTable(
                 name: "Pcs");
@@ -433,9 +399,6 @@ namespace Cyberpalata.DataProvider.Migrations
 
             migrationBuilder.DropTable(
                 name: "SeatsBookings");
-
-            migrationBuilder.DropTable(
-                name: "Games");
 
             migrationBuilder.DropTable(
                 name: "PeripheryType");

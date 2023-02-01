@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Cyberpalata.DataProvider": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

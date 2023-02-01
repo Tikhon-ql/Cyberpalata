@@ -70,15 +70,15 @@ namespace Cyberpalata.WebApi.Controllers
                 pcInfo = roomsPc.Value;        
 
             var pcInfoList = new List<PcInfo>();
-            foreach (var item in pcInfo.GetType().GetProperties())
-            {
-                if (item.Name != "Id")
-                {
-                    string type = item.Name;
-                    string name = item.GetValue(pcInfo).ToString();
-                    pcInfoList.Add(new PcInfo(type, name));
-                }
-            }
+            //foreach (var item in pcInfo.GetType().GetProperties())
+            //{
+            //    if (item.Name != "Id")
+            //    {
+            //        string type = item.Name;
+            //        string name = item.GetValue(pcInfo).ToString();
+            //        pcInfoList.Add(new PcInfo(type, name));
+            //    }
+            //}
             var viewModel = new GamingRoomViewModel
             {
                 PcInfos= pcInfoList,

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Cyberpalata.Common.Enums;
 
 namespace Cyberpalata.DataProvider.Models
@@ -13,7 +14,9 @@ namespace Cyberpalata.DataProvider.Models
         public string Name { get; set; }
         [Required] 
         public decimal Cost { get; set; }
-        [Required] 
+        [Required]
+        public int TypeId { get; set; }
+        [ForeignKey("TypeId")]
         public virtual MenuItemType Type { get; set; }
     }
 }

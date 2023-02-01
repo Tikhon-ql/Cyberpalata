@@ -16,13 +16,15 @@ namespace Cyberpalata.Logic.Configuration.MapperConfiguration
     {
         public static void CreateMap(AppMappingProfile profile)
         {
+            profile.AllowNullCollections = true;
+            profile.AllowNullDestinationValues = true;
             profile.CreateMap<Room, RoomDto>()
                 .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dst => dst.Seats, opt => opt.MapFrom(src => src.Seats))
                 .ForMember(dst => dst.Bookings, opt => opt.MapFrom(src => src.Bookings))
-                .ForMember(dst => dst.Pc, opt => opt.MapFrom(src => src.Pc))
-                .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.Type))
+                //.ForMember(dst => dst.Pc, opt => opt.MapFrom(src => src.Pc))
+                //.ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.Type))
                 .ForMember(dst => dst.Peripheries, opt => opt.MapFrom(src => src.Peripheries))
                 .ForMember(dst => dst.Prices, opt => opt.MapFrom(src => src.Prices))
                 .ForMember(dst => dst.Consoles, opt => opt.MapFrom(src => src.Consoles))
@@ -32,9 +34,9 @@ namespace Cyberpalata.Logic.Configuration.MapperConfiguration
                 .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dst => dst.Seats, opt => opt.MapFrom(src => src.Seats))
-                .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.Type))
+                //.ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.Type))
                 .ForMember(dst => dst.Bookings, opt => opt.MapFrom(src => src.Bookings))
-                .ForMember(dst => dst.Pc, opt => opt.MapFrom(src => src.Pc))
+                //.ForMember(dst => dst.Pc, opt => opt.MapFrom(src => src.Pc))
                 .ForMember(dst => dst.Peripheries, opt => opt.MapFrom(src => src.Peripheries))
                 .ForMember(dst => dst.Prices, opt => opt.MapFrom(src => src.Prices))
                 .ForMember(dst => dst.Consoles, opt => opt.MapFrom(src => src.Consoles))

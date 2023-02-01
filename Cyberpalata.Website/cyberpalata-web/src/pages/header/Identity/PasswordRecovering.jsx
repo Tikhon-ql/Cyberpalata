@@ -1,10 +1,13 @@
-
+import axios from "axios"
 
 export const PasswordRecovering = ()=>{
 
     function sendRecoveringMessage(event)
     {
-        
+        const baseUrl = `https://localhost:7227`;
+        const apiUrl = `${baseUrl}/users/passwordRecovering`;
+
+        axios.get(apiUrl, event.target.elements.email.value).then().catch(console.log);
     }
 
     return <div className="row">

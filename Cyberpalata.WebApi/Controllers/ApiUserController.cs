@@ -9,6 +9,8 @@ using Cyberpalata.ViewModel.User.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
+using System.Net.Mail;
 
 namespace Cyberpalata.WebApi.Controllers
 {
@@ -107,6 +109,16 @@ namespace Cyberpalata.WebApi.Controllers
             request.UserId = Guid.Parse(User.Claims.Single(claim => claim.Type == JwtRegisteredClaimNames.Sid).Value.ToString());
             await _userService.UpdateUserAsync(request);
             return await ReturnSuccess();
+        }
+
+        [HttpGet("passwordRecovering")]
+        public async Task<IActionResult> PasswordRecovering(string email)
+        {
+            var smtpClint = new SmtpClient(email)
+            {
+                Port = 587,
+            };
+            return Ok();
         }
     }
 }
