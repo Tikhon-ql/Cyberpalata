@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import jwtDecode from "jwt-decode";
-import axios from "axios";
+import api from "./../Components/api";
 
 export const AccessTokenVerify = (props) => {
     //let location = useLocation();
@@ -23,7 +23,7 @@ export const AccessTokenVerify = (props) => {
                 if(refreshToken != null)
                 {
                     console.log("Access token has been refreshed.");
-                    const apiRequestUrl = `https://localhost:7227/authentication/refresh`;
+                    //const apiRequestUrl = `https://localhost:7227/authentication/refresh`;
                     // const config = {
                     //     headers: { Authorization: `Bearer ${accessToken}` }
                     // };
@@ -32,9 +32,8 @@ export const AccessTokenVerify = (props) => {
                         "accessToken" : accessToken,
                         "refreshToken":refreshToken
                     }
-                    var res = axios.post(apiRequestUrl,requestBody).then(res=>
+                    var res = api.post(`/authentication/refresh`,requestBody).then(res=>
                     {
-                        //console.dir(res);
                         localStorage.setItem("accessToken", res.data.accessToken);
                         localStorage.setItem("refreshToken", res.data.refreshToken);
                     }).catch(console.log);
