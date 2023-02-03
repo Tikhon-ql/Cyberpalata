@@ -23,7 +23,10 @@ namespace Cyberpalata.WebApi.Controllers
         private readonly ISeatService _seatService;
         private readonly ILogger<ApiUserController> _logger;
 
-        public ApiUserController(IApiUserService userService, ILogger<ApiUserController> logger,IBookingService bookingService, IUnitOfWork uinOfWork) : base(uinOfWork)
+        public ApiUserController(IApiUserService userService, 
+            ILogger<ApiUserController> logger,
+            IBookingService bookingService, 
+            IUnitOfWork uinOfWork) : base(uinOfWork)
         {
             _userService = userService;
             _bookingService = bookingService;
