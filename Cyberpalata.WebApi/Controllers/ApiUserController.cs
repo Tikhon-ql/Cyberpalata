@@ -5,7 +5,6 @@ using Cyberpalata.Logic.Models.Identity.User;
 using Cyberpalata.ViewModel;
 using Cyberpalata.ViewModel.Rooms;
 using Cyberpalata.ViewModel.User;
-using Cyberpalata.ViewModel.User.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -30,85 +29,17 @@ namespace Cyberpalata.WebApi.Controllers
             _bookingService = bookingService;
             _logger = logger;
         }
-        [Authorize]
-        [HttpGet("profile")]
-        public async Task<IActionResult> Profile()
-        {
-            //if(!ModelState.IsValid)
-            //{
-            //    return BadRequest($"Bad request: {ModelState.ToString()}");
-            //}
-            //var id = Guid.Parse(User.Claims.Single(claim => claim.Type == JwtRegisteredClaimNames.Sid).Value.ToString());
-            //var user = await _userService.ReadAsync(id);
-            //if (user.HasNoValue)
-            //    return BadRequest($"User with id: {id} doesn't exist!");          
 
-            //var viewModel = new ProfileViewModel
-            //{
-            //    User = new UserViewModel
-            //    {
-            //        Name = user.Value.Username,
-            //        Surname = user.Value.Surname,
-            //        Email = user.Value.Email,
-            //        Phone = user.Value.Phone
-            //    }
-            //};
-
-            //var bookings = await _bookingService.GetBookingsByUserAsync(id);
-
-            //if (bookings.HasValue)
-            //{
-            //    foreach(var booking in bookings.Value)
-            //    {
-            //        var resultSeats = new List<UserSeatViewModel>();
-            //        var seats = await _seatService.GetSeatsByRoomId(booking.Room.Id);
-            //        if (seats.HasNoValue)
-            //            continue;
-
-            //        seats.Value.ForEach(seat =>
-            //        {
-            //            resultSeats.Add(new UserSeatViewModel
-            //            {
-            //                Number = seat.Number,
-            //                Type = seat.IsFree ? SeatType.Free : SeatType.IsTaken
-            //            });
-            //        });
-
-            //        resultSeats.OrderBy(seat => seat.Number);
-            //        foreach(var bookingSeat in booking.Seats)
-            //        {
-            //            resultSeats[bookingSeat.Number - 1].Type = SeatType.UsersSeat;
-            //        }
-
-            //        var bookingViewModel = new UserBookingViewModel
-            //        {
-            //            RoomName = booking.Room.Name,
-            //            Begining = booking.Begining,
-            //            Ending = booking.Ending,
-            //            Tariff = new PriceViewModel(booking.Tariff.Hours, booking.Tariff.Cost),
-            //            Seats = resultSeats
-            //        };
-            //        viewModel.Bookings.Add(bookingViewModel);
-            //    }
-            //}
-            var id = Guid.Parse(User.Claims.Single(claim => claim.Type == JwtRegisteredClaimNames.Sid).Value.ToString());
-            var user = await _userService.ReadAsync(id);
-            //if (user.HasNoValue)
-            //    return BadRequest($"User with id: {id} doesn't exist!"); // we dont need it?
-
-            return Ok(new ProfileViewModel {Username = user.Value.Username, Surname = user.Value.Surname, Email = user.Value.Email, Phone = user.Value.Phone });
-        }
-
-        [Authorize]
-        [HttpPost("profileEditing")]
-        public async Task<IActionResult> EditProfile(UserUpdateRequest request)
+        [HttpPost("register")]
+        public async Task<IActionResult> Registration(UserCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest($"Bad request: {ModelState.ToString()}");
+                return BadRequest($"Bad request: {ModelState}");
             }
-            request.UserId = Guid.Parse(User.Claims.Single(claim => claim.Type == JwtRegisteredClaimNames.Sid).Value.ToString());
-            await _userService.UpdateUserAsync(request);
+            var result = await _userService.CreateAsync(request);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
             return await ReturnSuccess();
         }
 
@@ -118,7 +49,8 @@ namespace Cyberpalata.WebApi.Controllers
             await _userService.PasswordRecoveryAsync(email);
             return Ok();
         }
-        [HttpPost("passwordRecovering")]
+
+        [HttpPut("passwordRecovering")]
         public async Task<IActionResult> PasswordRecovering(PasswordResetRequest request)
         {
             if (!ModelState.IsValid)
@@ -132,25 +64,27 @@ namespace Cyberpalata.WebApi.Controllers
         }
 
         [HttpPost("emailConfirm")]
-        public async Task<IActionResult> EmailConfrim(bool result,string email)
-        {
-            if (!result)
-            {
-                var deleteResult = await _userService.DeleteAsync(email);
-                if (deleteResult.IsFailure)
-                    return BadRequest(deleteResult.Error);
-            }     
-            return await ReturnSuccess();
-        }
-        [HttpPost("emailConfirm")]
         public async Task<IActionResult> EmailConfrim([EmailAddress]string email)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest($"Bad request: {ModelState.ToString()}");
+                return BadRequest($"Bad request: {ModelState}");
             }
-            int code = await _userService.SendCodeToMailAsync(email);
+            int code = _userService.SendCodeToMail(email);
             return Ok(code);
+        }
+
+        [HttpPost("activate")]
+        public async Task<IActionResult> ActivateUser([EmailAddress]string email)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest($"Bad request: {ModelState}");
+            }
+            var result = await _userService.ActivateUser(email);
+            if(result.IsFailure)
+                return BadRequest(result.Error);
+            return await ReturnSuccess();
         }
     }
 }

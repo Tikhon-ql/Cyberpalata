@@ -10,8 +10,8 @@ namespace Cyberpalata.Logic.Models.Booking
 {
     public class BookingCreateRequest
     {
-        [JsonProperty("user")]
-        public ApiUserDto User { get; set; } = new ApiUserDto();
+        //[JsonProperty("user")]
+        //public ApiUserDto User { get; set; } = new ApiUserDto();
         //public RoomDto Room { get; set; } = new RoomDto();
         public Guid RoomId { get; set; }
         public DateTime Begining { get; set; }

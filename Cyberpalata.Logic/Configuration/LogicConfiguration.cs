@@ -30,6 +30,7 @@ namespace Cyberpalata.Logic.Configuration
             services.AddScoped<IHashGenerator,HashGenerator>();
             services.AddScoped<IBookingService, BookingService>();
             services.AddScoped<ISeatService, SeatService>();
+            services.AddScoped<IMailService, MailService>();
             //services.AddScoped<ILoggerManager, LoggerManager>();
             //services.AddTransient<IMenuItemService, MenuItemService>();
         }

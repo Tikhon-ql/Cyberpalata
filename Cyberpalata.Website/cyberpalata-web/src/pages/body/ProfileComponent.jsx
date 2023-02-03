@@ -4,8 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { Children, useState } from "react";
 import { Home } from "./Home";
 import { Modal } from "../../Components/Modal/Modal";
+import { BookingViewComponent } from "./Booking/BookingViewComponent";
 
 export const ProfileComponent = () => {
+    const [index, setIndex] = useState(0);
 
     const [modalActive, setModalActive] = useState(false);
     const [editingActive, setEditingActive] = useState(false);
@@ -16,14 +18,12 @@ export const ProfileComponent = () => {
     let [surname, setSurname] = useState("");
     let [email, setEmail] = useState("");
     let [phone, setPhone] = useState("");
-    //let [user, setUser] = useState({});
-    //let [bookings, setBookings] = useState([]);
     let state = true;
     if(accessToken != null)
     {
         //const baseUrl = `http://dotnetinternship2022.norwayeast.cloudapp.azure.com:83`;
         const baseUrl = `https://localhost:7227`;
-        const apiRequestUrl = `${baseUrl}/users/profile`;
+        const apiRequestUrl = `${baseUrl}/profile/getProfile`;
 
         const config = {
             headers: { Authorization: `Bearer ${accessToken}` }
@@ -35,8 +35,6 @@ export const ProfileComponent = () => {
             setSurname(res.data.surname);
             setEmail(res.data.email);
             setPhone(res.data.phone);
-            //setUser(res.data.user);
-            //setBookings(res.data.bookings);
         }).catch(console.log, ()=>{state = false});
     }
     else
@@ -44,19 +42,6 @@ export const ProfileComponent = () => {
         console.error("Access is denied");
         state = false;
     }
-
-    // let columnCount = 10;
-    // let rowCount = bookings.seats.length / columnCount;
-
-    // seats.sort((a,b) => a.number > b.number ? 1 : -1);
-   
-    // let seatsPerRow = [];
-    // for(let i = 0;i < rowCount * columnCount;i+=columnCount)
-    // {
-    //     let chunk = seats.slice(i, i + columnCount);
-    //     seatsPerRow.push(chunk);
-    // }
-
     function editingEnableButtonClick(event)
     {
         setEditingActive(!editingActive);
@@ -66,7 +51,7 @@ export const ProfileComponent = () => {
     {
         event.preventDefault();
         const baseUrl = `https://localhost:7227`;
-        const apiRequestUrl = `${baseUrl}/users/profileEditing`;
+        let apiRequestUrl = `${baseUrl}/profile/profileEditing`;
         const config = {
             headers: { Authorization: `Bearer ${accessToken}` }
         };
@@ -76,13 +61,14 @@ export const ProfileComponent = () => {
             "email":event.target.elements.email.value,
             "phone":event.target.elements.phone.value,
         };
-        axios.post(apiRequestUrl,requestBody,config).then(()=>{
+        axios.put(apiRequestUrl,requestBody,config).then(()=>{
             setEditingActive(false);
             navigate('/profile');
         }).catch(console.log);
     }
 
 
+ 
     return <>{state ?
         <div className="mt-5 p-5" style={{"margin":"auto","width":"50%", "border" : "3px solid black", "padding" : "10px"}}>
             <form method="post" onSubmit={editingSubmit}>
@@ -103,27 +89,9 @@ export const ProfileComponent = () => {
                         <div className="d-flex flex-row"><h2>Phone: </h2><input id="phone" name="phone" type="tel" className="form-control" value={phone} readOnly/></div>
                     </div>
                 }
-                <input type="submit" value="Save changes" className="btn btn-dark mb-2"/>
+                {editingActive ? <input type="submit" value="Save changes" className="btn btn-dark mb-2"/> : <></>}
             </form> 
             <button onClick={editingEnableButtonClick}>{editingActive ? <div>Stop editing profile</div>: <div>Edit profile</div>}</button>
-            <button onClick={()=>{setModalActive(true)}}>Show bookings</button>
-            
-            <Modal active={modalActive} setActive={setModalActive}>
-            {/* <h2>Seats</h2>
-                <table className="table w-50 m-auto">
-                    <tbody id = 'tbody'>
-                    {seatsPerRow.map(row=>{
-                        return <tr>
-                            {row.map(cell=>{
-                                return <>
-                                {cell.isFree ? <td className="seat p-2"><button id = {`button${cell.number}`} className="btn btn-outline-dark" onClick={onSeatClick}>{cell.number}</button></td> : <td className="seat text-white p-2"><button id = {`button${cell.number}`} className="btn btn-outline-dark disabled" onClick={onSeatClick}>{cell.number}</button></td>}
-                                </>
-                            })}
-                        </tr>   
-                    })}
-                    </tbody>         
-                </table> */}
-            </Modal>
             <Link to='/' className="btn btn-outline-dark btn-sm mt-2">Home page</Link>
         </div>
              : <Home/>}

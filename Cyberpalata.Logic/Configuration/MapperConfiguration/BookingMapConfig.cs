@@ -20,12 +20,10 @@ namespace Cyberpalata.Logic.Configuration.MapperConfiguration
             profile.CreateMap<Maybe<Booking>, Maybe<BookingDto>>();
             profile.CreateMap<PagedList<Booking>, PagedList<BookingDto>>();
 
-            profile.CreateMap<BookingCreateRequest, Booking>()
-                .ForMember(dst => dst.User, opt => opt.MapFrom(src => src.User))
+            profile.CreateMap<BookingCreateRequest, BookingDto>()
                 .ForMember(dst => dst.Begining, opt => opt.MapFrom(src => src.Begining))
                 .ForMember(dst => dst.Ending, opt => opt.MapFrom(src => src.Ending))
                 .ForMember(dst => dst.Tariff, opt => opt.MapFrom(src => src.Tariff))
-                .ForMember(dst => dst.User, opt => opt.MapFrom(src => src.User))
                 .ForMember(dst => dst.Seats, opt => opt.MapFrom(src => src.Seats.Select(item => new SeatDto { Number = item, IsFree = false })));
         }
     }

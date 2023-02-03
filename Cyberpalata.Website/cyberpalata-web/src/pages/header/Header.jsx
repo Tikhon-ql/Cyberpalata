@@ -30,6 +30,9 @@ export const Header = (props) => {
                 <li className='nav-item m-3 text-dark'>
                     <Link to="/gamesLibrary" className='text-decoration-none text-dark'>Games library</Link>
                 </li>
+                {(AuthVerify() && accessToken) && <li className='nav-item m-3 text-dark'>
+                    <Link to="/bookingView" className='text-decoration-none text-dark'>My orders</Link>
+                </li>}
                 {(AuthVerify() && accessToken) && <li className='nav-item mt-3 text-dark'><Link to="/profile" className='text-decoration-none text-dark'>{accessToken.name}</Link></li>}
                 <li className="nav-item m-3 text-dark">
                     {AuthVerify() ? <Link to="/logout" className='text-decoration-none text-dark'>Logout</Link> : <Link to="/login" className='text-decoration-none text-dark'>Login</Link>}

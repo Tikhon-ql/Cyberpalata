@@ -37,6 +37,8 @@ namespace Cyberpalata.Logic.Services
 
             if (!user.HasValue)
                 return Result.Failure<ApiUserDto>("Email or password is incorrect!!!");
+            if (!user.Value.IsActivate)
+                return Result.Failure<ApiUserDto>("Your account isn't activated");
 
             string requestHashedPassword = _hashGenerator.HashPassword($"{request.Password}{user.Value.Salt}");
 

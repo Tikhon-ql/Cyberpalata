@@ -17,7 +17,7 @@ export const ResetPassword = ()=>{
             "password":event.target.elements.password.value,
             "passwordConfirm": event.target.elements.passwordConfirm.value
         }
-        axios.post(apiUrl,requestBody).then(()=>{
+        axios.put(apiUrl,requestBody).then(()=>{
             navigate("/");
         }).catch(console.log);
     }

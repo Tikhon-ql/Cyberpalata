@@ -19,14 +19,17 @@ namespace Cyberpalata.Logic.Services
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private readonly IHashGenerator _hashGenerator;
+        private readonly IMailService _mailService;
 
-        public ApiUserService(IApiUserRepository userRepository, IUserRefreshTokenRepository refreshTokenRepository, IMapper mapper, IHashGenerator hashGenerator, IConfiguration configuration)
+        public ApiUserService(IApiUserRepository userRepository, IUserRefreshTokenRepository refreshTokenRepository, 
+            IMapper mapper, IHashGenerator hashGenerator,IMailService mailService, IConfiguration configuration)
         {
             _userRepository = userRepository;
             _refreshTokenRepository = refreshTokenRepository;
             _mapper = mapper;
             _configuration = configuration;
             _hashGenerator = hashGenerator;
+            _mailService = mailService;
         }
 
         public async Task<Result> CreateAsync(UserCreateRequest request)
@@ -66,6 +69,8 @@ namespace Cyberpalata.Logic.Services
         public async Task<Maybe<ApiUserDto>> ReadAsync(Guid id)
         {
             var user = await _userRepository.ReadAsync(id);
+            if (!user.Value.IsActivate)
+                return Maybe.None;
             var result = _mapper.Map<ApiUserDto>(user.Value);
             return result;
         }
@@ -85,21 +90,27 @@ namespace Cyberpalata.Logic.Services
 
         public async Task PasswordRecoveryAsync([EmailAddress]string email)
         {
-            var message = new MailMessage();
-            message.From = new MailAddress(_configuration["EmailSettings:EmailAddress"]);
-            message.To.Add(new MailAddress(email));
+            //var message = new MailMessage();
+            //message.From = new MailAddress(_configuration["EmailSettings:EmailAddress"]);
+            //message.To.Add(new MailAddress(email));
 
-            message.Subject = "Password recovering";
-            message.Body = @$"<html>
-                                <div>
-                                    <a href='http://localhost:3000/passwordReset/{email}'>Reset password</a>
-                                </div>
-                            </html>";
-            message.IsBodyHtml = true;
-            var smtpClient = new SmtpClient("smtp.gmail.com",587);
-            smtpClient.Credentials = new NetworkCredential(_configuration["EmailSettings:EmailAddress"], _configuration["EmailSettings:Password"]);
-            smtpClient.EnableSsl = true;
-            smtpClient.Send(message);
+            //message.Subject = "Password recovering";
+            //message.Body = @$"<html>
+            //                    <div>
+            //                        <a href='http://localhost:3000/passwordReset/{email}'>Reset password</a>
+            //                    </div>
+            //                </html>";
+            //message.IsBodyHtml = true;
+            //var smtpClient = new SmtpClient("smtp.gmail.com",587);
+            //smtpClient.Credentials = new NetworkCredential(_configuration["EmailSettings:EmailAddress"], _configuration["EmailSettings:Password"]);
+            //smtpClient.EnableSsl = true;
+            //smtpClient.Send(message);
+            string bodyHtml = @$"<html>
+                                    <div>
+                                        <a href='http://localhost:3000/passwordReset/{email}'>Reset password</a>
+                                    </div>
+                                </html>";
+            _mailService.SendMail(email,"Password recovering", bodyHtml);
         }
 
         public async Task<Result> ResetPasswordAsync(PasswordResetRequest request)
@@ -112,40 +123,62 @@ namespace Cyberpalata.Logic.Services
             return Result.Success();
         }
 
-        public Task<Result> MailConfirmAsync(string email)
+        public Task<Result> MailConfirmAsync([EmailAddress] string email)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<int> SendCodeToMailAsync(string email)
+        public int SendCodeToMail([EmailAddress] string email)
         {
             var rnd = new Random(DateTime.Now.Millisecond);
             int code = rnd.Next(100000,9999999);
-            var message = new MailMessage();
-            message.From = new MailAddress(_configuration["EmailSettings:EmailAddress"]);
-            message.To.Add(new MailAddress(email));
+            //var message = new MailMessage();
+            //message.From = new MailAddress(_configuration["EmailSettings:EmailAddress"]);
+            //message.To.Add(new MailAddress(email));
 
-            message.Subject = "Password recovering";
-            message.Body = @$"<html>
+            //message.Subject = "Password recovering";
+            //message.Body = @$"<html>
+            //                    <div>
+            //                        <h1>You code:</h1><br/>
+            //                        <div><b>{code}</b></div>
+            //                    </div>
+            //                </html>";
+            //message.IsBodyHtml = true;
+            //using (SmtpClient client = new SmtpClient())
+            //{
+            //    client.EnableSsl = true;
+            //    client.UseDefaultCredentials = false;
+            //    client.Credentials = new NetworkCredential(_configuration["EmailSettings:EmailAddress"], _configuration["EmailSettings:Password"]);
+            //    client.Host = "smtp.gmail.com";
+            //    client.Port = 587;
+            //    client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            //    client.Send(message);
+            //}
+            string bodyHtml = @$"<html>
                                 <div>
-                                    <h1>You code:</h1><br/>
+                                    <h1>Your verification code:</h1><br/>
                                     <div><b>{code}</b></div>
                                 </div>
                             </html>";
-            message.IsBodyHtml = true;
-            var smtpClient = new SmtpClient("smtp.gmail.com", 587);
-            smtpClient.Credentials = new NetworkCredential(_configuration["EmailSettings:EmailAddress"], _configuration["EmailSettings:Password"]);
-            smtpClient.EnableSsl = true;
-            await smtpClient.SendMailAsync(message);
+            _mailService.SendMail(email, "Email verification", bodyHtml);
             return code;
         }
 
-        public async Task<Result> DeleteAsync(string email)
+        public async Task<Result> DeleteAsync([EmailAddress] string email)
         {
             var user = await _userRepository.ReadAsync(email);
             if (user.HasNoValue)
                 return Result.Failure($"User with email: {email} doesn't exist");
             _userRepository.Delete(user.Value);
+            return Result.Success();
+        }
+
+        public async Task<Result> ActivateUser(string email)
+        {
+            var user = await _userRepository.ReadAsync(email);
+            if (user.HasNoValue)
+                return Result.Failure($"User with email: {email} doesn't exist");
+            user.Value.IsActivate = true;
             return Result.Success();
         }
     }

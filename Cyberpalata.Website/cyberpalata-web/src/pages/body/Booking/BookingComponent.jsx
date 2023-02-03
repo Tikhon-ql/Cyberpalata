@@ -59,13 +59,7 @@ export const BookingComponent = () => {
             let accessToken = jwtDecode(localStorage.getItem(`accessToken`));
             let tariff = event.target.elements.tariff.value.split(":");
             console.dir(accessToken);
-            let requestBody = {
-                "user":
-                {
-                    "id":accessToken.sid,
-                    "username":accessToken.name,
-                    "email":accessToken.email
-                },
+            let requestBody = { 
                 "roomId":roomId,
                 "begining": event.target.elements.begining.value,
                 "ending": event.target.elements.ending.value,

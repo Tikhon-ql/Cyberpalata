@@ -1,39 +1,41 @@
-    
-import {Link, useAsyncError} from 'react-router-dom'
+    import {Link, useAsyncError} from 'react-router-dom'
 import './../css/RoomInfo.css';
 import './../../../Components/Index.css';
-import { DeviceInfo } from './../DeviceInfo';
+import { DeviceInfo } from '../DeviceInfo';
 import Dropdown from 'react-bootstrap/Dropdown';
 import axios from 'axios';
 import { useState } from 'react';
 import DropdownItem from 'react-bootstrap/esm/DropdownItem';
-import { PriceInfo } from './../PriceInfo';
-import { useParams } from 'react-router-dom'
+import { PriceInfo } from '../PriceInfo';
+import { useParams } from 'react-router-dom';
+// import { Method } from "../../../Components/Method";
+// import { GamingRoomInfo } from '../../../types/types';
+import api from "./../../../Components/api.js";
 
-export const GamingRoom = () => {
+const GamingRoom = () => {
     const {id} = useParams();
     const {name} = useParams();
     const {type} = useParams();
     const [peripheriesInfo, setPeripheries] = useState([]);
     const [deviceInfo, setDevices] = useState([]);
     const [priceInfo, setPrices] = useState([]);
-    {
+    //const [info, setInfo] = useState<GamingRoomInfo>();
         //399CE32F-1610-44DD-B634-4FFDC223038B
-        axios.get(`https://localhost:7227/gamingRooms/getRoomInfo?id=${id}`).then(res => {
-            console.dir(res);
-            setDevices(res.data.pcInfos);
-            setPrices(res.data.prices);
-            setPeripheries(res.data.peripheries);
-        })
-    }
+    api.get(`/gamingRooms/getRoomInfo?id=${id}`).then(res => {
+        console.dir(res);
+        setDevices(res.data.pcInfos);
+        setPrices(res.data.prices);
+        setPeripheries(res.data.peripheries);
+    })
+    //Method.getGamingRoomInfo(id).then(res=>{setInfo(res.data)});
     //console.dir(deviceInfo);
+
     return <>
                  <div className="mt-5 p-5" style={{"margin":"auto","width":"50%", "border" : "3px solid black", "padding" : "10px"}}>
                      <div style={{"display":"flex"}}>
                          <div><h1>{name}</h1></div>
                          <div className="m-2"><Link to={`/booking/${id}/${name}/${type}`} className="btn btn-outline-dark btn-sm">Booking</Link></div>
                      </div>
-                    
                     <hr></hr>
                     <h2>Devices</h2>
                     <table className='table'>
@@ -73,12 +75,10 @@ export const GamingRoom = () => {
                     </table>
                     <Link to={`/gamingRooms`} className="btn btn-outline-dark btn-sm mt-2">Back</Link>
                 </div>
-           </>
+    </>
 }
 
-
-
-
+export default GamingRoom;
 
 
 

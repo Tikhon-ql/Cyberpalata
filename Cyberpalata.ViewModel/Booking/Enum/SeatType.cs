@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cyberpalata.ViewModel.User.Enum
+namespace Cyberpalata.ViewModel.Booking.Enum
 {
     public class SeatType : Enumeration
     {

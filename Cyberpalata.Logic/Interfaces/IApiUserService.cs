@@ -13,7 +13,8 @@ namespace Cyberpalata.Logic.Interfaces
         Task PasswordRecoveryAsync([EmailAddress]string email);
         Task<Result> ResetPasswordAsync(PasswordResetRequest request);
         Task<Result> MailConfirmAsync(string email);
-        Task<int> SendCodeToMailAsync(string email);
+        int SendCodeToMail(string email);
         Task<Result> DeleteAsync(string email);
+        Task<Result> ActivateUser(string email);
     }
 }

@@ -28,20 +28,6 @@ namespace Cyberpalata.WebApi.Controllers
         //User locates in token get id from accessToken
       
 
-        [HttpPost("register")]
-        public async Task<IActionResult> Registration(UserCreateRequest request)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest("Bad request");
-            }
-            var result = await _userService.CreateAsync(request);
-            if (result.IsFailure)
-                return BadRequest(result.Error);
-            
-            return Ok();
-        }
-
         [HttpPost("login")]
         public async Task<IActionResult> Login(AuthenticateRequest request)
         {

@@ -6,6 +6,7 @@ using Cyberpalata.Logic.Models;
 using Cyberpalata.Logic.Models.Devices;
 using Cyberpalata.ViewModel.Rooms;
 using Cyberpalata.ViewModel.Rooms.GamingRoom;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 export const RegistrationComponent = ()=>{
 
     let navigate = useNavigate();
-
+    const baseUrl = `https://localhost:7227`;
     function sendRegisterRequest(event)
     {
         event.preventDefault();
@@ -17,19 +17,12 @@ export const RegistrationComponent = ()=>{
             "password":event.target.elements.password.value,
             "passwordConfirm" : event.target.elements.passwordConfirm.value
         }
-        navigate(`/emailConfirm`,{state:{data:data}});
-        // //console.dir(data);
-        // //const baseUrl = `http://dotnetinternship2022.norwayeast.cloudapp.azure.com:83`;
-        // const baseUrl = `https://localhost:7227`;
-        // const apiRequestUrl = `${baseUrl}/authentication/register`;
-        // //const apiRequestUrl = `https://localhost:7227/users/register`;
-        
-        // const res = axios.post(apiRequestUrl, data).then(res=>
-        // {
-        //     navigate(`/emailConfirm/${event.target.elements.email.value}`);
-        //     //console.log("anime");
-        // });
-        
+        const apiRequestUrl = `${baseUrl}/users/register`;
+
+        const res = axios.post(apiRequestUrl, data).then(()=>
+        {
+            navigate(`/emailConfirm/${data.email}`);
+        });
     }
 
     return<div className="row">

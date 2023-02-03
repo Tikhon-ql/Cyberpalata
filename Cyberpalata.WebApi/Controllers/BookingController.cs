@@ -2,15 +2,19 @@
 using Cyberpalata.Common.Enums;
 using Cyberpalata.Common.Intefaces;
 using Cyberpalata.DataProvider.Interfaces;
+using Cyberpalata.DataProvider.Models;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.Logic.Models.Booking;
 using Cyberpalata.ViewModel;
+using Cyberpalata.ViewModel.Booking;
+using Cyberpalata.ViewModel.Booking.Enum;
 using Cyberpalata.ViewModel.Rooms;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using NLog.LayoutRenderers.Wrappers;
 using System.IdentityModel.Tokens.Jwt;
+using SeatBookingViewModel = Cyberpalata.ViewModel.Booking.SeatBookingViewModel;
 
 namespace Cyberpalata.WebApi.Controllers
 {
@@ -67,7 +71,7 @@ namespace Cyberpalata.WebApi.Controllers
             if(tariffs.HasNoValue)
                 return BadRequest("Something wrong with room id or its tariffs");
 
-            var viewModel = new BookingViewModel
+            var viewModel = new BookingAddingViewModel
             {
                 Seats = resultSeats.Value.Select(s =>  new SeatViewModel { Number = s.Number, IsFree = s.IsFree}).ToList(),
                 Tariffs = tariffs.Value.Select(t => new PriceViewModel(t.Hours, t.Cost)).ToList()
@@ -82,14 +86,53 @@ namespace Cyberpalata.WebApi.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest($"Bad request: {ModelState.ToString()}");
+                return BadRequest($"Bad request: {ModelState}");
             }
 
-            //request.User.Id = User.Claims.Single(claim => claim.Type == JwtRegisteredClaimNames.Sid);
-            request.User.Surname = "Grek";
-            //await _bookingService.CreateAsync(request);
-            await _roomService.AddBookingToRoom(request);
+            var userId = Guid.Parse(User.Claims.Single(claim => claim.Type == JwtRegisteredClaimNames.Sid).Value);
+
+            await _roomService.AddBookingToRoom(userId,request);
             return await ReturnSuccess();
-        }   
+        }
+
+        [Authorize]
+        [HttpGet("getBooking")]
+        public async Task<IActionResult> GetBooking(Guid id)
+        {
+            var booking = await _bookingService.ReadAsync(id);
+            if (booking.HasNoValue)
+                return BadRequest($"Booking with id: {id} doen't exist!");
+            var viewModel = new BookingViewModel
+            {
+                Begining = booking.Value.Begining,
+                Ending = booking.Value.Ending,
+                RoomName = booking.Value.Room.Name,
+                Tariff = new PriceViewModel
+                {
+                    Cost = booking.Value.Tariff.Cost,
+                    Hours = booking.Value.Tariff.Hours
+                },
+                Seats = new List<SeatBookingViewModel>()
+            };
+
+            var seats = await _seatService.GetSeatsByRoomId(booking.Value.Room.Id);
+            var resultSeats = new List<SeatBookingViewModel>();
+            seats.Value.ForEach((seat =>
+            {
+                resultSeats.Add(new SeatBookingViewModel
+                {
+                    Number = seat.Number,
+                    Type = seat.IsFree ? SeatType.Free : SeatType.IsTaken
+                });
+            }));
+
+            resultSeats.OrderBy(seat => seat.Number);
+            foreach (var bookingSeat in booking.Value.Seats)
+            {
+                resultSeats[bookingSeat.Number - 1].Type = SeatType.UsersSeat;
+            }
+            viewModel.Seats = resultSeats;
+            return Ok(viewModel);
+        }
     }
 }

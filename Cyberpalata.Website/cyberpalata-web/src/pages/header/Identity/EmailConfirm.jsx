@@ -1,19 +1,20 @@
-import axios from "axios";
+import axios, { AxiosHeaders } from "axios";
 import { useState } from "react";
-import { Link,useLocation, useParams } from "react-router-dom";
+import { Link,Navigate,useLocation, useNavigate, useParams } from "react-router-dom";
 
 
 export const EmailConfirm = ()=>{
 
-    //const {email} = useParams();
-
+    const navigate = useNavigate();
+    const {email} = useParams();
+    //const {state} = useLocation();
+    //const {data} = state;
     const [code,setCode] = useState(0);
     const baseUrl = `https://localhost:7227`;
-    const apiUrl = `${baseUrl}/users/emailConfirm`;
-    const {state} = useLocation();
-    const {data} = state;
+    let apiUrl = `${baseUrl}/users/emailConfirm?email=${email}`;
+ 
 
-    console.dir(data);
+    //console.dir(data);
 
     // let requestBody = {
     //     "email" : email
@@ -23,31 +24,29 @@ export const EmailConfirm = ()=>{
         setCode(res.data.code);
     });
 
-    // function confirmEmail(event)
-    // {
-    //     event.preventDefault();
+    function sendActivateRequest(event)
+    {
+        event.preventDefault();
+        if(event.target.elements.code != code)
+        {
+            apiUrl = `${baseUrl}/users/activate?email=${email}`;
+            // const requestBody = {
+            //     "username": data.username,
+            //     "surname": data.surname,
+            //     "email":data.email,
+            //     "phone":data.phone,
+            //     "password":data.password,
+            //     "passwordConfirm" : data.passwordConfirm
+            // }
+            axios.post(apiUrl).then(()=>{
+                navigate('/');
+            })
+        }
+    }
 
-    //     if(event.target.elements.code != code)
-    //     {
-    //         requestBody = {
-    //             "result":false,
-    //             "email": email
-    //         }
-    //     }
-    //     else
-    //     {
-    //         requestBody = {
-    //             "result":true,
-    //             "email": email
-    //         }
-    //     }
-    //     axios.post(apiUrl,requestBody).then(res=>{
-    //     }).catch(console);
-    // }
-
-    return <>
+    return <>   
         <div>On your email we send message</div>
-        <form className="m-5 p-5 col-sm-4" onSubmit={()=>{}}>
+        <form className="m-5 p-5 col-sm-4" onSubmit={sendActivateRequest}>
             <div className="mb-3">
                 <label for="exampleInputEmail1" className="form-label">Your code</label>
                 <input type="text" name="code" className="form-control" id="exampleInputEmail1" placeholder="Enter code here..." aria-describedby="emailHelp"/>
