@@ -1,6 +1,7 @@
 ﻿using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Interfaces;
 using Cyberpalata.ViewModel.GameLibrary;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.OleDb;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -19,7 +20,7 @@ namespace Cyberpalata.WebApi.Controllers
             _gameService = gameService;
             _logger = logger;
         }
-
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
