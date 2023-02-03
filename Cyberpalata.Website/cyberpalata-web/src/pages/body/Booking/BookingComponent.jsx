@@ -1,8 +1,8 @@
-import axios from "axios";
 import jwtDecode from "jwt-decode";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import "./BookingComponent.css";
+import api from "./../../../Components/api";
 
 export const BookingComponent = () => {
     
@@ -11,16 +11,16 @@ export const BookingComponent = () => {
     const {roomType} = useParams();
     const [seats,setSeats] = useState([]);
     const [tarrifs, setTarrifs] = useState([]);
-    const apiUrl = `https://localhost:7227/booking/seats?roomId=${roomId}`;
+    const apiUrl = `https://localhost:7227;`;
 
     let accessToken = localStorage.getItem('accessToken');
     let refreshToken = localStorage.getItem('refreshToken');
 
-    const config = {
-        headers: { Authorization: `Bearer ${accessToken}` }
-    };
+    // const config = {
+    //     headers: { Authorization: `Bearer ${accessToken}` }
+    // };
 
-    axios.get(apiUrl,{},config).then(res=>{
+    api.get(`/booking/seats?roomId=${roomId}`).then(res=>{
         //console.dir(res);
         setSeats(res.data.seats);
         setTarrifs(res.data.tariffs);
@@ -53,7 +53,6 @@ export const BookingComponent = () => {
     {
         event.preventDefault();
         console.dir(event);
-        const apiUrl = `https://localhost:7227/booking`;
         if(localStorage.getItem('accessToken') != null)
         {
             let accessToken = jwtDecode(localStorage.getItem(`accessToken`));
@@ -70,11 +69,8 @@ export const BookingComponent = () => {
                 },
                 "seats": clickedSeats,        
             }
-            const config = {
-                headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
-            };
             console.dir(requestBody);
-            axios.post(apiUrl, requestBody,config).then(res=>setClickedSeats([]));
+            api.post(`/booking`, requestBody).then(res=>setClickedSeats([]));
         }    
     }
 

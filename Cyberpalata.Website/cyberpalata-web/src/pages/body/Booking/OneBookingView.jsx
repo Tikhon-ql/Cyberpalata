@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import api from "./../../../Components/api";
 
 export const OneBookingView = ()=>{
     const [countInRow,setCountInRow] = useState(0);    
@@ -13,12 +13,12 @@ export const OneBookingView = ()=>{
     
     const {id} = useParams();
 
-    const baseUrl = `https://localhost:7227`;
-    let apiRequestUrl = `${baseUrl}/booking/getBooking?id=${id}`;
-    const config = {
-        headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
-    };
-    axios.get(apiRequestUrl,config).then(res=>{
+    //const baseUrl = `https://localhost:7227`;
+    //let apiRequestUrl = `${baseUrl}/booking/getBooking?id=${id}`;
+    // const config = {
+    //     headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
+    // };
+    api.get(`/booking/getBooking?id=${id}`).then(res=>{
         setRoomName(res.data.roomName);
         setBegining(res.data.begining);
         setEnding(res.data.ending);

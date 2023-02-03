@@ -1,7 +1,6 @@
-import axios, { AxiosHeaders } from "axios";
 import { useState } from "react";
 import { Link,Navigate,useLocation, useNavigate, useParams } from "react-router-dom";
-
+import api from "./../../../Components/api";
 
 export const EmailConfirm = ()=>{
 
@@ -10,8 +9,8 @@ export const EmailConfirm = ()=>{
     //const {state} = useLocation();
     //const {data} = state;
     const [code,setCode] = useState(0);
-    const baseUrl = `https://localhost:7227`;
-    let apiUrl = `${baseUrl}/users/emailConfirm?email=${email}`;
+    // const baseUrl = `https://localhost:7227`;
+    // let apiUrl = `${baseUrl}/users/emailConfirm?email=${email}`;
  
 
     //console.dir(data);
@@ -20,7 +19,7 @@ export const EmailConfirm = ()=>{
     //     "email" : email
     // }
 
-    axios.post(apiUrl).then(res=>{
+    api.post(`/users/emailConfirm?email=${email}`).then(res=>{
         setCode(res.data.code);
     });
 
@@ -29,7 +28,7 @@ export const EmailConfirm = ()=>{
         event.preventDefault();
         if(event.target.elements.code != code)
         {
-            apiUrl = `${baseUrl}/users/activate?email=${email}`;
+            //apiUrl = `${baseUrl}/users/activate?email=${email}`;
             // const requestBody = {
             //     "username": data.username,
             //     "surname": data.surname,
@@ -38,7 +37,7 @@ export const EmailConfirm = ()=>{
             //     "password":data.password,
             //     "passwordConfirm" : data.passwordConfirm
             // }
-            axios.post(apiUrl).then(()=>{
+            api.post(`/users/activate?email=${email}`).then(()=>{
                 navigate('/');
             })
         }

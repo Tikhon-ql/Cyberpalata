@@ -5,6 +5,7 @@ import { Children, useState } from "react";
 import { Home } from "./Home";
 import { Modal } from "../../Components/Modal/Modal";
 import { BookingViewComponent } from "./Booking/BookingViewComponent";
+import api from "./../../Components/api";
 
 export const ProfileComponent = () => {
     const [index, setIndex] = useState(0);
@@ -22,14 +23,14 @@ export const ProfileComponent = () => {
     if(accessToken != null)
     {
         //const baseUrl = `http://dotnetinternship2022.norwayeast.cloudapp.azure.com:83`;
-        const baseUrl = `https://localhost:7227`;
-        const apiRequestUrl = `${baseUrl}/profile/getProfile`;
+        // const baseUrl = `https://localhost:7227`;
+        // const apiRequestUrl = `${baseUrl}/profile/getProfile`;
 
-        const config = {
-            headers: { Authorization: `Bearer ${accessToken}` }
-        };
+        // const config = {
+        //     headers: { Authorization: `Bearer ${accessToken}` }
+        // };
 
-        axios.get(apiRequestUrl,config).then(res =>{
+        api.get(`/profile/getProfile`).then(res =>{
             console.dir(res);
             setName(res.data.username);
             setSurname(res.data.surname);
@@ -50,18 +51,18 @@ export const ProfileComponent = () => {
     function editingSubmit(event)
     {
         event.preventDefault();
-        const baseUrl = `https://localhost:7227`;
-        let apiRequestUrl = `${baseUrl}/profile/profileEditing`;
-        const config = {
-            headers: { Authorization: `Bearer ${accessToken}` }
-        };
+        // const baseUrl = `https://localhost:7227`;
+        // let apiRequestUrl = `${baseUrl}/profile/profileEditing`;
+        // const config = {
+        //     headers: { Authorization: `Bearer ${accessToken}` }
+        // };
         const requestBody = {
             "username": event.target.elements.name.value,
             "surname": event.target.elements.surname.value,
             "email":event.target.elements.email.value,
             "phone":event.target.elements.phone.value,
         };
-        axios.put(apiRequestUrl,requestBody,config).then(()=>{
+        api.put(`/profile/profileEditing`,requestBody).then(()=>{
             setEditingActive(false);
             navigate('/profile');
         }).catch(console.log);

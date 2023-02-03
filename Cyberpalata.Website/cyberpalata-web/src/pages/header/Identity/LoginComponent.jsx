@@ -1,6 +1,6 @@
-import axios  from 'axios';
 import {Link} from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
+import api from "./../../../Components/api";
 
 export const LoginComponent = () => {
 
@@ -15,11 +15,11 @@ export const LoginComponent = () => {
 
         // console.dir(data);
         //const baseUrl = `http://dotnetinternship2022.norwayeast.cloudapp.azure.com:83`;
-        const baseUrl = `https://localhost:7227`;
-        const apiRequestUrl = `${baseUrl}/authentication/login`;
+        // const baseUrl = `https://localhost:7227`;
+        // const apiRequestUrl = `${baseUrl}/authentication/login`;
         //const apiRequestUrl = `https://localhost:7227/users/login`;
 
-        const res = axios.post(apiRequestUrl, data).then(res=>
+        api.post(`/authentication/login`, data).then(res=>
         {
             localStorage.setItem('accessToken', res.data.accessToken);
             localStorage.setItem('refreshToken', res.data.refreshToken);

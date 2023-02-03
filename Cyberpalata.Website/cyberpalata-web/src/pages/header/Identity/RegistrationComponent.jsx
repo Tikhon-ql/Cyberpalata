@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import api from "./../../../Components/api";
 
 export const RegistrationComponent = ()=>{
 
@@ -17,9 +17,9 @@ export const RegistrationComponent = ()=>{
             "password":event.target.elements.password.value,
             "passwordConfirm" : event.target.elements.passwordConfirm.value
         }
-        const apiRequestUrl = `${baseUrl}/users/register`;
+        // const apiRequestUrl = `${baseUrl}/users/register`;
 
-        const res = axios.post(apiRequestUrl, data).then(()=>
+        api.post(`/users/register`, data).then(()=>
         {
             navigate(`/emailConfirm/${data.email}`);
         });

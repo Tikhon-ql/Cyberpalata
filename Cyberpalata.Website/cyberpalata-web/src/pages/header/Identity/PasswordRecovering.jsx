@@ -1,6 +1,6 @@
-import axios from "axios"
 import {Link} from "react-router-dom"
 import { useNavigate } from "react-router-dom";
+import api from "./../../../Components/api";
 
 export const PasswordRecovering = ()=> {
 
@@ -8,9 +8,9 @@ export const PasswordRecovering = ()=> {
     function sendRecoveringMessage(event)
     {
         event.preventDefault();
-        const baseUrl = `https://localhost:7227`;
-        const apiUrl = `${baseUrl}/users/passwordRecovering?email=${event.target.elements.email.value}`;
-        axios.get(apiUrl).then(()=>{
+        // const baseUrl = `https://localhost:7227`;
+        // const apiUrl = `${baseUrl}/users/passwordRecovering?email=${event.target.elements.email.value}`;
+        api.get(`/users/passwordRecovering?email=${event.target.elements.email.value}`).then(()=>{
             navigate("/");
         }).catch(console.log);
     }

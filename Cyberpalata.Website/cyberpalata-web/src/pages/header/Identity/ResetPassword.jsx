@@ -1,6 +1,6 @@
-import axios from "axios"
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import api from "./../../../Components/api";
 
 export const ResetPassword = ()=>{
 
@@ -10,14 +10,14 @@ export const ResetPassword = ()=>{
     function passwordReset(event)
     {
         event.preventDefault();
-        const baseUrl = `https://localhost:7227`;
-        const apiUrl = `${baseUrl}/users/passwordRecovering`;
+        // const baseUrl = `https://localhost:7227`;
+        // const apiUrl = `${baseUrl}/users/passwordRecovering`;
         const requestBody = {
             "email":email,
             "password":event.target.elements.password.value,
             "passwordConfirm": event.target.elements.passwordConfirm.value
         }
-        axios.put(apiUrl,requestBody).then(()=>{
+        api.put(`/users/passwordRecovering`,requestBody).then(()=>{
             navigate("/");
         }).catch(console.log);
     }

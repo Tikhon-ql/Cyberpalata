@@ -1,5 +1,5 @@
-import axios from "axios"
 import { Link, useNavigate } from "react-router-dom";
+import api from "./../../../Components/api";
 
 export const LogoutComponent = () => {
     
@@ -10,16 +10,10 @@ export const LogoutComponent = () => {
 
         if(localStorage.getItem('accessToken') != null && localStorage.getItem('refreshToken') != null)
         {
-            //const baseUrl = `http://dotnetinternship2022.norwayeast.cloudapp.azure.com:83`;
-            const baseUrl = `https://localhost:7227`;
-            const apiUrl = `${baseUrl}/authentication/logout`;
-            //const apiUrl = `https://localhost:7227/users/logout`;
+            // const baseUrl = `https://localhost:7227`;
+            // const apiUrl = `${baseUrl}/authentication/logout`;
             let accessToken = localStorage.getItem('accessToken');
             let refreshToken = localStorage.getItem('refreshToken');
-    
-            const config = {
-                headers: { Authorization: `Bearer ${accessToken}` }
-            };
     
             let requestBody = 
             {
@@ -30,7 +24,7 @@ export const LogoutComponent = () => {
             localStorage.removeItem('accessToken');    
             localStorage.removeItem('refreshToken');    
     
-            axios.post(apiUrl, requestBody, config).then(res =>{ navigate("/"); }).catch((error) => {console.log(error); navigate("/");});
+            api.post(`/authentication/logout`, requestBody).then(res =>{ navigate("/"); }).catch((error) => {console.log(error); navigate("/");});
         }
     }
 
