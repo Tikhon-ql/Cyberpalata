@@ -1,14 +1,14 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom";
-
+import api from "./../../Components/api";
 
 const GameLibrary = () => {
     const [games, setGames] = useState([]);
 
     useEffect(()=>{
-        const baseUrl = `http://dotnetinternship2022.norwayeast.cloudapp.azure.com:83`;
-        axios.get(`${baseUrl}/games`).then(res => {
+        //const baseUrl = `http://dotnetinternship2022.norwayeast.cloudapp.azure.com:83`;
+        api.get(`/games`).then(res => {
             setGames(res.data.games);
         });
     },[]);
