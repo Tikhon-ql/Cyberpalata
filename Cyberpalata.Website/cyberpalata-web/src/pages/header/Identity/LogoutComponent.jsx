@@ -10,8 +10,6 @@ export const LogoutComponent = () => {
 
         if(localStorage.getItem('accessToken') != null && localStorage.getItem('refreshToken') != null)
         {
-            // const baseUrl = `https://localhost:7227`;
-            // const apiUrl = `${baseUrl}/authentication/logout`;
             let accessToken = localStorage.getItem('accessToken');
             let refreshToken = localStorage.getItem('refreshToken');
     
@@ -20,11 +18,11 @@ export const LogoutComponent = () => {
                 accessToken : accessToken,
                 refreshToken : refreshToken
             };
-    
-            localStorage.removeItem('accessToken');    
-            localStorage.removeItem('refreshToken');    
-    
-            api.post(`/authentication/logout`, requestBody).then(res =>{ navigate("/"); }).catch((error) => {console.log(error); navigate("/");});
+            api.post(`/authentication/logout`, requestBody).then(res =>{ 
+                navigate("/"); 
+                localStorage.removeItem('accessToken');    
+                localStorage.removeItem('refreshToken');
+            }).catch((error) => {console.log(error);});
         }
     }
 
