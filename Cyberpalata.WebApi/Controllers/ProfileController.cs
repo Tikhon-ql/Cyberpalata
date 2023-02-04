@@ -63,8 +63,8 @@ namespace Cyberpalata.WebApi.Controllers
             //var user = await _userService.ReadAsync(userId);
             var bookings = await _bookingService.GetPagedListAsync(page,userId);
 
-            if (page > bookings.TotalPagesCount)
-                return BadRequest("Page out of range.");
+            //if (page > bookings.TotalPagesCount)
+            //    return BadRequest("Page out of range.");
 
             var viewModel = new List<BookingSmallViewModel>();
             foreach(var item in bookings.Items)
@@ -77,7 +77,7 @@ namespace Cyberpalata.WebApi.Controllers
                     RoomName = item.Room.Name
                 });
             }
-            return Ok(viewModel);
+            return Ok(new {viewModel, bookings.TotalItemsCount});
         }
 
         //[Authorize]
