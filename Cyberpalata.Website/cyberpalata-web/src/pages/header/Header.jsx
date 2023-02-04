@@ -16,11 +16,7 @@ export const Header = (props) => {
     {
         accessToken = jwtDecode(localStorage.getItem('accessToken'));
     }
-
     const [state, setState] = useState(0);
-
-  
-
     console.dir(accessToken);
     return <>
         <nav id="headerId" className="navbar navbar-light bg-transparent">
