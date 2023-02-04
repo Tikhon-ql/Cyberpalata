@@ -1,5 +1,5 @@
 import './Index.css';
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 // import {LoungeInfo} from './pages/LoungeInfo'
 // import {GamingRoomInfo} from './pages/GamingRoomInfo'
 import { GameConsoleRoom } from '../pages/body/GameConsoleRoom/GameConsoleRoom';
@@ -21,6 +21,8 @@ import { EmailConfirm } from '../pages/header/Identity/EmailConfirm';
 import { BookingViewComponent } from '../pages/body/Booking/BookingViewComponent';
 import GamingRoom from './../pages/body/GamingRoom/GamingRoom'
 import { OneBookingView } from '../pages/body/Booking/OneBookingView';
+import { IternalServerError } from './Errors/500/IternalServerError';
+import { NotFound } from './Errors/404/NotFound';
 
 export const Index = () => {
     return (
@@ -43,6 +45,9 @@ export const Index = () => {
                 <Route path="/emailConfirm/:email" element={<EmailConfirm/>}/>
                 <Route path="/bookingView" element={<BookingViewComponent/>}/>
                 <Route path="/bookingView/:id" element={<OneBookingView/>}/>
+                <Route path="/500" element={<IternalServerError/>}/>
+                <Route path="/404" element={<NotFound/>}/>
+                <Route path="*" element={<Navigate replace to="/404" />} />
             </Routes>
             <AccessTokenVerify/>          
         </BrowserRouter>
