@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 const api = axios.create({baseURL: 'https://localhost:7227'});
 
 api.interceptors.request.use(
@@ -11,27 +12,37 @@ api.interceptors.request.use(
         return config
     },
     error=>{
-        if(error.response.status === 401)
+        console.error();
+        return Promise.reject(error);
+    }   
+)
+
+
+api.interceptors.response.use(
+    response=>response,
+    error=>{
+        if(error.response.status === 500)
         {
+            window.location.replace("/500");
+        }
+        if(error.response.status === 400)
+        {
+            alert(error.response.data)
+        }
+        if(error.response.status === 404)
+        {
+            window.location.replace("/404");
+        }
+        if(error.response.status === 401)
+        {  
+            alert("You aren't authorized!");
             const accessToken = localStorage.getItem('accessToken');
             if(accessToken != null)
             {
-                //const decodedToken = jwtDecode(accessToken);
-                //console.log(decodedToken);
-                //console.log((Date.now() / 1000));
-                //let minutes = 1 * 30;
-                // if(decodedToken.exp - minutes < (Date.now() / 1000))
-                // {
-                //console.log(decodedToken.exp - minutes);
-                //console.log(Date.now() / 1000);
                 var refreshToken = localStorage.getItem('refreshToken');
                 if(refreshToken != null)
                 {
                     console.log("Access token has been refreshed.");
-                    //const apiRequestUrl = `https://localhost:7227/authentication/refresh`;
-                    // const config = {
-                    //     headers: { Authorization: `Bearer ${accessToken}` }
-                    // };
                     const requestBody =
                     {       
                         "accessToken" : accessToken,
@@ -45,17 +56,10 @@ api.interceptors.request.use(
                 }
                 else{
                     alert("There are some trubles: refresh token is undefined.");
-                }
-                //}
-            }
-        }
-    }
-)
-
-api.interceptors.response.use(
-    response=>response,
-    error=>{
-        console.log("anime response");
+                }                
+            }           
+        }    
+        return Promise.reject(error);
     }
 )
 
