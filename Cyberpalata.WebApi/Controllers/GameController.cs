@@ -24,14 +24,15 @@ namespace Cyberpalata.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest($"Bad request: {ModelState.ToString()}");
-            }
-            _logger.LogInformation("Loggin");
-            var games = await _gameService.GetPagedListAsync(1);
-            var viewModel = new GameLibraryViewModel { Games = games.Items.Select(g => g.GameName).ToList() };
-            return await ReturnSuccess(viewModel);
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest($"Bad request: {ModelState.ToString()}");
+            //}
+            //_logger.LogInformation("Loggin");
+            //var games = await _gameService.GetPagedListAsync(1);
+            //var viewModel = new GameLibraryViewModel { Games = games.Items.Select(g => g.GameName).ToList() };
+            //return await ReturnSuccess(viewModel);
+            return StatusCode(500);
         }
         [HttpGet("count")]
         public int[] Get(int count)
