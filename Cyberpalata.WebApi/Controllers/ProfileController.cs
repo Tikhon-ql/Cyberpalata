@@ -57,12 +57,17 @@ namespace Cyberpalata.WebApi.Controllers
         }
         [Authorize]
         [HttpGet("getBookingSmallInfo")]
-        public async Task<IActionResult> GetBookingsSmallInfo()
+        public async Task<IActionResult> GetBookingsSmallInfo(int page)
         {
             var userId = Guid.Parse(User.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Sid).Value);
-            var user = await _userService.ReadAsync(userId);
+            //var user = await _userService.ReadAsync(userId);
+            var bookings = await _bookingService.GetPagedListAsync(page,userId);
+
+            if (page > bookings.TotalPagesCount)
+                return BadRequest("Page out of range.");
+
             var viewModel = new List<BookingSmallViewModel>();
-            foreach(var item in user.Value.Bookings)
+            foreach(var item in bookings.Items)
             {
                 viewModel.Add(new BookingSmallViewModel
                 {
