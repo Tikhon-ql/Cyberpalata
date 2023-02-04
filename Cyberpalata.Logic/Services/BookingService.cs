@@ -68,5 +68,11 @@ namespace Cyberpalata.Logic.Services
             var bookings = user.Value.Bookings;
             return _mapper.Map<List<BookingDto>>(bookings).AsMaybe();
         }
+
+        public async Task<PagedList<BookingDto>> GetPagedListAsync(int pageNumber, Guid userId)
+        {
+            var list = await _repository.GetPagedListAsync(pageNumber, userId);
+            return _mapper.Map<PagedList<BookingDto>>(list);
+        }
     }
 }

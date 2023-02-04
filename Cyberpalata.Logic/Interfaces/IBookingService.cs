@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Cyberpalata.Common;
+using Cyberpalata.DataProvider.Models;
 using Cyberpalata.Logic.Models.Booking;
 using System;
 using System.Collections.Generic;
@@ -17,5 +18,6 @@ namespace Cyberpalata.Logic.Interfaces
         Task<Result<BookingDto>> SearchAsync(Guid id);
         Task<PagedList<BookingDto>> GetPagedListAsync(int pageNumber);
         Task<Maybe<List<BookingDto>>> GetBookingsByUserAsync(Guid userId);
+        Task<PagedList<BookingDto>> GetPagedListAsync(int pageNumber, Guid userId);
     }
 }
