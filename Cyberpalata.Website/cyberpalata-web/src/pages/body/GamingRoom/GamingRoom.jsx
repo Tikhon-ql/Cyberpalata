@@ -4,7 +4,7 @@ import './../../../Components/Index.css';
 import { DeviceInfo } from '../DeviceInfo';
 import Dropdown from 'react-bootstrap/Dropdown';
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 import { PriceInfo } from '../PriceInfo';
 import { useParams } from 'react-router-dom';
@@ -21,12 +21,15 @@ const GamingRoom = () => {
     const [priceInfo, setPrices] = useState([]);
     //const [info, setInfo] = useState<GamingRoomInfo>();
         //399CE32F-1610-44DD-B634-4FFDC223038B
-    api.get(`/gamingRooms/getRoomInfo?id=${id}`).then(res => {
-        console.dir(res);
-        setDevices(res.data.pcInfos);
-        setPrices(res.data.prices);
-        setPeripheries(res.data.peripheries);
-    })
+    useEffect(()=>{
+        api.get(`/gamingRooms/getRoomInfo?id=${id}`).then(res => {
+            console.dir(res);
+            setDevices(res.data.pcInfos);
+            setPrices(res.data.prices);
+            setPeripheries(res.data.peripheries);
+        })
+    },[]);
+  
     //Method.getGamingRoomInfo(id).then(res=>{setInfo(res.data)});
     //console.dir(deviceInfo);
 

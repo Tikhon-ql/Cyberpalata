@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "./../../../Components/api";
 
@@ -18,15 +18,17 @@ export const OneBookingView = ()=>{
     // const config = {
     //     headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
     // };
-    api.get(`/booking/getBooking?id=${id}`).then(res=>{
-        setRoomName(res.data.roomName);
-        setBegining(res.data.begining);
-        setEnding(res.data.ending);
-        setTariff(res.data.tariff);
-        setSeats(res.data.seats);
-        console.dir(seats);
-    }).catch(console.log);
-
+    useEffect(()=>{
+        api.get(`/booking/getBooking?id=${id}`).then(res=>{
+            setRoomName(res.data.roomName);
+            setBegining(res.data.begining);
+            setEnding(res.data.ending);
+            setTariff(res.data.tariff);
+            setSeats(res.data.seats);
+            console.dir(seats);
+        }).catch(console.log);
+    },[]);
+ 
     let columnCount = 10;
     let rowCount = seats.length / columnCount;
 

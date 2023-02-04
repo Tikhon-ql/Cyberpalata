@@ -1,17 +1,18 @@
-import { useState} from "react";
+import { useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import api from "../../../Components/api";
+import { Pagination } from "../../../Components/Helpers/Pagination";
 import {OneBookingView} from "./OneBookingView"
 
 export const BookingViewComponent = (props)=>{
     const[bookingsSmall, setBookingsSmall] = useState([]);
     const[curPage, setCurPage] = useState(1);
-
-    api.get(`/profile/getBookingSmallInfo`).then(res=>{
-        setBookingsSmall(res.data);
-    }).catch(console.log);
+    useEffect(()=>{
+        api.get(`/profile/getBookingSmallInfo?page=${curPage}`).then(res=>{
+            setBookingsSmall(res.data);
+        }).catch(console.log);
+    },[]);
     return <>
-    
         <h1>Bookings</h1>       
         <div className="list-group">
             {bookingsSmall.map(item=>{
@@ -22,6 +23,7 @@ export const BookingViewComponent = (props)=>{
                         </div>
                     </Link>
             })}
+            <Pagination pageCount = {bookingsSmall.length} setCurPage = {setCurPage}/>
         </div>
     </>
 }

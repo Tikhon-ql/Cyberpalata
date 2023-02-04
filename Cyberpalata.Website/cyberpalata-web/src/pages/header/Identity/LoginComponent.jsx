@@ -12,13 +12,7 @@ export const LoginComponent = () => {
             "email":event.target.elements.email.value,
             "password":event.target.elements.password.value
         }
-
-        // console.dir(data);
-        //const baseUrl = `http://dotnetinternship2022.norwayeast.cloudapp.azure.com:83`;
-        // const baseUrl = `https://localhost:7227`;
-        // const apiRequestUrl = `${baseUrl}/authentication/login`;
-        //const apiRequestUrl = `https://localhost:7227/users/login`;
-
+        
         api.post(`/authentication/login`, data).then(res=>
         {
             localStorage.setItem('accessToken', res.data.accessToken);

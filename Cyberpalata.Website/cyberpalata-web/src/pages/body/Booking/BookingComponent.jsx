@@ -1,7 +1,7 @@
-import jwtDecode from "jwt-decode";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
 import "./BookingComponent.css";
+import jwtDecode from "jwt-decode";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import api from "./../../../Components/api";
 
 export const BookingComponent = () => {
@@ -11,6 +11,8 @@ export const BookingComponent = () => {
     const {roomType} = useParams();
     const [seats,setSeats] = useState([]);
     const [tarrifs, setTarrifs] = useState([]);
+    const [clickedSeats, setClickedSeats] = useState([]);
+    const [state, setState] = useState(0);
     const apiUrl = `https://localhost:7227;`;
 
     let accessToken = localStorage.getItem('accessToken');
@@ -19,12 +21,14 @@ export const BookingComponent = () => {
     // const config = {
     //     headers: { Authorization: `Bearer ${accessToken}` }
     // };
-
-    api.get(`/booking/seats?roomId=${roomId}`).then(res=>{
-        //console.dir(res);
-        setSeats(res.data.seats);
-        setTarrifs(res.data.tariffs);
-    }).catch(console.log);
+    useEffect(()=>{
+        api.get(`/booking/seats?roomId=${roomId}`).then(res=>{
+            //console.dir(res);
+            setSeats(res.data.seats);
+            setTarrifs(res.data.tariffs);
+        }).catch(console.log);
+    },[]);
+  
 
     let columnCount = 10;
     let rowCount = seats.length / columnCount;
@@ -70,14 +74,15 @@ export const BookingComponent = () => {
                 "seats": clickedSeats,        
             }
             console.dir(requestBody);
-            api.post(`/booking`, requestBody).then(res=>setClickedSeats([]));
+            api.post(`/booking`, requestBody).then(res=>{
+                setClickedSeats([]);
+            });
+            setState(1);
         }    
     }
 
-    const[clickedSeats, setClickedSeats] = useState([]);
     function onSeatClick(event)
-    {
-       
+    {   
         event.preventDefault();
         console.dir(event);
         if(event.target.className == "btn btn-dark")

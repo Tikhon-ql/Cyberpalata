@@ -1,9 +1,9 @@
 import axios from "axios"
 import jwtDecode from "jwt-decode";
 import { Link, useNavigate } from "react-router-dom";
-import { Children, useState } from "react";
+import { Children, useEffect, useState } from "react";
 import { Home } from "./Home";
-import { Modal } from "../../Components/Modal/Modal";
+import { Modal } from "../../Components/Helpers/Modal/Modal";
 import { BookingViewComponent } from "./Booking/BookingViewComponent";
 import api from "./../../Components/api";
 
@@ -29,7 +29,6 @@ export const ProfileComponent = () => {
         // const config = {
         //     headers: { Authorization: `Bearer ${accessToken}` }
         // };
-
         api.get(`/profile/getProfile`).then(res =>{
             console.dir(res);
             setName(res.data.username);

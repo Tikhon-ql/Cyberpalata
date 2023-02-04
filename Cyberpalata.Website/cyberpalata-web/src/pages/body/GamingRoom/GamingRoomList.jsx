@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {Link} from 'react-router-dom'
 import { useParams } from 'react-router-dom'
 import api from "./../../../Components/api";
@@ -8,9 +8,11 @@ export const GamingRoomList = () =>{
 
     const [gamingRoomsInfo, setGamingRoomsInfo] = useState([]);
     const {type} = useParams();
-    api.get(`/gamingRooms/type?type=${type}`).then(res => {
-        setGamingRoomsInfo(res.data.infos);
-    })
+    useEffect(()=>{
+        api.get(`/gamingRooms/type?type=${type}`).then(res => {
+            setGamingRoomsInfo(res.data.infos);
+        })
+    },[]); 
     //console.dir(gameConsoleRoomsInfo);
     // const sort = gameConsoleRoomsInfo.sort((a,b)=>{a.name < b.name ? 1 : -1});
     // console.dir(sort);

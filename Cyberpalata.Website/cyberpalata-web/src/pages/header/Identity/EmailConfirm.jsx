@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link,Navigate,useLocation, useNavigate, useParams } from "react-router-dom";
 import api from "./../../../Components/api";
 
@@ -18,11 +18,12 @@ export const EmailConfirm = ()=>{
     // let requestBody = {
     //     "email" : email
     // }
-
-    api.post(`/users/emailConfirm?email=${email}`).then(res=>{
-        setCode(res.data.code);
-    });
-
+    useEffect(()=>{
+        api.post(`/users/emailConfirm?email=${email}`).then(res=>{
+            setCode(res.data.code);
+        });
+    },[]);
+   
     function sendActivateRequest(event)
     {
         event.preventDefault();
