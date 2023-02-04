@@ -7,9 +7,12 @@ import {OneBookingView} from "./OneBookingView"
 export const BookingViewComponent = (props)=>{
     const[bookingsSmall, setBookingsSmall] = useState([]);
     const[curPage, setCurPage] = useState(1);
+    const[totalItemsCount, setTotalItemsCount] = useState(0);
     useEffect(()=>{
         api.get(`/profile/getBookingSmallInfo?page=${curPage}`).then(res=>{
-            setBookingsSmall(res.data);
+            console.dir(res.data);
+            setBookingsSmall(res.data.viewModel);
+            setTotalItemsCount(res.data.totalItemsCount);
         }).catch(console.log);
     },[]);
     return <>
@@ -23,7 +26,7 @@ export const BookingViewComponent = (props)=>{
                         </div>
                     </Link>
             })}
-            <Pagination pageCount = {bookingsSmall.length} setCurPage = {setCurPage}/>
+            <Pagination  totalItemsCount = {totalItemsCount} pageCount = {bookingsSmall.length} curPage = {curPage} setCurPage = {setCurPage}/>
         </div>
     </>
 }
