@@ -1,4 +1,5 @@
-﻿using Cyberpalata.DataProvider.Models;
+﻿using Cyberpalata.Common;
+using Cyberpalata.DataProvider.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace Cyberpalata.DataProvider.Interfaces
 {
     public interface IBookingRepository : IRepository<Booking>
     {
-        //Task<bool> CheckIsSeatFreeAsync(Seat seat);
+        Task<PagedList<Booking>> GetPagedListAsync(int pageNumber, Guid userId);
     }
 }
