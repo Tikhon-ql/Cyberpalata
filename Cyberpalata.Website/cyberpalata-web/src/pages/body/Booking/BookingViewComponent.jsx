@@ -14,18 +14,21 @@ export const BookingViewComponent = (props)=>{
             setBookingsSmall(res.data.viewModel);
             setTotalItemsCount(res.data.totalItemsCount);
         }).catch(console.log);
-    },[]);
+    },[curPage]);
     return <>
+        <h1>{curPage}</h1>
         <h1>Bookings</h1>       
         <div className="list-group">
             {bookingsSmall.map(item=>{
                 return <Link to={`/bookingView/${item.id}`} className="list-group-item list-group-item-action list-group-item-dark">
                         <div>
+                            <h1>{curPage}</h1>
                             <div>{item.roomName}</div>
                             <div>{item.begining} : {item.ending}</div>
                         </div>
                     </Link>
             })}
+            <button onClick={()=>{console.log(curPage)}}>Click</button>
             <Pagination  totalItemsCount = {totalItemsCount} pageCount = {bookingsSmall.length} curPage = {curPage} setCurPage = {setCurPage}/>
         </div>
     </>
