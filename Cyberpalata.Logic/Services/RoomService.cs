@@ -4,21 +4,25 @@ using Cyberpalata.Common;
 using Cyberpalata.Common.Enums;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
-using Cyberpalata.Logic.Interfaces;
+using Cyberpalata.Logic.Interfaces.Filters;
+using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models;
 using Cyberpalata.Logic.Models.Booking;
+using NLog.Filters;
 
 namespace Cyberpalata.Logic.Services
 {
     internal class RoomService : IRoomService
     {
         private readonly IRoomRepository _repository;
+        private readonly IBookingFilter _bookingFilter;
         private readonly IMapper _mapper;
 
-        public RoomService(IRoomRepository repository, IMapper mapper)
+        public RoomService(IRoomRepository repository, IMapper mapper, IBookingFilter bookingFilter)
         {
             _repository = repository;
             _mapper = mapper;
+            _bookingFilter = bookingFilter;
         }
 
         public async Task CreateAsync(RoomDto entity)
@@ -84,6 +88,10 @@ namespace Cyberpalata.Logic.Services
             if (room.HasNoValue)
                 return Result.Failure($"There aren't roo with id:{request.RoomId}");
             var dto = _mapper.Map<BookingDto>(request);
+
+            if (!_bookingFilter.IsValid(dto))
+                return Result.Failure("Data is invalid.");
+
             dto.User.Id = userId;
             await _repository.AddBookingToRoomAsync(request.RoomId, _mapper.Map<Booking>(dto));
             return Result.Success();

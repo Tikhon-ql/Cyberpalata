@@ -1,5 +1,7 @@
 ﻿using Cyberpalata.DataProvider.Configuration;
-using Cyberpalata.Logic.Interfaces;
+using Cyberpalata.Logic.Filters;
+using Cyberpalata.Logic.Interfaces.Filters;
+using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,6 +33,7 @@ namespace Cyberpalata.Logic.Configuration
             services.AddScoped<IBookingService, BookingService>();
             services.AddScoped<ISeatService, SeatService>();
             services.AddScoped<IMailService, MailService>();
+            services.AddSingleton<IBookingFilter, BookingFilter>();
             //services.AddScoped<ILoggerManager, LoggerManager>();
             //services.AddTransient<IMenuItemService, MenuItemService>();
         }

@@ -3,7 +3,8 @@ using CSharpFunctionalExtensions;
 using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
-using Cyberpalata.Logic.Interfaces;
+using Cyberpalata.Logic.Interfaces.Filters;
+using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Booking;
 using System;
 using System.Collections.Generic;
@@ -17,19 +18,27 @@ namespace Cyberpalata.Logic.Services
     {
         private readonly IBookingRepository _repository;
         private readonly IApiUserRepository _userRepository;
+        private readonly IBookingFilter _filter;
         private readonly IMapper _mapper;
 
-        public BookingService(IBookingRepository repository, IApiUserRepository userRepository, IMapper mapper)
+        public BookingService(IBookingRepository repository,
+            IApiUserRepository userRepository, 
+            IMapper mapper, IBookingFilter filter)
         {
             _repository = repository;
             _userRepository = userRepository;
             _mapper = mapper;
+            _filter = filter;
         }
 
-        public async Task CreateAsync(BookingCreateRequest request)
+        public async Task<Result> CreateAsync(BookingCreateRequest request)
         {
-            var ormModel = _mapper.Map<Booking>(request);
+            var dto = _mapper.Map<BookingDto>(request);
+            if(!_filter.IsValid(dto))
+                return Result.Failure("Data is invalid.");
+            var ormModel = _mapper.Map<Booking>(dto);
             await _repository.CreateAsync(ormModel);
+            return Result.Success();
         }
         public async Task<Maybe<BookingDto>> ReadAsync(Guid id)
         {
