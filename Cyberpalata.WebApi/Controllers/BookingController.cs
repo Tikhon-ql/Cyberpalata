@@ -115,7 +115,7 @@ namespace Cyberpalata.WebApi.Controllers
                 Seats = new List<SeatBookingViewModel>()
             };
 
-            var seats = await _seatService.GetSeatsByRoomId(booking.Value.Room.Id);
+            var seats = await _seatService.GetSeatsByRoomIdAsync(booking.Value.Room.Id);
             var resultSeats = new List<SeatBookingViewModel>();
             seats.Value.ForEach((seat =>
             {
