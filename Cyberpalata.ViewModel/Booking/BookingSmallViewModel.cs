@@ -10,7 +10,8 @@ namespace Cyberpalata.ViewModel.Booking
     {
         public Guid Id { get; set; }
         public string RoomName { get; set; }
-        public DateTime Begining { get; set; }
-        public DateTime Ending { get; set; }
+        public DateTime Date { get; set; }
+        public TimeSpan Begining { get; set; }
+        public TimeSpan Ending { get; set; }
     }
 }
