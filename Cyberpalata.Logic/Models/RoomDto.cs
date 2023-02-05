@@ -4,6 +4,7 @@ using Cyberpalata.DataProvider.Models.Devices;
 using Cyberpalata.Logic.Models.Booking;
 using Cyberpalata.Logic.Models.Devices;
 using Cyberpalata.Logic.Models.Peripheral;
+using Cyberpalata.Logic.Models.Seats;
 using System.ComponentModel.DataAnnotations;
 
 namespace Cyberpalata.Logic.Models
