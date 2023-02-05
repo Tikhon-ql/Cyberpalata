@@ -3,7 +3,7 @@ using Cyberpalata.Common.Enums;
 using Cyberpalata.Common.Intefaces;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
-using Cyberpalata.Logic.Interfaces;
+using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Booking;
 using Cyberpalata.ViewModel;
 using Cyberpalata.ViewModel.Booking;

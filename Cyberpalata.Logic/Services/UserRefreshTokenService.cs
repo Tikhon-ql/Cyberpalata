@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CSharpFunctionalExtensions;
 using Cyberpalata.DataProvider.Interfaces;
-using Cyberpalata.Logic.Interfaces;
+using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Identity;
 
 namespace Cyberpalata.Logic.Services

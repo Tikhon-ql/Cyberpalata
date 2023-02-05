@@ -1,6 +1,6 @@
 ﻿using Cyberpalata.Common.Enums;
 using Cyberpalata.Common.Intefaces;
-using Cyberpalata.Logic.Interfaces;
+using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.ViewModel.Rooms;
 using Cyberpalata.ViewModel.Rooms.GameConsoleRoom;
 using Microsoft.AspNetCore.Mvc;

@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Cyberpalata.Common.Enums;
 using Cyberpalata.Common.Intefaces;
-using Cyberpalata.Logic.Interfaces;
+using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models;
 using Cyberpalata.Logic.Models.Devices;
 using Cyberpalata.ViewModel.Rooms;

@@ -3,7 +3,7 @@ using CSharpFunctionalExtensions;
 using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Devices;
-using Cyberpalata.Logic.Interfaces;
+using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Devices;
 
 namespace Cyberpalata.Logic.Services

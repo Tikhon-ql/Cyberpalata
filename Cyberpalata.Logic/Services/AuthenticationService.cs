@@ -2,7 +2,7 @@
 using CSharpFunctionalExtensions;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Identity;
-using Cyberpalata.Logic.Interfaces;
+using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Identity;
 using Cyberpalata.Logic.Models.Identity.User;
 using Microsoft.Extensions.Configuration;

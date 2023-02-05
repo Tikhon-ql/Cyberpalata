@@ -1,4 +1,4 @@
-﻿using Cyberpalata.Logic.Interfaces;
+﻿using Cyberpalata.Logic.Interfaces.Services;
 using System.Security.Cryptography;
 using System.Text;
 

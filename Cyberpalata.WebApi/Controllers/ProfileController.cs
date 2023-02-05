@@ -1,5 +1,5 @@
 ﻿using Cyberpalata.Common.Intefaces;
-using Cyberpalata.Logic.Interfaces;
+using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Identity.User;
 using Cyberpalata.ViewModel.Booking;
 using Cyberpalata.ViewModel.Rooms;

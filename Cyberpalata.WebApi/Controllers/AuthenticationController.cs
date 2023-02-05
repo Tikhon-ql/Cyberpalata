@@ -1,5 +1,5 @@
 ﻿using Cyberpalata.Common.Intefaces;
-using Cyberpalata.Logic.Interfaces;
+using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Identity;
 using Cyberpalata.Logic.Models.Identity.User;
 using Microsoft.AspNetCore.Authorization;
