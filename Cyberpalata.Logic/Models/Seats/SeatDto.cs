@@ -1,7 +1,7 @@
 ﻿using Cyberpalata.DataProvider.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace Cyberpalata.Logic.Models
+namespace Cyberpalata.Logic.Models.Seats
 {
     public class SeatDto
     {
