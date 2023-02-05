@@ -1,4 +1,5 @@
 ﻿using Cyberpalata.Logic.Models.Identity.User;
+using Cyberpalata.Logic.Models.Seats;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -14,11 +15,13 @@ namespace Cyberpalata.Logic.Models.Booking
         [Required]
         public ApiUserDto User { get; set; } = new();
         [Required]
-        public DateTime Begining { get; set; }
+        public DateTime Date { get; set; }
         [Required]
-        public RoomDto Room { get; set; } = new();
+        public TimeSpan Begining { get; set; }
         [Required]
-        public DateTime Ending { get; set; }
+        public TimeSpan Ending { get; set; }
+        [Required]
+        public RoomDto Room { get; set; } = new();     
         [Required]
         public PriceDto Tariff { get; set; }
         [Required]
