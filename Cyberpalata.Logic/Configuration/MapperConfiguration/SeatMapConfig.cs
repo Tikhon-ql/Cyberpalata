@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Models;
-using Cyberpalata.Logic.Models;
+using Cyberpalata.Logic.Models.Seats;
 using System;
 using System.Collections.Generic;
 using System.Linq;
