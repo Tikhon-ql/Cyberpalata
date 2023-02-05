@@ -65,14 +65,5 @@ export const OneBookingView = ()=>{
             })}
             </tbody>         
         </table>
-          {/* {seats.map(seat=>{
-                            setCountInRow(countInRow + 1);
-                            return <> 
-                                    {countInRow > 10 & <br/>}
-                                    {seat.type.name == "Free" & <button id = {`button${seat.number}`} className="btn btn-outline-dark" >{seat.number}</button>}
-                                    {seat.type.name == "IsTaken" & <button id = {`button${seat.number}`} className="btn btn-dark disabled">{seat.number}</button>}
-                                    {seat.type.name == "UsersSeat" & <button id = {`button${seat.number}`} className="btn btn-primary disabled">{seat.number}</button>}
-                                </>
-            })} */}
     </>
 }
