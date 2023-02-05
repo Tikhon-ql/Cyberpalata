@@ -64,16 +64,16 @@ namespace Cyberpalata.WebApi.Controllers
             //        resultSeats.Add(new Seat { Number = item.Number, IsFree = true });
             //}
 
-            var resultSeats = await _seatService.GetSeatsByRoomId(roomId);
-            if (resultSeats.HasNoValue)
-                return BadRequest("Something wrong with room id or its seats");
+            //var resultSeats = await _seatService.GetSeatsByRoomId(roomId);
+            //if (resultSeats.HasNoValue)
+               //return BadRequest("Something wrong with room id or its seats");
             var tariffs = await _priceService.GetByRoomIdAsync(roomId);
             if(tariffs.HasNoValue)
                 return BadRequest("Something wrong with room id or its tariffs");
 
             var viewModel = new BookingAddingViewModel
             {
-                Seats = resultSeats.Value.Select(s =>  new SeatViewModel { Number = s.Number, IsFree = s.IsFree}).ToList(),
+                //Seats = resultSeats.Value.Select(s =>  new SeatViewModel { Number = s.Number, IsFree = s.IsFree}).ToList(),
                 Tariffs = tariffs.Value.Select(t => new PriceViewModel(t.Hours, t.Cost)).ToList()
             };
 
