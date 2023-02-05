@@ -91,8 +91,17 @@ namespace Cyberpalata.WebApi.Controllers
 
             var userId = Guid.Parse(User.Claims.Single(claim => claim.Type == JwtRegisteredClaimNames.Sid).Value);
 
-            await _roomService.AddBookingToRoom(userId,request);
+            var result = await _roomService.AddBookingToRoom(userId,request);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
             return await ReturnSuccess();
+        }
+
+        [Authorize]
+        [HttpGet("getPrice")]
+        public async Task<IActionResult> GetPrice(TimeSpan beg, TimeSpan end)
+        {
+            return Ok((end-beg).TotalMinutes / 4);
         }
 
         [Authorize]
