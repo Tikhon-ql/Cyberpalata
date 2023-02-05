@@ -12,7 +12,7 @@ namespace Cyberpalata.Logic.Filters
     {
         public bool IsValid(BookingDto obj)
         {
-            if(obj.Ending <= DateTime.Now || obj.Begining >= obj.Ending)
+            if(obj.Date <= DateTime.Now || obj.Begining >= obj.Ending)
                 return false;
             return true;
         }
