@@ -1,7 +1,9 @@
 import axios from 'axios';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 const api = axios.create({baseURL: 'https://localhost:7227'});
-
+//https://localhost:7227
+//http://dotnetinternship2022.norwayeast.cloudapp.azure.com:83/
 api.interceptors.request.use(
     config=> {
         const accessToken = localStorage.getItem('accessToken');
@@ -34,7 +36,9 @@ api.interceptors.response.use(
             window.location.replace("/404");
         }
         if(error.response.status === 401)
-        {  
+        { 
+            const originalRequest = error.config;
+          
             alert("You aren't authorized!");
             const accessToken = localStorage.getItem('accessToken');
             if(accessToken != null)
@@ -52,12 +56,14 @@ api.interceptors.response.use(
                     {
                         localStorage.setItem("accessToken", res.data.accessToken);
                         localStorage.setItem("refreshToken", res.data.refreshToken);
-                    }).catch(console.log);
+                    }).catch(console.log);      
                 }
                 else{
                     alert("There are some trubles: refresh token is undefined.");
-                }                
-            }           
+                }              
+                originalRequest._retry = true;
+                return api(originalRequest);            
+            }        
         }    
         return Promise.reject(error);
     }
