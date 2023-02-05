@@ -3,6 +3,7 @@ import jwtDecode from "jwt-decode";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "./../../../Components/api";
+import { servicesVersion } from "typescript";
 
 export const BookingComponent = () => {
     
@@ -12,7 +13,7 @@ export const BookingComponent = () => {
     const [seats,setSeats] = useState([]);
     const [tarrifs, setTarrifs] = useState([]);
     const [clickedSeats, setClickedSeats] = useState([]);
-    const [state, setState] = useState(0);
+    const [state, setState] = useState(10);
     const apiUrl = `https://localhost:7227;`;
 
     let accessToken = localStorage.getItem('accessToken');
@@ -26,10 +27,10 @@ export const BookingComponent = () => {
             //console.dir(res);
             setSeats(res.data.seats);
             setTarrifs(res.data.tariffs);
+            tarrifs.sort((a,b) => a.hours > b.hours);
         }).catch(console.log);
-    },[]);
+    },[clickedSeats]);
   
-
     let columnCount = 10;
     let rowCount = seats.length / columnCount;
 
@@ -52,8 +53,7 @@ export const BookingComponent = () => {
     //     }
     //     //console.dir(allSeats);
     // }
-
-    function sendBookToServer(event)
+    const sendBookToServer = (event) =>
     {
         event.preventDefault();
         console.dir(event);
@@ -70,15 +70,15 @@ export const BookingComponent = () => {
                 {
                     "hours":tariff[0],
                     "cost":tariff[1]
-                },
+                },           
                 "seats": clickedSeats,        
             }
             console.dir(requestBody);
-            api.post(`/booking`, requestBody).then(res=>{
+            api.post(`/booking`, requestBody).then(res=>{    
                 setClickedSeats([]);
-            });
-            setState(1);
-        }    
+            }).catch(console.log);
+           
+        }
     }
 
     function onSeatClick(event)
