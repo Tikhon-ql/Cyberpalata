@@ -9,7 +9,7 @@ export const Pagination = ({pageCount, curPage,setCurPage,totalItemsCount}) =>
     return(
         <ul class="pagination">
             {pages.map((page,index) => {
-                return <li key={index} onClick={()=>{console.dir(page) ;setCurPage(page);}} className = {page == curPage ? 'page-item active' : 'page-item'}><a className="page-link">{page}</a></li>
+                return <li key={index} onClick={()=>{setCurPage(page)}} className = {page == curPage? 'page-item active' : 'page-item'}><a className="page-link">{page}</a></li>
             })}
         </ul>
     )
