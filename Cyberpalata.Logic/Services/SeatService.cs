@@ -4,7 +4,7 @@ using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
 using Cyberpalata.Logic.Interfaces.Services;
-using Cyberpalata.Logic.Models;
+using Cyberpalata.Logic.Models.Seats;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +19,7 @@ namespace Cyberpalata.Logic.Services
         private readonly IRoomRepository _roomRepository;
         private readonly IMapper _mapper;
 
-        public SeatService(ISeatRepository repository,IRoomRepository roomRepository, IMapper mapper)
+        public SeatService(ISeatRepository repository, IRoomRepository roomRepository, IMapper mapper)
         {
             _repository = repository;
             _roomRepository = roomRepository;
@@ -66,18 +66,41 @@ namespace Cyberpalata.Logic.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Maybe<List<SeatDto>>> GetSeatsByRoomId(Guid roomId)
+        public async Task<Maybe<List<SeatDto>>> GetSeatsByRoomIdAsync(Guid roomId)
         {
             var room = await _roomRepository.ReadAsync(roomId);
             if (room.HasNoValue)
                 return Maybe.None;
             var list = room.Value.Seats;
             var resultSeats = _mapper.Map<List<SeatDto>>(room.Value.Seats);
-            var bookings = room.Value.Bookings.Where(b=>b.Ending < DateTime.Now).ToList();
+            var bookings = room.Value.Bookings.Where(b => b.Date > DateTime.Now).ToList();
             foreach (var seat in resultSeats)
             {
                 var isSeatFree = bookings.FirstOrDefault(b => b.Seats.FirstOrDefault(s => s.Id == seat.Id) != null) == null;
-                if(isSeatFree)
+                if (isSeatFree)
+                {
+                    seat.IsFree = true;
+                }
+            }
+            return resultSeats;
+        }
+
+        public async Task<Maybe<List<SeatDto>>> GetSeatsByRoomInRangeIdAsync(SeatsGettingRequest request)
+        {
+            var room = await _roomRepository.ReadAsync(request.RoomId);
+            if (room.HasNoValue)//////?????????
+                return Maybe.None;/////????????????
+            var list = room.Value.Seats;
+            var resultSeats = _mapper.Map<List<SeatDto>>(room.Value.Seats);
+            var bookings = room.Value.Bookings
+                .Where(b => b.Date > DateTime.Now 
+                && (b.Date == request.Date 
+                && ((b.Begining <= request.Begining && b.Ending >= request.Begining) 
+                || (b.Begining <= request.Ending && request.Begining <= b.Begining)))).ToList();
+            foreach (var seat in resultSeats)
+            {
+                var isSeatFree = bookings.FirstOrDefault(b => b.Seats.FirstOrDefault(s => s.Id == seat.Id) != null) == null;
+                if (isSeatFree)
                 {
                     seat.IsFree = true;
                 }
