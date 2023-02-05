@@ -11,8 +11,9 @@ namespace Cyberpalata.ViewModel.Booking
     public class BookingAddingViewModel
     {
         public string RoomName { get; set; }
-        public DateTime Begining { get; set; }
-        public DateTime Ending { get; set; }
+        public DateTime Date { get; set; }
+        public TimeSpan Begining { get; set; }
+        public TimeSpan Ending { get; set; }
         public List<Rooms.SeatViewModel> Seats { get; set; } = new();
         public List<PriceViewModel> Tariffs { get; set; } = new();
     }
