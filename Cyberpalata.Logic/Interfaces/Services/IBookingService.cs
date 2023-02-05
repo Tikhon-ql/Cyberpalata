@@ -8,11 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cyberpalata.Logic.Interfaces
+namespace Cyberpalata.Logic.Interfaces.Services
 {
     public interface IBookingService
     {
-        Task CreateAsync(BookingCreateRequest request);
+        Task<Result> CreateAsync(BookingCreateRequest request);
         Task<Maybe<BookingDto>> ReadAsync(Guid id);
         Task<Result> DeleteAsync(Guid id);
         Task<Result<BookingDto>> SearchAsync(Guid id);

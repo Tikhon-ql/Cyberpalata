@@ -1,4 +1,4 @@
-﻿namespace Cyberpalata.Logic.Interfaces
+﻿namespace Cyberpalata.Logic.Interfaces.Services
 {
     public interface IHashGenerator
     {

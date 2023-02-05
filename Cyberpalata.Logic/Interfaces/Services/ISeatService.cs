@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Cyberpalata.Logic.Models;
 
-namespace Cyberpalata.Logic.Interfaces
+namespace Cyberpalata.Logic.Interfaces.Services
 {
     public interface ISeatService : IService<SeatDto>
     {

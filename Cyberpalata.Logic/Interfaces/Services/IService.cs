@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Cyberpalata.Common;
 
-namespace Cyberpalata.Logic.Interfaces
+namespace Cyberpalata.Logic.Interfaces.Services
 {
     public interface IService<T> where T : class
     {
