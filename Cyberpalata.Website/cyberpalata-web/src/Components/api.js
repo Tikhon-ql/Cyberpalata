@@ -35,36 +35,10 @@ api.interceptors.response.use(
         {
             window.location.replace("/404");
         }
-        if(error.response.status === 401)
-        { 
-            const originalRequest = error.config;
+        // if(error.response.status === 401)
+        // { 
           
-            alert("You aren't authorized!");
-            const accessToken = localStorage.getItem('accessToken');
-            if(accessToken != null)
-            {
-                var refreshToken = localStorage.getItem('refreshToken');
-                if(refreshToken != null)
-                {
-                    console.log("Access token has been refreshed.");
-                    const requestBody =
-                    {       
-                        "accessToken" : accessToken,
-                        "refreshToken":refreshToken
-                    }
-                    api.post(`/authentication/refresh`,requestBody).then(res=>
-                    {
-                        localStorage.setItem("accessToken", res.data.accessToken);
-                        localStorage.setItem("refreshToken", res.data.refreshToken);
-                    }).catch(console.log);      
-                }
-                else{
-                    alert("There are some trubles: refresh token is undefined.");
-                }              
-                originalRequest._retry = true;
-                return api(originalRequest);            
-            }        
-        }    
+        // }    
         return Promise.reject(error);
     }
 )
