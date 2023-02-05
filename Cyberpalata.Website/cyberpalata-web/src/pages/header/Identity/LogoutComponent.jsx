@@ -18,11 +18,10 @@ export const LogoutComponent = () => {
                 accessToken : accessToken,
                 refreshToken : refreshToken
             };
-            api.post(`/authentication/logout`, requestBody).then(res =>{ 
-                navigate("/"); 
-                localStorage.removeItem('accessToken');    
-                localStorage.removeItem('refreshToken');
-            }).catch((error) => {console.log(error);});
+            api.post(`/authentication/logout`, requestBody).then(()=>{});
+            localStorage.removeItem('accessToken');    
+            localStorage.removeItem('refreshToken');
+            navigate("/");
         }
     }
 
