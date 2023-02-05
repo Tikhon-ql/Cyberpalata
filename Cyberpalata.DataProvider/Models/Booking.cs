@@ -18,9 +18,11 @@ namespace Cyberpalata.DataProvider.Models
         [ForeignKey("UserId")]
         public virtual ApiUser User { get; set; }
         [Required]
-        public DateTime Begining { get; set; }
+        public DateTime Date { get; set; }
         [Required]
-        public DateTime Ending { get; set; }
+        public TimeSpan Begining { get; set; }
+        [Required]
+        public TimeSpan Ending { get; set; }
         [Required]
         public Guid PriceId { get; set; }
         [ForeignKey("PriceId")]
