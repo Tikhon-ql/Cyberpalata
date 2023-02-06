@@ -24,7 +24,7 @@ namespace Cyberpalata.Logic.Configuration.MapperConfiguration
             profile.CreateMap<BookingCreateRequest, BookingDto>()
                 .ForMember(dst=>dst.Date, opt=>opt.MapFrom(src=>src.Date))
                 .ForMember(dst => dst.Begining, opt => opt.MapFrom(src => src.Begining))
-                .ForMember(dst => dst.Ending, opt => opt.MapFrom(src => src.Ending))
+                .ForMember(dst => dst.HoursCount, opt => opt.MapFrom(src => src.HoursCount))
                 .ForMember(dst => dst.Tariff, opt => opt.MapFrom(src => src.Tariff))
                 .ForMember(dst => dst.Seats, opt => opt.MapFrom(src => src.Seats.Select(item => new SeatDto { Number = item, IsFree = false })));
         }
