@@ -22,7 +22,7 @@ namespace Cyberpalata.DataProvider.Models
         [Required]
         public TimeSpan Begining { get; set; }
         [Required]
-        public TimeSpan Ending { get; set; }
+        public int HoursCount { get; set; }
         [Required]
         public Guid PriceId { get; set; }
         [ForeignKey("PriceId")]
