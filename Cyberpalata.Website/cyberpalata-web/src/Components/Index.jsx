@@ -25,7 +25,7 @@ import { IternalServerError } from './Errors/500/IternalServerError';
 import { NotFound } from './Errors/404/NotFound';
 
 export const Index = () => {
-    return (
+    return <div>
         <BrowserRouter basename='/'>
             <Routes>
                 <Route path='/' element={<Home />} />
@@ -52,5 +52,5 @@ export const Index = () => {
             </Routes>
             <AccessTokenVerify/>          
         </BrowserRouter>
-    );
+    </div>
 }

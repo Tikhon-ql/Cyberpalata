@@ -73,7 +73,7 @@ namespace Cyberpalata.WebApi.Controllers
                 {
                     Id = item.Id,
                     Begining = item.Begining,
-                    Ending = item.Ending,
+                    //Gou = item.HoursCount,
                     RoomName = item.Room.Name
                 });
             }

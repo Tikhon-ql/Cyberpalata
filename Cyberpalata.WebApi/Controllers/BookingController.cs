@@ -114,7 +114,7 @@ namespace Cyberpalata.WebApi.Controllers
             var viewModel = new BookingViewModel
             {
                 Begining = booking.Value.Begining,
-                Ending = booking.Value.Ending,
+                //Ending = booking.Value.Ending,
                 RoomName = booking.Value.Room.Name,
                 Tariff = new PriceViewModel
                 {

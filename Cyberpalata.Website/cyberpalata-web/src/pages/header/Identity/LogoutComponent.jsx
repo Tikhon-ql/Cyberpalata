@@ -19,11 +19,10 @@ export const LogoutComponent = ({setModalActive}) => {
             };
             api.post(`/authentication/logout`, requestBody).then(()=>
             {
-                localStorage.removeItem('accessToken');    
-                localStorage.removeItem('refreshToken');
-                setModalActive(false);
             });
-         
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            setModalActive(false);
         }
     }
 

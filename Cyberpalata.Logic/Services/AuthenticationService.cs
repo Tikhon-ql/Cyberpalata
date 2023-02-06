@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Castle.Core.Logging;
 using CSharpFunctionalExtensions;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Identity;
@@ -6,6 +7,7 @@ using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Identity;
 using Cyberpalata.Logic.Models.Identity.User;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -76,7 +78,6 @@ namespace Cyberpalata.Logic.Services
         //Maybe = valid null
         public async Task<Result<TokenDto>> RefreshTokenAsync(TokenDto tokenDto)
         {
-
             var claimIdResult = GetClaim(tokenDto.AccessToken, JwtRegisteredClaimNames.Sid);
             if (claimIdResult.IsFailure)
                 return Result.Failure<TokenDto>(claimIdResult.Error);
@@ -196,9 +197,9 @@ namespace Cyberpalata.Logic.Services
         public async Task<Result> LogoutAsync(TokenDto tokenDto)
         {
             var userRefreshToken = await _refreshTokenRepository.ReadAsync(tokenDto.RefreshToken);
-
+            //add own error class
             if (!userRefreshToken.HasValue)
-                return Result.Failure("Refresh token doesn't exist in database!");
+                return Result.Failure("");
 
             var claimIdResult = GetClaim(tokenDto.AccessToken, JwtRegisteredClaimNames.Sid);
             if (claimIdResult.IsFailure)

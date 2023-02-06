@@ -11,6 +11,6 @@ namespace Cyberpalata.Logic.Models.Seats
         public Guid RoomId { get; set; }
         public DateTime Date { get; set; }
         public TimeSpan Begining { get; set; }
-        public TimeSpan Ending { get; set; }
+        public int HoursCount { get; set; }
     }
 }

@@ -95,8 +95,10 @@ namespace Cyberpalata.Logic.Services
             var bookings = room.Value.Bookings
                 .Where(b => b.Date > DateTime.Now 
                 && (b.Date == request.Date 
-                && ((b.Begining <= request.Begining && b.Ending >= request.Begining) 
-                || (b.Begining <= request.Ending && request.Begining <= b.Begining)))).ToList();
+                && ((request.Begining <= b.Begining 
+                    && request.Date.Add(request.Begining).AddHours(request.HoursCount) > b.Date.Add(b.Begining)) 
+                || (b.Begining <= request.Begining
+                    && request.Date.Add(request.Begining).AddHours(request.HoursCount) < b.Date.Add(b.Begining).AddHours(b.HoursCount))))).ToList();
             foreach (var seat in resultSeats)
             {
                 var isSeatFree = bookings.FirstOrDefault(b => b.Seats.FirstOrDefault(s => s.Id == seat.Id) != null) == null;

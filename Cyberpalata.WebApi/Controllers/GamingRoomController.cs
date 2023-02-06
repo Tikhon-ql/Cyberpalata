@@ -58,7 +58,7 @@ namespace Cyberpalata.WebApi.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest($"Bad request: {ModelState.ToString()}");
+                return BadRequest($"Bad request: {ModelState}");
             }
             var prices = await _priceService.GetByRoomIdAsync(id);   
             var peripheries = await _peripheryService.GetByGamingRoomId(id);

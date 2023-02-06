@@ -60,7 +60,14 @@ namespace Cyberpalata.WebApi.Controllers
             var res = await _authenticationService.LogoutAsync(tokenDto);
 
             if (res.IsFailure)
+            {
+                if (res.Error == "")
+                {
+                    return await ReturnSuccess();
+                }
                 return BadRequest(res.Error);
+            }
+               
 
             return await ReturnSuccess();
         }

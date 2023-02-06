@@ -12,7 +12,6 @@ export const BookingComponent = () => {
     const {roomType} = useParams();
     const [seats,setSeats] = useState([]);
     const [price, setPrice] = useState(0);
-    //const [tarrifs, setTarrifs] = useState([]);
     const [clickedSeats, setClickedSeats] = useState([]);
     const [state, setState] = useState(10);
     const apiUrl = `https://localhost:7227;`;
@@ -25,22 +24,26 @@ export const BookingComponent = () => {
         console.dir(event);
         let date = document.forms[0].date.value;
         let beg = document.forms[0].begining.value;
-        let end = document.forms[0].ending.value;
-        if(date && beg && end && end > beg)
+        let hours = document.forms[0].hours.value;
+        if(hours)
         {
-            let requestBody = {
-                "roomId":roomId,
-                "date":date,
-                "begining":beg,
-                "ending":end
-            }
-            api.get(`/seats/getSeats`,requestBody).then(res=>{
-                setSeats(res.data);
-            })
-            api.get(`/booking/getPrice?beg=${beg}&end=${end}`).then(res=>{
-                setPrice(res.data);
-            });
-        }     
+            document.getElementById("rangeVal").innerText = hours;
+        }
+        // if(date && beg && end && end > beg)
+        // {
+        //     let requestBody = {
+        //         "roomId":roomId,
+        //         "date":date,
+        //         "begining":beg,
+        //         "hoursCount":hours
+        //     }
+        //     api.get(`/seats/getSeats`,requestBody).then(res=>{
+        //         setSeats(res.data);
+        //     })
+        //     api.get(`/booking/getPrice?beg=${beg}&end=${end}`).then(res=>{
+        //         setPrice(res.data);
+        //     });
+        // }     
     }
 
     useEffect(()=>{
@@ -108,8 +111,8 @@ export const BookingComponent = () => {
         }         
         console.dir(clickedSeats);
     }
-    return <>
-    <form method="post" onSubmit={sendBookToServer} className="mt-5 p-5" style={{"margin":"auto","width":"50%", "border" : "3px solid black", "padding" : "10px"}}>
+    return <div className="d-flex align-items-center justify-content-center">
+    <form method="post" onSubmit={sendBookToServer} className="p-5 m-2 bg-info text-white shadow rounded-2" style={{"margin":"auto", "border" : "3px solid black", "padding" : "10px"}}>
         <h2 className="mx-auto">{roomName}</h2>
         <h2>Dates</h2>
         <div className="">
@@ -121,9 +124,9 @@ export const BookingComponent = () => {
                 <div>Begining</div>
                 <input id="begining" name="begining" onChange={onTimeChange} type="time"/>
             </label>
-            <label htmlFor="ending" className="m-3">
-                <div>Ending</div> 
-                <input id="ending" name="ending" onChange={onTimeChange} type="time"/>
+            <label htmlFor="hoursCount" className="m-3 w-100 ">
+                <div className="d-flex">Hours count(0-10):<div id="rangeVal" style={{"marginLeft":"5px"}}></div></div>
+                <input id="hours" name="hours" className="w-50" onChange={onTimeChange} type="range" min = "1" max = "10"/>
             </label>
         </div>
         {seats.length != 0 ? 
@@ -172,5 +175,5 @@ export const BookingComponent = () => {
             <input id="seats" name="seats" style={{"visibility":"hidden"}} type="text"/>
         </div>       */}
     </form>
-    </>
+    </div>
 }

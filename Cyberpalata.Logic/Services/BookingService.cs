@@ -30,16 +30,6 @@ namespace Cyberpalata.Logic.Services
             _mapper = mapper;
             _filter = filter;
         }
-
-        public async Task<Result> CreateAsync(BookingCreateRequest request)
-        {
-            var dto = _mapper.Map<BookingDto>(request);
-            if(!_filter.IsValid(dto))
-                return Result.Failure("Data is invalid.");
-            var ormModel = _mapper.Map<Booking>(dto);
-            await _repository.CreateAsync(ormModel);
-            return Result.Success();
-        }
         public async Task<Maybe<BookingDto>> ReadAsync(Guid id)
         {
             var booking = await _repository.ReadAsync(id);

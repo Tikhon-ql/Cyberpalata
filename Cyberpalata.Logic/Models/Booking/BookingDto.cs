@@ -19,7 +19,7 @@ namespace Cyberpalata.Logic.Models.Booking
         [Required]
         public TimeSpan Begining { get; set; }
         [Required]
-        public TimeSpan Ending { get; set; }
+        public int HoursCount { get; set; }
         [Required]
         public RoomDto Room { get; set; } = new();     
         [Required]

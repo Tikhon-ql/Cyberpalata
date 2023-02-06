@@ -33,6 +33,7 @@ namespace Cyberpalata.WebApi.Controllers
             _logger = logger;
         }
 
+        //create bad request json
         [HttpPost("register")]
         public async Task<IActionResult> Registration(UserCreateRequest request)
         {

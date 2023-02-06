@@ -1,13 +1,17 @@
+import { useState } from 'react';
 import {Link} from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import api from "./../../../Components/api";
 import "./../../../index.css";
+import BarLoader from "react-spinners/BarLoader";
 
 export const LoginComponent = () => {
 
+    const [loading, setLoading] = useState(false);
     let navigate = useNavigate();
     function sendLoginRequest(event)
     {
+        setLoading(true);
         event.preventDefault();
         const data = {
             "email":event.target.elements.email.value,
@@ -19,10 +23,20 @@ export const LoginComponent = () => {
             localStorage.setItem('accessToken', res.data.accessToken);
             localStorage.setItem('refreshToken', res.data.refreshToken);
             localStorage.setItem('isAuthenticated', true);
+            setLoading(false);
             navigate("/");
+        }).catch(()=>{
+            setLoading(false);
         });
     }
-    return <div className="d-flex align-items-center justify-content-center">
+return <div style={{"display":"flex","justifyContent":"center","alignItems":"center","width":"100%","height":"100vh"}}>{loading ? <div> 
+    <BarLoader
+        color={"#123abc"}
+        loading={loading}
+        size={30}
+        />
+      </div> : 
+      <div className="d-flex align-items-center justify-content-center">
         <form className="p-5 m-2 bg-info text-white shadow rounded-2" onSubmit={sendLoginRequest}>
             <div className="mb-3">
                 <label for="exampleInputEmail1" className="form-label">Email address</label>
@@ -41,5 +55,6 @@ export const LoginComponent = () => {
             </div>  
         </form>
     </div>
+  }</div>
 }
 

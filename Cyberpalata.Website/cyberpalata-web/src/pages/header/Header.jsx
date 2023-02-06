@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { LogoutComponent } from './Identity/LogoutComponent';
 import { useEffect, useState } from 'react';
 import { Modal } from '../../Components/Helpers/Modal/Modal';
+import "bootstrap";
 
 
 export const Header = (props) => {
@@ -24,22 +25,25 @@ export const Header = (props) => {
     useEffect(()=>{setState(1)},[]);
     console.dir(accessToken);
     return <>
-        <nav id="headerId" className="navbar navbar-light bg-transparent">
-            <Link to='/' className='navbar-brand'><Logo/></Link>
-            <ul class="nav nav-pills d-flex justify-content-center">
-                <li className='nav-item m-3 text-dark'>
-                    <Link to="/gamesLibrary" className='btn btn-outline-dark btn-sm'>Games library</Link>
+        <nav id="headerId" className="navbar navbar-light bg-dark">
+            {/* <Link to='/' className='navbar-brand'><Logo/></Link> */}
+            <ul class="nav nav-pills d-flex justify-content-between w-100">
+                <li className='nav-item text-dark' style={{"marginTop":"2vh"}}>
+                    <Link to="/gamesLibrary" className='text-decoration-none text-white h4 m-5 mya' style={{"paddingBottom":"5px"}}>Games library</Link>
                 </li>
-                {(AuthVerify() && accessToken) && <li className='nav-item m-3 text-dark'>
-                    <Link to="/bookingView" className='btn btn-outline-dark btn-sm'>My orders</Link>
+                {(AuthVerify() && accessToken) && <li className='nav-item text-white' style={{"marginTop":"2vh"}}>
+                    <Link to="/bookingView" className='text-decoration-none text-white h4 mya' style={{"paddingBottom":"5px"}}>My orders</Link>
                 </li>}
-                {(AuthVerify() && accessToken) && <li className='nav-item mt-3 text-dark'><Link to="/profile" className='btn btn-outline-dark btn-sm'>{accessToken.name}</Link></li>}
-                <li className="nav-item m-3 text-dark">
+                <li className='nav-item'> <Link className='animate-charcter mya h1'  style={{"marginTop":"0","marginRight":"2vw", "paddingBottom":"5px"}}>CYBERPALATA</Link></li>
+                {(AuthVerify() && accessToken) && <li className='nav-item text-white' style={{"marginTop":"2vh"}}>
+                    <Link to="/profile" className='text-decoration-none text-white m-3 h4 mya' style={{"paddingBottom":"5px"}}>Profile</Link>
+                    </li>}
+                <li className="nav-item text-white" style={{"marginTop":"2vh"}}>
                     {AuthVerify() ? 
                     <div>
-                        <button className="btn btn-outline-dark btn-sm" onClick={()=>{setModalActive(true)}} >Logout</button>
+                        <a className="text-decoration-none text-white h4 m-5 mya" style={{"paddingBottom":"5px"}} onClick={()=>{setModalActive(true)}}>Logout</a>
                     </div> 
-                    : <Link to="/login" className='btn btn-outline-dark btn-sm'>Login</Link>}
+                    : <Link to="/login" className='text-decoration-none text-white h4 mya' style={{"paddingBottom":"5px"}}>Login</Link>}
                 </li>
             </ul>
             <Modal active={modalActive} setActive={setModalActive}>

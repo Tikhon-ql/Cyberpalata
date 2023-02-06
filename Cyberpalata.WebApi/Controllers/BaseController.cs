@@ -1,5 +1,6 @@
 ﻿using Cyberpalata.Common.Intefaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Cyberpalata.WebApi.Controllers
 {
@@ -21,6 +22,19 @@ namespace Cyberpalata.WebApi.Controllers
         {
             await _unitOfWork.CommitAsync();
             return Ok();
+        }
+        protected async Task<IActionResult> BadRequestJson(string error)
+        {
+            return BadRequest(new MyCustomError { Error = error} );
+        }
+        protected async Task<IActionResult> BadRequestJson(ModelStateDictionary state)
+        {
+            //return BadRequest(new MyCustomError { Error = error });
+            return BadRequest();
+        }
+        private class MyCustomError 
+        {
+            public string Error { get; set; }
         }
     }
 }
