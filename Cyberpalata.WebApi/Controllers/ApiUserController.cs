@@ -42,7 +42,10 @@ namespace Cyberpalata.WebApi.Controllers
             }
             var result = await _userService.CreateAsync(request);
             if (result.IsFailure)
-                return BadRequest(result.Error);
+            {
+                ModelState.AddModelError("Create", result.Error);//??????????
+                return BadRequest($"Bad request: {ModelState}");//??????
+            }
             return await ReturnSuccess();
         }
 

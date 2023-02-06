@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 export const Home = () => {
     return <>
-     <Header/>
+        <Header/>
         <div style={{"display":"flex", "justifyContent":"center", "position":"absolute", "top":"30%","left":"30%"}}>
             <div className='loungeLink'>
                 <Link to='/lounge'><label className='labelRoomVert'>Lounge</label></Link>

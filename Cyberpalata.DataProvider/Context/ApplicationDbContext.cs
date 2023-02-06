@@ -98,7 +98,7 @@ namespace Cyberpalata.DataProvider.Context
         private void UniqueIndexesCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserRefreshToken>().HasIndex(urf => urf.RefreshToken).IsUnique();
-            modelBuilder.Entity<ApiUser>().HasIndex(user=>user.Email).IsUnique();
+            //modelBuilder.Entity<ApiUser>().HasIndex(user=>user.Email).IsUnique();
         }
     }
 }

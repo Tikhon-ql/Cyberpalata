@@ -29,6 +29,8 @@ api.interceptors.response.use(
         }
         if(error.response.status === 400)
         {
+            console.log("error");
+            console.dir(error.response.data);
             alert(error.response.data)
         }
         if(error.response.status === 404)

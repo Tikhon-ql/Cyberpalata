@@ -1,9 +1,10 @@
+import {Link} from "react-router-dom"
 
 export const IternalServerError = () => {
-    return <div className="flex h-screen">
-        <div className="m-auto">
-            <h1 className="text-center">500</h1>
-            <h2 className="text-center">Unexpected Error <b>:(</b></h2>
+    return  <div className="d-flex align-items-center justify-content-center pt-4" style={{"height":"100vh","width":"100vw","display":"flex","alignItems":"center","justifyContent":"center"}}>
+                <div className="p-5 m-2 bg-info text-white shadow rounded-2 d-flex align-items-center justify-content-center">
+                    <h1 className="text-centre">500 - Unexpected Error!<b> :(</b></h1>
+                    <Link to="/" className="btn btn-outline-dark btn-sm text-white w-50 m-1">Go Home</Link>
+                </div>
         </div>
-    </div>
 }

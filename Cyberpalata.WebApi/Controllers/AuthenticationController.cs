@@ -42,7 +42,7 @@ namespace Cyberpalata.WebApi.Controllers
             {
                 _logger.LogError(result.Error);
                 return BadRequest(result.Error);
-            }
+            }   
                
 
             var token = await _authenticationService.GenerateTokenAsync(result.Value);

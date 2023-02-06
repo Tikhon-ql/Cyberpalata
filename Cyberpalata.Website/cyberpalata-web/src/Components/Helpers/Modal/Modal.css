@@ -22,15 +22,15 @@
 
 .modal__content
 {
-    padding: 20px;
-    border-radius: 12px;
-    background-color: white;
+    /* padding: 20px; */
+    /* border-radius: 12px; */
+    /* background-color: white; */
     transform: scale(0.5);
     transition: 0.4s all;
-    width: 50vw;
 }
 
 .modal__content.active
 {
     transform: scale(1);
+    pointer-events: all;
 }

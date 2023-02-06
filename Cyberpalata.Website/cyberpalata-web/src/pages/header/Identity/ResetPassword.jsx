@@ -22,20 +22,20 @@ export const ResetPassword = ()=>{
         }).catch(console.log);
     }
 
-    return <>
-    <form method="post" onSubmit={passwordReset}>
-        <div className="mb-3">
-                <label for="password" className="form-label">New password</label>
-                <input type="password" className="form-control" name="password" id="password"/>
-            </div>
+    return <div className="d-flex align-items-center justify-content-center">
+        <form className="p-5 m-2 bg-info text-white shadow rounded-2" method="post" onSubmit={passwordReset}>
             <div className="mb-3">
-                <label for="passwordConfirm" className="form-label">New password confirm</label>
-                <input type="password" className="form-control" name="passwordConfirm" id="passwordConfirm"/>
+                    <label for="password" className="form-label">New password</label>
+                    <input type="password" className="form-control" name="password" id="password" required/>
+                </div>
+                <div className="mb-3">
+                    <label for="passwordConfirm" className="form-label">New password confirm</label>
+                    <input type="password" className="form-control" name="passwordConfirm" id="passwordConfirm" required/>
+                </div>
+                <div className="d-flex justify-content-around">
+                    <button type="submit" className="btn btn-outline-dark btn-sm text-white w-50 m-1">Reset</button>
+                    <Link to='/' className="btn btn-outline-dark btn-sm text-white w-50 m-1">Cancel</Link>
             </div>
-            <div className="d-flex justify-content-around">
-                <button type="submit" className="btn btn-outline-dark mr-3 w-25">Reset</button>
-                <Link to='/' className="btn btn-outline-dark ml-3 w-25">Cancel</Link>
-        </div>
-    </form>   
-    </>
+        </form>   
+    </div>
 }

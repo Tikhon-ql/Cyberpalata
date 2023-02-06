@@ -34,16 +34,16 @@ export const AccessTokenVerify = (props) => {
                         }).catch(console.log);      
                     console.log("Access token has been refreshed.");
                 }
-                else{
-                    alert("There are some trubles: refresh token is undefined.");
-                }        
+                // else{
+                //     alert("There are some trubles: refresh token is undefined.");
+                // }        
             }
         }
     }
 
 
     useEffect(()=>{
-        setInterval(checkAccessTokenExpirationTime,10000);
+        setInterval(checkAccessTokenExpirationTime,5000);
         console.log(location);
        
     },[]);//[location, props]);

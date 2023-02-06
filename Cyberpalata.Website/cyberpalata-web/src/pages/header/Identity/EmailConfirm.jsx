@@ -3,7 +3,6 @@ import { Link,Navigate,useLocation, useNavigate, useParams } from "react-router-
 import api from "./../../../Components/api";
 
 export const EmailConfirm = ()=>{
-
     const navigate = useNavigate();
     const {email} = useParams();
     //const {state} = useLocation();
@@ -20,14 +19,14 @@ export const EmailConfirm = ()=>{
     // }
     useEffect(()=>{
         api.post(`/users/emailConfirm?email=${email}`).then(res=>{
-            setCode(res.data.code);
+            setCode(res.data);
         });
     },[]);
    
     function sendActivateRequest(event)
     {
         event.preventDefault();
-        if(event.target.elements.code != code)
+        if(event.target.elements.code.value == code)
         {
             //apiUrl = `${baseUrl}/users/activate?email=${email}`;
             // const requestBody = {
@@ -42,20 +41,26 @@ export const EmailConfirm = ()=>{
                 navigate('/');
             })
         }
+        else
+        {
+            alert("Code is incorrect");
+        }
     }
 
-    return <>   
-        <div>On your email we send message</div>
-        <form className="m-5 p-5 col-sm-4" onSubmit={sendActivateRequest}>
-            <div className="mb-3">
-                <label for="exampleInputEmail1" className="form-label">Your code</label>
-                <input type="text" name="code" className="form-control" id="exampleInputEmail1" placeholder="Enter code here..." aria-describedby="emailHelp"/>
-                <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
-            </div>
-            <div className="d-flex justify-content-around">
-                <button type="submit" className="btn btn-outline-dark mr-3 w-25">Confirm</button>
-                <Link to='/' className="btn btn-outline-dark ml-3 w-25">Cancel</Link>
-            </div>
-        </form>
-    </>
+    return <div className="d-flex align-items-center justify-content-center">
+        <div className="p-5 m-2 bg-info text-white shadow rounded-2">
+            <div>On your email we send a message</div>
+            <form onSubmit={sendActivateRequest}>
+                <div className="mb-3">
+                    <label for="exampleInputEmail1" className="form-label"></label>
+                    <input type="number" name="code" className="form-control" id="exampleInputEmail1" onChange={(e)=>{e.preventDefault()}} required placeholder="Enter six-digit code here..." aria-describedby="emailHelp"/>
+                    <div id="emailHelp" className="form-text text-white">We'll never share your code with anyone else.</div>
+                </div>
+                <div className="d-flex justify-content-around">
+                    <button type="submit" className="btn btn-outline-dark btn-sm text-white w-50 m-1">Confirm</button>
+                    <Link to='/' className="btn btn-outline-dark btn-sm text-white w-50 m-1">Cancel</Link>
+                </div>
+            </form>
+        </div>
+    </div>
 }

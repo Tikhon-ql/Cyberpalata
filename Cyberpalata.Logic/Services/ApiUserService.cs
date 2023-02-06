@@ -60,7 +60,7 @@ namespace Cyberpalata.Logic.Services
         {
             var user = await _userRepository.ReadAsync(request.Email);
 
-            if (user.HasValue)
+            if (user.HasValue && user.Value.IsActivate)
                 return Result.Failure("User is already exist!");
 
             return Result.Success();
@@ -90,24 +90,9 @@ namespace Cyberpalata.Logic.Services
 
         public async Task PasswordRecoveryAsync([EmailAddress]string email)
         {
-            //var message = new MailMessage();
-            //message.From = new MailAddress(_configuration["EmailSettings:EmailAddress"]);
-            //message.To.Add(new MailAddress(email));
-
-            //message.Subject = "Password recovering";
-            //message.Body = @$"<html>
-            //                    <div>
-            //                        <a href='http://localhost:3000/passwordReset/{email}'>Reset password</a>
-            //                    </div>
-            //                </html>";
-            //message.IsBodyHtml = true;
-            //var smtpClient = new SmtpClient("smtp.gmail.com",587);
-            //smtpClient.Credentials = new NetworkCredential(_configuration["EmailSettings:EmailAddress"], _configuration["EmailSettings:Password"]);
-            //smtpClient.EnableSsl = true;
-            //smtpClient.Send(message);
             string bodyHtml = @$"<html>
                                     <div>
-                                        <a href='http://localhost:3000/passwordReset/{email}'>Reset password</a>
+                                        <a href='http://localhost:3000/passwordReset/{email}' class='btn btn-outline-dark btn-sm text-white w-50 m-1'>Reset password</a>
                                     </div>
                                 </html>";
             _mailService.SendMail(email,"Password recovering", bodyHtml);
@@ -132,31 +117,9 @@ namespace Cyberpalata.Logic.Services
         {
             var rnd = new Random(DateTime.Now.Millisecond);
             int code = rnd.Next(100000,9999999);
-            //var message = new MailMessage();
-            //message.From = new MailAddress(_configuration["EmailSettings:EmailAddress"]);
-            //message.To.Add(new MailAddress(email));
-
-            //message.Subject = "Password recovering";
-            //message.Body = @$"<html>
-            //                    <div>
-            //                        <h1>You code:</h1><br/>
-            //                        <div><b>{code}</b></div>
-            //                    </div>
-            //                </html>";
-            //message.IsBodyHtml = true;
-            //using (SmtpClient client = new SmtpClient())
-            //{
-            //    client.EnableSsl = true;
-            //    client.UseDefaultCredentials = false;
-            //    client.Credentials = new NetworkCredential(_configuration["EmailSettings:EmailAddress"], _configuration["EmailSettings:Password"]);
-            //    client.Host = "smtp.gmail.com";
-            //    client.Port = 587;
-            //    client.DeliveryMethod = SmtpDeliveryMethod.Network;
-            //    client.Send(message);
-            //}
             string bodyHtml = @$"<html>
                                 <div>
-                                    <h1>Your verification code:</h1><br/>
+                                    <h1>Your verification code:</h1>
                                     <div><b>{code}</b></div>
                                 </div>
                             </html>";

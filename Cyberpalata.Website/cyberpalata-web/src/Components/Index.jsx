@@ -26,7 +26,7 @@ import { NotFound } from './Errors/404/NotFound';
 
 export const Index = () => {
     return (
-        <BrowserRouter basename='/'>   
+        <BrowserRouter basename='/'>
             <Routes>
                 <Route path='/' element={<Home />} />
                 <Route path="/gameConsoleRoom" element = {<GameConsoleRoomList/>}/>
@@ -48,6 +48,7 @@ export const Index = () => {
                 <Route path="/500" element={<IternalServerError/>}/>
                 <Route path="/404" element={<NotFound/>}/>
                 <Route path="*" element={<Navigate replace to="/404" />} />
+                <Route path="/index" element={<Index/>}></Route>
             </Routes>
             <AccessTokenVerify/>          
         </BrowserRouter>
