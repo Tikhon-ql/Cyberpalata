@@ -7,8 +7,10 @@ import { Modal } from "../../Components/Helpers/Modal/Modal";
 import { BookingViewComponent } from "./Booking/BookingViewComponent";
 import api from "./../../Components/api";
 import BarLoader from "react-spinners/BarLoader";
+import stateStore from "../../store/stateStore";
+import { observer } from "mobx-react-lite";
 
-export const ProfileComponent = () => {
+export const ProfileComponent = observer(() => {
     const [index, setIndex] = useState(0);
     console.log("ANIME PROFILE");
     const [modalActive, setModalActive] = useState(false);
@@ -21,6 +23,13 @@ export const ProfileComponent = () => {
     let [email, setEmail] = useState("");
     let [phone, setPhone] = useState("");
     const [loading, setLoading] = useState(false);
+
+    const [otherError, setOtherError] = useState("");
+    const [usernameError, setUsernameError] = useState("");
+    const [surnameError, setSurnameError] = useState("");
+    const [emailError, setEmailError] = useState("");
+    const [phoneError, setPhoneError] = useState("");
+
     let state = true;
     //const baseUrl = `http://dotnetinternship2022.norwayeast.cloudapp.azure.com:83`;
     // const baseUrl = `https://localhost:7227`;
@@ -31,18 +40,21 @@ export const ProfileComponent = () => {
     // };
     useEffect(()=>{
         setLoading(true);
-        setTimeout(()=>{
-            api.get(`/profile/getProfile`).then(res =>{
-                console.dir(res);
-                setName(res.data.username);
-                setSurname(res.data.surname);
-                setEmail(res.data.email);
-                setPhone(res.data.phone);
-                setLoading(false);
-                //setSubmitState(false);
-            }).catch(console.log, ()=>{state = false});
-        },1000);        
-    },[submitState]);
+        api.get(`/profile/getProfile`).then(res =>{
+            console.dir(res);
+            setName(res.data.username);
+            setSurname(res.data.surname);
+            setEmail(res.data.email);
+            setPhone(res.data.phone);
+            setLoading(false);
+            //setSubmitState(false);
+        }).catch(err=>{
+            if(err.response.status >= 500 && err.response.status <= 599)
+            {
+                navigate("/500");
+            }
+        });       
+    },[submitState, stateStore.state]);
     function editingEnableButtonClick(event)
     {
         event.preventDefault();
@@ -62,7 +74,42 @@ export const ProfileComponent = () => {
             setEditingActive(false);
             setSubmitState(!submitState);
             navigate('/profile');
-        }).catch(console.log);
+        }).catch(error=>{
+            if(error.response.status >= 500 && error.response.status <= 599)
+            {
+                navigate('/');
+            }
+            const data = error.response.data;
+            if(data.Other)
+            {
+                setOtherError(data.Other);
+            }
+            if(data.Email)
+            {
+                setEmailError(data.Email);
+            }
+            if(data.Username)
+            {
+                setUsernameError(data.Username);
+            }
+            if(data.Surname)
+            {
+                setSurnameError(data.Surname);
+            }
+            if(data.Phone)
+            {
+                setPhoneError(data.Phone);
+            }
+        });
+    }
+
+    function clearErrors()
+    {
+        setOtherError("");
+        setEmailError("");
+        setUsernameError("");
+        setSurnameError("");
+        setPhoneError("");
     }
  
     return <div style={{"display":"flex","justifyContent":"center","alignItems":"center","width":"100%","height":"80vh"}}>{loading ?
@@ -81,10 +128,15 @@ export const ProfileComponent = () => {
                     <hr></hr>
                     {editingActive ?  
                         <div>
-                            <div className="d-flex flex-row"><h2 className="text-dark">Name: </h2><input id="nameInput" name="name" type="text" className="form-control bg-transparent border-0 text-white" defaultValue={name} /></div>
-                            <div className="d-flex flex-row"><h2 className="text-dark">Surname: </h2><input id="surnameInput" name="surname" type="text" className="form-control bg-transparent border-0 text-white" defaultValue={surname}/></div>
-                            <div className="d-flex flex-row"><h2 className="text-dark">Email: </h2><input id="emailInput" name="email" type="email" className="form-control bg-transparent border-0 text-white" defaultValue={email} /></div>
-                            <div className="d-flex flex-row"><h2 className="text-dark">Phone: </h2><input id="phoneInput" name="phone" type="tel" className="form-control bg-transparent border-0 text-white" defaultValue={phone}/></div>
+                            {otherError != "" && <div className="m-1 text-danger">{otherError}</div>}
+                            <div className="d-flex flex-row"><h2 className="text-dark">Name: </h2><input id="nameInput" name="name" type="text" onInput={clearErrors} className="form-control bg-transparent border-0 text-white" defaultValue={name} /></div>
+                            {usernameError != "" && <div className="m-1 text-danger">{usernameError}</div>}
+                            <div className="d-flex flex-row"><h2 className="text-dark">Surname: </h2><input id="surnameInput" name="surname" type="text" onInput={clearErrors} className="form-control bg-transparent border-0 text-white" defaultValue={surname}/></div>
+                            {surnameError != "" && <div className="m-1 text-danger">{surnameError}</div>}
+                            <div className="d-flex flex-row"><h2 className="text-dark">Email: </h2><input id="emailInput" name="email" type="email" onInput={clearErrors} className="form-control bg-transparent border-0 text-white" defaultValue={email} /></div>
+                            {emailError != "" && <div className="m-1 text-danger">{emailError}</div>}
+                            <div className="d-flex flex-row"><h2 className="text-dark">Phone: </h2><input id="phoneInput" name="phone" type="tel" onInput={clearErrors} className="form-control bg-transparent border-0 text-white" defaultValue={phone}/></div>
+                            {phoneError != "" && <div className="m-1 text-danger">{phoneError}</div>}
                         </div>
                         : 
                         <div>
@@ -109,4 +161,4 @@ export const ProfileComponent = () => {
                 </div>
          </div>}
         </div>
-} 
+})
