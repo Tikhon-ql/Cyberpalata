@@ -7,7 +7,7 @@ import { Header } from '../pages/header/Header';
 import {Home} from '../pages/body/Home';
 import { GameLibrary } from '../pages/body/GameLibrary';
 import { GameConsoleRoomList } from '../pages/body/GameConsoleRoom/GameConsoleRoomList';
-import {LoginComponent} from '../pages/header/Identity/LoginComponent';
+import LoginComponent from '../pages/header/Identity/LoginComponent';
 import {RegistrationComponent} from '../pages/header/Identity/RegistrationComponent';
 import { AccessTokenVerify } from './AccessTokenVerify';
 import { LogoutComponent } from '../pages/header/Identity/LogoutComponent';
@@ -27,6 +27,7 @@ import { NotFound } from './Errors/404/NotFound';
 export const Index = () => {
     return <div>
         <BrowserRouter basename='/'>
+            <Header/>
             <Routes>
                 <Route path='/' element={<Home />} />
                 <Route path="/gameConsoleRoom" element = {<GameConsoleRoomList/>}/>
