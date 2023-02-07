@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "./../../../Components/api";
+import BarLoader from "react-spinners/BarLoader";
+import { Link } from "react-router-dom";
 
 export const OneBookingView = ()=>{
     const [countInRow,setCountInRow] = useState(0);    
     //const [booking, setBooking] = useState({});
     const [roomName, setRoomName] = useState("")
     const [begining, setBegining] = useState("");
-    const [ending, setEnding] = useState("");
-    const [tariff, setTariff] = useState({});
+    const [hours, setHours] = useState(0);
+    const [price, setPrice] = useState(0);
     const [seats, setSeats] = useState([]);
-    
+    const [loading, setLoading] = useState(false);
+    let navigate = useNavigate();
     const {id} = useParams();
 
     //const baseUrl = `https://localhost:7227`;
@@ -19,14 +22,20 @@ export const OneBookingView = ()=>{
     //     headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
     // };
     useEffect(()=>{
+        setLoading(true);
         api.get(`/booking/getBooking?id=${id}`).then(res=>{
             setRoomName(res.data.roomName);
             setBegining(res.data.begining);
-            setEnding(res.data.ending);
-            setTariff(res.data.tariff);
+            setHours(res.data.hoursCount);
+            setPrice(res.data.price);
             setSeats(res.data.seats);
-            console.dir(seats);
-        }).catch(console.log);
+            setLoading(false);
+        }).catch(err=>{
+            if(err.response.status >= 500 && err.response.status <= 599)
+            {
+                navigate("/500");
+            }
+        });
     },[]);
  
     let columnCount = 10;
@@ -44,26 +53,48 @@ export const OneBookingView = ()=>{
 
     //setBookingsIds(res.data.bookingsIds);
 
-    return <>
-        <div>{roomName}</div>
-        <div>{begining}</div>
-        <div>{ending}</div>
-        <div>{tariff.hours}: {tariff.cost}</div> 
-        <table className="table w-50 m-auto">
-            <tbody id = 'tbody'>
-            {seatsPerRow.map(row=>{
-                return <tr>
-                    {row.map(cell=>{
-                        console.dir(cell);
-                        return <>
-                        {cell.type.name == "Free" && <td className="seat p-2"><button id = {`button${cell.number}`} className="btn btn-outline-dark">{cell.number}</button></td>}
-                        {cell.type.name == "IsTaken" && <td className="seat p-2"><button id = {`button${cell.number}`} className="btn btn-dark">{cell.number}</button></td>}
-                        {cell.type.name == "UsersSeat" && <td className="seat p-2"><button id = {`button${cell.number}`} className="btn btn-primary">{cell.number}</button></td>}
-                        </>
+    return <div style={{"display":"flex","justifyContent":"center","alignItems":"center","width":"100%","height":"80vh"}}>{loading ? 
+        <div>
+            <BarLoader
+                color={"#123abc"}
+                loading={loading}
+                size={30}
+                />
+        </div> 
+        :<div className="d-flex align-items-center justify-content-center">
+            <div className="p-5 m-2 bg-info text-white shadow rounded-2">
+                <div className="bg-light rounded p-2 w-50">
+                    <div className="d-flex">
+                        <div className="m-1 bg-dark p-1 rounded">Room: {roomName}</div>
+                        <div className="m-1 bg-dark p-1 rounded">Price: {price}</div> 
+                    </div>
+                    <div className="d-flex">
+                        <div className="m-1 bg-dark p-1 rounded">Begining: {begining}</div>
+                        <div className="m-1 bg-dark p-1 rounded">Hours count: {hours}</div>
+                    </div>
+                </div>
+                <table className="table w-50 m-auto">
+                    <tbody id = 'tbody'>
+                    {seatsPerRow.map(row=>{
+                        return <tr>
+                            {row.map(cell=>{
+                                console.dir(cell);
+                                return <>
+                                {cell.type.name == "Free" && <td className="seat p-2"><button id = {`button${cell.number}`} className="btn btn-outline-dark">{cell.number}</button></td>}
+                                {cell.type.name == "IsTaken" && <td className="seat p-2"><button id = {`button${cell.number}`} className="btn btn-dark">{cell.number}</button></td>}
+                                {cell.type.name == "UsersSeat" && <td className="seat p-2"><button id = {`button${cell.number}`} className="btn btn-primary">{cell.number}</button></td>}
+                                </>
+                            })}
+                        </tr>
                     })}
-                </tr>   
-            })}
-            </tbody>         
-        </table>
-    </>
+                    </tbody>         
+                </table>
+                <Link to='/bookingView' className="btn btn-dark btn-sm m-2">Back</Link>
+            </div>
+     
+    </div>
+    }
+       
+    
+    </div>
 }

@@ -20,6 +20,11 @@ export const EmailConfirm = ()=>{
     useEffect(()=>{
         api.post(`/users/emailConfirm?email=${email}`).then(res=>{
             setCode(res.data);
+        }).catch(err=>{
+            if(err.response.status >= 500 && err.response.status <= 599)
+            {
+                navigate("/500");
+            }
         });
     },[]);
    
@@ -39,7 +44,12 @@ export const EmailConfirm = ()=>{
             // }
             api.post(`/users/activate?email=${email}`).then(()=>{
                 navigate('/');
-            })
+            }).catch(err=>{
+                if(err.response.status >= 500 && err.response.status <= 599)
+                {
+                    navigate("/500");
+                }
+            });
         }
         else
         {

@@ -35,6 +35,10 @@ export const RegistrationComponent = ()=>{
             navigate(`/emailConfirm/${data.email}`);
         }).catch((err)=>
         {
+            if(err.response.status >= 500 && err.response.status <= 599)
+            {
+                navigate('/');
+            }
             let data = err.response.data;
             if(data.Other)
             {

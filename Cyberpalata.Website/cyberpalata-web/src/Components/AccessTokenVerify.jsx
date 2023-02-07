@@ -33,6 +33,7 @@ export const AccessTokenVerify = observer((props) => {
                         {
                             localStorage.setItem("accessToken", res.data.accessToken);
                             localStorage.setItem("refreshToken", res.data.refreshToken);
+                            stateStore.stateChange();
                         }).catch(console.log);      
                     console.log("Access token has been refreshed.");
                 }
@@ -47,7 +48,6 @@ export const AccessTokenVerify = observer((props) => {
     useEffect(()=>{
         setInterval(checkAccessTokenExpirationTime,5000);
         console.log(location);
-       
     },[]);//[location, props]);
     return <></>;
-}
+})

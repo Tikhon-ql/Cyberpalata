@@ -2,20 +2,25 @@ import axios from "axios"
 import jwtDecode from "jwt-decode";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import stateStore from "../../store/stateStore";
 import api from "./../../Components/api";
 import BarLoader from "react-spinners/BarLoader";
 
 const GameLibrary = () => {
+    const navigate = useNavigate();
     const [games, setGames] = useState([]);
     const [loading,setLoading] = useState(true);
     useEffect(()=>{
         api.get(`/games`).then(res => {
             setGames(res.data.games);
-        });
-        setTimeout(() => { console.log("мир"); }, 3000);
-        setLoading(false);
+            
+        }).catch(err=>{
+            if(err.response.status >= 500 && err.response.status <= 599)
+            {
+                navigate("/500");
+            }
+        }).finally(()=>{setLoading(false);});
     },[]);
     return <div style={{"display":"flex","justifyContent":"center","alignItems":"center","width":"100%","height":"80vh"}}>
         {loading ? 

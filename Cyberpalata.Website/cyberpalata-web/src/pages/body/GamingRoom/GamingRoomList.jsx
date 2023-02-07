@@ -1,22 +1,26 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import { useParams } from 'react-router-dom'
 import api from "./../../../Components/api";
 import BarLoader from "react-spinners/BarLoader";
 
 export const GamingRoomList = () =>{
 
+    let navigate = useNavigate();
     const [gamingRoomsInfo, setGamingRoomsInfo] = useState([]);
     const [loading, setLoading] = useState(true);
     const {type} = useParams();
     useEffect(()=>{
-        setTimeout(()=>{
-            api.get(`/gamingRooms/type?type=${type}`).then(res => {
-                setGamingRoomsInfo(res.data.infos);
-            })
+        api.get(`/gamingRooms/type?type=${type}`).then(res => {
+            setGamingRoomsInfo(res.data.infos);
             setLoading(false);
-        },1000);
+        }).catch(err=>{
+            if(err.response.status >= 500 && err.response.status <= 599)
+            {
+                navigate("/500");
+            }
+        });
     },[]); 
     //console.dir(gameConsoleRoomsInfo);
     // const sort = gameConsoleRoomsInfo.sort((a,b)=>{a.name < b.name ? 1 : -1});

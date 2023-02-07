@@ -19,7 +19,12 @@ export const ResetPassword = ()=>{
         }
         api.put(`/users/passwordRecovering`,requestBody).then(()=>{
             navigate("/");
-        }).catch(console.log);
+        }).catch(err=>{
+            if(err.response.status >= 500 && err.response.status <= 599)
+            {
+                navigate("/500");
+            }
+        });
     }
 
     return <div className="d-flex align-items-center justify-content-center">

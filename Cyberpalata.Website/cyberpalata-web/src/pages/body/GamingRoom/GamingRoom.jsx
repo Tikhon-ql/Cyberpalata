@@ -1,4 +1,4 @@
-    import {Link, useAsyncError} from 'react-router-dom'
+    import {Link, useAsyncError, useNavigate} from 'react-router-dom'
 import './../css/RoomInfo.css';
 import './../../../Components/Index.css';
 import { DeviceInfo } from '../DeviceInfo';
@@ -14,6 +14,7 @@ import api from "./../../../Components/api.js";
 import BarLoader from "react-spinners/BarLoader";
 
 const GamingRoom = () => {
+    let navigate = useNavigate();
     const {id} = useParams();
     const {name} = useParams();
     const {type} = useParams();
@@ -22,15 +23,18 @@ const GamingRoom = () => {
     const [priceInfo, setPrices] = useState([]);
     const [loading, setLoading] = useState(true);
     useEffect(()=>{
-        setTimeout(()=>{
-            api.get(`/gamingRooms/getRoomInfo?id=${id}`).then(res => {
-                console.dir(res);
-                setDevices(res.data.pcInfos);
-                setPrices(res.data.prices);
-                setPeripheries(res.data.peripheries);
-            });
+        api.get(`/gamingRooms/getRoomInfo?id=${id}`).then(res => {
+            console.dir(res);
+            setDevices(res.data.pcInfos);
+            setPrices(res.data.prices);
+            setPeripheries(res.data.peripheries);
             setLoading(false);
-        },1000)
+        }).catch(err=>{
+            if(err.response.status >= 500 && err.response.status <= 599)
+            {
+                navigate("/500");
+            }
+        });
     },[]);
 
     return <div style={{"display":"flex","justifyContent":"center","alignItems":"center","width":"100%","height":"80vh"}}>
@@ -71,18 +75,6 @@ const GamingRoom = () => {
                         {peripheriesInfo.map((item)=>{
                             return <tr><td>{item.typeName}</td><td>{item.name}</td></tr>
                         })}
-                        </tbody>
-                    </table>
-                    <h2>Prices</h2>
-                    <table className='table'>
-                        <thead className='thead-dark'>
-                            <th scope='col'>Hours</th>
-                            <th scope='col'>Cost</th>
-                        </thead>
-                        <tbody>
-                            {priceInfo.map((item)=>{
-                                return <tr><td>{item.hours}</td><td>{item.cost}</td></tr>
-                            })}
                         </tbody>
                     </table>
                     <div className='d-flex w-100'>

@@ -19,10 +19,17 @@ export const LogoutComponent = ({setModalActive}) => {
             };
             api.post(`/authentication/logout`, requestBody).then(()=>
             {
+                
+            }).catch(err=>{
+                if(err.response.status >= 500 && err.response.status <= 599)
+                {
+                    navigate("/500");
+                }
             });
             localStorage.removeItem('accessToken');
             localStorage.removeItem('refreshToken');
             setModalActive(false);
+            navigate('/');
         }
     }
 

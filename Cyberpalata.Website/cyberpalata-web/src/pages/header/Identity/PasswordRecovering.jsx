@@ -12,7 +12,12 @@ export const PasswordRecovering = ()=> {
         // const apiUrl = `${baseUrl}/users/passwordRecovering?email=${event.target.elements.email.value}`;
         api.get(`/users/passwordRecovering?email=${event.target.elements.email.value}`).then(()=>{
             navigate("/");
-        }).catch(console.log);
+        }).catch(err=>{
+            if(err.response.status >= 500 && err.response.status <= 599)
+            {
+                navigate("/500");
+            }
+        });
     }
 
     return <div className="d-flex align-items-center justify-content-center">
