@@ -4,11 +4,21 @@ import { useNavigate } from "react-router-dom";
 import api from "./../../../Components/api";
 import "./../../../index.css";
 import BarLoader from "react-spinners/BarLoader";
+import { observer } from 'mobx-react-lite';
+import store from '../../../store/headerRerenderStore';
 
-export const LoginComponent = () => {
-
+const LoginComponent = () => {
+    const [otherError,setOtherError] = useState("");
+    const [emailError,setEmailError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
     const [loading, setLoading] = useState(false);
     let navigate = useNavigate();
+    function clearErrors()
+    {
+        setEmailError("");
+        setOtherError("");
+        setPasswordError("");
+    }
     function sendLoginRequest(event)
     {
         setLoading(true);
@@ -17,19 +27,31 @@ export const LoginComponent = () => {
             "email":event.target.elements.email.value,
             "password":event.target.elements.password.value
         }
-        
         api.post(`/authentication/login`, data).then(res=>
         {
             localStorage.setItem('accessToken', res.data.accessToken);
             localStorage.setItem('refreshToken', res.data.refreshToken);
             localStorage.setItem('isAuthenticated', true);
-            setLoading(false);
+            store.stateChange();
             navigate("/");
-        }).catch(()=>{
-            setLoading(false);
-        });
+        }).catch(err=>{
+            let data = err.response.data;
+            if(data.Other)
+            {
+                setOtherError(data.Other);
+            }
+            if(data.Email)
+            {
+                setEmailError(data.Email);
+            }
+            if(data.Password)
+            {
+                setPasswordError(data.Password);
+            }
+        })
+        .finally(()=>{ setLoading(false);});     
     }
-return <div style={{"display":"flex","justifyContent":"center","alignItems":"center","width":"100%","height":"100vh"}}>{loading ? <div> 
+return <div style={{"display":"flex","justifyContent":"center","alignItems":"center","width":"100%","height":"80vh"}}>{loading ? <div> 
     <BarLoader
         color={"#123abc"}
         loading={loading}
@@ -39,13 +61,15 @@ return <div style={{"display":"flex","justifyContent":"center","alignItems":"cen
       <div className="d-flex align-items-center justify-content-center">
         <form className="p-5 m-2 bg-info text-white shadow rounded-2" onSubmit={sendLoginRequest}>
             <div className="mb-3">
+                {otherError != "" && <div className="text-danger m-1 rounded">{otherError}</div>}
                 <label for="exampleInputEmail1" className="form-label">Email address</label>
-                <input type="email" name="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"/>
-                <div id="emailHelp" className="form-text text-white">We'll never share your email with anyone else.</div>
+                <input type="email" name="email" onInput={clearErrors} className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"/>
+                {emailError != "" && <div className="text-danger m-1 rounded">{emailError}</div>}
             </div>
             <div className="mb-3">
                 <label for="exampleInputPassword1" className="form-label">Password</label>
-                <input type="password" name="password" className="form-control" id="exampleInputPassword1"/>
+                <input type="password" name="password" onInput={clearErrors} className="form-control" id="exampleInputPassword1"/>
+                {passwordError != "" && <div className="text-danger m-1 rounded">{passwordError}</div>}
             </div>
             <div className="d-flex justify-content-around">
                 <button type="submit" className="btn  btn-outline-dark btn-sm m-2 text-white">Login</button> 
@@ -57,4 +81,8 @@ return <div style={{"display":"flex","justifyContent":"center","alignItems":"cen
     </div>
   }</div>
 }
+
+export default observer(LoginComponent);
+
+
 
