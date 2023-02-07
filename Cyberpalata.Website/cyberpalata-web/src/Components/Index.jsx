@@ -5,7 +5,7 @@ import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 import { GameConsoleRoom } from '../pages/body/GameConsoleRoom/GameConsoleRoom';
 import { Header } from '../pages/header/Header';
 import {Home} from '../pages/body/Home';
-import { GameLibrary } from '../pages/body/GameLibrary';
+import GameLibrary from '../pages/body/GameLibrary';
 import { GameConsoleRoomList } from '../pages/body/GameConsoleRoom/GameConsoleRoomList';
 import LoginComponent from '../pages/header/Identity/LoginComponent';
 import {RegistrationComponent} from '../pages/header/Identity/RegistrationComponent';

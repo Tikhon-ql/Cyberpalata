@@ -110,7 +110,7 @@ export const BookingComponent = () => {
         }         
         console.dir(clickedSeats);
     }
-    return <div style={{"display":"flex","justifyContent":"center","alignItems":"center","width":"100%","height":"100vh"}}>
+    return <div style={{"display":"flex","justifyContent":"center","alignItems":"center","width":"100%","height":"80vh"}}>
         {loading ? 
       <div> 
         <BarLoader

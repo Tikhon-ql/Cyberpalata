@@ -5,7 +5,7 @@ import api from "./../../../Components/api";
 import "./../../../index.css";
 import BarLoader from "react-spinners/BarLoader";
 import { observer } from 'mobx-react-lite';
-import store from '../../../store/headerRerenderStore';
+import headerRerenderStore from '../../../store/headerRerenderStore';
 
 const LoginComponent = () => {
     const [otherError,setOtherError] = useState("");
@@ -32,7 +32,7 @@ const LoginComponent = () => {
             localStorage.setItem('accessToken', res.data.accessToken);
             localStorage.setItem('refreshToken', res.data.refreshToken);
             localStorage.setItem('isAuthenticated', true);
-            store.stateChange();
+            headerRerenderStore.stateChange();
             navigate("/");
         }).catch(err=>{
             let data = err.response.data;
@@ -85,4 +85,4 @@ return <div style={{"display":"flex","justifyContent":"center","alignItems":"cen
 export default observer(LoginComponent);
 
 
-
+// <input type="email" name="email" onInput={clearErrors} className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"/>

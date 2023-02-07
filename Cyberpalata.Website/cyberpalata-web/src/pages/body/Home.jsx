@@ -8,7 +8,6 @@ import { Modal } from '../../Components/Helpers/Modal/Modal';
 import { GamingRoomTypeChoosing } from './GamingRoom/GamingRoomTypeChoosing';
 
 export const Home = () => {
-    
     const [modalActive, setModalActive] = useState(false);
     return <>
         <div style={{"display":"flex", "justifyContent":"center", "position":"absolute", "top":"30%","left":"30%"}}>
