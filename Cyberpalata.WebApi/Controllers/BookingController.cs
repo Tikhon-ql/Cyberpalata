@@ -116,11 +116,11 @@ namespace Cyberpalata.WebApi.Controllers
                 Begining = booking.Value.Begining,
                 //Ending = booking.Value.Ending,
                 RoomName = booking.Value.Room.Name,
-                Tariff = new PriceViewModel
-                {
-                    Cost = booking.Value.Tariff.Cost,
-                    Hours = booking.Value.Tariff.Hours
-                },
+                //Tariff = new PriceViewModel
+                //{
+                //    Cost = booking.Value.Tariff.Cost,
+                //    Hours = booking.Value.Tariff.Hours
+                //},
                 Seats = new List<SeatBookingViewModel>()
             };
 
