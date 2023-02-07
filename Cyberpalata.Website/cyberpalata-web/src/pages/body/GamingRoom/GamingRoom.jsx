@@ -11,6 +11,7 @@ import { useParams } from 'react-router-dom';
 // import { Method } from "../../../Components/Method";
 // import { GamingRoomInfo } from '../../../types/types';
 import api from "./../../../Components/api.js";
+import BarLoader from "react-spinners/BarLoader";
 
 const GamingRoom = () => {
     const {id} = useParams();
@@ -19,26 +20,34 @@ const GamingRoom = () => {
     const [peripheriesInfo, setPeripheries] = useState([]);
     const [deviceInfo, setDevices] = useState([]);
     const [priceInfo, setPrices] = useState([]);
-    //const [info, setInfo] = useState<GamingRoomInfo>();
-        //399CE32F-1610-44DD-B634-4FFDC223038B
+    const [loading, setLoading] = useState(true);
     useEffect(()=>{
-        api.get(`/gamingRooms/getRoomInfo?id=${id}`).then(res => {
-            console.dir(res);
-            setDevices(res.data.pcInfos);
-            setPrices(res.data.prices);
-            setPeripheries(res.data.peripheries);
-        })
+        setTimeout(()=>{
+            api.get(`/gamingRooms/getRoomInfo?id=${id}`).then(res => {
+                console.dir(res);
+                setDevices(res.data.pcInfos);
+                setPrices(res.data.prices);
+                setPeripheries(res.data.peripheries);
+            });
+            setLoading(false);
+        },1000)
     },[]);
-  
-    //Method.getGamingRoomInfo(id).then(res=>{setInfo(res.data)});
-    //console.dir(deviceInfo);
 
-    return <>
-                 <div className="mt-5 p-5" style={{"margin":"auto","width":"50%", "border" : "3px solid black", "padding" : "10px"}}>
-                     <div style={{"display":"flex"}}>
-                         <div><h1>{name}</h1></div>
-                         <div className="m-2"><Link to={`/booking/${id}/${name}/${type}`} className="btn btn-outline-dark btn-sm">Booking</Link></div>
-                     </div>
+    return <div style={{"display":"flex","justifyContent":"center","alignItems":"center","width":"100%","height":"80vh"}}>
+        {loading ?
+            <div>
+                <BarLoader
+                color={"#123abc"}
+                loading={loading}
+                size={30}
+                />
+            </div> 
+            : <div className="d-flex align-items-center justify-content-center">
+                <div className="p-5 m-2 bg-info text-white shadow rounded-2" >
+                    <div style={{"display":"flex"}}>
+                        <div><h1>{name}</h1></div>
+                        
+                    </div>
                     <hr></hr>
                     <h2>Devices</h2>
                     <table className='table'>
@@ -76,9 +85,14 @@ const GamingRoom = () => {
                             })}
                         </tbody>
                     </table>
-                    <Link to={`/gamingRooms`} className="btn btn-outline-dark btn-sm mt-2">Back</Link>
-                </div>
-    </>
+                    <div className='d-flex w-100'>
+                        <Link to={`/booking/${id}/${name}/${type}`} className="btn btn-outline-dark w-50 btn-sm m-1">Booking</Link>
+                        <Link to={`/gamingRooms`} className="btn btn-outline-dark w-50 btn-sm m-1">Back</Link>
+                    </div>
+                
+            </div>
+        </div>}
+    </div> 
 }
 
 export default GamingRoom;
