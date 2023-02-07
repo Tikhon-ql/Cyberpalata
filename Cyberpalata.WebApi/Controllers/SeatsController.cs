@@ -27,5 +27,5 @@ namespace Cyberpalata.WebApi.Controllers
             var viewModel = seats.Value.Select(s => new SeatViewModel { Number = s.Number, IsFree = s.IsFree }).ToList();
             return Ok(viewModel);
         }
-    }
+    }   
 }
