@@ -9,6 +9,7 @@ using Cyberpalata.ViewModel;
 using Cyberpalata.ViewModel.Booking;
 using Cyberpalata.ViewModel.Booking.Enum;
 using Cyberpalata.ViewModel.Rooms;
+using Cyberpalata.WebApi.ActionFilters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -82,18 +83,13 @@ namespace Cyberpalata.WebApi.Controllers
 
         [Authorize]
         [HttpPost]
+        [ServiceFilter(typeof(ModelStateValidationFilter))]
         public async Task<IActionResult> Post(BookingCreateRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest($"Bad request: {ModelState}");
-            }
-
             var userId = Guid.Parse(User.Claims.Single(claim => claim.Type == JwtRegisteredClaimNames.Sid).Value);
-
             var result = await _roomService.AddBookingToRoom(userId,request);
             if (result.IsFailure)
-                return BadRequest(result.Error);
+                return BadRequestJson(result);
             return await ReturnSuccess();
         }
 
@@ -113,15 +109,12 @@ namespace Cyberpalata.WebApi.Controllers
                 return BadRequest($"Booking with id: {id} doen't exist!");
             var viewModel = new BookingViewModel
             {
-                Begining = booking.Value.Begining,
-                //Ending = booking.Value.Ending,
                 RoomName = booking.Value.Room.Name,
-                //Tariff = new PriceViewModel
-                //{
-                //    Cost = booking.Value.Tariff.Cost,
-                //    Hours = booking.Value.Tariff.Hours
-                //},
-                Seats = new List<SeatBookingViewModel>()
+                Date = booking.Value.Date.ToString(),
+                Begining = booking.Value.Begining.ToString(@"hh\:mm"),
+                Price = booking.Value.Price,
+                HoursCount = booking.Value.HoursCount,
+                Seats = new List<SeatBookingViewModel>(),
             };
 
             var seats = await _seatService.GetSeatsByRoomIdAsync(booking.Value.Room.Id);
@@ -131,11 +124,11 @@ namespace Cyberpalata.WebApi.Controllers
                 resultSeats.Add(new SeatBookingViewModel
                 {
                     Number = seat.Number,
-                    Type = seat.IsFree ? SeatType.Free : SeatType.IsTaken
+                    Type = SeatType.Free,
                 });
             }));
 
-            resultSeats.OrderBy(seat => seat.Number);
+            resultSeats = resultSeats.OrderBy(seat => seat.Number).ToList();
             foreach (var bookingSeat in booking.Value.Seats)
             {
                 resultSeats[bookingSeat.Number - 1].Type = SeatType.UsersSeat;
