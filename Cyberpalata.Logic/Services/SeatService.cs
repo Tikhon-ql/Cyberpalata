@@ -88,8 +88,8 @@ namespace Cyberpalata.Logic.Services
         public async Task<Maybe<List<SeatDto>>> GetSeatsByRoomInRangeIdAsync(SeatsGettingRequest request)
         {
             var room = await _roomRepository.ReadAsync(request.RoomId);
-            if (room.HasNoValue)//////?????????
-                return Maybe.None;/////????????????
+            if (room.HasNoValue)
+                return Maybe.None;
             var list = room.Value.Seats;
             var resultSeats = _mapper.Map<List<SeatDto>>(room.Value.Seats);
             var bookings = room.Value.Bookings

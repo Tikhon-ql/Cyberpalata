@@ -2,8 +2,10 @@ import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import jwtDecode from "jwt-decode";
 import api from "./../Components/api";
+import stateStore from "../store/stateStore";
+import { observer } from "mobx-react-lite";
 
-export const AccessTokenVerify = (props) => {
+export const AccessTokenVerify = observer((props) => {
     let location = useLocation();
 
     function checkAccessTokenExpirationTime()
