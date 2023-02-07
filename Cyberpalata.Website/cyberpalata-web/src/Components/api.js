@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-const api = axios.create({baseURL: 'https://localhost:7227'});
+const api = axios.create({baseURL: 'http://dotnetinternship2022.norwayeast.cloudapp.azure.com:83'});
 //https://localhost:7227
 //http://dotnetinternship2022.norwayeast.cloudapp.azure.com:83/
 api.interceptors.request.use(
