@@ -72,7 +72,7 @@ namespace Cyberpalata.DataProvider.Repositories
             var room = await ReadAsync(roomId);
             
             //room.Value.Bookings.Add(new Booking());
-            var price = room.Value.Prices.FirstOrDefault(p => p.Hours == booking.Tariff.Hours);
+            //var price = room.Value.Prices.FirstOrDefault(p => p.Hours == booking.Tariff.Hours);
 
             var seats = room.Value.Seats.Where(s => booking.Seats.FirstOrDefault(seat => seat.Number == s.Number) != null).ToList();
 
@@ -86,7 +86,7 @@ namespace Cyberpalata.DataProvider.Repositories
                 seat.Bookings.Add(booking);
             }
 
-            booking.Tariff = price;
+            //booking.Tariff = price;
 
             var user = await _userRepository.ReadAsync(booking.User.Id);
             booking.User = user.Value;
