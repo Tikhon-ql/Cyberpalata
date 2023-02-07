@@ -99,9 +99,9 @@ namespace Cyberpalata.WebApi.Controllers
 
         [Authorize]
         [HttpGet("getPrice")]
-        public async Task<IActionResult> GetPrice(TimeSpan beg, TimeSpan end)
+        public async Task<IActionResult> GetPrice(TimeSpan beg, int hours)
         {
-            return Ok((end-beg).TotalMinutes / 4);
+            return Ok(hours);
         }
 
         [Authorize]
