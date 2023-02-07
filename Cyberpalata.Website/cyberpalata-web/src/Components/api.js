@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-const api = axios.create({baseURL: 'http://dotnetinternship2022.norwayeast.cloudapp.azure.com:83'});
+const api = axios.create({baseURL: 'https://localhost:7227'});
 //https://localhost:7227
 //http://dotnetinternship2022.norwayeast.cloudapp.azure.com:83/
 api.interceptors.request.use(
@@ -20,29 +20,22 @@ api.interceptors.request.use(
 )
 
 
-api.interceptors.response.use(
-    response=>response,
-    error=>{
-        if(error.response.status >= 500 && error.response.status <= 599)
-        {
-            window.location.replace("/500");
-        }
-        if(error.response.status === 400)
-        {
-            console.log("error");
-            console.dir(error.response.data);
-            //alert(error.response.data)
-        }
-        if(error.response.status === 404)
-        {
-            window.location.replace("/404");
-        }
-        // if(error.response.status === 401)
-        // { 
-          
-        // }
-        return Promise.reject(error);
-    }
-)
+// api.interceptors.response.use(
+//     response=>response,
+//     error=>{
+//         const navigate = useNavigate();
+//         if(error.response.status >= 500 && error.response.status <= 599)
+//         {
+//             console.log("ANIME");
+//             console.dir(error);
+//             navigate("/500");
+//         }
+//         if(error.response.status === 404)
+//         {
+//             window.location.replace("/404");
+//         }
+//         return error;
+//     }
+// )
 
 export default api;
