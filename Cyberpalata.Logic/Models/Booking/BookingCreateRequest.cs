@@ -14,7 +14,7 @@ namespace Cyberpalata.Logic.Models.Booking
         public DateTime Date { get; set; }
         public TimeSpan Begining { get; set; }
         public int HoursCount { get; set; }
-        public PriceDto Tariff { get; set; } = new PriceDto();
+        public decimal Price { get; set; }
         public List<int> Seats { get; set; } = new();
     }
 }

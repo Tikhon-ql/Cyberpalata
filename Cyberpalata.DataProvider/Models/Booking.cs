@@ -24,9 +24,7 @@ namespace Cyberpalata.DataProvider.Models
         [Required]
         public int HoursCount { get; set; }
         [Required]
-        public Guid PriceId { get; set; }
-        [ForeignKey("PriceId")]
-        public virtual Price Tariff { get; set; }
+        public decimal Price { get;set; }
         public virtual List<Seat> Seats { get; set; }
         public virtual List<Game> GamesToDownloadBefore { get; set; }//have to check is the game in the cyberclub games list
     }
