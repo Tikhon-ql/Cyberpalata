@@ -23,7 +23,7 @@ namespace Cyberpalata.Logic.Models.Booking
         [Required]
         public RoomDto Room { get; set; } = new();     
         [Required]
-        public PriceDto Tariff { get; set; }
+        public decimal Price { get; set; }
         [Required]
         public List<SeatDto> Seats { get; set; } = new();
         public List<GameDto> GamesToDownloadBefore { get; set; } = new();//have to check is the game in the cyberclub games list
