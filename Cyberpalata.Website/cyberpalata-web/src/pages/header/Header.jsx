@@ -9,13 +9,15 @@ import { useNavigate } from 'react-router-dom';
 import { LogoutComponent } from './Identity/LogoutComponent';
 import { useEffect, useState } from 'react';
 import { Modal } from '../../Components/Helpers/Modal/Modal';
-import store from '../../store/headerRerenderStore';
 import { observer } from 'mobx-react-lite';
+import headerRerenderStore from '../../store/headerRerenderStore';
+import stateStore from '../../store/stateStore';
 
 
 
 export const Header = observer((props) => {
-    store.state = false;
+    stateStore.state = false;
+    headerRerenderStore.state = false;
     let accessToken = false;
     const [modalActive, setModalActive] = useState(false);
 
@@ -24,19 +26,19 @@ export const Header = observer((props) => {
         accessToken = jwtDecode(localStorage.getItem('accessToken'));
     }
     const [state, setState] = useState(0);
-    useEffect(()=>{console.log("Anime")},[store.state])
+    useEffect(()=>{console.log("Anime")},[headerRerenderStore.state])
     console.dir(accessToken);
     return <>
         <nav id="headerId" className="navbar navbar-light bg-dark">
             {/* <Link to='/' className='navbar-brand'><Logo/></Link> */}
             <ul class="nav nav-pills d-flex justify-content-between w-100">
                 <li className='nav-item text-dark' style={{"marginTop":"2vh"}}>
-                    <Link to="/gamesLibrary" className='text-decoration-none text-white h4 m-5 mya' style={{"paddingBottom":"5px"}}>Games library</Link>
+                    <Link to="/gamesLibrary" className='text-decoration-none text-white h4 m-5 mya' style={{"paddingBottom":"5px"}} onClick={()=>{stateStore.stateChange()}}>Games library</Link>
                 </li>
                 {(AuthVerify() && accessToken) && <li className='nav-item text-white' style={{"marginTop":"2vh"}}>
                     <Link to="/bookingView" className='text-decoration-none text-white h4 mya' style={{"paddingBottom":"5px"}}>My orders</Link>
                 </li>}
-                <li className='nav-item'> <Link className='animate-charcter mya h1'  style={{"marginTop":"0","marginRight":"2vw", "paddingBottom":"5px"}}>CYBERPALATA</Link></li>
+                <li className='nav-item'> <Link to='/' className='animate-charcter mya h1' style={{"marginTop":"0","marginRight":"2vw", "paddingBottom":"5px"}}>CYBERPALATA</Link></li>
                 {(AuthVerify() && accessToken) && <li className='nav-item text-white' style={{"marginTop":"2vh"}}>
                     <Link to="/profile" className='text-decoration-none text-white m-3 h4 mya' style={{"paddingBottom":"5px"}}>Profile</Link>
                     </li>}
