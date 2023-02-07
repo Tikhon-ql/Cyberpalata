@@ -1,6 +1,8 @@
 using Cyberpalata.Logic.Configuration;
 using Cyberpalata.Logic.Interfaces;
+using Cyberpalata.WebApi.ActionFilters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
@@ -20,6 +22,10 @@ builder.Services.AddControllers().AddNewtonsoftJson();
 
 builder.Services.AddCors();
 
+builder.Services.AddScoped<ModelStateValidationFilter>();
+
+builder.Services.Configure<ApiBehaviorOptions>(options
+    => options.SuppressModelStateInvalidFilter = true);
 
 builder.Services.AddLogging(logginBuilder =>
 {
@@ -48,6 +54,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     //    },
     //};
 });
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
