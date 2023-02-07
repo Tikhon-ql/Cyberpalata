@@ -84,6 +84,12 @@ namespace Cyberpalata.Logic.Services
 
         public async Task<Result> AddBookingToRoom(Guid userId,BookingCreateRequest request)
         {
+            if (request.Seats.Count == 0)
+                return Result.Failure("Seats collection is empty");
+
+            if((request.Date - DateTime.Now).Days >= 14)
+                return Result.Failure("Incorrect date");
+
             var room = await _repository.ReadAsync(request.RoomId);
             if (room.HasNoValue)
                 return Result.Failure($"There aren't roo with id:{request.RoomId}");
