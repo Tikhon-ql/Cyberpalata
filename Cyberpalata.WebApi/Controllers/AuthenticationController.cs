@@ -2,6 +2,7 @@
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Identity;
 using Cyberpalata.Logic.Models.Identity.User;
+using Cyberpalata.WebApi.ActionFilters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -29,34 +30,34 @@ namespace Cyberpalata.WebApi.Controllers
       
 
         [HttpPost("login")]
+        [ServiceFilter(typeof(ModelStateValidationFilter))]
         public async Task<IActionResult> Login(AuthenticateRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError("Validation error");
-                return BadRequest($"Bad request: {ModelState.ToString()}");
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    _logger.LogError("Validation error");
+            //    return BadRequest($"Bad request: {ModelState}");
+            //}
 
             var result = await _authenticationService.ValidateUserAsync(request);
             if (result.IsFailure)
             {
-                _logger.LogError(result.Error);
-                return BadRequest(result.Error);
-            }   
-               
+                return BadRequestJson(result);
+            }
 
             var token = await _authenticationService.GenerateTokenAsync(result.Value);
             return await ReturnSuccess(token.Value);
         }
 
         [HttpPost("logout")]
+        [ServiceFilter(typeof(ModelStateValidationFilter))]
         [Authorize]
         public async Task<IActionResult> Logout([FromBody] TokenDto tokenDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest($"Bad request: {ModelState.ToString()}");
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest($"Bad request: {ModelState.ToString()}");
+            //}
             var res = await _authenticationService.LogoutAsync(tokenDto);
 
             if (res.IsFailure)
@@ -73,13 +74,14 @@ namespace Cyberpalata.WebApi.Controllers
         }
         //?????????? move to api user controller
         [AllowAnonymous]
+        [ServiceFilter(typeof(ModelStateValidationFilter))]
         [HttpPost("refresh")]
         public async Task<IActionResult> RefreshToken([FromBody] TokenDto tokenDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest($"Bad request: {ModelState.ToString()}");
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest($"Bad request: {ModelState.ToString()}");
+            //}
             var res = await _authenticationService.RefreshTokenAsync(tokenDto);
 
             if (res.IsFailure)

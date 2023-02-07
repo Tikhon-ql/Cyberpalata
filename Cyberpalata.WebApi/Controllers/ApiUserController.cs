@@ -5,6 +5,7 @@ using Cyberpalata.Logic.Models.Identity.User;
 using Cyberpalata.ViewModel;
 using Cyberpalata.ViewModel.Rooms;
 using Cyberpalata.ViewModel.User;
+using Cyberpalata.WebApi.ActionFilters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -35,17 +36,13 @@ namespace Cyberpalata.WebApi.Controllers
 
         //create bad request json
         [HttpPost("register")]
+        [ServiceFilter(typeof(ModelStateValidationFilter))]
         public async Task<IActionResult> Registration(UserCreateRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest($"Bad request: {ModelState}");
-            }
             var result = await _userService.CreateAsync(request);
             if (result.IsFailure)
             {
-                ModelState.AddModelError("Create", result.Error);//??????????
-                return BadRequest($"Bad request: {ModelState}");//??????
+                return BadRequestJson(result);
             }
             return await ReturnSuccess();
         }
