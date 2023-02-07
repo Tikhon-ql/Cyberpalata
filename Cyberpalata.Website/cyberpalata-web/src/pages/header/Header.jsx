@@ -9,12 +9,14 @@ import { useNavigate } from 'react-router-dom';
 import { LogoutComponent } from './Identity/LogoutComponent';
 import { useEffect, useState } from 'react';
 import { Modal } from '../../Components/Helpers/Modal/Modal';
-import "bootstrap";
+import store from '../../store/headerRerenderStore';
+import { observer } from 'mobx-react-lite';
 
 
-export const Header = (props) => {
+
+export const Header = observer((props) => {
+    store.state = false;
     let accessToken = false;
-
     const [modalActive, setModalActive] = useState(false);
 
     if(localStorage.getItem('accessToken') != null)
@@ -22,7 +24,7 @@ export const Header = (props) => {
         accessToken = jwtDecode(localStorage.getItem('accessToken'));
     }
     const [state, setState] = useState(0);
-    useEffect(()=>{setState(1)},[]);
+    useEffect(()=>{console.log("Anime")},[store.state])
     console.dir(accessToken);
     return <>
         <nav id="headerId" className="navbar navbar-light bg-dark">
@@ -43,7 +45,7 @@ export const Header = (props) => {
                     <div>
                         <a className="text-decoration-none text-white h4 m-5 mya" style={{"paddingBottom":"5px"}} onClick={()=>{setModalActive(true)}}>Logout</a>
                     </div> 
-                    : <Link to="/login" className='text-decoration-none text-white h4 mya' style={{"paddingBottom":"5px"}}>Login</Link>}
+                    : <Link to="/login" className='text-decoration-none text-white h4 mya m-5' style={{"paddingBottom":"5px"}}>Login</Link>}
                 </li>
             </ul>
             <Modal active={modalActive} setActive={setModalActive}>
@@ -51,5 +53,5 @@ export const Header = (props) => {
             </Modal>
         </nav>
    </>
-}
+})
 //<Link to="/logout" className='text-decoration-none text-dark'>Logout</Link>

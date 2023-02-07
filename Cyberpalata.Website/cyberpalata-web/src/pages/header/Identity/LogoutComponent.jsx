@@ -27,7 +27,7 @@ export const LogoutComponent = ({setModalActive}) => {
     }
 
     return <>
-    <div className="d-flex align-items-center justify-content-center pt-4" style={{"height":"100vh","width":"100vw","display":"flex","alignItems":"center","justifyContent":"center"}}>
+    <div className="d-flex align-items-center justify-content-center pt-4" >
         <div className="p-5 m-2 bg-info text-white shadow rounded-2">
             <h2>You really want logout?</h2>
             <div style={{'display': 'flex'}}>
@@ -38,3 +38,4 @@ export const LogoutComponent = ({setModalActive}) => {
     </div>
     </>
 }
+//style={{"height":"100vh","width":"100vw","display":"flex","alignItems":"center","justifyContent":"center"}}

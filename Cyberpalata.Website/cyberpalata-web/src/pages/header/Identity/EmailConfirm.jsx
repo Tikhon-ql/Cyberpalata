@@ -63,4 +63,4 @@ export const EmailConfirm = ()=>{
             </form>
         </div>
     </div>
-}
+}   
