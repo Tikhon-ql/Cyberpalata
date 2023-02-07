@@ -1,6 +1,8 @@
-﻿using Cyberpalata.Common.Intefaces;
+﻿using CSharpFunctionalExtensions;
+using Cyberpalata.Common.Intefaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Newtonsoft.Json;
 
 namespace Cyberpalata.WebApi.Controllers
 {
@@ -23,18 +25,24 @@ namespace Cyberpalata.WebApi.Controllers
             await _unitOfWork.CommitAsync();
             return Ok();
         }
-        protected async Task<IActionResult> BadRequestJson(string error)
+        protected IActionResult BadRequestJson(Result error)
         {
-            return BadRequest(new MyCustomError { Error = error} );
+            var errorsDictionary = new Dictionary<string, string>();
+            errorsDictionary.Add("Other", error.Error);
+            var json = JsonConvert.SerializeObject(errorsDictionary);
+            return BadRequest(json);
         }
-        protected async Task<IActionResult> BadRequestJson(ModelStateDictionary state)
-        {
-            //return BadRequest(new MyCustomError { Error = error });
-            return BadRequest();
-        }
-        private class MyCustomError 
-        {
-            public string Error { get; set; }
-        }
+        //protected IActionResult BadRequestJson<T>(Result<T> error)
+        //{
+        //    var errorsDictionary = new Dictionary<string, string>();
+        //    errorsDictionary.Add("Other", error.Error);
+        //    var json = JsonConvert.SerializeObject(errorsDictionary);
+        //    return BadRequest(json);
+        //}
+        //protected async Task<IActionResult> BadRequestJson(ModelStateDictionary state)
+        //{
+        //    //return BadRequest(new MyCustomError { Error = error });
+        //    return BadRequest();
+        //}
     }
 }
