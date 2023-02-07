@@ -4,6 +4,7 @@ using Cyberpalata.Logic.Models.Identity.User;
 using Cyberpalata.ViewModel.Booking;
 using Cyberpalata.ViewModel.Rooms;
 using Cyberpalata.ViewModel.User;
+using Cyberpalata.WebApi.ActionFilters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -28,12 +29,9 @@ namespace Cyberpalata.WebApi.Controllers
 
         [Authorize]
         [HttpPut("profileEditing")]
+        [ServiceFilter(typeof(ModelStateValidationFilter))]
         public async Task<IActionResult> EditProfile(UserUpdateRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest($"Bad request: {ModelState}");
-            }
             request.UserId = Guid.Parse(User.Claims.Single(claim => claim.Type == JwtRegisteredClaimNames.Sid).Value.ToString());
             await _userService.UpdateUserAsync(request);
             return await ReturnSuccess();
@@ -72,7 +70,10 @@ namespace Cyberpalata.WebApi.Controllers
                 viewModel.Add(new BookingSmallViewModel
                 {
                     Id = item.Id,
-                    Begining = item.Begining,
+                    Begining = item.Begining.ToString(@"hh\:mm"),
+                    HoursCount = item.HoursCount,   
+                    Price = item.Price,
+                    Date = item.Date.ToString("yyyy-MM-dd"),
                     //Gou = item.HoursCount,
                     RoomName = item.Room.Name
                 });
