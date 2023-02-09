@@ -4,22 +4,14 @@ using Cyberpalata.DataProvider.Context;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Cyberpalata.DataProvider.Repositories
 {
-    internal class ApiUserRepository : IApiUserRepository
+    internal class ApiUserRepository :BaseRepository<ApiUser>, IApiUserRepository
     {
-
-        private readonly ApplicationDbContext _context;
-
-        public ApiUserRepository(ApplicationDbContext context)
+        public ApiUserRepository(ApplicationDbContext context, IConfiguration configuration) : base(context,configuration)
         {
-            _context = context;
-        }
-
-        public async Task CreateAsync(ApiUser entity)
-        {
-            await _context.Users.AddAsync(entity);
         }
 
         public async Task<Maybe<ApiUser>> ReadAsync(string email)
@@ -27,21 +19,11 @@ namespace Cyberpalata.DataProvider.Repositories
             var entity = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
             return entity;
         }
-        public async Task<Maybe<ApiUser>> ReadAsync(Guid id)
-        {
-            var entity = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-            return entity;
-        }
 
-        public async Task<PagedList<ApiUser>> GetPageListAsync(int pageNumber)
+        public override async Task<PagedList<ApiUser>> GetPageListAsync(int pageNumber)
         {
             var list = await _context.Users.Skip((pageNumber - 1) * 10).Take(10).ToListAsync();
             return new PagedList<ApiUser>(list, pageNumber, 10, _context.Users.Count());
-        }
-
-        public void Delete(ApiUser user)
-        {
-            _context.Users.Remove(user);
         }
     }
 }

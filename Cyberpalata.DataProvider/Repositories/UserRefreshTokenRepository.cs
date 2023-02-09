@@ -29,13 +29,5 @@ namespace Cyberpalata.DataProvider.Repositories
         {
             _context.RefreshTokens.Remove(refreshToken);
         }
-
-        //public async Task<Maybe<ApiUser>> GetUserByRefreshToken(string refreshToken)
-        //{
-        //    var token = await ReadAsync(refreshToken);
-        //    if (token.HasValue)
-        //        return token.Value.User;
-        //    return Maybe.None;
-        //}
     }
 }
