@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cyberpalata.DataProvider.Models.Identity
 {
-    public class UserRefreshToken
+    public class UserRefreshToken : BaseEntity
     {
-        [Key] 
-        public Guid Id { get; set; }
+        //[Key] 
+        //public Guid Id { get; set; }
         [Required]
         public Guid UserId { get; set; }
         [ForeignKey("UserId")]

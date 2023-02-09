@@ -2,11 +2,11 @@
 
 namespace Cyberpalata.DataProvider.Models.Identity
 {
-    public class ApiUser
+    public class ApiUser : BaseEntity
     {
-        [Key]
-        [Required] 
-        public Guid Id { get; set; }
+        //[Key]
+        //[Required] 
+        //public Guid Id { get; set; }
         [Required] 
         public string Username { get; set; }
         [Required] 

@@ -4,11 +4,11 @@ using Cyberpalata.Common.Enums;
 
 namespace Cyberpalata.DataProvider.Models.Peripheral
 {
-    public class Periphery
+    public class Periphery : BaseEntity
     {
-        [Key]
-        [Required]
-        public Guid Id { get; set; }
+        //[Key]
+        //[Required]
+        //public Guid Id { get; set; }
         [MaxLength(50)]
         [Required]
         public string? Name { get; set; }

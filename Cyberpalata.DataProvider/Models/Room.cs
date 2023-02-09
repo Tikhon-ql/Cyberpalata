@@ -1,5 +1,4 @@
-﻿using CSharpFunctionalExtensions;
-using Cyberpalata.Common.Enums;
+﻿using Cyberpalata.Common.Enums;
 using Cyberpalata.DataProvider.Models.Devices;
 using Cyberpalata.DataProvider.Models.Peripheral;
 using System.ComponentModel.DataAnnotations;
@@ -7,10 +6,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cyberpalata.DataProvider.Models
 {
-    public class Room
+    public class Room : BaseEntity
     {
-        [Key]
-        public Guid Id { get; set; }
+        //[Key]
+        //public Guid Id { get; set; }
         [Required]
         [MaxLength(50)]
         public string Name { get; set; }
@@ -19,7 +18,6 @@ namespace Cyberpalata.DataProvider.Models
         [ForeignKey("TypeId")]
         public virtual RoomType Type { get; set; }
         public bool IsVip { get; set; }
-        public virtual List<Price> Prices { get; set; } = new();
         public virtual List<Seat> Seats { get; set; } = new();
         public virtual List<Booking> Bookings { get; set; } = new();
         public virtual List<GameConsole> Consoles { get; set; } = new();

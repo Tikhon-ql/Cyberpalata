@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cyberpalata.DataProvider.Models.Devices
 {
-    public class GameConsole
+    public class GameConsole : BaseEntity
     {
-        [Key]
-        [Required]
-        public Guid Id { get; set; }
+        //[Key]
+        //[Required]
+        //public Guid Id { get; set; }
 
         [MaxLength(50)]
         [Required]

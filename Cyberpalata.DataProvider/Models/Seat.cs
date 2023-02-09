@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cyberpalata.DataProvider.Models
 {
-    public class Seat
+    public class Seat : BaseEntity
     {
-        [Key] 
-        [Required] 
-        public Guid Id { get; set; }
+        //[Key] 
+        //[Required] 
+        //public Guid Id { get; set; }
         [Required]
         public int Number { get; set; }
         [Required]

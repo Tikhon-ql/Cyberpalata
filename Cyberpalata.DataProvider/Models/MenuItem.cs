@@ -4,11 +4,11 @@ using Cyberpalata.Common.Enums;
 
 namespace Cyberpalata.DataProvider.Models
 {
-    public class MenuItem
+    public class MenuItem : BaseEntity
     {
-        [Key] 
-        [Required] 
-        public Guid Id { get; set; }
+        //[Key] 
+        //[Required] 
+        //public Guid Id { get; set; }
         [Required] 
         [MaxLength(50)] 
         public string Name { get; set; }
