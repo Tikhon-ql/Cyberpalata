@@ -17,7 +17,6 @@ namespace Cyberpalata.DataProvider.Context
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Pc> Pcs { get; set; }
         public DbSet<Game> Games { get; set; }
-        public DbSet<Price> Prices { get; set; }
         public DbSet<Periphery> Peripheries { get; set; }  
         public DbSet<GameConsole> GameConsoles { get; set; }
         public DbSet<ApiUser> Users { get; set; }
@@ -51,7 +50,8 @@ namespace Cyberpalata.DataProvider.Context
             //modelBuilder.Entity<Periphery>().HasOne(p => p.GamingRoom).WithMany();
             //modelBuilder.Entity<GameConsole>().HasOne(gc => gc.ConsoleRoom).WithMany();
 
-            //modelBuilder.Entity<UserRefreshToken>().HasOne(urt => urt.User).WithMany();
+            modelBuilder.Entity<UserRefreshToken>().HasOne(urt => urt.User).WithMany().OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Booking>().HasOne(b => b.User).WithMany(u => u.Bookings).OnDelete(DeleteBehavior.Cascade);
             //modelBuilder.Entity<Periphery>().HasOne(p => p.Type).WithMany();
 
 
@@ -67,12 +67,11 @@ namespace Cyberpalata.DataProvider.Context
             modelBuilder.Entity<Game>().Property(g => g.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<Pc>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<Periphery>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
-            modelBuilder.Entity<Price>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
+            //modelBuilder.Entity<Price>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<GameConsole>().Property(g => g.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<Room>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<ApiUser>().Property(a => a.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<UserRefreshToken>().Property(t => t.Id).HasDefaultValueSql("NEWID()");
-            //modelBuilder.Entity<Booking>().Property(t => t.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<Seat>().Property(s => s.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<Seat>().Property(s => s.Number).ValueGeneratedOnAdd();
         }
@@ -98,7 +97,6 @@ namespace Cyberpalata.DataProvider.Context
         private void UniqueIndexesCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserRefreshToken>().HasIndex(urf => urf.RefreshToken).IsUnique();
-            //modelBuilder.Entity<ApiUser>().HasIndex(user=>user.Email).IsUnique();
         }
     }
 }
