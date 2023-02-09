@@ -1,15 +1,13 @@
-﻿using Cyberpalata.DataProvider.Models;
-using Cyberpalata.DataProvider.Models.Identity;
+﻿using Cyberpalata.DataProvider.Models.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cyberpalata.DataProvider.Models
 {
-    public class Booking
+    public class Booking : BaseEntity
     {
-        [Key]
-        public Guid Id { get; set; }
-        [Required]//constraint gaming room X game console room only
+        //[Key]
+        //public Guid Id { get; set; }
         public Guid RoomId { get; set; }
         [ForeignKey("RoomId")]
         public virtual Room Room { get; set; }
@@ -26,6 +24,6 @@ namespace Cyberpalata.DataProvider.Models
         [Required]
         public decimal Price { get;set; }
         public virtual List<Seat> Seats { get; set; }
-        public virtual List<Game> GamesToDownloadBefore { get; set; }//have to check is the game in the cyberclub games list
+        public virtual List<Game> GamesToDownloadBefore { get; set; }
     }
 }
