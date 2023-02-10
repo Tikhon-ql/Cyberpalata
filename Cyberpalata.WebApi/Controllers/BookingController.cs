@@ -84,5 +84,29 @@ namespace Cyberpalata.WebApi.Controllers
             viewModel.Seats = resultSeats;
             return Ok(viewModel);
         }
+
+        [Authorize]
+        [HttpGet("getBookingSmallInfo")]
+        public async Task<IActionResult> GetBookingsSmallInfo(int page)
+        {
+            var userId = Guid.Parse(User.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Sid).Value);
+            //var user = await _userService.ReadAsync(userId);
+            var bookings = await _bookingService.GetPagedListAsync(page, userId);
+
+            var viewModel = new List<BookingSmallViewModel>();
+            foreach (var item in bookings.Items)
+            {
+                viewModel.Add(new BookingSmallViewModel
+                {
+                    Id = item.Id,
+                    Begining = item.Begining.ToString(@"hh\:mm"),
+                    HoursCount = item.HoursCount,
+                    Price = item.Price,
+                    Date = item.Date.ToString("yyyy-MM-dd"),
+                    RoomName = item.Room.Name
+                });
+            }
+            return Ok(new { viewModel, bookings.TotalItemsCount });
+        }
     }
 }
