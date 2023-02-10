@@ -14,53 +14,14 @@ namespace Cyberpalata.Logic.Services
     internal class RoomService : IRoomService
     {
         private readonly IRoomRepository _repository;
-        private readonly IBookingFilter _bookingFilter;
+        private readonly ISeatService _seatService;
         private readonly IMapper _mapper;
 
-        public RoomService(IRoomRepository repository, IMapper mapper, IBookingFilter bookingFilter)
+        public RoomService(IRoomRepository repository, ISeatService seatService, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
-            _bookingFilter = bookingFilter;
-        }
-
-        public async Task CreateAsync(RoomDto entity)
-        {
-            await _repository.CreateAsync(_mapper.Map<Room>(entity));
-        }
-
-        public async Task<Maybe<RoomDto>> ReadAsync(Guid id)
-        {
-            var room = await _repository.ReadAsync(id);
-            return _mapper.Map<Maybe<RoomDto>>(room);
-        }
-
-        public async Task<Result> DeleteAsync(Guid id)
-        {
-            var res = await SearchAsync(id);
-
-            if (res.IsFailure)
-                return Result.Failure(res.Error);
-
-            _repository.Delete(_mapper.Map<Room>(res.Value));
-
-            return Result.Success();
-        }
-
-        public async Task<Result<RoomDto>> SearchAsync(Guid id)
-        {
-            var room = await _repository.ReadAsync(id);
-
-            if (!room.HasValue)
-                return Result.Failure<RoomDto>($"Room with id {id} doesn't exist");
-
-            return Result.Success(_mapper.Map<RoomDto>(room.Value));
-        }
-
-        public async Task<PagedList<RoomDto>> GetPagedListAsync(int pageNumber)
-        {
-            var list = await _repository.GetPageListAsync(pageNumber);
-            return _mapper.Map<PagedList<RoomDto>>(list);
+            _seatService = seatService;
         }
 
         public async Task<PagedList<RoomDto>> GetPagedListAsync(int pageNumber, RoomType type)
@@ -81,31 +42,63 @@ namespace Cyberpalata.Logic.Services
             return _mapper.Map<PagedList<RoomDto>>(list);
         }
 
-        public async Task<Result> AddBookingToRoom(Guid userId,BookingCreateRequest request)
+        public async Task<Result> AddBookingToRoom(Guid userId, BookingCreateRequest request)
         {
             if (request.Seats.Count == 0)
                 return Result.Failure("Seats collection is empty");
 
-            if((request.Date - DateTime.Now).Days >= 14)
-                return Result.Failure("Incorrect date");
+            if ((request.Date - DateTime.Now).Days >= 14)
+                return Result.Failure("Incorrect date: You can make a booking only on 2 weeks ahead");
 
             var room = await _repository.ReadAsync(request.RoomId);
             if (room.HasNoValue)
                 return Result.Failure($"There aren't roo with id:{request.RoomId}");
             var dto = _mapper.Map<BookingDto>(request);
 
-            if (!_bookingFilter.IsValid(dto))
-                return Result.Failure("Data is invalid.");
-
             dto.User.Id = userId;
             await _repository.AddBookingToRoomAsync(request.RoomId, _mapper.Map<Booking>(dto));
             return Result.Success();
         }
 
-        //public async Task<Maybe<List<SeatDto>>> GetRoomFreeSeats(Guid roomId)
-        //{
-        //    var list = await _repository.GetRoomFreeSeats(roomId);
-        //    return _mapper.Map<Maybe<List<SeatDto>>>(list);
-        //}
+        public async Task<Maybe<List<RoomDto>>> SearchRooms(SearchRoomRequest request)
+        {
+            var rooms = await _repository.GetAll();
+            if (rooms.HasNoValue)
+                return Maybe.None;
+            var resultList = new List<RoomDto>();
+            foreach (var room in rooms.Value)
+            {
+                var seats = await _seatService.GetSeatsByRoomInRangeIdAsync(new SeatsGettingRequest
+                {
+                    RoomId = room.Id,
+                    Begining = request.Begining,
+                    Date = request.Date,
+                    HoursCount = request.HoursCount
+                });
+
+                if (seats.HasNoValue)
+                    continue;
+
+                seats.Value.Sort((a,b)=>a.Number - b.Number);
+
+                int seatCountInRow = 0;
+
+                foreach(var seat in seats.Value)
+                {
+                    if (seat.IsFree)
+                        seatCountInRow++;
+                    else
+                        seatCountInRow = 0;
+                    if(request.Count == seatCountInRow)
+                    {
+                        resultList.Add(_mapper.Map<RoomDto>(room));
+                        rooms.Value.Remove(room);
+                        break;
+                    }
+                }
+            }
+            
+            return resultList;
+        }
     }
 }
