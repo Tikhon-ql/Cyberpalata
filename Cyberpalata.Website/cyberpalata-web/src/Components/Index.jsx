@@ -1,7 +1,5 @@
 import './Index.css';
 import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
-// import {LoungeInfo} from './pages/LoungeInfo'
-// import {GamingRoomInfo} from './pages/GamingRoomInfo'
 import { GameConsoleRoom } from '../pages/body/GameConsoleRoom/GameConsoleRoom';
 import { Header } from '../pages/header/Header';
 import {Home} from '../pages/body/Home';
@@ -19,10 +17,11 @@ import { PasswordRecovering } from '../pages/header/Identity/PasswordRecovering'
 import { ResetPassword } from '../pages/header/Identity/ResetPassword';
 import { EmailConfirm } from '../pages/header/Identity/EmailConfirm';
 import { BookingViewComponent } from '../pages/body/Booking/BookingViewComponent';
-import GamingRoom from './../pages/body/GamingRoom/GamingRoom'
+import GamingRoom from './../pages/body/GamingRoom/GamingRoom';
 import { OneBookingView } from '../pages/body/Booking/OneBookingView';
 import { IternalServerError } from './Errors/500/IternalServerError';
 import { NotFound } from './Errors/404/NotFound';
+import { RoomSearch } from '../pages/header/RoomSearch';
 
 export const Index = () => {
     return <div>
@@ -46,7 +45,7 @@ export const Index = () => {
                 <Route path="/emailConfirm/:email" element={<EmailConfirm/>}/>
                 <Route path="/bookingView" element={<BookingViewComponent/>}/>
                 <Route path="/bookingView/:id" element={<OneBookingView/>}/>
-                <Route path="/500" element={<IternalServerError/>}/>
+                <Route path="/searchRoom" element={<RoomSearch/>}/>
                 <Route path="/404" element={<NotFound/>}/>
                 <Route path="*" element={<Navigate replace to="/404" />} />
                 <Route path="/index" element={<Index/>}></Route>
