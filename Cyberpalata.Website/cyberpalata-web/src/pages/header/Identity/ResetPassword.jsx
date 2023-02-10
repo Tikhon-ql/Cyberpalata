@@ -10,8 +10,6 @@ export const ResetPassword = ()=>{
     function passwordReset(event)
     {
         event.preventDefault();
-        // const baseUrl = `https://localhost:7227`;
-        // const apiUrl = `${baseUrl}/users/passwordRecovering`;
         const requestBody = {
             "email":email,
             "password":event.target.elements.password.value,
@@ -19,10 +17,14 @@ export const ResetPassword = ()=>{
         }
         api.put(`/users/passwordRecovering`,requestBody).then(()=>{
             navigate("/");
-        }).catch(err=>{
-            if(err.response.status >= 500 && err.response.status <= 599)
+        }).catch(error=>{
+            if(error.code && error.code == "ERR_NETWORK")
             {
-                navigate("/500");
+                navigate('/500');
+            }
+            if((error.response.status >= 500 && error.response.status <= 599))
+            {
+                navigate('/500');
             }
         });
     }

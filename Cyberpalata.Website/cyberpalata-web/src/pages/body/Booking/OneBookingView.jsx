@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 
 export const OneBookingView = ()=>{
     const [countInRow,setCountInRow] = useState(0);    
-    //const [booking, setBooking] = useState({});
     const [roomName, setRoomName] = useState("")
     const [begining, setBegining] = useState("");
     const [hours, setHours] = useState(0);
@@ -16,11 +15,6 @@ export const OneBookingView = ()=>{
     let navigate = useNavigate();
     const {id} = useParams();
 
-    //const baseUrl = `https://localhost:7227`;
-    //let apiRequestUrl = `${baseUrl}/booking/getBooking?id=${id}`;
-    // const config = {
-    //     headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
-    // };
     useEffect(()=>{
         setLoading(true);
         api.get(`/booking/getBooking?id=${id}`).then(res=>{
@@ -30,10 +24,14 @@ export const OneBookingView = ()=>{
             setPrice(res.data.price);
             setSeats(res.data.seats);
             setLoading(false);
-        }).catch(err=>{
-            if(err.response.status >= 500 && err.response.status <= 599)
+        }).catch(error=>{
+            if(error.code && error.code == "ERR_NETWORK")
             {
-                navigate("/500");
+                navigate('/500');
+            }
+            if((error.response.status >= 500 && error.response.status <= 599))
+            {
+                navigate('/500');
             }
         });
     },[]);
@@ -50,9 +48,6 @@ export const OneBookingView = ()=>{
         seatsPerRow.push(chunk);
     }
    
-
-    //setBookingsIds(res.data.bookingsIds);
-
     return <div style={{"display":"flex","justifyContent":"center","alignItems":"center","width":"100%","height":"80vh"}}>{loading ? 
         <div>
             <BarLoader
@@ -94,7 +89,5 @@ export const OneBookingView = ()=>{
      
     </div>
     }
-       
-    
     </div>
 }

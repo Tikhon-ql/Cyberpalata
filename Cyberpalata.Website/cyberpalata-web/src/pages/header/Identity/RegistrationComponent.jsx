@@ -6,6 +6,10 @@ import { useState } from "react";
 
 export const RegistrationComponent = ()=>{
     let navigate = useNavigate();
+    const [username, setUsername] = useState("");
+    const [surname, setSurname] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
     const [otherError, setOtherError] = useState("");
     const [usernameError, setUsernameError] = useState("");
     const [surnameError, setSurnameError] = useState("");
@@ -28,18 +32,21 @@ export const RegistrationComponent = ()=>{
             "passwordConfirm" : event.target.elements.passwordConfirm.value
         }
         console.log(data.email);
-        // const apiRequestUrl = `${baseUrl}/users/register`;
 
         api.post(`/users/register`, data).then(()=>
         {
             navigate(`/emailConfirm/${data.email}`);
-        }).catch((err)=>
+        }).catch((error)=>
         {
-            if(err.response.status >= 500 && err.response.status <= 599)
+            if(error.code && error.code == "ERR_NETWORK")
             {
-                navigate('/');
+                navigate('/500');
             }
-            let data = err.response.data;
+            if((error.response.status >= 500 && error.response.status <= 599))
+            {
+                navigate('/500');
+            }
+            let data = error.response.data;
             if(data.Other)
             {
                 setOtherError(data.Other);
@@ -95,23 +102,23 @@ export const RegistrationComponent = ()=>{
             <div className="d-flex"> 
                 <div className="m-1">
                     <label for="username" className="form-label">Name</label>
-                    <input type="text" className="form-control" onInput={clearErrors} id="username" name="username" aria-describedby="usernameHelp"/>
+                    <input type="text" className="form-control" onInput={clearErrors} onChange={(e)=>{setUsername(e.target.value)}} id="username" name="username" defaultValue={username} aria-describedby="usernameHelp"/>
                     {usernameError != "" && <div className="m-1 text-danger">{usernameError}</div>}
                 </div>
                 <div className="m-1">
                     <label for="surname" className="form-label">Surname</label>
-                    <input type="text" className="form-control" id="surname" name="surname" aria-describedby="surnameHelp"/>
+                    <input type="text" className="form-control" id="surname" onChange={(e)=>{setSurname(e.target.value)}} name="surname" defaultValue={surname} aria-describedby="surnameHelp"/>
                     {surnameError != "" && <div className="m-1 text-danger">{surnameError}</div>}
                 </div>
             </div>
             <div className="m-1">
                 <label for="email" className="form-label">Email address</label>
-                <input type="email" className="form-control" id="email" name="email" aria-describedby="emailHelp"/>
+                <input type="email" className="form-control" id="email" name="email" onChange={(e)=>{setEmail(e.target.value)}} defaultValue={email} aria-describedby="emailHelp"/>
                 {emailError != "" && <div className="m-1 text-danger">{emailError}</div>}
             </div>
             <div className="m-1">
                 <label for="phone" className="form-label">Phone</label>
-                <input type="tel" className="form-control" id="phone" name="phone" aria-describedby="phoneHelp" pattern="^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$"/>
+                <input type="tel" className="form-control" id="phone" name="phone" aria-describedby="phoneHelp" onChange={(e)=>{setPhone(e.target.value)}} defaultValue={phone} />
                 {phoneError != "" && <div className="m-1 text-danger">{phoneError}</div>}
             </div>
             <div className="d-flex">

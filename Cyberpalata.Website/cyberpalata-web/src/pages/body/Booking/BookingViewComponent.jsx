@@ -2,7 +2,6 @@ import { useEffect, useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../../../Components/api";
 import { Pagination } from "../../../Components/Helpers/Pagination";
-import {OneBookingView} from "./OneBookingView"
 import BarLoader from "react-spinners/BarLoader";
 
 export const BookingViewComponent = (props)=>{
@@ -11,18 +10,21 @@ export const BookingViewComponent = (props)=>{
     const[curPage, setCurPage] = useState(1);
     const[totalItemsCount, setTotalItemsCount] = useState(0);
     const [loading,setLoading] = useState(false);
-    const [pageLoading,setPageLoading] = useState(false);
     useEffect(()=>{
         setLoading(true);
-        api.get(`/profile/getBookingSmallInfo?page=${curPage}`).then(res=>{
+        api.get(`/booking/getBookingSmallInfo?page=${curPage}`).then(res=>{
             console.dir(res.data);
             setBookingsSmall(res.data.viewModel);
             setTotalItemsCount(res.data.totalItemsCount);
             setLoading(false);
-        }).catch(err=>{
-            if(err.response.status >= 500 && err.response.status <= 599)
+        }).catch(error=>{
+            if(error.code && error.code == "ERR_NETWORK")
             {
-                navigate("/500");
+                navigate('/500');
+            }
+            if((error.response.status >= 500 && error.response.status <= 599))
+            {
+                navigate('/500');
             }
         });
     },[curPage]);
@@ -52,7 +54,7 @@ export const BookingViewComponent = (props)=>{
                                 </div>
                             </Link>
                     })}
-                    <Pagination totalItemsCount = {totalItemsCount} pageCount = {bookingsSmall.length} curPage = {curPage} setCurPage = {setCurPage}/>
+                    <Pagination totalItemsCount = {totalItemsCount} pageCount = {3} curPage = {curPage} setCurPage = {setCurPage}/>
                 </div>
             </div>
         </div>}

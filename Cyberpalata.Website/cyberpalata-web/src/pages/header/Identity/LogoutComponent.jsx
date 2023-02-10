@@ -20,10 +20,14 @@ export const LogoutComponent = ({setModalActive}) => {
             api.post(`/authentication/logout`, requestBody).then(()=>
             {
                 
-            }).catch(err=>{
-                if(err.response.status >= 500 && err.response.status <= 599)
+            }).catch(error=>{
+                if(error.code && error.code == "ERR_NETWORK")
                 {
-                    navigate("/500");
+                    navigate('/500');
+                }
+                if((error.response.status >= 500 && error.response.status <= 599))
+                {
+                    navigate('/500');
                 }
             });
             localStorage.removeItem('accessToken');
@@ -45,4 +49,3 @@ export const LogoutComponent = ({setModalActive}) => {
     </div>
     </>
 }
-//style={{"height":"100vh","width":"100vw","display":"flex","alignItems":"center","justifyContent":"center"}}

@@ -5,25 +5,23 @@ import api from "./../../../Components/api";
 export const EmailConfirm = ()=>{
     const navigate = useNavigate();
     const {email} = useParams();
-    //const {state} = useLocation();
-    //const {data} = state;
     const [code,setCode] = useState(0);
-    // const baseUrl = `https://localhost:7227`;
-    // let apiUrl = `${baseUrl}/users/emailConfirm?email=${email}`;
- 
-
-    //console.dir(data);
-
-    // let requestBody = {
-    //     "email" : email
-    // }
     useEffect(()=>{
-        api.post(`/users/emailConfirm?email=${email}`).then(res=>{
+
+        const requestBody = 
+        {
+            "email" : email
+        };
+        api.post(`/users/emailConfirm`,requestBody).then(res=>{
             setCode(res.data);
-        }).catch(err=>{
-            if(err.response.status >= 500 && err.response.status <= 599)
+        }).catch(error=>{
+            if(error.code && error.code == "ERR_NETWORK")
             {
-                navigate("/500");
+                navigate('/500');
+            }
+            if((error.response.status >= 500 && error.response.status <= 599))
+            {
+                navigate('/500');
             }
         });
     },[]);
@@ -32,22 +30,21 @@ export const EmailConfirm = ()=>{
     {
         event.preventDefault();
         if(event.target.elements.code.value == code)
-        {
-            //apiUrl = `${baseUrl}/users/activate?email=${email}`;
-            // const requestBody = {
-            //     "username": data.username,
-            //     "surname": data.surname,
-            //     "email":data.email,
-            //     "phone":data.phone,
-            //     "password":data.password,
-            //     "passwordConfirm" : data.passwordConfirm
-            // }
-            api.post(`/users/activate?email=${email}`).then(()=>{
+        { 
+            const requestBody = 
+            {
+                "email" : email
+            };
+            api.put(`/users/activate`,requestBody).then(()=>{
                 navigate('/');
-            }).catch(err=>{
-                if(err.response.status >= 500 && err.response.status <= 599)
+            }).catch(error=>{
+                if(error.code && error.code == "ERR_NETWORK")
                 {
-                    navigate("/500");
+                    navigate('/500');
+                }
+                if((error.response.status >= 500 && error.response.status <= 599))
+                {
+                    navigate('/500');
                 }
             });
         }

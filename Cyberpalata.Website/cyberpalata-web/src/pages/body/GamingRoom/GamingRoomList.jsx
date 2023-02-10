@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {Link, useNavigate} from 'react-router-dom'
 import { useParams } from 'react-router-dom'
@@ -12,19 +11,20 @@ export const GamingRoomList = () =>{
     const [loading, setLoading] = useState(true);
     const {type} = useParams();
     useEffect(()=>{
-        api.get(`/gamingRooms/type?type=${type}`).then(res => {
+        api.get(`/gamingRooms/getRoomByType?type=${type}`).then(res => {
             setGamingRoomsInfo(res.data.infos);
             setLoading(false);
-        }).catch(err=>{
-            if(err.response.status >= 500 && err.response.status <= 599)
+        }).catch(error=>{
+            if(error.code && error.code == "ERR_NETWORK")
             {
-                navigate("/500");
+                navigate('/500');
+            }
+            if((error.response.status >= 500 && error.response.status <= 599))
+            {
+                navigate('/500');
             }
         });
     },[]); 
-    //console.dir(gameConsoleRoomsInfo);
-    // const sort = gameConsoleRoomsInfo.sort((a,b)=>{a.name < b.name ? 1 : -1});
-    // console.dir(sort);
     return <div style={{"display":"flex","justifyContent":"center","alignItems":"center","width":"100%","height":"80vh"}}>
         {loading ? 
         <div>
