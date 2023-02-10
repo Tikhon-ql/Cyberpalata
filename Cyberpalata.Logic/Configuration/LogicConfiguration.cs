@@ -1,6 +1,4 @@
 ﻿using Cyberpalata.DataProvider.Configuration;
-using Cyberpalata.Logic.Filters;
-using Cyberpalata.Logic.Interfaces.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Services;
 using Microsoft.Extensions.Configuration;
@@ -21,8 +19,6 @@ namespace Cyberpalata.Logic.Configuration
             },typeof(AppMappingProfile));
 
             services.AddScoped<IRoomService, RoomService>();
-            services.AddScoped<IGameService, GameService>();
-            services.AddScoped<IPriceService, PriceService>();
             services.AddScoped<IApiUserService, ApiUserService>();
             services.AddScoped<IGameConsoleService, GameConsoleService>();
             services.AddScoped<IUserRefreshTokenService, UserRefreshTokenService>();
@@ -33,9 +29,6 @@ namespace Cyberpalata.Logic.Configuration
             services.AddScoped<IBookingService, BookingService>();
             services.AddScoped<ISeatService, SeatService>();
             services.AddScoped<IMailService, MailService>();
-            services.AddSingleton<IBookingFilter, BookingFilter>();
-            //services.AddScoped<ILoggerManager, LoggerManager>();
-            //services.AddTransient<IMenuItemService, MenuItemService>();
         }
     }
 }
