@@ -24,7 +24,7 @@ export const PasswordRecovering = ()=> {
         <form className="p-5 m-2 bg-info text-white shadow rounded-2" onSubmit={sendRecoveringMessage}>
             <div className="mb-3">
                 <label for="exampleInputEmail1" className="form-label">Email address</label>
-                <input type="email" name="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"/>
+                <input type="email" name="email" className="form-control" id="exampleInputEmail1" required aria-describedby="emailHelp"/>
                 <div id="emailHelp" className="form-text text-white">We'll never share your email with anyone else.</div>
             </div>
             <div className="d-flex justify-content-around">
