@@ -12,8 +12,6 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
-
 builder.Host.UseNLog();
 
 var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
@@ -45,18 +43,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecurityKey"]))
     };
-    //options.Events = new JwtBearerEvents
-    //{
-    //    OnAuthenticationFailed = context =>
-    //    {
-    //        Console.WriteLine("bad");
-    //        return Task.CompletedTask;
-    //    },
-    //};
 });
 
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -64,7 +52,6 @@ builder.Services.ConfigureLogicLayer(builder.Configuration);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -79,8 +66,6 @@ app.UseCors(options =>
         .AllowAnyHeader()
         .AllowAnyMethod();
 });
-
-//app.UseMiddleware<IsTokenExpiredMidleware>();
 
 app.UseAuthorization();
 
