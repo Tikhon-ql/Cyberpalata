@@ -4,6 +4,5 @@
     {
         public List<PcInfo> PcInfos { get; set; }
         public List<Periphery> Peripheries { get; set; } = new();
-        public List<PriceViewModel> Prices { get; set; } = new();
     }
 }
