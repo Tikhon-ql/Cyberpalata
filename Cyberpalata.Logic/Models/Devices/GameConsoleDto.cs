@@ -3,6 +3,6 @@
     public class GameConsoleDto
     {
         public Guid Id { get; set; }
-        public string? ConsoleName { get; set; }
+        public string ConsoleName { get; set; }
     }
 }

@@ -1,11 +1,7 @@
 ﻿using Cyberpalata.Logic.Models.Identity.User;
+using Cyberpalata.Logic.Models.Room;
 using Cyberpalata.Logic.Models.Seats;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cyberpalata.Logic.Models.Booking
 {
@@ -26,7 +22,7 @@ namespace Cyberpalata.Logic.Models.Booking
         public decimal Price { get; set; }
         [Required]
         public List<SeatDto> Seats { get; set; } = new();
-        public List<GameDto> GamesToDownloadBefore { get; set; } = new();//have to check is the game in the cyberclub games list
-        public bool IsExpired { get; set; } // trigger
+        public List<GameDto> GamesToDownloadBefore { get; set; } = new();
+        public bool IsExpired { get; set; }
     }
 }
