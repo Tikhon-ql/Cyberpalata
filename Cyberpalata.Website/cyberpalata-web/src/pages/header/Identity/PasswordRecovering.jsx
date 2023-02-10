@@ -8,14 +8,16 @@ export const PasswordRecovering = ()=> {
     function sendRecoveringMessage(event)
     {
         event.preventDefault();
-        // const baseUrl = `https://localhost:7227`;
-        // const apiUrl = `${baseUrl}/users/passwordRecovering?email=${event.target.elements.email.value}`;
         api.get(`/users/passwordRecovering?email=${event.target.elements.email.value}`).then(()=>{
             navigate("/");
-        }).catch(err=>{
-            if(err.response.status >= 500 && err.response.status <= 599)
+        }).catch(error=>{
+            if(error.code && error.code == "ERR_NETWORK")
             {
-                navigate("/500");
+                navigate('/500');
+            }
+            if((error.response.status >= 500 && error.response.status <= 599))
+            {
+                navigate('/500');
             }
         });
     }
