@@ -23,19 +23,11 @@ namespace Cyberpalata.WebApi.Controllers
             _refreshTokenService = refreshTokenService;
             _logger = logger;
         }
-        //User locates in token get id from accessToken
-      
 
         [HttpPost("login")]
         [ServiceFilter(typeof(ModelStateValidationFilter))]
         public async Task<IActionResult> Login(AuthenticateRequest request)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    _logger.LogError("Validation error");
-            //    return BadRequest($"Bad request: {ModelState}");
-            //}
-
             var result = await _authenticationService.ValidateUserAsync(request);
             if (result.IsFailure)
             {
@@ -46,39 +38,25 @@ namespace Cyberpalata.WebApi.Controllers
             return await ReturnSuccess(token.Value);
         }
 
+        [Authorize]
         [HttpPost("logout")]
         [ServiceFilter(typeof(ModelStateValidationFilter))]
-        [Authorize]
-        public async Task<IActionResult> Logout([FromBody] TokenDto tokenDto)
+        public async Task<IActionResult> Logout([FromBody]TokenDto tokenDto)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest($"Bad request: {ModelState.ToString()}");
-            //}
             var res = await _authenticationService.LogoutAsync(tokenDto);
 
             if (res.IsFailure)
             {
-                if (res.Error == "")
-                {
-                    return await ReturnSuccess();
-                }
-                return BadRequest(res.Error);
+                return BadRequestJson(res);
             }
                
-
             return await ReturnSuccess();
         }
-        //?????????? move to api user controller
         [AllowAnonymous]
         [ServiceFilter(typeof(ModelStateValidationFilter))]
         [HttpPost("refresh")]
-        public async Task<IActionResult> RefreshToken([FromBody] TokenDto tokenDto)
+        public async Task<IActionResult> RefreshToken([FromBody]TokenDto tokenDto)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest($"Bad request: {ModelState.ToString()}");
-            //}
             var res = await _authenticationService.RefreshTokenAsync(tokenDto);
 
             if (res.IsFailure)
