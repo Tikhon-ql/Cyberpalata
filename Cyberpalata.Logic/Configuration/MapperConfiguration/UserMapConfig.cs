@@ -1,13 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
-using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.Logic.Models.Identity.User;
-using Cyberpalata.Logic.Models.Peripheral;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cyberpalata.Logic.Configuration.MapperConfiguration
 {

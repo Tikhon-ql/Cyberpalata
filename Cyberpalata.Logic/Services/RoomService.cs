@@ -4,11 +4,10 @@ using Cyberpalata.Common;
 using Cyberpalata.Common.Enums;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
-using Cyberpalata.Logic.Interfaces.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
-using Cyberpalata.Logic.Models;
 using Cyberpalata.Logic.Models.Booking;
-using NLog.Filters;
+using Cyberpalata.Logic.Models.Room;
+using Cyberpalata.Logic.Models.Seats;
 
 namespace Cyberpalata.Logic.Services
 {

@@ -1,10 +1,7 @@
 ﻿using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.ViewModel.GameLibrary;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data.OleDb;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Cyberpalata.WebApi.Controllers
 {

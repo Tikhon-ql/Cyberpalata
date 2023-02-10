@@ -1,19 +1,12 @@
 ﻿using CSharpFunctionalExtensions;
-using Cyberpalata.Common.Enums;
 using Cyberpalata.Common.Intefaces;
-using Cyberpalata.DataProvider.Interfaces;
-using Cyberpalata.DataProvider.Models;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Booking;
-using Cyberpalata.ViewModel;
 using Cyberpalata.ViewModel.Booking;
 using Cyberpalata.ViewModel.Booking.Enum;
-using Cyberpalata.ViewModel.Rooms;
 using Cyberpalata.WebApi.ActionFilters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using NLog.LayoutRenderers.Wrappers;
 using System.IdentityModel.Tokens.Jwt;
 using SeatBookingViewModel = Cyberpalata.ViewModel.Booking.SeatBookingViewModel;
 

@@ -1,14 +1,11 @@
 ﻿using AutoMapper;
 using CSharpFunctionalExtensions;
-using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Identity.User;
 using Microsoft.Extensions.Configuration;
 using System.ComponentModel.DataAnnotations;
-using System.Net;
-using System.Net.Mail;
 
 namespace Cyberpalata.Logic.Services
 {
@@ -106,11 +103,6 @@ namespace Cyberpalata.Logic.Services
             user.Value.Salt = _hashGenerator.GenerateSalt();
             user.Value.Password = _hashGenerator.HashPassword($"{request.Password}{user.Value.Salt}");
             return Result.Success();
-        }
-
-        public Task<Result> MailConfirmAsync([EmailAddress] string email)
-        {
-            throw new NotImplementedException();
         }
 
         public int SendCodeToMail([EmailAddress] string email)

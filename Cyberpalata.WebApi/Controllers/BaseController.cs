@@ -1,7 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Cyberpalata.Common.Intefaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json;
 
 namespace Cyberpalata.WebApi.Controllers

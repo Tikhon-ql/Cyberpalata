@@ -1,17 +1,13 @@
 ﻿using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Interfaces.Services;
-using Cyberpalata.Logic.Models;
+using Cyberpalata.Logic.Models.Identity;
 using Cyberpalata.Logic.Models.Identity.User;
-using Cyberpalata.ViewModel;
-using Cyberpalata.ViewModel.Rooms;
 using Cyberpalata.ViewModel.User;
 using Cyberpalata.WebApi.ActionFilters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net;
-using System.Net.Mail;
 
 namespace Cyberpalata.WebApi.Controllers
 {
