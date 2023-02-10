@@ -71,9 +71,8 @@ namespace Cyberpalata.Logic.Services
             {
                 AccessToken = accessToken.Value,
                 RefreshToken = refreshToken
-            };//???????????????
+            };
         }
-        //Maybe = valid null
         public async Task<Result<TokenDto>> RefreshTokenAsync(TokenDto tokenDto)
         {
             var claimIdResult = GetClaim(tokenDto.AccessToken, JwtRegisteredClaimNames.Sid);
@@ -195,14 +194,14 @@ namespace Cyberpalata.Logic.Services
         public async Task<Result> LogoutAsync(TokenDto tokenDto)
         {
             var userRefreshToken = await _refreshTokenRepository.ReadAsync(tokenDto.RefreshToken);
-            //add own error class
-            if (!userRefreshToken.HasValue)
-                return Result.Failure("");
+            if (userRefreshToken.HasNoValue)
+                return Result.Failure("Refresh token isn't exist!");
 
-            var claimIdResult = GetClaim(tokenDto.AccessToken, JwtRegisteredClaimNames.Sid);
-            if (claimIdResult.IsFailure)
-                return Result.Failure(claimIdResult.Error);
-            var claimId = claimIdResult.Value;
+            var userIdClaim = GetClaim(tokenDto.AccessToken, JwtRegisteredClaimNames.Sid);
+            if (userIdClaim.IsFailure)
+                return Result.Failure(userIdClaim.Error);
+
+            var claimId = userIdClaim.Value;
 
             if (!Guid.TryParse(claimId.Value, out Guid userId))
                 return Result.Failure("Cannot parse id");
