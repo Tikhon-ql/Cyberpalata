@@ -3,6 +3,7 @@ using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Seats;
 using Cyberpalata.ViewModel.Rooms;
+using Cyberpalata.WebApi.ActionFilters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +19,7 @@ namespace Cyberpalata.WebApi.Controllers
             _seatService = seatService;
         }
         [Authorize]
+        [ServiceFilter(typeof(ModelStateValidationFilter))]
         [HttpPost("getSeats")]
         public async Task<IActionResult> GetSeats([FromBody]SeatsGettingRequest request)
         {

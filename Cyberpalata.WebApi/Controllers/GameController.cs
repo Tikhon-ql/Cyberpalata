@@ -17,30 +17,13 @@ namespace Cyberpalata.WebApi.Controllers
             _gameService = gameService;
             _logger = logger;
         }
-        [Authorize]
+
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest($"Bad request: {ModelState.ToString()}");
-            //}
-            //_logger.LogInformation("Loggin");
-            //var games = await _gameService.GetPagedListAsync(1);
-            //var viewModel = new GameLibraryViewModel { Games = games.Items.Select(g => g.GameName).ToList() };
-            //return await ReturnSuccess(viewModel);
-            return StatusCode(500);
-        }
-        [HttpGet("count")]
-        public int[] Get(int count)
-        {
-            var rnd = new Random(DateTime.Now.Millisecond);
-            var arr = new int[count];
-            for (int i = 0; i < count; i++)
-            {
-                arr[i] = rnd.Next();
-            }
-            return arr;
+            var games = await _gameService.GetPagedListAsync(1);
+            var viewModel = new GameLibraryViewModel { Games = games.Items.Select(g => g.GameName).ToList() };
+            return await ReturnSuccess(viewModel);
         }
     }
 }
