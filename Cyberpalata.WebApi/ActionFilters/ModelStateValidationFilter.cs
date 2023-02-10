@@ -8,7 +8,6 @@ namespace Cyberpalata.WebApi.ActionFilters
     {
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            //throw new NotImplementedException();
         }
 
         public void OnActionExecuting(ActionExecutingContext context)
@@ -20,9 +19,6 @@ namespace Cyberpalata.WebApi.ActionFilters
                     kvp => kvp.Key,
                     kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
                 );
-                //var message = string.Join(" | ", modelState.Values
-                //.SelectMany(v => v.Errors)
-                //.Select(e => e.ErrorMessage));
                 var json = JsonConvert.SerializeObject(errorList);
                 context.Result = new UnprocessableEntityObjectResult(json);
             }
