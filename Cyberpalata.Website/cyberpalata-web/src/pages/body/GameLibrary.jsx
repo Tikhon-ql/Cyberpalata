@@ -1,9 +1,6 @@
-import axios from "axios"
-import jwtDecode from "jwt-decode";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom";
-import stateStore from "../../store/stateStore";
 import api from "./../../Components/api";
 import BarLoader from "react-spinners/BarLoader";
 
@@ -15,10 +12,14 @@ const GameLibrary = () => {
         api.get(`/games`).then(res => {
             setGames(res.data.games);
             
-        }).catch(err=>{
-            if(err.response.status >= 500 && err.response.status <= 599)
+        }).catch(error=>{
+            if(error.code && error.code == "ERR_NETWORK")
             {
-                navigate("/500");
+                navigate('/500');
+            }
+            if((error.response.status >= 500 && error.response.status <= 599))
+            {
+                navigate('/500');
             }
         }).finally(()=>{setLoading(false);});
     },[]);

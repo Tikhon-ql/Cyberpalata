@@ -1,8 +1,5 @@
 import './../../Components/Index.css';
 import {Link} from 'react-router-dom'
-import { GameLibrary } from './../body/GameLibrary';
-import { Header } from '../header/Header';
-import jwtDecode from 'jwt-decode';
 import { useEffect, useState } from 'react';
 import { Modal } from '../../Components/Helpers/Modal/Modal';
 import { GamingRoomTypeChoosing } from './GamingRoom/GamingRoomTypeChoosing';
@@ -27,6 +24,3 @@ export const Home = observer(() => {
         </div>
     </>
 })
-
-{/* <Link to='/gamingRoomTypeChoosing'><div className='gamingRoomLink'><label className='labelRoomHoriz'>Gaming room</label></div></Link>
-<Link to='/gameConsoleRoom'><div className='gameConsoleRoomLink'><label className='labelRoomHoriz'>Game console room</label></div></Link> */}

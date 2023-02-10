@@ -1,19 +1,11 @@
-import axios from "axios"
-import jwtDecode from "jwt-decode";
 import { Link, useNavigate } from "react-router-dom";
 import { Children, useEffect, useState } from "react";
-import { Home } from "./Home";
-import { Modal } from "../../Components/Helpers/Modal/Modal";
-import { BookingViewComponent } from "./Booking/BookingViewComponent";
 import api from "./../../Components/api";
 import BarLoader from "react-spinners/BarLoader";
 import stateStore from "../../store/stateStore";
 import { observer } from "mobx-react-lite";
 
 export const ProfileComponent = observer(() => {
-    const [index, setIndex] = useState(0);
-    console.log("ANIME PROFILE");
-    const [modalActive, setModalActive] = useState(false);
     const [editingActive, setEditingActive] = useState(false);
     const [submitState, setSubmitState] = useState(false);
     let navigate = useNavigate();
@@ -31,27 +23,23 @@ export const ProfileComponent = observer(() => {
     const [phoneError, setPhoneError] = useState("");
 
     let state = true;
-    //const baseUrl = `http://dotnetinternship2022.norwayeast.cloudapp.azure.com:83`;
-    // const baseUrl = `https://localhost:7227`;
-    // const apiRequestUrl = `${baseUrl}/profile/getProfile`;
-
-    // const config = {
-    //     headers: { Authorization: `Bearer ${accessToken}` }
-    // };
     useEffect(()=>{
         setLoading(true);
-        api.get(`/profile/getProfile`).then(res =>{
+        api.get(`/users/getUserProfile`).then(res =>{
             console.dir(res);
             setName(res.data.username);
             setSurname(res.data.surname);
             setEmail(res.data.email);
             setPhone(res.data.phone);
             setLoading(false);
-            //setSubmitState(false);
-        }).catch(err=>{
-            if(err.response.status >= 500 && err.response.status <= 599)
+        }).catch(error=>{
+            if(error.code && error.code == "ERR_NETWORK")
             {
-                navigate("/500");
+                navigate('/500');
+            }
+            if((error.response.status >= 500 && error.response.status <= 599))
+            {
+                navigate('/500');
             }
         });       
     },[submitState, stateStore.state]);
@@ -70,12 +58,13 @@ export const ProfileComponent = observer(() => {
             "email":event.target.elements.email.value,
             "phone":event.target.elements.phone.value,
         };
-        api.put(`/profile/profileEditing`,requestBody).then(()=>{
+        api.put(`/users/editUser`,requestBody).then(()=>{
             setEditingActive(false);
             setSubmitState(!submitState);
             navigate('/profile');
         }).catch(error=>{
-            if(error.response.status >= 500 && error.response.status <= 599)
+            console.dir(error);
+            if((error.response.status >= 500 && error.response.status <= 599) || error.code == "ERR_NETWORK")
             {
                 navigate('/');
             }

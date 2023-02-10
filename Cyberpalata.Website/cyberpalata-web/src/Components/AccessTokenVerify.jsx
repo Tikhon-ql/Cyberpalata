@@ -14,8 +14,6 @@ export const AccessTokenVerify = observer((props) => {
         if(accessToken != null)
         {
             const decodedToken = jwtDecode(accessToken);
-            //console.log(decodedToken);
-            //console.log((Date.now() / 1000));
             let minutes = 1 * 30;
             if(decodedToken.exp - minutes < (Date.now() / 1000))
             {
@@ -36,10 +34,7 @@ export const AccessTokenVerify = observer((props) => {
                             stateStore.stateChange();
                         }).catch(console.log);      
                     console.log("Access token has been refreshed.");
-                }
-                // else{
-                //     alert("There are some trubles: refresh token is undefined.");
-                // }        
+                }      
             }
         }
     }
@@ -48,6 +43,6 @@ export const AccessTokenVerify = observer((props) => {
     useEffect(()=>{
         setInterval(checkAccessTokenExpirationTime,5000);
         console.log(location);
-    },[]);//[location, props]);
+    },[]);
     return <></>;
 })

@@ -3,7 +3,6 @@ import jwtDecode from "jwt-decode";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "./../../../Components/api";
-import { servicesVersion } from "typescript";
 import BarLoader from "react-spinners/BarLoader";
 
 export const BookingComponent = () => {
@@ -26,6 +25,7 @@ export const BookingComponent = () => {
 
     function onTimeChange(event)
     {
+        console.dir(clickedSeats);
         console.dir(event);
         clearErrors();
         let date = document.forms[0].date.value;
@@ -51,7 +51,7 @@ export const BookingComponent = () => {
                     navigate("/500");
                 }
             })
-            api.get(`/booking/getPrice?beg=${beg}&hours=${hours}`).then(res=>{
+            api.get(`/booking/calculateBookingPrice?beg=${beg}&hours=${hours}`).then(res=>{
                 setPrice(res.data);
             }).catch(err=>{
                 if(err.response.status >= 500 && err.response.status <= 599)
@@ -72,12 +72,8 @@ export const BookingComponent = () => {
 
     useEffect(()=>{
         api.get(`/booking/seats?roomId=${roomId}`).then(res=>{
-            //console.dir(res);
-            //setSeats(res.data.seats);
-            //setTarrifs(res.data.tariffs);
-            //tarrifs.sort((a,b) => a.hours > b.hours);
         }).catch(err=>{
-            if(err.status >= 500 && err.status <= 599)
+            if(err.response.status >= 500 && err.response.status <= 599)
             {
                 navigate("/500");
             }
@@ -104,7 +100,6 @@ export const BookingComponent = () => {
         {
             let accessToken = jwtDecode(localStorage.getItem(`accessToken`));
             let price = document.getElementById("price").innerHTML;
-            //let tariff = event.target.elements.tariff.value.split(":");
             console.dir(accessToken);
             let requestBody = { 
                 "roomId":roomId,
@@ -119,9 +114,13 @@ export const BookingComponent = () => {
                 setClickedSeats([]);
                 setSeats([]);
             }).catch((error)=>{
-                if(error.status >= 500 && error.status <= 599)
+                if(error.code && error.code == "ERR_NETWORK")
                 {
-                    navigate('/');
+                    navigate('/500');
+                }
+                if((error.response.status >= 500 && error.response.status <= 599))
+                {
+                    navigate('/500');
                 }
                 const data = error.response.data;
                 if(data.Other)
@@ -223,20 +222,6 @@ export const BookingComponent = () => {
                     : <div><h2>Enter correct data and time to view available seats</h2>
                     </div> 
                     }
-                  
-                    {/* <div>
-                        <h2>Tarrifs</h2>
-                            <div className="m-auto">
-                                {tarrifs.map(item=>{
-                                    return <div>
-                                        <label style={{"marginRight":"1vh"}}>Hours:{item.hours}    -   Cost: {item.cost}</label>
-                                        <input id ={`tariff${item.hours}`} name="tariff" type="radio" className="form-check-input" value={`${item.hours}:${item.cost}`}/>
-                                        </div>
-                                })}
-                            </div>
-                    
-                        <input id="seats" name="seats" style={{"visibility":"hidden"}} type="text"/>
-                    </div>       */}
                 </form>
                 </div>
             </div>

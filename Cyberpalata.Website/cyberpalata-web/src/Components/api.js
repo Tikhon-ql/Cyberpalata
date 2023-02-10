@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 const api = axios.create({baseURL: 'https://localhost:7227'});
 //https://localhost:7227
@@ -30,7 +29,11 @@ api.interceptors.request.use(
 //             console.dir(error);
 //             navigate("/500");
 //         }
-//         return error;
+//         if(error.response.status === 404)
+//         {
+//             window.location.replace("/404");
+//         }
+//         return Promise.reject(error);
 //     }
 // )
 

@@ -1,4 +1,3 @@
-import { formToJSON } from "axios";
 import {Link} from "react-router-dom"
 
 export const GamingRoomTypeChoosing = ()=> {
@@ -14,5 +13,3 @@ export const GamingRoomTypeChoosing = ()=> {
     </div>
   );
 }
-
-//style={{"height":"100vh","width":"100vw","display":"flex","alignItems":"center","justifyContent":"center"}}
