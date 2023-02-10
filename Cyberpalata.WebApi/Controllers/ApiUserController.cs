@@ -30,7 +30,6 @@ namespace Cyberpalata.WebApi.Controllers
             _logger = logger;
         }
 
-        //create bad request json
         [HttpPost("register")]
         [ServiceFilter(typeof(ModelStateValidationFilter))]
         public async Task<IActionResult> Registration(UserCreateRequest request)
@@ -51,37 +50,54 @@ namespace Cyberpalata.WebApi.Controllers
         }
 
         [HttpPut("passwordRecovering")]
+        [ServiceFilter(typeof(ModelStateValidationFilter))]
         public async Task<IActionResult> PasswordRecovering(PasswordResetRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest($"Bad request: {ModelState.ToString()}");
-            }
             var result = await _userService.ResetPasswordAsync(request);
             if (result.IsFailure)
                 return BadRequest(result.Error);
             return await ReturnSuccess();
         }
 
-        [HttpPost("emailConfirm")]
-        public async Task<IActionResult> EmailConfrim([EmailAddress]string email)
+        [Authorize]
+        [HttpPut("editUser")]
+        [ServiceFilter(typeof(ModelStateValidationFilter))]
+        public async Task<IActionResult> EditUser(UserUpdateRequest request)
         {
-            if (!ModelState.IsValid)
+            request.UserId = Guid.Parse(User.Claims.Single(claim => claim.Type == JwtRegisteredClaimNames.Sid).Value.ToString());
+            await _userService.UpdateUserAsync(request);
+            return await ReturnSuccess();
+        }
+
+        [Authorize]
+        [HttpGet("getUserProfile")]
+        public async Task<IActionResult> GetUserProfile()
+        {
+            var id = Guid.Parse(User.Claims.Single(claim => claim.Type == JwtRegisteredClaimNames.Sid).Value.ToString());
+            var user = await _userService.ReadAsync(id);
+            return Ok(new ProfileViewModel
             {
-                return BadRequest($"Bad request: {ModelState}");
-            }
-            int code = _userService.SendCodeToMail(email);
+                Username = user.Value.Username,
+                Surname = user.Value.Surname,
+                Email = user.Value.Email,
+                Phone = user.Value.Phone,
+            });
+        }
+
+
+        [HttpPost("emailConfirm")]
+        [ServiceFilter(typeof(ModelStateValidationFilter))]
+        public async Task<IActionResult> EmailConfrim([FromBody]EmailConfirmRequest request)
+        {
+            int code = _userService.SendCodeToMail(request.Email);
             return Ok(code);
         }
 
-        [HttpPost("activate")]
-        public async Task<IActionResult> ActivateUser([EmailAddress]string email)
+        [HttpPut("activate")]
+        [ServiceFilter(typeof(ModelStateValidationFilter))]
+        public async Task<IActionResult> ActivateUser([FromBody]ActivateUserRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest($"Bad request: {ModelState}");
-            }
-            var result = await _userService.ActivateUser(email);
+            var result = await _userService.ActivateUser(request.Email);
             if(result.IsFailure)
                 return BadRequest(result.Error);
             return await ReturnSuccess();
