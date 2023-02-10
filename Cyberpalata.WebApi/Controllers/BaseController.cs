@@ -31,17 +31,5 @@ namespace Cyberpalata.WebApi.Controllers
             var json = JsonConvert.SerializeObject(errorsDictionary);
             return BadRequest(json);
         }
-        //protected IActionResult BadRequestJson<T>(Result<T> error)
-        //{
-        //    var errorsDictionary = new Dictionary<string, string>();
-        //    errorsDictionary.Add("Other", error.Error);
-        //    var json = JsonConvert.SerializeObject(errorsDictionary);
-        //    return BadRequest(json);
-        //}
-        //protected async Task<IActionResult> BadRequestJson(ModelStateDictionary state)
-        //{
-        //    //return BadRequest(new MyCustomError { Error = error });
-        //    return BadRequest();
-        //}
     }
 }
