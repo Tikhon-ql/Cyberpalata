@@ -42,8 +42,8 @@ namespace Cyberpalata.WebApi.Controllers
         }
 
         [Authorize]
-        [HttpGet("getPrice")]
-        public async Task<IActionResult> GetPrice(TimeSpan beg, int hours)
+        [HttpGet("calculateBookingPrice")]
+        public async Task<IActionResult> CalculateBookingPrice(TimeSpan beg, int hours)
         {
             return Ok(hours);
         }
