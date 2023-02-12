@@ -1,10 +1,9 @@
-﻿using CSharpFunctionalExtensions;
-using Cyberpalata.DataProvider.Models.Devices;
+﻿using Cyberpalata.DataProvider.Models.Devices;
 
 namespace Cyberpalata.DataProvider.Interfaces
 {
+    //A.K.: clear usings. Interface is empty, no need in it
     public interface IPcRepository : IRepository<Pc>
     {
-        //Task<Maybe<Pc>> GetByGamingRoomId(Guid roomId);
     }
 }   

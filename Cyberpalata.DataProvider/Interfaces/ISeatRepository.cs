@@ -1,11 +1,10 @@
-﻿using CSharpFunctionalExtensions;
-using Cyberpalata.DataProvider.Models;
+﻿using Cyberpalata.DataProvider.Models;
 
 namespace Cyberpalata.DataProvider.Interfaces
 {
     public interface ISeatRepository : IRepository<Seat>
     {
-        //Task<List<Seat>> GetByRoomIdAsync(Guid roomId);
+        //A.K.: it is better to return the result of the operation. Result<List<Guid,Seat property to understand>> will be ok. Clear usings
         Task CreateRangeAsync(List<Seat> seats);
     }
 }

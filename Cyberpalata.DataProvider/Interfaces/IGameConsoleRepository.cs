@@ -3,8 +3,8 @@ using Cyberpalata.DataProvider.Models.Devices;
 
 namespace Cyberpalata.DataProvider.Interfaces
 {
+    //A.K.: Empty interface is not needed. Less code, less bugs
     public interface IGameConsoleRepository : IRepository<GameConsole>
     {
-        //Task<Maybe<List<GameConsole>>> GetByGameConsoleRoomIdAsync(Guid roomId);//TODO: REMOVE MAYBE (CHECK OTHER REPS)
     }
 }
