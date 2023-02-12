@@ -5,9 +5,6 @@ namespace Cyberpalata.DataProvider.Models
 {
     public class Seat : BaseEntity
     {
-        //[Key] 
-        //[Required] 
-        //public Guid Id { get; set; }
         [Required]
         public int Number { get; set; }
         [Required]

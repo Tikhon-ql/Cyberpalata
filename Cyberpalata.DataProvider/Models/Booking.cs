@@ -6,15 +6,13 @@ namespace Cyberpalata.DataProvider.Models
 {
     public class Booking : BaseEntity
     {
-        //[Key]
-        //public Guid Id { get; set; }
         public Guid RoomId { get; set; }
         [ForeignKey("RoomId")]
         public virtual Room Room { get; set; }
         [Required]
         public Guid UserId { get; set; }
         [ForeignKey("UserId")]
-        public virtual ApiUser User { get; set; }
+        public virtual User User { get; set; }
         [Required]
         public DateTime Date { get; set; }
         [Required]

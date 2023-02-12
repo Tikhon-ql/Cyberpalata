@@ -5,12 +5,10 @@ namespace Cyberpalata.DataProvider.Models.Identity
 {
     public class UserRefreshToken : BaseEntity
     {
-        //[Key] 
-        //public Guid Id { get; set; }
         [Required]
         public Guid UserId { get; set; }
         [ForeignKey("UserId")]
-        public virtual ApiUser User { get; set; }
+        public virtual User User { get; set; }
         [Required]
         public string RefreshToken { get; set; }
         [Required] 

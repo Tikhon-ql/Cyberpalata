@@ -6,9 +6,6 @@ namespace Cyberpalata.DataProvider.Models.Peripheral
 {
     public class Periphery : BaseEntity
     {
-        //[Key]
-        //[Required]
-        //public Guid Id { get; set; }
         [MaxLength(50)]
         [Required]
         public string? Name { get; set; }
