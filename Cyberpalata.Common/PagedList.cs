@@ -15,5 +15,7 @@
         public int CurrentPageNumber { get; }
         public int PageSize { get; }
         public int TotalItemsCount { get; }
+        public int TotalPagesCount() => Convert.ToInt32(Math.Ceiling((decimal)(TotalItemsCount / PageSize)));
     }
 }
+    
