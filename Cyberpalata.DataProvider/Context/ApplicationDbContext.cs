@@ -1,9 +1,15 @@
-﻿using Cyberpalata.DataProvider.Models.Devices;
+﻿using Cyberpalata.Common.Enums;
+using Cyberpalata.DataProvider.Models.Devices;
+using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.DataProvider.Models.Peripheral;
 using Cyberpalata.DataProvider.Models;
-using Cyberpalata.DataProvider.Models.Identity;
 using Microsoft.EntityFrameworkCore;
-using Cyberpalata.Common.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Cyberpalata.DataProvider.Models.Tournaments;
 
 namespace Cyberpalata.DataProvider.Context
 {
@@ -17,12 +23,16 @@ namespace Cyberpalata.DataProvider.Context
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Pc> Pcs { get; set; }
         public DbSet<Game> Games { get; set; }
-        public DbSet<Periphery> Peripheries { get; set; }  
+        public DbSet<Periphery> Peripheries { get; set; }
         public DbSet<GameConsole> GameConsoles { get; set; }
-        public DbSet<ApiUser> Users { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<UserRefreshToken> RefreshTokens { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Seat> Seats { get; set; }
+        public DbSet<Tournament> Tournaments { get; set; }
+        public DbSet<Team> Teams { get; set; }
+        public DbSet<TeamMember> TeamMembers { get; set; }
+        public DbSet<Prize> Prizes { get;set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,7 +41,7 @@ namespace Cyberpalata.DataProvider.Context
             ConfigureRelationships(modelBuilder);
             ConstraintsConfiguration(modelBuilder);
             InitialData(modelBuilder);
-            base.OnModelCreating(modelBuilder);      
+            base.OnModelCreating(modelBuilder);
         }
 
         private void ConfigureRelationships(ModelBuilder modelBuilder)
