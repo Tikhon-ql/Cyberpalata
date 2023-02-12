@@ -51,6 +51,16 @@ namespace Cyberpalata.DataProvider.Context
                   .UsingEntity<Dictionary<Guid, Guid>>("SeatsBookings",
                   j => j.HasOne<Seat>().WithMany().OnDelete(DeleteBehavior.NoAction),
                   j => j.HasOne<Booking>().WithMany().OnDelete(DeleteBehavior.NoAction));
+
+            modelBuilder.Entity<Tournament>().HasMany(t=>t.Teams).WithMany(t=>t.Tournaments)
+                    .UsingEntity<Dictionary<Guid, Guid>>("TeamsTournaments",
+                    j => j.HasOne<Team>().WithMany().OnDelete(DeleteBehavior.NoAction),
+                    j => j.HasOne<Tournament>().WithMany().OnDelete(DeleteBehavior.NoAction));
+
+            modelBuilder.Entity<TeamMember>().HasOne(t => t.Member).WithMany().OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Tournament>().HasOne(t => t.Winner).WithMany();
+
             //modelBuilder.Entity<Room>().HasMany(r => r.Prices).WithOne(p => p.Room);
             //modelBuilder.Entity<Room>().HasMany(r => r.Seats).WithOne(s => s.Room);
             //modelBuilder.Entity<Room>().HasOne(r => r.Type).WithMany();
@@ -73,16 +83,20 @@ namespace Cyberpalata.DataProvider.Context
         }
 
         private void ConfigureIdAutoGeneration(ModelBuilder modelBuilder)
-        { 
+        {
             modelBuilder.Entity<Game>().Property(g => g.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<Pc>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<Periphery>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
             //modelBuilder.Entity<Price>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<GameConsole>().Property(g => g.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<Room>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
-            modelBuilder.Entity<ApiUser>().Property(a => a.Id).HasDefaultValueSql("NEWID()");
+            modelBuilder.Entity<User>().Property(a => a.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<UserRefreshToken>().Property(t => t.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<Seat>().Property(s => s.Id).HasDefaultValueSql("NEWID()");
+            modelBuilder.Entity<Tournament>().Property(s => s.Id).HasDefaultValueSql("NEWID()");
+            //modelBuilder.Entity<Team>().Property(s => s.Id).HasDefaultValueSql("NEWID()");
+            modelBuilder.Entity<TeamMember>().Property(s => s.Id).HasDefaultValueSql("NEWID()");
+            modelBuilder.Entity<Prize>().Property(s => s.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<Seat>().Property(s => s.Number).ValueGeneratedOnAdd();
         }
 
