@@ -1,14 +1,15 @@
 ﻿using CSharpFunctionalExtensions;
 using Cyberpalata.Logic.Models.Identity;
-using Cyberpalata.Logic.Models.Identity.User;
+using Cyberpalata.ViewModel;
+using Cyberpalata.ViewModel.Request.Identity;
 
 namespace Cyberpalata.Logic.Interfaces.Services
 {
     public interface IAuthenticationService
     {
-        Task<Result<ApiUserDto>> ValidateUserAsync(AuthenticateRequest request);
-        Task<Maybe<TokenDto>> GenerateTokenAsync(ApiUserDto user);
-        Task<Result<TokenDto>> RefreshTokenAsync(TokenDto tokenDto);
-        Task<Result> LogoutAsync(TokenDto tokenDto);
+        Task<Result<UserDto>> ValidateUserAsync(AuthenticateViewModel request);
+        Task<Maybe<TokenViewModel>> GenerateTokenAsync(UserDto user);
+        Task<Result<TokenViewModel>> RefreshTokenAsync(TokenViewModel tokenDto);
+        Task<Result> LogoutAsync(TokenViewModel tokenDto);
     }
 }

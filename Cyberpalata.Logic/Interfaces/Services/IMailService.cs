@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Cyberpalata.Logic.Interfaces.Services
+﻿namespace Cyberpalata.Logic.Interfaces.Services
 {
     public interface IMailService
     {
-        void SendMail(string emailTo, string subject, string body);
+        void SendPasswordResetEmail(string emailTo);
+        void SendVerificationCodeToMail(string emailTo,int code);
     }
 }

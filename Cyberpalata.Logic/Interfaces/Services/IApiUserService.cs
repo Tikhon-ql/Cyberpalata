@@ -1,18 +1,19 @@
 ﻿using CSharpFunctionalExtensions;
-using Cyberpalata.Logic.Models.Identity.User;
+using Cyberpalata.Logic.Models.Identity;
+using Cyberpalata.ViewModel.Request.Identity;
 using System.ComponentModel.DataAnnotations;
 
 namespace Cyberpalata.Logic.Interfaces.Services
 {
-    public interface IApiUserService
+    public interface IUserService
     {
-        Task<Result> CreateAsync(UserCreateRequest request);
-        Task<Maybe<ApiUserDto>> ReadAsync(Guid id);
-        Task<Result> ValidateUserAsync(UserCreateRequest request);
+        Task<Result<Guid>> CreateAsync(UserCreateViewModel request);
+        Task<Maybe<UserDto>> ReadAsync(Guid id);
+        Task<Result> ValidateUserAsync(UserCreateViewModel request);
         Task UpdateUserAsync(UserUpdateRequest request);
         Task PasswordRecoveryAsync([EmailAddress] string email);
-        Task<Result> ResetPasswordAsync(PasswordResetRequest request);
-        int SendCodeToMail(string email);
+        Task<Result> ResetPasswordAsync(PasswordResetViewModel request);
+        Task<Result<int>> SendCodeToMailAsync(EmailConfirmViewModel viewModel);
         Task<Result> DeleteAsync(string email);
         Task<Result> ActivateUser(string email);
     }
