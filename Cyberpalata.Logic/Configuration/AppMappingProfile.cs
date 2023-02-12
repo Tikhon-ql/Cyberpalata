@@ -22,6 +22,7 @@ namespace Cyberpalata.Logic.Configuration
             BookingMapConfig.CreateMap(this);
             PrizeMapConfig.CreateMap(this);
             TeamMapConfig.CreateMap(this);
+            UserMapConfig.CreateMap(this);
         }
     }
 }
