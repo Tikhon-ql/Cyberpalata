@@ -3,8 +3,8 @@ using Cyberpalata.DataProvider.Models.Identity;
 
 namespace Cyberpalata.DataProvider.Interfaces
 {
-    public interface IApiUserRepository : IRepository<ApiUser>
+    public interface IUserRepository : IRepository<User>
     {
-        Task<Maybe<ApiUser>> ReadAsync(string email);
+        Task<Maybe<User>> ReadAsync(string email);
     }
 }
