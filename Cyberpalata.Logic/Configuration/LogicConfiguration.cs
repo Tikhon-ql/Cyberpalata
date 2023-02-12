@@ -19,7 +19,7 @@ namespace Cyberpalata.Logic.Configuration
             },typeof(AppMappingProfile));
 
             services.AddScoped<IRoomService, RoomService>();
-            services.AddScoped<IApiUserService, ApiUserService>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGameConsoleService, GameConsoleService>();
             services.AddScoped<IUserRefreshTokenService, UserRefreshTokenService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
@@ -29,6 +29,8 @@ namespace Cyberpalata.Logic.Configuration
             services.AddScoped<IBookingService, BookingService>();
             services.AddScoped<ISeatService, SeatService>();
             services.AddScoped<IMailService, MailService>();
+            services.AddScoped<ITournamentService, TournamentService>();
+            services.AddScoped<ITeamService, TeamService>();
         }
     }
 }
