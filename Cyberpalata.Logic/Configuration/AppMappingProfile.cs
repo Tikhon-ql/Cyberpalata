@@ -23,6 +23,7 @@ namespace Cyberpalata.Logic.Configuration
             PrizeMapConfig.CreateMap(this);
             TeamMapConfig.CreateMap(this);
             UserMapConfig.CreateMap(this);
+            TournamentMapConfig.CreateMap(this);
         }
     }
 }
