@@ -17,7 +17,6 @@ namespace Cyberpalata.Logic.Configuration
             PeripheryMapConfig.CreateMap(this);
             GameConsoleMapConfig.CreateMap(this);
             UserRefreshTokenMapConfig.CreateMap(this);
-            UserMapConfig.CreateMap(this);
             RoomMapConfig.CreateMap(this);
             BookingMapConfig.CreateMap(this);
             PrizeMapConfig.CreateMap(this);
