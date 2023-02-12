@@ -11,7 +11,7 @@ namespace Cyberpalata.Logic.Models.Room
         [Key]
         public Guid Id { get; set; }
         [MaxLength(50)]
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; set; } = String.Empty;
         public bool IsVip { get; set; } = false;
         public List<SeatDto> Seats { get; set; } = new();
         public List<BookingDto> Bookings { get; set; } = new();
