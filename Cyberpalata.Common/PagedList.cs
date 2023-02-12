@@ -11,10 +11,9 @@
         }
 
 
-        public List<T> Items { get; set; }
-        public int CurrentPageNumber { get; set; }
-        public int PageSize { get; set; }
-        public int TotalItemsCount { get; set; }
-        public int TotalPagesCount { get => Convert.ToInt32(Math.Ceiling((decimal)(TotalItemsCount / PageSize))); }
+        public List<T> Items { get; }
+        public int CurrentPageNumber { get; }
+        public int PageSize { get; }
+        public int TotalItemsCount { get; }
     }
 }
