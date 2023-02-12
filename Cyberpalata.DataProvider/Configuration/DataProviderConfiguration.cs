@@ -19,19 +19,20 @@ namespace Cyberpalata.DataProvider.Configuration
                 options.UseSqlServer(connectionString).UseLazyLoadingProxies();
                 options.EnableSensitiveDataLogging();
             });
-
-         
+      
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IApiUserRepository, ApiUserRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRoomRepository, RoomRepository>();
             services.AddScoped<IGameRepository, GameRepository>();
-            services.AddScoped<IApiUserRepository, ApiUserRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IGameConsoleRepository, GameConsoleRepository>();
             services.AddScoped<IUserRefreshTokenRepository, UserRefreshTokenRepository>();
             services.AddScoped<IPcRepository, PcRepository>();
             services.AddScoped<IPeripheryRepository, PeripheryRepository>();
             services.AddScoped<IBookingRepository, BookingRepository>();
             services.AddScoped<ISeatRepository, SeatRepository>();
+            services.AddScoped<ITournamentRepository, TournamentRepository>();
+            services.AddScoped<ITeamRepository, TeamRepository>();
         }
     }
 }
