@@ -17,6 +17,7 @@ namespace Cyberpalata.Logic.Services
         public BookingService(IBookingRepository repository,
             IApiUserRepository userRepository, 
             IMapper mapper)
+            ISeatService seatService)
         {
             _repository = repository;
             _userRepository = userRepository;
