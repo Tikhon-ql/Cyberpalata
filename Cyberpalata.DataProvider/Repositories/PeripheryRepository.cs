@@ -5,18 +5,19 @@ using Cyberpalata.DataProvider.Context;
 using Microsoft.EntityFrameworkCore;
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Configuration;
+using Cyberpalata.Common.Filters;
 
 namespace Cyberpalata.DataProvider.Repositories
 {
     internal class PeripheryRepository :BaseRepository<Periphery>, IPeripheryRepository
     {
-        public PeripheryRepository(ApplicationDbContext context, IConfiguration configuration):base(context, configuration)
+        public PeripheryRepository(ApplicationDbContext context):base(context)
         {
         }
-        public override async Task<PagedList<Periphery>> GetPageListAsync(int pageNumber)
-        {
-            var list = await _context.Peripheries.Include(p => p.Type).Skip((pageNumber - 1) * 10).Take(10).ToListAsync();
-            return new PagedList<Periphery>(list, pageNumber, 10, _context.Peripheries.Count());
-        }
+        //public override async Task<PagedList<Periphery>> GetPageListAsync(BaseFilter filter)
+        //{
+        //    var list = await _context.Peripheries.Include(p => p.Type).Skip((filter.CurrentPage - 1) * filter.PageSize).Take(filter.PageSize).ToListAsync();
+        //    return new PagedList<Periphery>(list, filter.CurrentPage, filter.PageSize, _context.Peripheries.Count());
+        //}
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Cyberpalata.Common;
+using Cyberpalata.Common.Filters;
 using Cyberpalata.DataProvider.Context;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
@@ -17,22 +18,25 @@ namespace Cyberpalata.DataProvider.Repositories
     {
         protected readonly ApplicationDbContext _context;
         private readonly DbSet<T> _entitySet;
-        protected readonly IConfiguration _configuration;
-        public BaseRepository(ApplicationDbContext context, IConfiguration configuration)
+        public BaseRepository(ApplicationDbContext context)
         {
             _context = context;
             _entitySet = _context.Set<T>();
-            _configuration = configuration;
         }
-        public async Task CreateAsync(T entity) => await _context.AddAsync(entity);
-
-        public void Delete(T entity) => _context.Remove(entity);
-        public virtual async Task<PagedList<T>> GetPageListAsync(int pageNumber)
+        public virtual async Task<Guid> CreateAsync(T entity)
         {
-            var list = await _entitySet.Skip(((pageNumber - 1) * int.Parse(_configuration["PaginationSettings:defaultPageSize"]))).Take(int.Parse(_configuration["PaginationSettings:defaultPageSize"])).ToListAsync();
-            return new PagedList<T>(list, pageNumber, int.Parse(_configuration["PaginationSettings:defaultPageSize"]), _entitySet.Count());
+            entity.Id = Guid.NewGuid();
+            await _context.AddAsync(entity);
+            return entity.Id;//???
         }
 
-        public async Task<Maybe<T>> ReadAsync(Guid id) => await _entitySet.FirstOrDefaultAsync(e=>e.Id == id);
+        public virtual void Delete(T entity) => _context.Remove(entity);
+        public virtual async Task<PagedList<T>> GetPageListAsync(BaseFilter filter)
+        {
+            var list = await _entitySet.Skip(((filter.CurrentPage - 1) * filter.PageSize)).Take(filter.PageSize).ToListAsync();
+            return new PagedList<T>(list, filter.CurrentPage, filter.PageSize, _entitySet.Count());
+        }
+
+        public virtual async Task<Maybe<T>> ReadAsync(Guid id) => await _entitySet.FirstOrDefaultAsync(e=>e.Id == id);
     }
 }

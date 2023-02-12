@@ -1,31 +1,34 @@
 ﻿using CSharpFunctionalExtensions;
 using Cyberpalata.Common;
+using Cyberpalata.Common.Filters;
 using Cyberpalata.DataProvider.Context;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
+using Cyberpalata.DataProvider.Models.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics.Internal;
 using Microsoft.Extensions.Configuration;
 
 namespace Cyberpalata.DataProvider.Repositories
 {
     internal class BookingRepository : BaseRepository<Booking>, IBookingRepository
     {
-        public BookingRepository(ApplicationDbContext context, IConfiguration configuration):base(context, configuration)
+        public BookingRepository(ApplicationDbContext context):base(context)
         {
         }
 
-        public override async Task<PagedList<Booking>> GetPageListAsync(int pageNumber)
+        //???
+        public override async Task<PagedList<Booking>> GetPageListAsync(BaseFilter filter)
         {
-            var list = await _context.Bookings.Skip((pageNumber - 1) * 20).Take(20).ToListAsync();
-            return new PagedList<Booking>(list, pageNumber, 20,_context.Bookings.Count());
-        }
+            IQueryable<Booking> bookings = null;
 
-        public async Task<PagedList<Booking>> GetPagedListAsync(int pageNumber, Guid userId)
-        {
-            int pageSize = int.Parse(_configuration["PaginationSettings:bookingByIdPageSize"]);
-            var usersBookings = _context.Bookings.Where(b => b.User.Id == userId);
-            var list = usersBookings.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
-            return new PagedList<Booking>(list,pageNumber,pageSize,usersBookings.Count());
+            if (filter is BookingFilter)
+                bookings = _context.Bookings.Where(b => b.User.Id == ((BookingFilter)filter).UserId);
+            else
+                bookings = _context.Bookings;
+
+            var resultList = await bookings.Skip((filter.CurrentPage - 1) * filter.PageSize).Take(filter.PageSize).ToListAsync();
+            return new PagedList<Booking>(resultList,filter.CurrentPage, filter.PageSize,bookings.Count());
         }
 
         public async Task<Maybe<List<Booking>>> GetActualBookingsByRoomId(Guid roomId)

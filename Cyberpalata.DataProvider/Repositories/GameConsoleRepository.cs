@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Cyberpalata.Common;
+using Cyberpalata.Common.Filters;
 using Cyberpalata.DataProvider.Context;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Devices;
@@ -10,13 +11,13 @@ namespace Cyberpalata.DataProvider.Repositories
 {
     internal class GameConsoleRepository :BaseRepository<GameConsole>, IGameConsoleRepository
     {
-        public GameConsoleRepository(ApplicationDbContext context, IConfiguration configuration):base(context, configuration)
+        public GameConsoleRepository(ApplicationDbContext context):base(context)
         {
         }
-        public override async Task<PagedList<GameConsole>> GetPageListAsync(int pageNumber)
-        {
-            var list = await _context.GameConsoles.Skip((pageNumber - 1) * 10).Take(10).ToListAsync();
-            return new PagedList<GameConsole>(list, pageNumber, 10, _context.GameConsoles.Count());
-        }
+        //public override async Task<PagedList<GameConsole>> GetPageListAsync(BaseFilter filter)
+        //{
+        //    var list = await _context.GameConsoles.Skip((filter.CurrentPage - 1) * filter.PageSize).Take(filter.PageSize).ToListAsync();
+        //    return new PagedList<GameConsole>(list, filter.CurrentPage, filter.PageSize, _context.GameConsoles.Count());
+        //}
     }
 }
