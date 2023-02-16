@@ -8,7 +8,7 @@ namespace Cyberpalata.Logic.Interfaces.Services
     public interface IAuthenticationService
     {
         Task<Result<UserDto>> ValidateUserAsync(AuthenticateViewModel request);
-        Task<Maybe<TokenViewModel>> GenerateTokenAsync(UserDto user);
+        Task<TokenViewModel> GenerateTokenAsync(UserDto user);
         Task<Result<TokenViewModel>> RefreshTokenAsync(TokenViewModel tokenDto);
         Task<Result> LogoutAsync(TokenViewModel tokenDto);
     }

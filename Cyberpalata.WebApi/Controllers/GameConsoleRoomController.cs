@@ -1,8 +1,8 @@
 ﻿using Cyberpalata.Common.Enums;
 using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Interfaces.Services;
-using Cyberpalata.ViewModel.Rooms;
-using Cyberpalata.ViewModel.Rooms.GameConsoleRoom;
+using Cyberpalata.ViewModel.Response.Rooms;
+using Cyberpalata.ViewModel.Response.Rooms.GameConsoleRoom;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cyberpalata.WebApi.Controllers
@@ -23,17 +23,18 @@ namespace Cyberpalata.WebApi.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            var infos = (await _gameConsoleRoomService.GetPagedListAsync(1,RoomType.GameConsoleRoom)).Items;
+        //[HttpGet]
+        //public async Task<IActionResult> Get()
+        //{
+        //    var filter = new Roo
+        //    var infos = (await _gameConsoleRoomService.GetPagedListAsync(1,RoomType.GameConsoleRoom)).Items;
 
-            var viewModel = new RoomViewModel
-            {
-                Infos = infos.Select(x => new RoomListItemInfo { Id = x.Id.ToString(), Name = x.Name }).ToList()
-            };
-            return await ReturnSuccess(viewModel);
-        }
+        //    var viewModel = new RoomCollectionViewModel
+        //    {
+        //        Infos = infos.Select(x => new RoomItemViewModel { Id = x.Id.ToString(), Name = x.Name }).ToList()
+        //    };
+        //    return await ReturnSuccess(viewModel);
+        //}
 
         [HttpGet("id")]
         public async Task<IActionResult> Get(Guid id)

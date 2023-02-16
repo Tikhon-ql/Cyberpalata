@@ -1,5 +1,5 @@
 ﻿using Cyberpalata.Common;
-using Cyberpalata.Common.Filters;
+using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Models;
 using System;
 using System.Collections.Generic;
@@ -11,6 +11,6 @@ namespace Cyberpalata.Logic.Interfaces.Services
 {
     public interface IGameService
     {
-        Task<PagedList<GameDto>> GetPagedListAsync(BaseFilter filter);
+        Task<PagedList<GameDto>> GetPagedListAsync(BaseFilterBL filter);
     }
 }

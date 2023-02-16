@@ -1,7 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Cyberpalata.Common;
 using Cyberpalata.Common.Enums;
-using Cyberpalata.Common.Filters;
 using Cyberpalata.DataProvider.Context;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
@@ -13,14 +12,8 @@ namespace Cyberpalata.DataProvider.Repositories
 {
     internal class RoomRepository :BaseRepository<Room>, IRoomRepository
     {
-        private readonly IBookingRepository _bookingRepository;
-        private readonly IUserRepository _userRepository;
-
-        public RoomRepository(ApplicationDbContext context
-            ,IBookingRepository bookingRepository, IUserRepository userRepository):base(context)
+        public RoomRepository(ApplicationDbContext context):base(context)
         {
-            _bookingRepository = bookingRepository;
-            _userRepository = userRepository;
         }
 
         //public override async Task<PagedList<Room>> GetPageListAsync(int pageNumber)
@@ -49,20 +42,21 @@ namespace Cyberpalata.DataProvider.Repositories
         //    return pagedList;
         //}
 
-        public override async Task<PagedList<Room>> GetPageListAsync(BaseFilter filter)
-        {
-            IQueryable<Room> rooms = null;//???
-            if (filter is RoomFilter)
-            {
-                var roomFilter = filter as RoomFilter;
-                rooms = _context.Rooms.Where(r => r.Type == roomFilter.Type && r.IsVip == roomFilter.IsVip);
-            }
-            else
-                rooms = _context.Rooms;
+        //public override async Task<PagedList<Room>> GetPageListAsync<RoomFilter>(RoomFilter filter)
+        //{
+        //    var rooms = await base.GetPageListAsync(filter);
+        //    if(filter.IsVip.HasValue)
+        //    {
+        //        rooms.Items = rooms.Items.Where(r => r.IsVip == filter.IsVip.Value);
+        //    }
+        //    if(filter.Type.HasValue)
+        //    {
+        //        rooms.Items = rooms.Items.Where(r => r.Type == filter.Type.Value);
+        //    }
+            
 
-            var resultList = await rooms.Skip((filter.CurrentPage - 1) * filter.PageSize).Take(filter.PageSize).ToListAsync();
-            return new PagedList<Room>(resultList, filter.CurrentPage, filter.PageSize, _context.Rooms.Count());
-        }
+        //    return rooms;
+        //}
 
         //public async Task AddBookingToRoomAsync(Guid roomId, Booking booking)
         //{

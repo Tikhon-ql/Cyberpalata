@@ -1,11 +1,13 @@
 ﻿using CSharpFunctionalExtensions;
 using Cyberpalata.Common.Enums;
 using Cyberpalata.Common.Intefaces;
+using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Devices;
 using Cyberpalata.Logic.Models.Room;
-using Cyberpalata.ViewModel.Rooms;
-using Cyberpalata.ViewModel.Rooms.GamingRoom;
+using Cyberpalata.ViewModel.Request.Room;
+using Cyberpalata.ViewModel.Response.Rooms;
+using Cyberpalata.ViewModel.Response.Rooms.GamingRoom;
 using Cyberpalata.WebApi.ActionFilters;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,18 +30,31 @@ namespace Cyberpalata.WebApi.Controllers
         }
 
         [HttpGet("getRoomByType")]
-        public async Task<IActionResult> GetRoomByType(string type)
+        public async Task<IActionResult> GetRoomByType(bool isVip)
         {
-            if (type != "vip" && type != "common")
-                return BadRequest("Bad type query parametr");
 
-            var rooms = type == "vip"
-                ? await _roomService.GetVipRoomsAsync(1, RoomType.GamingRoom)
-                : await _roomService.GetCommonRoomsAsync(1, RoomType.GamingRoom);
+            // add to enum 
+            //if (type != "vip" && type != "common")
+            //    if (type != "vip" && type != "common")
+            //    return BadRequest("Bad type query parametr");
 
-            var viewModel = new RoomViewModel
+            //var rooms = type == "vip"
+            //    ? await _roomService.GetVipRoomsAsync(1, RoomType.GamingRoom)
+            //    : await _roomService.GetCommonRoomsAsync(1, RoomType.GamingRoom);
+            var filter = new RoomFilterBL
             {
-                Infos = rooms.Items.Select(x => new RoomListItemInfo { Id = x.Id.ToString(), Name = x.Name }).ToList()
+                Type = RoomType.GamingRoom,
+                IsVip = isVip,
+                PageSize = 10,
+                CurrentPage = 1
+            };
+
+            var rooms = await _roomService.GetPagedListAsync(filter);
+
+
+            var viewModel = new RoomCollectionViewModel
+            {
+                Infos = rooms.Items.Select(x => new RoomItemViewModel { Id = x.Id.ToString(), Name = x.Name }).ToList()
             };
             return await ReturnSuccess(viewModel);
         }
@@ -54,7 +69,7 @@ namespace Cyberpalata.WebApi.Controllers
             if (roomsPc.HasValue)
                 pcInfo = roomsPc.Value;        
 
-            var pcInfoList = new List<PcInfo>();
+            var pcInfoList = new List<PcViewModel>();
             //foreach (var item in pcInfo.GetType().GetProperties())
             //{
             //    if (item.Name != "Id")
@@ -67,16 +82,15 @@ namespace Cyberpalata.WebApi.Controllers
             var viewModel = new GamingRoomViewModel
             {
                 PcInfos= pcInfoList,
-                Peripheries = peripheries.Value.Select(p => new Periphery(p.Name, p.Type.Name)).ToList(),
+                Peripheries = peripheries.Value.Select(p => new PeripheryViewModel(p.Name, p.Type.Name)).ToList(),
             };
             return await ReturnSuccess(viewModel);
         }
 
         [HttpPost("searchRooms")]
-        [ServiceFilter(typeof(ModelStateValidationFilter))]
-        public async Task<IActionResult> SearchRooms([FromBody]SearchRoomRequest request)
+        public async Task<IActionResult> SearchRooms([FromBody]SearchRoomViewModel viewModel)
         {
-            var rooms = await _roomService.SearchRooms(request);
+            var rooms = await _roomService.SearchRooms(viewModel);
             if (rooms.HasNoValue)
                 return await ReturnSuccess();
             return await ReturnSuccess(rooms.Value);

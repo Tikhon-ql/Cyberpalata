@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Cyberpalata.Common;
-using Cyberpalata.Common.Filters;
 using Cyberpalata.DataProvider.Context;
+using Cyberpalata.DataProvider.Filters;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +15,8 @@ using System.Threading.Tasks;
 namespace Cyberpalata.DataProvider.Repositories
 {
     internal class BaseRepository<T> : IRepository<T> where T : BaseEntity
-    {
+    {                                                      
+        
         protected readonly ApplicationDbContext _context;
         private readonly DbSet<T> _entitySet;
         public BaseRepository(ApplicationDbContext context)
@@ -27,14 +28,16 @@ namespace Cyberpalata.DataProvider.Repositories
         {
             entity.Id = Guid.NewGuid();
             await _context.AddAsync(entity);
-            return entity.Id;//???
-        }
+            return entity.Id;
+        }   
 
         public virtual void Delete(T entity) => _context.Remove(entity);
-        public virtual async Task<PagedList<T>> GetPageListAsync(BaseFilter filter)
+        public virtual async Task<PagedList<T>> GetPageListAsync(BaseFilter<T> filter)
         {
-            var list = await _entitySet.Skip(((filter.CurrentPage - 1) * filter.PageSize)).Take(filter.PageSize).ToListAsync();
-            return new PagedList<T>(list, filter.CurrentPage, filter.PageSize, _entitySet.Count());
+            IQueryable<T> list = _entitySet.AsQueryable<T>();
+            list = filter.EnrichQuery(list);
+            list = list.Skip(((filter.CurrentPage - 1) * filter.PageSize)).Take(filter.PageSize);
+            return new PagedList<T>(list.ToList(), filter.CurrentPage, filter.PageSize, _entitySet.Count());
         }
 
         public virtual async Task<Maybe<T>> ReadAsync(Guid id) => await _entitySet.FirstOrDefaultAsync(e=>e.Id == id);

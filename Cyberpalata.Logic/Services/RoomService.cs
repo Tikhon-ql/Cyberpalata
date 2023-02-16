@@ -1,79 +1,161 @@
 ﻿using AutoMapper;
 using CSharpFunctionalExtensions;
 using Cyberpalata.Common;
-using Cyberpalata.Common.Enums;
+using Cyberpalata.DataProvider.Filters;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
+using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
-using Cyberpalata.Logic.Models.Booking;
 using Cyberpalata.Logic.Models.Room;
-using Cyberpalata.Logic.Models.Seats;
+using Cyberpalata.ViewModel.Request.Booking;
+using Cyberpalata.ViewModel.Request.Room;
+using Cyberpalata.ViewModel.Request.Seats;
+using Microsoft.Extensions.Configuration;
 
 namespace Cyberpalata.Logic.Services
 {
     internal class RoomService : IRoomService
     {
         private readonly IRoomRepository _repository;
+        private readonly IUserRepository _userRepository;
         private readonly ISeatService _seatService;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
+        private readonly IBookingRepository _bookingRepository;
 
-        public RoomService(IRoomRepository repository, ISeatService seatService, IMapper mapper)
+        private readonly IBookingService _bookingService;
+
+        public RoomService(IRoomRepository repository, ISeatService seatService,IUserRepository userRepository,
+            IMapper mapper, IConfiguration configuration, IBookingRepository bookingRepository, IBookingService bookingService)
         {
             _repository = repository;
             _mapper = mapper;
             _seatService = seatService;
+            _configuration = configuration;
+            _userRepository = userRepository;
+            _bookingRepository = bookingRepository;
+            _bookingRepository= bookingRepository;
         }
 
-        public async Task<PagedList<RoomDto>> GetPagedListAsync(int pageNumber, RoomType type)
+        public async Task<PagedList<RoomDto>> GetPagedListAsync(RoomFilterBL filter)
         {
-            var list = await _repository.GetPageListAsync(pageNumber);
+            var list = await _repository.GetPageListAsync(_mapper.Map<RoomFilter>(filter));
             return _mapper.Map<PagedList<RoomDto>>(list);
         }
 
-        public async Task<PagedList<RoomDto>> GetVipRoomsAsync(int pageNumber, RoomType type)
+        //public async Task<PagedList<RoomDto>> GetVipRoomsAsync(int pageNumber, RoomType type)
+        //{
+        //    var list = await _repository.GetVipRoomsAsync(pageNumber, type);
+        //    return _mapper.Map<PagedList<RoomDto>>(list);
+        //}
+
+        //public async Task<PagedList<RoomDto>> GetCommonRoomsAsync(int pageNumber, RoomType type)
+        //{
+        //    var list = await _repository.GetCommonRoomsAsync(pageNumber, type);
+        //    return _mapper.Map<PagedList<RoomDto>>(list);
+        //}
+
+        private List<Seat> GetFreeSeats(BookingCreateViewModel viewModel, Room room)
         {
-            var list = await _repository.GetVipRoomsAsync(pageNumber, type);
-            return _mapper.Map<PagedList<RoomDto>>(list);
+            var freeSeats = new List<Seat>();
+            foreach(var seat in viewModel.Seats)
+            {
+                bool isFree = true;
+                foreach(var booking in room.Bookings)
+                {
+                    bool isBookingHasSeat = booking.Seats.FirstOrDefault(s=>s.Number == seat) != null;
+                    if(isBookingHasSeat)
+                    {
+                        isFree = false;
+                        break;
+                    }
+                }
+                if(isFree)
+                {
+                    var freeSeat = room.Seats.First(s=>s.Number == seat);
+                    freeSeats.Add(freeSeat);
+                }
+            }
+            return freeSeats;
+        }
+        
+        private Booking CreateBookingWithSeats(BookingCreateViewModel viewModel, Room room)
+        {
+            var seats = GetFreeSeats(viewModel, room);
+            var booking = new Booking
+            {
+                Id = Guid.NewGuid(),
+                Seats = seats,
+                Date = viewModel.Date,
+                Begining = viewModel.Begining,
+                HoursCount = viewModel.HoursCount
+            }; 
+            foreach (var seat in seats)
+            {
+                seat.Bookings.Add(booking);
+            }
+            return booking;
         }
 
-        public async Task<PagedList<RoomDto>> GetCommonRoomsAsync(int pageNumber, RoomType type)
+        // comes 1 2 3 4 5 3 and 5 are taken
+        public async Task<Result> AddBookingToRoom(Guid userId, BookingCreateViewModel viewModel)
         {
-            var list = await _repository.GetCommonRoomsAsync(pageNumber, type);
-            return _mapper.Map<PagedList<RoomDto>>(list);
-        }
 
-        public async Task<Result> AddBookingToRoom(Guid userId, BookingCreateRequest request)
-        {
-            if (request.Seats.Count == 0)
-                return Result.Failure("Seats collection is empty");
+            ValidateBooking(viewModel);
 
-            if ((request.Date - DateTime.Now).Days >= 14)
-                return Result.Failure("Incorrect date: You can make a booking only on 2 weeks ahead");
-
-            var room = await _repository.ReadAsync(request.RoomId);
+            var room = await _repository.ReadAsync(viewModel.RoomId);
             if (room.HasNoValue)
-                return Result.Failure($"There aren't roo with id:{request.RoomId}");
-            var dto = _mapper.Map<BookingDto>(request);
+                return Result.Failure($"There aren't roo with id:{viewModel.RoomId}");
 
-            dto.User.Id = userId;
-            await _repository.AddBookingToRoomAsync(request.RoomId, _mapper.Map<Booking>(dto));
+            //var bookingDto = _mapper.Map<BookingDto>(viewModel);
+            //var booking = _mapper.Map<Booking>(viewModel);
+            //booking.Seats = GetFreeSeats(viewModel, room.Value);
+
+            //foreach (var seat in booking.Seats)
+            //{
+            //    seat.Bookings.Add(booking);
+            //}
+            var booking = CreateBookingWithSeats(viewModel, room.Value);
+
+            var user = await _userRepository.ReadAsync(userId);
+            booking.User = user.Value;
+
+            booking.Room = room.Value;
+            room.Value.Bookings.Add(booking);
+
+            //booking.User.Id = userId;
+            //bookingDto.Room = _mapper.Map<RoomDto>(room.Value);
+            //await _repository.AddBookingToRoomAsync(viewModel.RoomId, _mapper.Map<Booking>(bookingDto));
+            await _bookingRepository.CreateAsync(booking);
             return Result.Success();
         }
 
-        public async Task<Maybe<List<RoomDto>>> SearchRooms(SearchRoomRequest request)
+        private Result ValidateBooking(BookingCreateViewModel viewModel)
+        {
+            if (viewModel.Seats.Count == 0)
+                return Result.Failure("Seats collection is empty");
+
+            //??? Date trouble UTC
+            int bookingMakingMaxAheadDays = int.Parse(_configuration["BookingSettings:BookingMaxMakingAheadDays"]);
+            if ((viewModel.Date - DateTime.Now).Days >= bookingMakingMaxAheadDays)
+                return Result.Failure("Incorrect date: You can make a booking only on 2 weeks ahead");
+            return Result.Success();
+        }
+
+   
+
+        public async Task<Maybe<List<RoomDto>>> SearchRooms(SearchRoomViewModel viewModel)
         {
             var rooms = await _repository.GetAll();
-            if (rooms.HasNoValue)
-                return Maybe.None;
             var resultList = new List<RoomDto>();
-            foreach (var room in rooms.Value)
+            foreach (var room in rooms)
             {
-                var seats = await _seatService.GetSeatsByRoomInRangeIdAsync(new SeatsGettingRequest
+                var seats = await _seatService.GetSeatsByRoomInRangeIdAsync(new SeatsGettingViewModel
                 {
                     RoomId = room.Id,
-                    Begining = request.Begining,
-                    Date = request.Date,
-                    HoursCount = request.HoursCount
+                    Begining = viewModel.Begining,
+                    Date = viewModel.Date,
+                    HoursCount = viewModel.HoursCount
                 });
 
                 if (seats.HasNoValue)
@@ -89,10 +171,10 @@ namespace Cyberpalata.Logic.Services
                         seatCountInRow++;
                     else
                         seatCountInRow = 0;
-                    if(request.Count == seatCountInRow)
+                    if(viewModel.Count == seatCountInRow)
                     {
                         resultList.Add(_mapper.Map<RoomDto>(room));
-                        rooms.Value.Remove(room);
+                        rooms.Remove(room);
                         break;
                     }
                 }

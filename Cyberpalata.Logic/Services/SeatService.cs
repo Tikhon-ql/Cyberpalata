@@ -5,6 +5,7 @@ using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Seats;
+using Cyberpalata.ViewModel.Request.Seats;
 
 namespace Cyberpalata.Logic.Services
 {
@@ -43,31 +44,31 @@ namespace Cyberpalata.Logic.Services
             return resultSeats;
         }
 
-        public async Task<Maybe<List<SeatDto>>> GetSeatsByRoomInRangeIdAsync(SeatsGettingRequest request)
+        public async Task<Maybe<List<SeatDto>>> GetSeatsByRoomInRangeIdAsync(SeatsGettingViewModel viewModel)
         {
-            var room = await _roomRepository.ReadAsync(request.RoomId);
+            var room = await _roomRepository.ReadAsync(viewModel.RoomId);
             if (room.HasNoValue)
                 return Maybe.None;
 
             var roomSeats = room.Value.Seats;
             var resultSeats = _mapper.Map<List<SeatDto>>(room.Value.Seats);
 
-            var actualRoomBookings = await _bookingRepository.GetActualBookingsByRoomId(request.RoomId);
+            var actualRoomBookings = await _bookingRepository.GetActualBookingsByRoomId(viewModel.RoomId);
             if (actualRoomBookings.HasNoValue)
                 return resultSeats;
 
             var bookings = actualRoomBookings.Value
-                .Where(b => (b.Date == request.Date
-                && ((request.Begining <= b.Begining 
-                    && request.Date.Add(request.Begining).AddHours(request.HoursCount) > b.Date.Add(b.Begining)) 
-                || (b.Begining <= request.Begining
-                    && request.Date.Add(request.Begining) < b.Date.Add(b.Begining).AddHours(b.HoursCount))))).ToList();
+                .Where(b => (b.Date == viewModel.Date
+                && ((viewModel.Begining <= b.Begining 
+                    && viewModel.Date.Add(viewModel.Begining).AddHours(viewModel.HoursCount) > b.Date.Add(b.Begining)) 
+                || (b.Begining <= viewModel.Begining
+                    && viewModel.Date.Add(viewModel.Begining) < b.Date.Add(b.Begining).AddHours(b.HoursCount))))).ToList();
             foreach (var seat in resultSeats)
             {
                 var isSeatFree = bookings.FirstOrDefault(b => b.Seats.FirstOrDefault(s => s.Id == seat.Id) != null) == null;
-                if (isSeatFree)
+                if (!isSeatFree)
                 {
-                    seat.IsFree = true;
+                    seat.IsFree = false;
                 }
             }
             return resultSeats;

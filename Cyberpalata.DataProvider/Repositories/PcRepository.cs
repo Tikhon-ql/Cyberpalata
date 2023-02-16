@@ -1,6 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
 using Cyberpalata.Common;
-using Cyberpalata.Common.Filters;
 using Cyberpalata.DataProvider.Context;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Devices;

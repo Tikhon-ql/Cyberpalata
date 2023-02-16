@@ -2,7 +2,10 @@
 using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Seats;
-using Cyberpalata.ViewModel.Rooms;
+using Cyberpalata.ViewModel;
+using Cyberpalata.ViewModel.Request.Seats;
+using Cyberpalata.ViewModel.Response;
+using Cyberpalata.ViewModel.Response.Booking.Enum;
 using Cyberpalata.WebApi.ActionFilters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,14 +22,13 @@ namespace Cyberpalata.WebApi.Controllers
             _seatService = seatService;
         }
         [Authorize]
-        [ServiceFilter(typeof(ModelStateValidationFilter))]
         [HttpPost("getSeats")]
-        public async Task<IActionResult> GetSeats([FromBody]SeatsGettingRequest request)
+        public async Task<IActionResult> GetSeats([FromBody]SeatsGettingViewModel request)
         {
             var seats = await _seatService.GetSeatsByRoomInRangeIdAsync(request);
             if (seats.HasNoValue)
                 return BadRequest("Bad seat getting request!");
-            var viewModel = seats.Value.Select(s => new SeatViewModel { Number = s.Number, IsFree = s.IsFree }).ToList();
+            var viewModel = seats.Value.Select(s => new SeatViewModel { Number = s.Number, Type = s.IsFree ? SeatType.Free : SeatType.IsTaken }).ToList();
             return Ok(viewModel);
         }
     }   

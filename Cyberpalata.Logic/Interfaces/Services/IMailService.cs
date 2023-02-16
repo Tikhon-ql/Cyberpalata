@@ -2,7 +2,7 @@
 {
     public interface IMailService
     {
-        void SendPasswordResetEmail(string emailTo);
-        void SendVerificationCodeToMail(string emailTo,int code);
+        Task SendPasswordResetEmail(string emailTo);
+        Task SendVerificationCodeToMail(string emailTo,int code);
     }
 }

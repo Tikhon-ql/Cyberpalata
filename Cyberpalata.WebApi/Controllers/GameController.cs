@@ -1,6 +1,7 @@
 ﻿using Cyberpalata.Common.Intefaces;
+using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
-using Cyberpalata.ViewModel.GameLibrary;
+using Cyberpalata.ViewModel.Response.GameLibrary;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cyberpalata.WebApi.Controllers
@@ -21,7 +22,12 @@ namespace Cyberpalata.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var games = await _gameService.GetPagedListAsync(1);
+            var filter = new BaseFilterBL
+            {
+                CurrentPage = 1,
+                PageSize = 10,
+            };
+            var games = await _gameService.GetPagedListAsync(filter);
             var viewModel = new GameLibraryViewModel { Games = games.Items.Select(g => g.GameName).ToList() };
             return await ReturnSuccess(viewModel);
         }

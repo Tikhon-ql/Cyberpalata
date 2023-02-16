@@ -1,15 +1,11 @@
 ﻿using AutoMapper;
 using Cyberpalata.Common;
+using Cyberpalata.DataProvider.Filters;
 using Cyberpalata.DataProvider.Interfaces;
+using Cyberpalata.DataProvider.Models;
+using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models;
-using Cyberpalata.Logic.Models.Booking;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cyberpalata.Logic.Services
 {
@@ -23,9 +19,9 @@ namespace Cyberpalata.Logic.Services
             _mapper = mapper;
         }
 
-        public async Task<PagedList<GameDto>> GetPagedListAsync(int pageNumber)
+        public async Task<PagedList<GameDto>> GetPagedListAsync(BaseFilterBL filter)
         {
-            var list = await _repository.GetPageListAsync(pageNumber);
+            var list = await _repository.GetPageListAsync(_mapper.Map<BaseFilter<Game>>(filter));
             return _mapper.Map<PagedList<GameDto>>(list);
         }
     }

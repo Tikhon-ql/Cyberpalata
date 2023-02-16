@@ -140,8 +140,7 @@ namespace Cyberpalata.DataProvider.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConsoleName")
                         .IsRequired()
@@ -162,8 +161,7 @@ namespace Cyberpalata.DataProvider.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Cpu")
                         .IsRequired()
@@ -205,8 +203,7 @@ namespace Cyberpalata.DataProvider.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("BookingId")
                         .HasColumnType("uniqueidentifier");
@@ -223,18 +220,43 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.ToTable("Games");
                 });
 
-            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Identity.ApiUser", b =>
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.HtmlContent", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Html")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Htmls");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "ResetPasswordHtml",
+                            Html = "<html>\r\n                                    <div>\r\n                                        <a href='http://localhost:3000/passwordReset' class='btn btn-outline-dark btn-sm text-white w-50 m-1'>Reset password</a>\r\n                                    </div>\r\n                                </html>"
+                        },
+                        new
+                        {
+                            Id = "EmailVerificationHtml",
+                            Html = "<html>\r\n                                <div>\r\n                                    <h1>Your verification code:</h1>\r\n                                    <div><b></b></div>\r\n                                </div>\r\n                            </html>"
+                        });
+                });
+
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Identity.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsActivate")
+                    b.Property<bool>("IsActivated")
                         .HasColumnType("bit");
 
                     b.Property<string>("Password")
@@ -266,8 +288,7 @@ namespace Cyberpalata.DataProvider.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Expiration")
                         .HasColumnType("datetime2");
@@ -293,8 +314,7 @@ namespace Cyberpalata.DataProvider.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -320,8 +340,7 @@ namespace Cyberpalata.DataProvider.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsVip")
                         .HasColumnType("bit");
@@ -348,14 +367,10 @@ namespace Cyberpalata.DataProvider.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Number")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Number"));
 
                     b.Property<Guid>("RoomId")
                         .HasColumnType("uniqueidentifier");
@@ -371,8 +386,7 @@ namespace Cyberpalata.DataProvider.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("TournamentId")
                         .HasColumnType("uniqueidentifier");
@@ -390,6 +404,9 @@ namespace Cyberpalata.DataProvider.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("IsHiring")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -403,8 +420,7 @@ namespace Cyberpalata.DataProvider.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsCaptain")
                         .HasColumnType("bit");
@@ -428,8 +444,7 @@ namespace Cyberpalata.DataProvider.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -441,7 +456,7 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.Property<int>("TeamsMaxCount")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("WinnerId")
+                    b.Property<Guid?>("WinnerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -489,7 +504,7 @@ namespace Cyberpalata.DataProvider.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Cyberpalata.DataProvider.Models.Identity.ApiUser", "User")
+                    b.HasOne("Cyberpalata.DataProvider.Models.Identity.User", "User")
                         .WithMany("Bookings")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -531,7 +546,7 @@ namespace Cyberpalata.DataProvider.Migrations
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Identity.UserRefreshToken", b =>
                 {
-                    b.HasOne("Cyberpalata.DataProvider.Models.Identity.ApiUser", "User")
+                    b.HasOne("Cyberpalata.DataProvider.Models.Identity.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -590,7 +605,7 @@ namespace Cyberpalata.DataProvider.Migrations
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Tournaments.TeamMember", b =>
                 {
-                    b.HasOne("Cyberpalata.DataProvider.Models.Identity.ApiUser", "Member")
+                    b.HasOne("Cyberpalata.DataProvider.Models.Identity.User", "Member")
                         .WithMany()
                         .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -611,9 +626,7 @@ namespace Cyberpalata.DataProvider.Migrations
                 {
                     b.HasOne("Cyberpalata.DataProvider.Models.Tournaments.Team", "Winner")
                         .WithMany()
-                        .HasForeignKey("WinnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("WinnerId");
 
                     b.Navigation("Winner");
                 });
@@ -653,7 +666,7 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.Navigation("GamesToDownloadBefore");
                 });
 
-            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Identity.ApiUser", b =>
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Identity.User", b =>
                 {
                     b.Navigation("Bookings");
                 });

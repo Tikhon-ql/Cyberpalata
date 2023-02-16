@@ -6,6 +6,7 @@ using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Identity;
 using Cyberpalata.ViewModel;
 using Cyberpalata.ViewModel.Request.Identity;
+using Cyberpalata.ViewModel.Response.Rooms.GamingRoom;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -36,10 +37,9 @@ namespace Cyberpalata.Logic.Services
         {
             var user = await _userRepository.ReadAsync(viewModel.Email);
 
-            //A.K.: really password is incorrect?)
             if (!user.HasValue)
                 return Result.Failure<UserDto>("Email or password is incorrect!!!");
-            if (!user.Value.IsActivate)
+            if (!user.Value.IsActivated)
                 return Result.Failure<UserDto>("Your account isn't activated");
 
             string requestHashedPassword = _hashGenerator.HashPassword($"{viewModel.Password}{user.Value.Salt}");
@@ -47,83 +47,91 @@ namespace Cyberpalata.Logic.Services
             if (user.Value.Password == requestHashedPassword)
                 return Result.Success(_mapper.Map<UserDto>(user.Value));
 
-            //A.K.: really email is invalid here?
             return Result.Failure<UserDto>("Email or password is incorrect!!!");
         }
 
-        public async Task<Maybe<TokenViewModel>> GenerateTokenAsync(UserDto user)
+        public async Task<TokenViewModel> GenerateTokenAsync(UserDto user)
         {
             var accessToken = GenerateAccessToken(user);
 
-            if (!accessToken.HasValue)
-                return Maybe.None;
-
             var refreshToken = GenerateRefreshToken();
 
-            var apiUser = await _userRepository.ReadAsync(user.Email);
-
-            //A.K.:are you sure it is allowed user to be .None here? I mean it is not an exception?
-            //Its exception because we validatie user before???
-            //???
-            //if (!apiUser.HasValue)
-            //    return Maybe.None;
+            var apiUser = (await _userRepository.ReadAsync(user.Email)).Value;
 
             int refreshTokenExpirationTimeInMinutes = int.Parse(_configuration["RefreshTokenSettings:ExpirationTimeMin"]);
-            await _refreshTokenRepository.CreateAsync(new UserRefreshToken { User = apiUser.Value, Expiration = DateTime.Now.AddMinutes(refreshTokenExpirationTimeInMinutes), RefreshToken = refreshToken });
+            await _refreshTokenRepository.CreateAsync(new UserRefreshToken { User = apiUser, Expiration = DateTime.Now.AddMinutes(refreshTokenExpirationTimeInMinutes), RefreshToken = refreshToken });
 
             return new TokenViewModel
             {
-                AccessToken = accessToken.Value,
+                AccessToken = accessToken,
                 RefreshToken = refreshToken
             };
         }
-        //A.K.: methods more than 20 lines usually can be simply split to multiply which increase readability
-        public async Task<Result<TokenViewModel>> RefreshTokenAsync(TokenViewModel tokenDto)
+
+        private async Task<bool> RefreshTokenIsExpired(UserRefreshToken refreshToken)
         {
-            Maybe<UserRefreshToken> refreshToken = await _refreshTokenRepository.ReadAsync(tokenDto.RefreshToken);
-            if (!refreshToken.HasValue)
-                return Result.Failure<TokenViewModel>("Refresh token doesn't exist!");
-
-            var claimIdResult = GetClaim(tokenDto.AccessToken, JwtRegisteredClaimNames.Sid);
-            if (claimIdResult.IsFailure)
-                return Result.Failure<TokenViewModel>(claimIdResult.Error);
-            var claimId = claimIdResult.Value;
-            var userId = Guid.Parse(claimId.Value);
-
-            //if (userId != refreshToken.Value.User.Id)
-            //{
-            //    return Result.Failure<TokenViewModel>("Your aren't owner of the refresh token");
-            //}
-
-            OwnerIdClaimValidation(claimId, refreshToken.Value.User.Id);
             int beforeMinutes = int.Parse(_configuration["RefreshTokenSettings:TimeToCheckBeforeRefreshTokenExpiredMin"]);
-            var isRefreshTokenExpired = DateTime.Now.AddMinutes(beforeMinutes) >= refreshToken.Value.Expiration;
+            var isRefreshTokenExpired = DateTime.Now.AddMinutes(beforeMinutes) >= refreshToken.Expiration;
+            return isRefreshTokenExpired;
+        }
+
+        //private bool ValidateAccessToken(string accessToken)
+        //{
+        //    var jwt = new JwtSecurityTokenHandler();
+            
+        //}
+
+        private async Task<Result<UserRefreshToken>> ValidateRefreshToken(TokenViewModel viewModel)
+        {
+            var refreshToken = await _refreshTokenRepository.ReadAsync(viewModel.RefreshToken);
+            if (!refreshToken.HasValue)
+                return Result.Failure<UserRefreshToken>("Refresh token doesn't exist!");
+            var userIdResult = GetIdClaim(viewModel.AccessToken, JwtRegisteredClaimNames.Sid);
+
+            if (userIdResult.IsFailure)
+                return Result.Failure<UserRefreshToken>(userIdResult.Error);
+
+            if (userIdResult.Value != refreshToken.Value.User.Id)
+                return Result.Failure<UserRefreshToken>("Your aren't owner of the refresh token");
+
+            return Result.Success(refreshToken.Value);
+        }
+
+        private async Task<TokenViewModel> Refresh(UserRefreshToken refreshToken)
+        {
+            var isRefreshTokenExpired = await RefreshTokenIsExpired(refreshToken);
             if (isRefreshTokenExpired)
             {
-                var token = await GenerateTokenAsync(_mapper.Map<UserDto>(refreshToken.Value.User));
-                if (!token.HasValue)
-                    return Result.Failure<TokenViewModel>("Something went wrong with token generation!");
-                return Result.Success(token.Value);
-            }        
+                var token = await GenerateTokenAsync(_mapper.Map<UserDto>(refreshToken.User));
+                return token;
+            }
             else
             {
-                var accessToken = GenerateAccessToken(_mapper.Map<UserDto>(refreshToken.Value.User));
-                if(!accessToken.HasValue)
-                    return Result.Failure<TokenViewModel>("Something went wrong with token generation!");
-                return Result.Success(new TokenViewModel
+                var accessToken = GenerateAccessToken(_mapper.Map<UserDto>(refreshToken.User));
+                return new TokenViewModel
                 {
-                    AccessToken = accessToken.Value,
-                    RefreshToken = tokenDto.RefreshToken
-                });
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken.RefreshToken
+                };
             }
         }
 
-        private Result<Claim> GetClaim(string jwtToken ,string claimName)
+        public async Task<Result<TokenViewModel>> RefreshTokenAsync(TokenViewModel viewModel)
+        {
+            var refreshTokenResult = await ValidateRefreshToken(viewModel);
+            if (refreshTokenResult.IsFailure)
+                return Result.Failure<TokenViewModel>(refreshTokenResult.Error);
+            var refreshedToken = await Refresh(refreshTokenResult.Value);
+            return Result.Success(refreshedToken);
+        }
+
+
+        private Result<Guid> GetIdClaim(string jwtToken ,string claimName)
         {
             var jwtSecurityTokenResult = ParseJwt(jwtToken);
             if (jwtSecurityTokenResult.IsFailure)
             {
-                return Result.Failure<Claim>(jwtSecurityTokenResult.Error);
+                return Result.Failure<Guid>(jwtSecurityTokenResult.Error);
             }
 
             var jwtSecurityToken = jwtSecurityTokenResult.Value;
@@ -131,19 +139,11 @@ namespace Cyberpalata.Logic.Services
             var claim = jwtSecurityToken.Claims.FirstOrDefault(claim => claim.Type == claimName);
             if (claim == null)
             {
-                return Result.Failure<Claim>($"{claimName} claim missed.");
+                return Result.Failure<Guid>($"{claimName} claim missed.");
             }
-            return Result.Success(claim);
-        }
-
-        private Result OwnerIdClaimValidation(Claim claimId, Guid rightOwnerId)
-        {
-            //??? It's exception?
-            if (!Guid.TryParse(claimId.Value, out Guid userId))
-                return Result.Failure("Cannot parse id");
-            if (userId != rightOwnerId)
-                return Result.Failure("Your aren't owner of the refresh token");
-            return Result.Success();
+            if(!Guid.TryParse(claim.Value, out Guid userId))
+                return Result.Failure<Guid>($"Wrong userId value.");
+            return Result.Success(userId);
         }
 
         private Result<JwtSecurityToken> ParseJwt(string jwtToken)
@@ -161,9 +161,7 @@ namespace Cyberpalata.Logic.Services
             }
         }
 
-
-
-        private Maybe<string> GenerateAccessToken(UserDto user)
+        private string GenerateAccessToken(UserDto user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecurityKey"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -175,8 +173,9 @@ namespace Cyberpalata.Logic.Services
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
             };
 
-            if (!int.TryParse(_configuration["AccessTokenSettings:ExpirationTimeMin"], out int accessTokenExpirationTimeInMinutes))
-                return Maybe.None;
+            //Add token settings to work with config.
+
+            int accessTokenExpirationTimeInMinutes = int.Parse(_configuration["AccessTokenSettings:ExpirationTimeMin"]);
 
             var accessToken = new JwtSecurityToken(_configuration["Jwt:Issuer"],
                 _configuration["Jwt:Audience"],
@@ -204,11 +203,11 @@ namespace Cyberpalata.Logic.Services
                 return Result.Failure("Refresh token isn't exist!");
 
             ///??? If i will get only id from Token probably i should rewrite GetClaim method to check owner id validation
-            var userIdClaim = GetClaim(tokenDto.AccessToken, JwtRegisteredClaimNames.Sid);
-            if (userIdClaim.IsFailure)
-                return Result.Failure(userIdClaim.Error);
+            var userIdResult = GetIdClaim(tokenDto.AccessToken, JwtRegisteredClaimNames.Sid);
+            if (userIdResult.IsFailure)
+                return Result.Failure(userIdResult.Error);
 
-            var claimId = userIdClaim.Value;
+            //var claimId = userIdClaim.Value;
 
             //if (!Guid.TryParse(claimId.Value, out Guid userId))
             //    return Result.Failure("Cannot parse id");
@@ -216,7 +215,8 @@ namespace Cyberpalata.Logic.Services
             //if (userId != userRefreshToken.Value.User.Id)
             //    return Result.Failure("Your aren't owner of the refresh token");
 
-            OwnerIdClaimValidation(claimId, userRefreshToken.Value.User.Id);
+            if (userIdResult.Value != userRefreshToken.Value.User.Id)
+                return Result.Failure("Your aren't owner of the refresh token");
 
             _refreshTokenRepository.Delete(userRefreshToken.Value);
             return Result.Success();

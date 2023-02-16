@@ -33,10 +33,10 @@ namespace Cyberpalata.DataProvider.Context
         public DbSet<Team> Teams { get; set; }
         public DbSet<TeamMember> TeamMembers { get; set; }
         public DbSet<Prize> Prizes { get;set; }
+        public DbSet<HtmlContent> Htmls { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            ConfigureIdAutoGeneration(modelBuilder);
             UniqueIndexesCreating(modelBuilder);
             ConfigureRelationships(modelBuilder);
             ConstraintsConfiguration(modelBuilder);
@@ -52,7 +52,7 @@ namespace Cyberpalata.DataProvider.Context
                   j => j.HasOne<Seat>().WithMany().OnDelete(DeleteBehavior.NoAction),
                   j => j.HasOne<Booking>().WithMany().OnDelete(DeleteBehavior.NoAction));
 
-            modelBuilder.Entity<Tournament>().HasMany(t=>t.Teams).WithMany(t=>t.Tournaments)
+            modelBuilder.Entity<Tournament>().HasMany(t => t.Teams).WithMany(t => t.Tournaments)
                     .UsingEntity<Dictionary<Guid, Guid>>("TeamsTournaments",
                     j => j.HasOne<Team>().WithMany().OnDelete(DeleteBehavior.NoAction),
                     j => j.HasOne<Tournament>().WithMany().OnDelete(DeleteBehavior.NoAction));
@@ -82,24 +82,6 @@ namespace Cyberpalata.DataProvider.Context
             //modelBuilder.Entity<Booking>().HasOne(b => b.Room).WithMany(r => r.Bookings).OnDelete(DeleteBehavior.NoAction);
         }
 
-        private void ConfigureIdAutoGeneration(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Game>().Property(g => g.Id).HasDefaultValueSql("NEWID()");
-            modelBuilder.Entity<Pc>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
-            modelBuilder.Entity<Periphery>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
-            //modelBuilder.Entity<Price>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
-            modelBuilder.Entity<GameConsole>().Property(g => g.Id).HasDefaultValueSql("NEWID()");
-            modelBuilder.Entity<Room>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
-            modelBuilder.Entity<User>().Property(a => a.Id).HasDefaultValueSql("NEWID()");
-            modelBuilder.Entity<UserRefreshToken>().Property(t => t.Id).HasDefaultValueSql("NEWID()");
-            modelBuilder.Entity<Seat>().Property(s => s.Id).HasDefaultValueSql("NEWID()");
-            modelBuilder.Entity<Tournament>().Property(s => s.Id).HasDefaultValueSql("NEWID()");
-            //modelBuilder.Entity<Team>().Property(s => s.Id).HasDefaultValueSql("NEWID()");
-            modelBuilder.Entity<TeamMember>().Property(s => s.Id).HasDefaultValueSql("NEWID()");
-            modelBuilder.Entity<Prize>().Property(s => s.Id).HasDefaultValueSql("NEWID()");
-            modelBuilder.Entity<Seat>().Property(s => s.Number).ValueGeneratedOnAdd();
-        }
-
         private void ConstraintsConfiguration(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Room>().HasCheckConstraint("IsVip", "IsVip = 0 or(IsVip = 1 and TypeId between 2 and 3)");
@@ -116,7 +98,93 @@ namespace Cyberpalata.DataProvider.Context
             modelBuilder.Entity<PeripheryType>().HasData(PeripheryType.Mouse);
             modelBuilder.Entity<PeripheryType>().HasData(PeripheryType.Screen);
             modelBuilder.Entity<PeripheryType>().HasData(PeripheryType.Chair);
-        }
+
+            string resetPasswordHtml = @$"<html>
+                                    <div>
+                                        <a href='http://localhost:3000/passwordReset' class='btn btn-outline-dark btn-sm text-white w-50 m-1'>Reset password</a>
+                                    </div>
+                                </html>";
+            string emailVerificationHtml = @$"<html>
+                                <div>
+                                    <h1>Your verification code:</h1>
+                                    <div><b></b></div>
+                                </div>
+                            </html>";
+            modelBuilder.Entity<HtmlContent>().HasData(new HtmlContent { Id = "ResetPasswordHtml",Html = resetPasswordHtml });
+            modelBuilder.Entity<HtmlContent>().HasData(new HtmlContent { Id = "EmailVerificationHtml", Html = emailVerificationHtml });
+
+            var user1 = new User
+            {
+                Id = Guid.NewGuid(),
+                Username = "user1",
+                Surname = "Userovich",
+                Email = "user1@mail.ru",
+                Phone = "+375257175402",
+                Salt = "salt1",
+                Password = "password1salt1",
+                IsActivated= true,
+            };
+            var user2 = new User
+            {
+                Id = Guid.NewGuid(),
+                Username = "user2",
+                Surname = "Userovich2",
+                Email = "user2@mail.ru",
+                Phone = "+375257175402",
+                Salt = "salt2",
+                Password = "password2salt2",
+                IsActivated = true,
+            };
+            var user3 = new User
+            {
+                Id = Guid.NewGuid(),
+                Username = "user3",
+                Surname = "Userovich3",
+                Email = "user3@mail.ru",
+                Phone = "+375257175402",
+                Salt = "salt3",
+                Password = "password3salt3",
+                IsActivated = true,
+            };
+
+            var user4 = new User
+            {
+                Id = Guid.NewGuid(),
+                Username = "user4",
+                Surname = "Userovich4",
+                Email = "user4@mail.ru",
+                Phone = "+375257175402",
+                Salt = "salt4",
+                Password = "password4salt4",
+                IsActivated = true,
+            };
+
+            var user5 = new User
+            {
+                Id = Guid.NewGuid(),
+                Username = "user5",
+                Surname = "Userovich5",
+                Email = "user5@mail.ru",
+                Phone = "+375257175402",
+                Salt = "salt5",
+                Password = "password5salt5",
+                IsActivated = true,
+            };
+
+            var user6 = new User
+            {
+                Id = Guid.NewGuid(),
+                Username = "user6",
+                Surname = "Userovich6",
+                Email = "user6@mail.ru",
+                Phone = "+375257175402",
+                Salt = "salt6",
+                Password = "password6salt6",
+                IsActivated = true,
+            };
+
+            //{ code}
+        }/*{_configuration["PasswordResetPageUrl"]}*/
 
         private void UniqueIndexesCreating(ModelBuilder modelBuilder)
         {

@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Cyberpalata.DataProvider.Models;
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Configuration;
-using Cyberpalata.Common.Filters;
 
 namespace Cyberpalata.DataProvider.Repositories
 {

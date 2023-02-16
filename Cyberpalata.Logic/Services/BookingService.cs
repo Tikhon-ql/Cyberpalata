@@ -1,27 +1,34 @@
 ﻿using AutoMapper;
 using CSharpFunctionalExtensions;
 using Cyberpalata.Common;
+using Cyberpalata.DataProvider.Filters;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
+using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Booking;
+using Cyberpalata.ViewModel.Response;
+using Cyberpalata.ViewModel.Response.Booking;
+using Cyberpalata.ViewModel.Response.Booking.Enum;
 
 namespace Cyberpalata.Logic.Services
 {
     internal class BookingService : IBookingService
     {
         private readonly IBookingRepository _repository;
-        private readonly IApiUserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly ISeatService _seatService;
         private readonly IMapper _mapper;
 
         public BookingService(IBookingRepository repository,
-            IApiUserRepository userRepository, 
-            IMapper mapper)
+            IUserRepository userRepository, 
+            IMapper mapper, 
             ISeatService seatService)
         {
             _repository = repository;
             _userRepository = userRepository;
             _mapper = mapper;
+            _seatService = seatService;
         }
         public async Task<Maybe<BookingDto>> ReadAsync(Guid id)
         {
@@ -29,12 +36,12 @@ namespace Cyberpalata.Logic.Services
             return _mapper.Map<Maybe<BookingDto>>(booking);
         }
 
-        public async Task<PagedList<BookingDto>> GetPagedListAsync(BaseFilter filter)
+        public async Task<PagedList<BookingDto>> GetPagedListAsync(BookingFilterBL filter)
         {
-            var list = await _repository.GetPageListAsync(filter);
+            var list = await _repository.GetPageListAsync(_mapper.Map<BookingFilter>(filter));
             return _mapper.Map<PagedList<BookingDto>>(list);
         }
-        //???Is it an exception
+
         public async Task<Result<BookingDetailsViewModel>> GetBookingDetail(Guid id)
         {
             var booking = await _repository.ReadAsync(id);
