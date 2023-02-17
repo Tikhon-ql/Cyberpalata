@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom"
 import api from "../../../Components/api";
 import { TournamentDetailed } from "../../../types/types";
 import { TournamentNetwork } from "./TournamentNetwork";
-
+import React from 'react'
 
 export const TournamentDetailedView = ()=>{
 
@@ -17,8 +17,6 @@ export const TournamentDetailedView = ()=>{
     });
     useEffect(()=>{
         api.get(`/tournaments/getTournamentDetaile?tournamentId=${id}`).then(res=>{
-            console.log("DATA");
-            console.dir(res);
             setTournament(res.data);
             setIsLoader(true);
         })

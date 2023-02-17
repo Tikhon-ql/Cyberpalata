@@ -12,5 +12,7 @@ namespace Cyberpalata.ViewModel.Response.Tournament
         public int FirstTeamScore { get; set; }
         public string SecondTeamName { get; set; }
         public int SecondTeamScore { get; set; }
+        public string Date { get; set; }
+        public string Time { get; set; }
     }
 }

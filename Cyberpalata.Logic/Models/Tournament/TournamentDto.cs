@@ -15,5 +15,6 @@ namespace Cyberpalata.Logic.Models.Tournament
         public TeamDto Winner { get; set; } = new();
         public List<PrizeDto> Prizes { get; set; } = new();
         public List<TeamDto> Teams { get; set; } = new();
+        public List<RoundDto> Rounds { get; set; }
     }
 }

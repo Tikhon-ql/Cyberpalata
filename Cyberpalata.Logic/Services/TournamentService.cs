@@ -50,28 +50,62 @@ namespace Cyberpalata.Logic.Services
                 Name = tournament.Value.Name,
                 Date = tournament.Value.Date.ToString("d"),
                 TeamsMaxCount = tournament.Value.TeamsMaxCount,
-                Batles = new List<TeamBatleViewModel>()
+                Rounds = new List<RoundViewModel>()
+                //Batles = new List<TeamBatleViewModel>()
             };
-            for(int i = 1;i < tournament.Value.Teams.Count;i+=2)
+            int roundMaxCount = GetRoundMaxCount(tournament.Value.TeamsMaxCount);
+
+            int index = 0;
+            foreach(var round in tournament.Value.Rounds)
             {
-                viewModel.Batles.Add(new TeamBatleViewModel
+                var roundViewModel = new RoundViewModel();
+                int roundBatlesMaxCount = CalculateRoundTeamsMaxCount(tournament.Value.TeamsMaxCount, index) / 2;
+                foreach(var batle in round.Batles)
                 {
-                    FirstTeamName = tournament.Value.Teams[i - 1].Name,
-                    SecondTeamName = tournament.Value.Teams[i].Name,
-                    FirstTeamScore = 0,
-                    SecondTeamScore = 0,
-                });
-            }
-            for(int i = viewModel.Batles.Count;i < viewModel.TeamsMaxCount - 1;i+=2)
-            {
-                viewModel.Batles.Add(new TeamBatleViewModel
+                    roundViewModel.Batles.Add(new TeamBatleViewModel
+                    {
+                        Date = batle.Date.ToString("d"),
+                        FirstTeamName = batle.FirstTeam.Name,
+                        SecondTeamName = batle.SecondTeam.Name,
+                        FirstTeamScore = batle.FirstTeamScore,
+                        SecondTeamScore = batle.SecondTeamScore
+                    });
+                }
+                for(int i = roundViewModel.Batles.Count - 1; i < roundBatlesMaxCount;i++)
                 {
-                    FirstTeamName = " ",
-                    SecondTeamName = " ",
-                    FirstTeamScore = 0,
-                    SecondTeamScore = 0,
-                });
+                    roundViewModel.Batles.Add(new TeamBatleViewModel
+                    {
+                        Date = "",
+                        FirstTeamName = "",
+                        SecondTeamName = "",
+                        FirstTeamScore = 0,
+                        SecondTeamScore = 0
+                    });
+                }
+                index++;
+                viewModel.Rounds.Add(roundViewModel);
             }
+
+            //for(int i = 1;i < tournament.Value.Teams.Count;i+=2)
+            //{
+            //    viewModel.Batles.Add(new TeamBatleViewModel
+            //    {
+            //        FirstTeamName = tournament.Value.Teams[i - 1].Name,
+            //        SecondTeamName = tournament.Value.Teams[i].Name,
+            //        FirstTeamScore = 0,
+            //        SecondTeamScore = 0,
+            //    });
+            //}
+            //for(int i = viewModel.Batles.Count;i < viewModel.TeamsMaxCount - 1;i+=2)
+            //{
+            //    viewModel.Batles.Add(new TeamBatleViewModel
+            //    {
+            //        FirstTeamName = "Navi",
+            //        SecondTeamName = "Vp",
+            //        FirstTeamScore = 1,
+            //        SecondTeamScore = 10,
+            //    });
+            //}
             return viewModel;
         }
 
@@ -86,6 +120,28 @@ namespace Cyberpalata.Logic.Services
 
             tournament.Value.Teams.Add(team.Value);
             return Result.Success();
+        }
+
+        private int GetRoundMaxCount(int teamMaxCount)
+        {
+            int roundMaxCount = 0;
+            while (teamMaxCount > 0)
+            {
+                teamMaxCount /= 2;
+                roundMaxCount++;
+            }
+            roundMaxCount--;
+            return roundMaxCount;
+        }
+
+        private int CalculateRoundTeamsMaxCount(int teamMaxCount, int roundNumber)
+        {
+            while(roundNumber >= 0)
+            {
+                teamMaxCount /= 2;
+                roundNumber--;
+            }
+            return teamMaxCount;
         }
     }
 }

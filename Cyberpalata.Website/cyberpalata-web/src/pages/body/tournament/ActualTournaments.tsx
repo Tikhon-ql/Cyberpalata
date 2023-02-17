@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { Tournament, TournamentDetailed } from "../../../types/types"
 import api from "./../../../Components/api";
 import {Link} from "react-router-dom";
+import React from 'react'
 
 export const ActualTournaments = ()=>{
 

@@ -1,5 +1,6 @@
 import './../tournament/Tournament.css';
 import { Matchup } from './Matchup';
+import React from 'react'
 
 export const Championship = ()=>{
     return <>

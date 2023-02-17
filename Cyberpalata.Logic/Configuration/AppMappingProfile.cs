@@ -25,6 +25,8 @@ namespace Cyberpalata.Logic.Configuration
             TournamentMapConfig.CreateMap(this);
             FiltersMapConfig.CreateMap(this);
             TeamMemberMapConfig.CreateMap(this);
+            BatleMapConfig.CreateMap(this);
+            RoundMapConfig.CreateMap(this);
         }
     }
 }

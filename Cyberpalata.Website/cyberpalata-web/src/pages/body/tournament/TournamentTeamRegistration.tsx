@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import api from "./../../../Components/api";
 import { Team, Tournament } from "./../../../types/types";
+import React from 'react'
 
 export const TournamentTeamRegistration = ()=>{
 

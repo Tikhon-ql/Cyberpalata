@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Batle } from "../../../types/types";
 import { Matchup } from "./Matchup";
+import React from 'react'
 
 type Props = {
     round: number,
@@ -13,15 +14,26 @@ export const Round = ({round, isCurrent, teamsCount,batles}:Props) => {
 
     const [rounds, setRounds] = useState<string[]>(["round-one", "round-two","round-three","round-four","round-five","round-six","round-seven"]);
     const [teamsNumbers, setTeamsNumbers] = useState<number[]>([]);
-    // for(let i = 0;i < teamsCount / 2;i++)
-    // {
-    //     teams.push(i);
-    // }
+    for(let i = 0;i < teamsCount / 2;i++)
+    {
+        teamsNumbers.push(i);
+    }
+    //console.dir(batles);
+    //console.log(`Round ${round} : ${teamsCount}`);
     return <div className={isCurrent ? `round ${rounds[round]} current` : `round ${rounds[round]}`}>
 		<div className="round-details">Round {round + 1}<span className="date">March 16</span></div>
-        {batles.map((item:Batle,index)=>{
-            return <Matchup team1 = {item.firstTeamName} team2 = {item.secondTeamName} score1 = {`${item.firstTeamScore}`} score2 = {`${item.secondTeamScore}`} isChampionMatchup = {false}/>
-        })}
+            {teamsNumbers.map((item:number,index)=>{
+            return <Matchup team1 = {batles[item] ? batles[item].firstTeamName : " "} 
+                            team2 = {batles[item] ? batles[item].secondTeamName : " "} 
+                            score1 = {batles[item] ? `${batles[item].firstTeamScore}` : " "} 
+                            score2 = {batles[item] ? `${batles[item].secondTeamScore}` : " "} isChampionMatchup = {false}/>
+        })
+        //</div> 
+        // :<div> 
+        //     {batles.map((item:Batle,index)=>{
+        //     return <Matchup team1 = {" "} team2 = {" "} score1 = {` `} score2 = {` `} isChampionMatchup = {false}/>
+        // })}</div>
+    }
 	</div>
 }
 

@@ -11,6 +11,6 @@ namespace Cyberpalata.ViewModel.Response.Tournament
         public string Name { get; set; }
         public string Date { get; set; }
         public int TeamsMaxCount { get; set; }
-        public List<TeamBatleViewModel> Batles { get; set; }
+        public List<RoundViewModel> Rounds { get; set; }
     }
 }
