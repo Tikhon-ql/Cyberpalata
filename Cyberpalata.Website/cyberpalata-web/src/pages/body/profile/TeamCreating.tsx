@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import api from "src/Components/api"
+import api from "./../../../Components/api"
 
 
 export const TeamCreating = () => {

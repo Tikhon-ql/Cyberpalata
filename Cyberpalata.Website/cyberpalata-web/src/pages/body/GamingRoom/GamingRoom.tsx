@@ -6,8 +6,8 @@ import { useParams } from 'react-router-dom';
 import api from "./../../../Components/api";
 import BarLoader from "react-spinners/BarLoader";
 import React from 'react';
-import { Periphery } from 'src/types/types';
-import { Pc } from 'src/types/types';
+import { Periphery } from './../../../types/types';
+import { Pc } from './../../../types/types';
 
 const GamingRoom = () => {
     let navigate = useNavigate();

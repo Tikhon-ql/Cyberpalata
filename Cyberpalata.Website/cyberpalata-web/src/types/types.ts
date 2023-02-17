@@ -49,3 +49,22 @@ export type Tournament = {
     id:string,
     name:string
 }
+
+export type TournamentDetailed = {
+    name:string,
+    date:string,
+    teamsMaxCount: number,
+    batles:Batle[]
+}
+
+export type Batle = {
+    firstTeamName: string,
+    secondTeamName: string,
+    firstTeamScore:number,
+    secondTeamScore:number,
+}
+
+export type TeamTournamentViewModel = {
+    name:string,
+    score:number
+}

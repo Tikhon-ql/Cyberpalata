@@ -40,6 +40,41 @@ namespace Cyberpalata.Logic.Services
             return _mapper.Map<List<GetTournamentViewModel>>(actualTournaments);
         }
 
+        public async Task<TournamentDetailedViewModel> GetTournamentDetailed(Guid tournamentId)
+        {
+            var tournament = await _tournamentRepository.ReadAsync(tournamentId);
+            //if (tournament.HasNoValue)
+            //    return ; // ??? что делать в таких ситуациях ? Exception
+            var viewModel = new TournamentDetailedViewModel
+            {
+                Name = tournament.Value.Name,
+                Date = tournament.Value.Date.ToString("d"),
+                TeamsMaxCount = tournament.Value.TeamsMaxCount,
+                Batles = new List<TeamBatleViewModel>()
+            };
+            for(int i = 1;i < tournament.Value.Teams.Count;i+=2)
+            {
+                viewModel.Batles.Add(new TeamBatleViewModel
+                {
+                    FirstTeamName = tournament.Value.Teams[i - 1].Name,
+                    SecondTeamName = tournament.Value.Teams[i].Name,
+                    FirstTeamScore = 0,
+                    SecondTeamScore = 0,
+                });
+            }
+            for(int i = viewModel.Batles.Count;i < viewModel.TeamsMaxCount - 1;i+=2)
+            {
+                viewModel.Batles.Add(new TeamBatleViewModel
+                {
+                    FirstTeamName = " ",
+                    SecondTeamName = " ",
+                    FirstTeamScore = 0,
+                    SecondTeamScore = 0,
+                });
+            }
+            return viewModel;
+        }
+
         public async Task<Result> RegisterTeam(RegisterTeamViewModel viewModel)
         {
             var team = await _teamRepository.ReadAsync(viewModel.TeamId);

@@ -51,14 +51,14 @@ namespace Cyberpalata.Logic.Services
 
         public async Task SendVerificationCodeToMail(string emailTo,int code)
         {
-            //string bodyHtml = @$"<html>
-            //                    <div>
-            //                        <h1>Your verification code:</h1>
-            //                        <div><b>{code}</b></div>
-            //                    </div>
-            //                </html>";
-            var html = await _htmlRepository.ReadAsync("EmailVerificationHtml");
-            SendMail(emailTo,"Verification code",html.Html);
+            string bodyHtml = @$"<html>
+                                <div>
+                                    <h1>Your verification code:</h1>
+                                    <div><b>{code}</b></div>
+                                </div>
+                            </html>";
+            //var html = await _htmlRepository.ReadAsync("EmailVerificationHtml");
+            SendMail(emailTo,"Verification code", bodyHtml);
         }
     }
 }

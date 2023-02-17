@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import api from "./../../../Components/api";
 import BarLoader from "react-spinners/BarLoader";
 import React from 'react';
-import { Seat } from "src/types/types";
+import { Seat } from "./../../../types/types";
 
 export const BookingComponent = () => {
     

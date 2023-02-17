@@ -4,7 +4,7 @@ import api from "./../../../Components/api";
 import BarLoader from "react-spinners/BarLoader";
 import { Link } from "react-router-dom";
 import React from 'react';
-import { BookingDetails, Seat } from "src/types/types";
+import { BookingDetails, Seat } from "./../../../types/types";
 
 export const OneBookingView = ()=>{
     const [countInRow,setCountInRow] = useState(0);    

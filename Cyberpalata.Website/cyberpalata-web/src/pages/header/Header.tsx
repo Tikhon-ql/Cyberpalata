@@ -36,7 +36,7 @@ export const Header = observer((props) => {
                     <Link to="/createTournament" className='text-decoration-none text-white h4 m-5 mya' style={{"paddingBottom":"5px"}}>Create tournament</Link>
                 </li>
                 <li className='nav-item text-dark' style={{"marginTop":"2vh"}}>
-                    <Link to="/tournamentNetwork" className='text-decoration-none text-white h4 m-5 mya' style={{"paddingBottom":"5px"}}>Tournament network</Link>
+                    <Link to="/showActualTournaments" className='text-decoration-none text-white h4 m-5 mya' style={{"paddingBottom":"5px"}}>Show actual tournaments</Link>
                 </li>
                 <li className='nav-item text-dark' style={{"marginTop":"2vh"}}>
                     <Link to="/searchRoom" className='text-decoration-none text-white h4 m-5 mya' style={{"paddingBottom":"5px"}} onClick={()=>{stateStore.stateChange()}}>Search</Link>

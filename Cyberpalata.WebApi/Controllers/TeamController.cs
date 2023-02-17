@@ -64,11 +64,11 @@ namespace Cyberpalata.WebApi.Controllers
             return await ReturnSuccess(viewModel);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> AddTeamMember()
-        {
+        //[HttpPut]
+        //public async Task<IActionResult> AddTeamMember()
+        //{
 
-        }
+        //}
 
         //[HttpGet]
         //public async Task<IActionResult> SetTeamRecruting()

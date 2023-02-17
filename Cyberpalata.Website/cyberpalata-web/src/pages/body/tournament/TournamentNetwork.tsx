@@ -1,17 +1,59 @@
 import { useEffect, useState } from "react";
-import api from "src/Components/api";
+import api from "./../../../Components/api";
 import { Championship } from "../tournamentNetwork/Championship";
 import { Matchup } from "../tournamentNetwork/Matchup";
 import { Round } from "../tournamentNetwork/Round";
 import "./Tournament.css";
+import { Batle } from "../../../types/types";
 
-export const TournamentNetwork = () => {
-    const [indexes,setIndexes] = useState<number[]>([]);
-	const [teamsMaxCount, setTeamsMaxCount] = useState<number>(32);
+type Props = {
+	name:string,
+	date:string,
+	teamsMaxCount:number,
+	batles:Batle[]
+}
+
+export const TournamentNetwork = ({name, date, teamsMaxCount,batles}:Props) => {
+    //const [indexes,setIndexes] = useState<number[]>([]);
+	//const [teamsMaxCount, setTeamsMaxCount] = useState<number>(32);
+
+	console.log("props");
+	console.dir({name, date, teamsMaxCount,batles});
 	const [teamsCounts, setTeamsCounts] = useState<number[]>([]);
 	const [rounds, setRound] = useState<number[]>([]);
 	const [reverseRounds, setReverseRounds] = useState<number[]>([]);
 	const [currentRound, setCurrentRound] = useState<number>(0);
+	const [splitOneBatles, setSplitOneBatles] = useState<Batle[]>([]);
+	const [splitTwoBatles, setSplitTwoBatles] = useState<Batle[]>([]);
+
+	useEffect(()=>{
+		// const middle = teamsMaxCount / 2;
+		// const splitOne = teams.splice(0, middle);
+		// const splitTwo = teams.splice(-middle);
+		// for(let i = 0;i < middle / 2;i+=2)
+		// {
+		// 	const batle:Batle = {
+		// 		teamOne: splitOne[i],
+		// 		teamOneScore: 1,
+		// 		teamTwo: splitOne[i + 1],
+		// 		teamTwoScore:1
+		// 	};
+		// 	console.dir(batle);
+		// 	splitOneBatles.push(batle);
+		// }
+		// for(let i = 0;i < middle / 2;i+=2)
+		// {
+		// 	const batle:Batle = {
+		// 		teamOne: splitTwo[i],
+		// 		teamOneScore: 1,
+		// 		teamTwo: splitTwo[i + 1],
+		// 		teamTwoScore:1
+		// 	};
+		// 	splitTwoBatles.push(batle);
+		// }
+		// console.log("split one");
+		// console.dir(splitOneBatles);
+	},[]);
 
 	let max = teamsMaxCount;
 	while(Math.floor(max / 2) > 0)
@@ -38,7 +80,7 @@ export const TournamentNetwork = () => {
             <div className="container">
 				<div className="split split-one">
 					{rounds.map((item:number, index)=>{
-						return <Round round={item} teamsCount = {teamsCounts[index]} isCurrent={index == currentRound ? true : false}/>
+						return <Round round={item} teamsCount = {teamsCounts[index]} isCurrent={index == currentRound ? true : false} batles={batles.splice(0,batles.length / 2)}/>
 					})}
 {/*
 					<Round round={2} isCurrent={false}/>	 */}
@@ -46,7 +88,7 @@ export const TournamentNetwork = () => {
 				<Championship/>
 				<div className="split split-two">
 					{reverseRounds.map((item:number, index)=>{
-						return <Round round={item} teamsCount = {teamsCounts[(teamsMaxCount / 8) - 1 - index]} isCurrent={(teamsMaxCount / 8) - 1 - index == currentRound ? true : false}/>
+						return <Round round={item} teamsCount = {teamsCounts[(teamsMaxCount / 8) - 1 - index]} isCurrent={(teamsMaxCount / 8) - 1 - index == currentRound ? true : false} batles={batles.splice(-(batles.length / 2))}/>
 					})}
 					{/* <Round round={2} isCurrent={false}/>
 					<Round round={1} isCurrent={true}/> */}

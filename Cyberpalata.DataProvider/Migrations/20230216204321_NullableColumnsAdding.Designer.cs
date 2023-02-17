@@ -4,6 +4,7 @@ using Cyberpalata.DataProvider.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cyberpalata.DataProvider.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230216204321_NullableColumnsAdding")]
+    partial class NullableColumnsAdding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,6 +109,7 @@ namespace Cyberpalata.DataProvider.Migrations
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Booking", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<TimeSpan>("Begining")
@@ -138,6 +142,7 @@ namespace Cyberpalata.DataProvider.Migrations
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Devices.GameConsole", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConsoleName")
@@ -158,6 +163,7 @@ namespace Cyberpalata.DataProvider.Migrations
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Devices.Pc", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Cpu")
@@ -199,6 +205,7 @@ namespace Cyberpalata.DataProvider.Migrations
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Game", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("BookingId")
@@ -245,6 +252,7 @@ namespace Cyberpalata.DataProvider.Migrations
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Identity.User", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
@@ -282,6 +290,7 @@ namespace Cyberpalata.DataProvider.Migrations
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Identity.UserRefreshToken", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Expiration")
@@ -307,6 +316,7 @@ namespace Cyberpalata.DataProvider.Migrations
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Peripheral.Periphery", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -332,6 +342,7 @@ namespace Cyberpalata.DataProvider.Migrations
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Room", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsVip")
@@ -358,6 +369,7 @@ namespace Cyberpalata.DataProvider.Migrations
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Seat", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Number")
@@ -376,6 +388,7 @@ namespace Cyberpalata.DataProvider.Migrations
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Tournaments.Prize", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("TournamentId")
@@ -391,6 +404,7 @@ namespace Cyberpalata.DataProvider.Migrations
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Tournaments.Team", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsHiring")
@@ -408,6 +422,7 @@ namespace Cyberpalata.DataProvider.Migrations
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Tournaments.TeamMember", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsCaptain")
@@ -431,6 +446,7 @@ namespace Cyberpalata.DataProvider.Migrations
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Tournaments.Tournament", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Date")

@@ -14,7 +14,7 @@ namespace Cyberpalata.DataProvider.Models.Tournaments
         public DateTime Date { get; set; }
         public int TeamsMaxCount { get; set; }
         public virtual Team? Winner { get; set; }
-        public virtual List<Team> Teams { get; set; }
-        public virtual List<Prize> Prizes { get; set; }
+        public virtual List<Team>? Teams { get; set; }
+        public virtual List<Prize>? Prizes { get; set; }
     }
 }

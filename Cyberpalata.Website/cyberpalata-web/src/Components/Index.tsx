@@ -23,10 +23,12 @@ import { IternalServerError } from './Errors/500/IternalServerError';
 import { NotFound } from './Errors/404/NotFound';
 import { RoomSearch } from '../pages/header/RoomSearch';
 import React, {useState} from 'react';
-import { TeamCreating } from 'src/pages/body/profile/TeamCreating';
-import { TournamentCreating } from 'src/pages/body/tournament/TournamentCreating';
-import { TournamentTeamRegistration } from 'src/pages/body/tournament/TournamentTeamRegistration';
-import { TournamentNetwork } from 'src/pages/body/tournament/TournamentNetwork';
+import { TeamCreating } from './../pages/body/profile/TeamCreating';
+import { TournamentCreating } from './../pages/body/tournament/TournamentCreating';
+import { TournamentTeamRegistration } from './../pages/body/tournament/TournamentTeamRegistration';
+import { TournamentNetwork } from './../pages/body/tournament/TournamentNetwork';
+import { ActualTournaments } from '../pages/body/tournament/ActualTournaments';
+import { TournamentDetailedView } from '../pages/body/tournament/TournamentDetailedView';
 
 export const Index = () => {
 
@@ -58,7 +60,9 @@ export const Index = () => {
                 <Route path="*" element={<Navigate replace to="/404" />} />
                 <Route path="/index" element={<Index/>}></Route>
                 <Route path="/registerTeam" element={<TournamentTeamRegistration/>}></Route>   
-                <Route path="/tournamentNetwork" element={<TournamentNetwork/>}></Route>   
+                {/* <Route path="/tournamentNetwork" element={<TournamentNetwork/>}></Route> */}
+                <Route path="/showActualTournaments" element={<ActualTournaments/>}></Route>
+                <Route path="/showTournamentDetailed/:id" element={<TournamentDetailedView/>}></Route>
             </Routes>
             <AccessTokenVerify/>          
         </BrowserRouter>

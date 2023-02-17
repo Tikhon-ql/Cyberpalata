@@ -4,7 +4,7 @@ import api from "../../../Components/api";
 import { Pagination } from "../../../Components/Helpers/Pagination";
 import BarLoader from "react-spinners/BarLoader";
 import React from 'react';
-import { BookingCollection } from "src/types/types";
+import { BookingCollection } from "./../../../types/types";
 
 
 export const BookingViewComponent = (props: any) => {
