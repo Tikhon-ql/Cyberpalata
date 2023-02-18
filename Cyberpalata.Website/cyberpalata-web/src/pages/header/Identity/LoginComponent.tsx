@@ -7,6 +7,7 @@ import BarLoader from "react-spinners/BarLoader";
 import { observer } from 'mobx-react-lite';
 import headerRerenderStore from '../../../store/headerRerenderStore';
 import React from 'react';
+import jwt_decode from "jwt-decode";
 
 const LoginComponent = () => {
     const [email, setEmail] = useState<string>("");
@@ -34,6 +35,9 @@ const LoginComponent = () => {
         {
             localStorage.setItem('accessToken', res.data.accessToken);
             localStorage.setItem('refreshToken', res.data.refreshToken);
+
+            var dec = jwt_decode(res.data.accessToken);
+            console.dir(dec);
 
             headerRerenderStore.stateChange();
             navigate("/");

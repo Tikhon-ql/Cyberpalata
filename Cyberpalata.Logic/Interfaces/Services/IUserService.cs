@@ -16,5 +16,6 @@ namespace Cyberpalata.Logic.Interfaces.Services
         Task<Result<int>> SendCodeToMailAsync(EmailConfirmViewModel viewModel);
         Task<Result> DeleteAsync(string email);
         Task<Result> ActivateUser(string email);
+        Task<Result> AddUserToRole(Guid userId, string roleName);
     }
 }

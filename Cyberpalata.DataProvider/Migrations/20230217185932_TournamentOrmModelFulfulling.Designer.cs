@@ -4,6 +4,7 @@ using Cyberpalata.DataProvider.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cyberpalata.DataProvider.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230217185932_TournamentOrmModelFulfulling")]
+    partial class TournamentOrmModelFulfulling
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -242,33 +245,6 @@ namespace Cyberpalata.DataProvider.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Identity.Role", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("d8766f5e-5820-4e8b-9a82-98218079a483"),
-                            Name = "User"
-                        },
-                        new
-                        {
-                            Id = new Guid("f22c77ed-4c7a-429b-80d4-77dcb7050bd3"),
-                            Name = "Admin"
-                        });
-                });
-
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Identity.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -454,9 +430,6 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
@@ -533,21 +506,6 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.HasIndex("WinnerId");
 
                     b.ToTable("Tournaments");
-                });
-
-            modelBuilder.Entity("RoleUser", b =>
-                {
-                    b.Property<Guid>("RolesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("RolesId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("RoleUser");
                 });
 
             modelBuilder.Entity("SeatsBookings", b =>
@@ -739,21 +697,6 @@ namespace Cyberpalata.DataProvider.Migrations
                         .HasForeignKey("WinnerId");
 
                     b.Navigation("Winner");
-                });
-
-            modelBuilder.Entity("RoleUser", b =>
-                {
-                    b.HasOne("Cyberpalata.DataProvider.Models.Identity.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RolesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Cyberpalata.DataProvider.Models.Identity.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("SeatsBookings", b =>

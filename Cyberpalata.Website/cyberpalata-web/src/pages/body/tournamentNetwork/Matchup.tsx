@@ -18,8 +18,6 @@ export const Matchup = ({team1 = "&nbsp;",team2 = "&nbsp;",score1 = " ",score2 =
     // {
     //     team1 = "&nbsp;"
     // }
-
-    console.log(1);
     return <>
         <ul className={isChampionMatchup ? "matchup championship" : "matchup"}>
             <li className="team team-top">{team1}<span className={isChampionMatchup ? "vote-count" : "score"}>{score1}</span></li>

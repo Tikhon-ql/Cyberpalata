@@ -41,7 +41,7 @@ namespace Cyberpalata.WebApi.Controllers
             var viewModel = await _tournamentService.GetActualTournaments();
             return await ReturnSuccess(viewModel);
         }
-        [Authorize]
+        //[Authorize]
         [HttpGet("getTournamentDetaile")]
         public async Task<IActionResult> GetTournamentDetaile(Guid tournamentId)
         {

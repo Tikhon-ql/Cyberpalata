@@ -34,6 +34,7 @@ namespace Cyberpalata.DataProvider.Configuration
             services.AddScoped<ITournamentRepository, TournamentRepository>();
             services.AddScoped<ITeamRepository, TeamRepository>();
             services.AddScoped<IHtmlRepository, HtmlRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
         }
     }
 }

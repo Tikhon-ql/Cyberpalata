@@ -2,23 +2,23 @@ import { useEffect, useState } from "react";
 import api from "./../../../Components/api";
 import { Championship } from "../tournamentNetwork/Championship";
 import { Matchup } from "../tournamentNetwork/Matchup";
-import { Round } from "../tournamentNetwork/Round";
-import "./Tournament.css";
+import { RoundView } from "../tournamentNetwork/RoundView";
+// import "./Tournament.css";
 import React from 'react'
-import { Batle } from "../../../types/types";
+import { Batle, Round } from "../../../types/types";
 
 type Props = {
 	name:string,
 	date:string,
 	teamsMaxCount:number,
-	batles:Batle[]
+	rounds: Round[]
 }
 
-export const TournamentNetwork = ({name, date, teamsMaxCount,batles}:Props) => {
+export const TournamentNetwork = ({name, date, teamsMaxCount,rounds}:Props) => {
     //const [indexes,setIndexes] = useState<number[]>([]);
 	//const [teamsMaxCount, setTeamsMaxCount] = useState<number>(32);
 	const [teamsCounts, setTeamsCounts] = useState<number[]>([]);
-	const [rounds, setRound] = useState<number[]>([]);
+	// const [rounds, setRound] = useState<number[]>([]);
 	const [reverseRounds, setReverseRounds] = useState<number[]>([]);
 	const [currentRound, setCurrentRound] = useState<number>(0);
 	const [splitOneBatles, setSplitOneBatles] = useState<Batle[]>([]);
@@ -61,43 +61,44 @@ export const TournamentNetwork = ({name, date, teamsMaxCount,batles}:Props) => {
 	}
 	console.dir(teamsCounts);
 
-	for(let i = 1 ; i < (teamsMaxCount / 8);i++)
-	{
-		rounds.push(i);
-	}
-	console.dir(rounds);
-	for(let i = (teamsMaxCount / 8) - 1;i > 0;i--)
-	{
-		reverseRounds.push(i);
-	}
+	// for(let i = 0 ; i < (teamsMaxCount / 8);i++)
+	// {
+	// 	rounds.push(i);
+	// }
+	// console.dir(rounds);
+	// for(let i = (teamsMaxCount / 8) - 1;i >= 0;i--)
+	// {
+	// 	reverseRounds.push(i);
+	// }
 	console.log("Rounds");
 	console.dir(rounds);
-
+	console.log("Lenght:" + rounds[0].batles.length);
 	// 16 -> 8 -> 4 -> 2 -> 1
 
-    return <>
-        <section id="bracket">
+    return <div>
+        <section id="bracket" className="h-75">
             <div className="container">
 				<div className="split split-one">
-					<Round round={0} teamsCount = {teamsCounts[0]} isCurrent={0 == currentRound ? true : false} batles={batles.splice(0,batles.length / 2)}/>
-					{rounds.map((item:number, index)=>{
-						return <Round round={item} teamsCount = {teamsCounts[item]} isCurrent={item == currentRound ? true : false} batles={[]}/>
+					{/* <Round round={0} teamsCount = {teamsCounts[0]} isCurrent={0 == currentRound ? true : false} batles={batles.splice(0,batles.length / 2)}/> */}
+					{rounds.map((item:Round, index)=>{
+						console.dir(item.number)
+						return <RoundView date={item.date} key={index} round={item.number} isCurrent={item.number == currentRound ? true : false} batles={item.batles.splice(0, item.batlesMaxCount)} teamsMaxCount={teamsMaxCount}/>
 					})}
 {/*
 				<Round round={2} isCurrent={false}/>	 */}
 				</div>
 				<Championship/>
 				<div className="split split-two">
-					{reverseRounds.map((item:number, index)=>{
-						return <Round round={item} teamsCount = {teamsCounts[item]} isCurrent={(teamsMaxCount / 8) - 1 - item == currentRound ? true : false} batles={[]}/>
+					{rounds.reverse().map((item:Round, index)=>{
+						return <RoundView date={item.date} key={index} round={item.number} isCurrent={item.number == currentRound ? true : false} batles={item.batles.splice(item.batles.length - item.batlesMaxCount)} teamsMaxCount={teamsMaxCount}/>
 					})}
-					<Round round={0} teamsCount = {teamsCounts[0]} isCurrent={0 == currentRound ? true : false} batles={batles.splice(-(batles.length))}/>
+					{/* <Round round={0} teamsCount = {teamsCounts[0]} isCurrent={0 == currentRound ? true : false} batles={batles.splice(-(batles.length))}/> */}
 					{/* <Round round={2} isCurrent={false}/>
 					<Round round={1} isCurrent={true}/> */}
 				</div>
             </div>
         </section>
-	   </>	
+	   </div>	
 }
 
 

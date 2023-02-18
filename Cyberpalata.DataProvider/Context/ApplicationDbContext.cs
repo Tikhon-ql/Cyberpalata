@@ -34,6 +34,7 @@ namespace Cyberpalata.DataProvider.Context
         public DbSet<TeamMember> TeamMembers { get; set; }
         public DbSet<Prize> Prizes { get;set; }
         public DbSet<HtmlContent> Htmls { get; set; }
+        public DbSet<Role> Roles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -60,6 +61,8 @@ namespace Cyberpalata.DataProvider.Context
             modelBuilder.Entity<TeamMember>().HasOne(t => t.Member).WithMany().OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Tournament>().HasOne(t => t.Winner).WithMany();
+
+            modelBuilder.Entity<User>().HasMany(u => u.Roles).WithMany();
 
             //modelBuilder.Entity<Room>().HasMany(r => r.Prices).WithOne(p => p.Room);
             //modelBuilder.Entity<Room>().HasMany(r => r.Seats).WithOne(s => s.Room);
@@ -183,6 +186,10 @@ namespace Cyberpalata.DataProvider.Context
                 IsActivated = true,
             };
 
+            var userRole = new Role { Id = Guid.NewGuid(), Name = "User" };
+            var adminRole = new Role { Id = Guid.NewGuid(), Name= "Admin" };
+            modelBuilder.Entity<Role>().HasData(userRole);
+            modelBuilder.Entity<Role>().HasData(adminRole);
             //{ code}
         }/*{_configuration["PasswordResetPageUrl"]}*/
 

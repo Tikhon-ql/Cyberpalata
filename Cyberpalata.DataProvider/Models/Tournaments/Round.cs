@@ -9,6 +9,7 @@ namespace Cyberpalata.DataProvider.Models.Tournaments
     public class Round : BaseEntity
     {
         public int Number { get; set; }
+        public DateTime Date { get;set; }
         public virtual List<Batle> Batles { get; set; }
     }
 }

@@ -166,12 +166,17 @@ namespace Cyberpalata.Logic.Services
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecurityKey"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             
-            var claims = new[]
+            var claims = new List<Claim>()
             {
                 new Claim(JwtRegisteredClaimNames.Sid, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Name,user.Username),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
             };
+
+            foreach(var role in user.Roles)
+            { 
+                claims.Add(new Claim("role", role.Name));
+            }
 
             //Add token settings to work with config.
 

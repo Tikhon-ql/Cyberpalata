@@ -10,6 +10,7 @@ namespace Cyberpalata.Logic.Configuration
             AllowNullCollections = true;
             AllowNullDestinationValues = true;
 
+            RoleMapConfig.CreateMap(this);
             GameMapConfig.CreateMap(this);
             SeatMapConfig.CreateMap(this);
             MenuItemMapConfig.CreateMap(this);

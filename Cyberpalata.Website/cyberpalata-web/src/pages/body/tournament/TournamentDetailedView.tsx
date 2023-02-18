@@ -13,16 +13,17 @@ export const TournamentDetailedView = ()=>{
         name:"",
         date:"",
         teamsMaxCount:0,
-        batles:[]
+        rounds:[]
     });
     useEffect(()=>{
         api.get(`/tournaments/getTournamentDetaile?tournamentId=${id}`).then(res=>{
+            console.dir(res.data); 
             setTournament(res.data);
             setIsLoader(true);
         })
     },[]);
 
     return <>
-        {isloaded && <TournamentNetwork name={tournament.name} date={tournament.date} teamsMaxCount={tournament.teamsMaxCount} batles={tournament.batles}/>   }
+        {isloaded && <TournamentNetwork name={tournament.name} date={tournament.date} teamsMaxCount={tournament.teamsMaxCount} rounds={tournament.rounds}/>   }
     </>
 }

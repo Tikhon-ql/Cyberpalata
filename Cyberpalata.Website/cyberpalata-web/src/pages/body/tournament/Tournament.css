@@ -27,7 +27,7 @@ body {font-family: 'Istok Web', sans-serif;background: url("http://picjumbo.com/
 .vote-options {display: block;height: 52px;}
 .share .container {margin: 0 auto; text-align: center;}
 .share-icon {font-size: 24px; color: #fff;padding: 25px;}
-.share-wrap {max-width: 1100px; text-align: center; margin: 60px auto;}
+.share-wrap { text-align: center; margin: 60px auto;}
 .final {margin: 4.5em 0;}
 
 @-webkit-keyframes pulse {

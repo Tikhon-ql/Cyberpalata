@@ -12,5 +12,6 @@ namespace Cyberpalata.Logic.Models.Identity
         public string Phone { get; set; } = String.Empty;
         public string Password { get; set; } = String.Empty;
         public List<BookingDto> Bookings { get; set; } = new();
+        public List<RoleDto> Roles { get; set; } = new();
     }
 }

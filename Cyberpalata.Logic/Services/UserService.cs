@@ -16,13 +16,16 @@ namespace Cyberpalata.Logic.Services
         private readonly IMapper _mapper;
         private readonly IHashGenerator _hashGenerator;
         private readonly IMailService _mailService;
+        private readonly IRoleRepository _roleRepository;
 
-        public UserService(IUserRepository userRepository,IMapper mapper, IHashGenerator hashGenerator,IMailService mailService)
+        public UserService(IUserRepository userRepository,IMapper mapper,
+                            IHashGenerator hashGenerator,IMailService mailService, IRoleRepository roleRepository)
         {
             _userRepository = userRepository;
             _mapper = mapper;
             _hashGenerator = hashGenerator;
             _mailService = mailService;
+            _roleRepository = roleRepository;
         }
 
         public async Task<Result<Guid>> CreateAsync(UserCreateViewModel request)
@@ -44,6 +47,8 @@ namespace Cyberpalata.Logic.Services
             var password = $"{request.Password}{newUser.Salt}";
 
             newUser.Password = _hashGenerator.HashPassword(password);
+
+            await AddUserToRole(newUser.Id, "User");
 
             var userId = await _userRepository.CreateAsync(newUser);
             return Result.Success(userId);
@@ -136,6 +141,16 @@ namespace Cyberpalata.Logic.Services
             if (user.HasNoValue)
                 return Result.Failure($"User with email: {email} doesn't exist");
             user.Value.IsActivated = true;
+            return Result.Success();
+        }
+
+        public async Task<Result> AddUserToRole(Guid userId, string roleName)
+        {
+            var user = await _userRepository.ReadAsync(userId);///??? Probably delete maybe
+            var role = await _roleRepository.ReadAsync(roleName);
+            if (role.HasNoValue)
+                return Result.Failure("Role not found");
+            user.Value.Roles.Add(role.Value);
             return Result.Success();
         }
     }
