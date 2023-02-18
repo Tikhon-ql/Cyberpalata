@@ -1,7 +1,8 @@
 import { observer } from "mobx-react-lite";
 import { Link, useNavigate } from "react-router-dom";
-import headerRerenderStore from "src/store/headerRerenderStore";
+import headerRerenderStore from "./../../../store/headerRerenderStore";
 import api from "./../../../Components/api";
+import React from "react";
 
 export const LogoutComponent = observer(({setModalActive}: any) => {
     const navigate = useNavigate();

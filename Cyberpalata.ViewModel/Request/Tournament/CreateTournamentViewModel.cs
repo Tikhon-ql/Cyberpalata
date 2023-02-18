@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cyberpalata.ViewModel.Response.Tournament;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -16,5 +17,6 @@ namespace Cyberpalata.ViewModel.Request.Tournament
         [Required]
         public DateTime Date { get; set; }
         public int TeamsMaxCount { get; set; }
+        public List<RoundCreateViewModel> Rounds { get; set; }
     }
 }

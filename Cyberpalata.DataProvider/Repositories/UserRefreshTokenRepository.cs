@@ -16,6 +16,7 @@ namespace Cyberpalata.DataProvider.Repositories
 
         public async Task CreateAsync(UserRefreshToken entity)
         {
+            entity.Id = Guid.NewGuid();
             await _context.RefreshTokens.AddAsync(entity);
         }
 

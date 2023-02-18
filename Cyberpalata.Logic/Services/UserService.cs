@@ -41,15 +41,14 @@ namespace Cyberpalata.Logic.Services
                 Username = request.Username,
                 Surname = request.Surname,
                 Phone = request.Phone,
-                Salt = _hashGenerator.GenerateSalt()
+                Salt = _hashGenerator.GenerateSalt(),
+                Roles = new List<Role>()
             };
 
             var password = $"{request.Password}{newUser.Salt}";
 
             newUser.Password = _hashGenerator.HashPassword(password);
-
-            await AddUserToRole(newUser.Id, "User");
-
+            await AddUserToRole(newUser, "User");
             var userId = await _userRepository.CreateAsync(newUser);
             return Result.Success(userId);
         }
@@ -144,13 +143,12 @@ namespace Cyberpalata.Logic.Services
             return Result.Success();
         }
 
-        public async Task<Result> AddUserToRole(Guid userId, string roleName)
+        private async Task<Result> AddUserToRole(User user, string roleName)
         {
-            var user = await _userRepository.ReadAsync(userId);///??? Probably delete maybe
             var role = await _roleRepository.ReadAsync(roleName);
             if (role.HasNoValue)
                 return Result.Failure("Role not found");
-            user.Value.Roles.Add(role.Value);
+            user.Roles.Add(role.Value);
             return Result.Success();
         }
     }

@@ -259,12 +259,12 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d8766f5e-5820-4e8b-9a82-98218079a483"),
+                            Id = new Guid("41d0ad47-f0d2-43ea-a5a9-0b600c9d67b4"),
                             Name = "User"
                         },
                         new
                         {
-                            Id = new Guid("f22c77ed-4c7a-429b-80d4-77dcb7050bd3"),
+                            Id = new Guid("7c704268-e191-4e0d-ab24-197f9cf6178c"),
                             Name = "Admin"
                         });
                 });

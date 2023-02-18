@@ -12,9 +12,9 @@ namespace Cyberpalata.Logic.Models.Tournament
         public string Name { get; set; }
         public DateTime Date { get; set; }
         public int TeamsMaxCount { get; set; }
-        public TeamDto Winner { get; set; } = new();
-        public List<PrizeDto> Prizes { get; set; } = new();
-        public List<TeamDto> Teams { get; set; } = new();
+        public TeamDto Winner { get; set; }
+        public List<PrizeDto> Prizes { get; set; }
+        public List<TeamDto> Teams { get; set; }
         public List<RoundDto> Rounds { get; set; }
     }
 }

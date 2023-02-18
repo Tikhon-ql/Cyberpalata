@@ -15,13 +15,14 @@ import React from 'react';
 export const Header = observer((props) => {
     stateStore.state = false;
     headerRerenderStore.state = false;
-    let accessToken = false;
+    let accessToken;
     const [modalActive, setModalActive] = useState(false);
 
-    if(localStorage.getItem('accessToken') != null)
+    if(localStorage.getItem('accessToken'))
     {
 
         accessToken = jwtDecode(localStorage.getItem('accessToken') || "");
+        console.dir(accessToken);
     }
     useEffect(()=>{},[headerRerenderStore.state])
     console.dir(accessToken);
@@ -32,9 +33,12 @@ export const Header = observer((props) => {
                 <li className='nav-item text-dark' style={{"marginTop":"2vh"}}>
                     <Link to="/gamesLibrary" className='text-decoration-none text-white h4 m-5 mya' style={{"paddingBottom":"5px"}} onClick={()=>{stateStore.stateChange()}}>Games library</Link>
                 </li>
+                {accessToken && accessToken.role.includes("Admin") &&
                 <li className='nav-item text-dark' style={{"marginTop":"2vh"}}>
                     <Link to="/createTournament" className='text-decoration-none text-white h4 m-5 mya' style={{"paddingBottom":"5px"}}>Create tournament</Link>
                 </li>
+                }
+
                 <li className='nav-item text-dark' style={{"marginTop":"2vh"}}>
                     <Link to="/showActualTournaments" className='text-decoration-none text-white h4 m-5 mya' style={{"paddingBottom":"5px"}}>Show actual tournaments</Link>
                 </li>
@@ -49,11 +53,11 @@ export const Header = observer((props) => {
                     <Link to="/profile" className='text-decoration-none text-white m-3 h4 mya' style={{"paddingBottom":"5px"}}>Profile</Link>
                     </li>}
                 <li className="nav-item text-white" style={{"marginTop":"2vh"}}>
-                    {AuthVerify() ? 
+                    {AuthVerify() ?
 
                     <div>
                         <a className="text-decoration-none text-white h4 m-5 mya" style={{"paddingBottom":"5px"}} onClick={()=>{setModalActive(true)}}>Logout</a>
-                    </div> 
+                    </div>
 
                     : <Link to="/login" className='text-decoration-none text-white h4 mya m-5' style={{"paddingBottom":"5px"}}>Login</Link>}
                 </li>
