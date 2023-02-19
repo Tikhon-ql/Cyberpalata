@@ -4,6 +4,7 @@ using Cyberpalata.DataProvider.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cyberpalata.DataProvider.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230218203647_RoundTeamMaxCountColumnAdding")]
+    partial class RoundTeamMaxCountColumnAdding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -259,12 +262,12 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("75a632ac-495b-4725-849d-b79d87130a7e"),
+                            Id = new Guid("5276fca9-bc29-491f-9904-45cbd9b59533"),
                             Name = "User"
                         },
                         new
                         {
-                            Id = new Guid("5f94420d-63db-4716-a55f-55e7191a9f93"),
+                            Id = new Guid("7ba43f4d-280c-4e4d-abd0-8c9845c7cd10"),
                             Name = "Admin"
                         });
                 });

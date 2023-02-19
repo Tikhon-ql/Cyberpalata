@@ -4,6 +4,7 @@ using Cyberpalata.DataProvider.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cyberpalata.DataProvider.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230218200031_RoundIdAutoGenerationAdding")]
+    partial class RoundIdAutoGenerationAdding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -259,12 +262,12 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("75a632ac-495b-4725-849d-b79d87130a7e"),
+                            Id = new Guid("7238ad4e-be86-45c2-84bb-d3400bde5664"),
                             Name = "User"
                         },
                         new
                         {
-                            Id = new Guid("5f94420d-63db-4716-a55f-55e7191a9f93"),
+                            Id = new Guid("123e9616-9769-408e-a88c-b0c8b82a6e13"),
                             Name = "Admin"
                         });
                 });
@@ -458,9 +461,6 @@ namespace Cyberpalata.DataProvider.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Number")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TeamsMaxCount")
                         .HasColumnType("int");
 
                     b.Property<Guid?>("TournamentId")

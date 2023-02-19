@@ -45,6 +45,12 @@ namespace Cyberpalata.DataProvider.Context
             base.OnModelCreating(modelBuilder);
         }
 
+        private void ConfigureIdAutoGeneration(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Round>().Property(r => r.Id).HasDefaultValueSql("NEWID()");
+            modelBuilder.Entity<TeamMember>().Property(r => r.Id).HasDefaultValueSql("NEWID()");
+        }
+
         private void ConfigureRelationships(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Booking>().HasOne(b => b.Room).WithMany(r => r.Bookings).OnDelete(DeleteBehavior.NoAction);

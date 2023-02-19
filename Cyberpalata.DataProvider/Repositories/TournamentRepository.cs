@@ -16,6 +16,12 @@ namespace Cyberpalata.DataProvider.Repositories
         {
         }
 
+        public override Task<Guid> CreateAsync(Tournament entity)
+        {
+            foreach (var round in entity.Rounds)
+                round.Id = Guid.NewGuid();
+            return base.CreateAsync(entity);
+        }
         public List<Tournament> GetAll()
         {
             return _context.Tournaments.ToList();

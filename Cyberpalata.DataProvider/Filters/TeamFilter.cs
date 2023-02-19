@@ -17,7 +17,7 @@ namespace Cyberpalata.DataProvider.Filters
         public override IQueryable<Team> EnrichQuery(IQueryable<Team> query)
         {
             if (UserId.HasValue && UserId.Value != Guid.Empty)
-                query = query.ToList().Select(q => q.Members.First(m => m.IsCaptain && m.MemberId == UserId)).ToList().Select(c => c.Team).AsQueryable();
+                query = query.ToList().Where(q => q.Members.FirstOrDefault(m => m.IsCaptain && m.MemberId == UserId) != null).ToList().AsQueryable();
             if (IsHiring.HasValue)
                 query = query.Where(q => q.IsHiring == IsHiring.Value);
             return query.ToList().AsQueryable();

@@ -1,5 +1,4 @@
 import api from "./../../../Components/api"
-import './res/form.css'
 import React, { useEffect, useState } from 'react'
 
 export type Round = {
@@ -18,12 +17,14 @@ export const TournamentCreating = ()=>{
     function sendTournamentCreatingRequest(event:any)
     {
         event.preventDefault();
+        console.dir(event.target.elements);
         var requestBody = {
             "name":event.target.elements.name.value,
             "date":event.target.elements.date.value,
             "teamsMaxCount":event.target.elements.teamsMaxCount.value,
             "rounds": rounds
         };
+        console.dir(requestBody);
         api.post(`/tournaments/createTournament`,requestBody)
         .then(res=>res)
         .catch(err=>err)
@@ -56,7 +57,7 @@ export const TournamentCreating = ()=>{
                 for(let i = rounds.length;i < round;i++)
                 {
                     rounds.push({
-                        number: i + 1,
+                        number: i,
                         date: ""
                     });
                 }
@@ -70,28 +71,26 @@ export const TournamentCreating = ()=>{
         // }
     }
 
-    return <>
-        <form className="form"  onSubmit={(event) => {sendTournamentCreatingRequest(event)}}>
-            <div className="inputBlue">
-                <input id="name" name="name"  type="text" placeholder="Name here..."/>
-            </div>
-            <div className="inputGray">
-                <input id="date" name="date" type="date" placeholder="Date here..."/>
-            </div>
-            <div className="inputOrange">
-                <input id="teamsMaxCount" name="teamsMaxCount" type="number" onChange={(event)=>{teamsMaxCountChanged(event)}}  placeholder="Teams max count here..." min={8} max={40}/>
-            </div>
+    return <div style={{"display":"flex","justifyContent":"center", "alignItems":"center","width":"100%","height":"80vh"}}>
+        <form className="form p-5 bg-white rounded"  onSubmit={(event) => {sendTournamentCreatingRequest(event)}}>
+                <div className ="m-1">
+                    <input id="name" name="name" className="w-100"  type="text" placeholder="Name here..."/>
+                </div>
+                <div  className ="m-1">
+                    <input id="date" name="date" className="w-100" type="date" placeholder="Date here..."/>
+                </div>
+                <div className ="m-1">
+                    <input id="teamsMaxCount" className="w-100" name="teamsMaxCount" type="number" onChange={(event)=>{teamsMaxCountChanged(event)}}  placeholder="Teams max count here..." min={8} max={40}/>
+                </div>
             {rounds.map((item:Round, index)=>{
-                return <div className="inputGray p-3" key={index}>
-                    <h4>Round number {item.number}</h4>
-                    <input id="date" name="date" type="date" onChange={(e)=>{rounds[item.number - 1].date = e.target.value}} className="m-2" placeholder="Round date here..."/>
+                return <div className="m-1">
+                    <h6 className="m-1">Round number {item.number + 1}</h6>
+                    <input id="roundDate" name="roundDate" type="date" onChange={(e)=>{rounds[item.number].date = e.target.value}} className="m-2" placeholder="Round date here..."/>
                 </div>
             })}
-            <div className="submit">
-                <span>log in</span>
-            </div>
+            <input type="submit" className="m-2" value ="Create"/>
         </form>
-    </>
+    </div>
 
 }
 

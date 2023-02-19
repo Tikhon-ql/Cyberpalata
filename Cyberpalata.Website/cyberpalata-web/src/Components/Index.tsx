@@ -57,9 +57,9 @@ export const Index = () => {
                 <Route path="/searchRoom" element={<RoomSearch/>}/>
                 <Route path="/createTournament" element={<TournamentCreating/>}/>
                 <Route path="/404" element={<NotFound/>}/>
-                <Route path="*" element={<Navigate replace to="/404" />} />
+                {/* <Route path="*" element={<Navigate replace to="/404" />} /> */}
                 <Route path="/index" element={<Index/>}></Route>
-                <Route path="/registerTeam" element={<TournamentTeamRegistration/>}></Route>   
+                <Route path="/registerTeam/:tournamentId" element={<TournamentTeamRegistration/>}></Route>   
                 {/* <Route path="/tournamentNetwork" element={<TournamentNetwork/>}></Route> */}
                 <Route path="/showActualTournaments" element={<ActualTournaments/>}></Route>
                 <Route path="/showTournamentDetailed/:id" element={<TournamentDetailedView/>}></Route>

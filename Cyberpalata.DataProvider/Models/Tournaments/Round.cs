@@ -10,6 +10,7 @@ namespace Cyberpalata.DataProvider.Models.Tournaments
     {
         public int Number { get; set; }
         public DateTime Date { get;set; }
+        public int TeamsMaxCount { get;set; }
         public virtual List<Batle> Batles { get; set; }
     }
 }

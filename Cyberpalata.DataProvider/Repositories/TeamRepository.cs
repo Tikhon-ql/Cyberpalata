@@ -15,5 +15,11 @@ namespace Cyberpalata.DataProvider.Repositories
         public TeamRepository(ApplicationDbContext context) : base(context)
         {
         }
+        public override Task<Guid> CreateAsync(Team entity)
+        {
+            foreach(var memeber in entity.Members)
+                memeber.Id = Guid.NewGuid();    
+            return base.CreateAsync(entity);
+        }
     }
 }

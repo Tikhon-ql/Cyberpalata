@@ -20,6 +20,7 @@ namespace Cyberpalata.Logic.Configuration.MapperConfiguration
         public static void CreateMap(AppMappingProfile profile)
         {
             profile.CreateMap<Round, RoundDto>();
+            profile.CreateMap<RoundDto, Round>();
             profile.CreateMap<RoundCreateViewModel, RoundDto>();
         }
     }

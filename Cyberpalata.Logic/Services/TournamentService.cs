@@ -71,7 +71,7 @@ namespace Cyberpalata.Logic.Services
                     {
                         Date = batle.Date.ToString("d"),
                         FirstTeamName = batle.FirstTeam.Name,
-                        SecondTeamName = batle.SecondTeam.Name,
+                        SecondTeamName = batle.SecondTeam != null ? batle.SecondTeam.Name : " ",
                         FirstTeamScore = batle.FirstTeamScore,
                         SecondTeamScore = batle.SecondTeamScore,
                     });
@@ -115,6 +115,24 @@ namespace Cyberpalata.Logic.Services
                 return Result.Failure("Tournament with sended id doesn't exist");
 
             tournament.Value.Teams.Add(team.Value);
+            var round = tournament.Value.Rounds.First(r=>r.Number == 0);
+
+            if(round.Batles.Count == 0)
+                round.Batles.Add(new Batle {Id = Guid.NewGuid(), FirstTeam = team.Value, FirstTeamScore = 0 });
+            else
+            {
+                var hasNullSecondTeam = round.Batles.FirstOrDefault(r => r.SecondTeam == null);
+
+                if (hasNullSecondTeam != null)
+                {
+                    hasNullSecondTeam.SecondTeam = team.Value;
+                    hasNullSecondTeam.SecondTeamScore = 0;
+                }
+                else
+                {
+                    round.Batles.Add(new Batle { Id = Guid.NewGuid(), FirstTeam = team.Value, FirstTeamScore = 0 });
+                }
+            }         
             return Result.Success();
         }
     }
