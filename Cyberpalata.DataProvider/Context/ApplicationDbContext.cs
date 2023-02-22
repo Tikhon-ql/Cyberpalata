@@ -4,11 +4,6 @@ using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.DataProvider.Models.Peripheral;
 using Cyberpalata.DataProvider.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Cyberpalata.DataProvider.Models.Tournaments;
 
 namespace Cyberpalata.DataProvider.Context
@@ -35,6 +30,7 @@ namespace Cyberpalata.DataProvider.Context
         public DbSet<Prize> Prizes { get;set; }
         public DbSet<HtmlContent> Htmls { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<BatleResult> BatleResults { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -65,30 +61,9 @@ namespace Cyberpalata.DataProvider.Context
                     j => j.HasOne<Tournament>().WithMany().OnDelete(DeleteBehavior.NoAction));
 
             modelBuilder.Entity<TeamMember>().HasOne(t => t.Member).WithMany().OnDelete(DeleteBehavior.NoAction);
-
             modelBuilder.Entity<Tournament>().HasOne(t => t.Winner).WithMany();
-
-            modelBuilder.Entity<User>().HasMany(u => u.Roles).WithMany();
-
-            //modelBuilder.Entity<Room>().HasMany(r => r.Prices).WithOne(p => p.Room);
-            //modelBuilder.Entity<Room>().HasMany(r => r.Seats).WithOne(s => s.Room);
-            //modelBuilder.Entity<Room>().HasOne(r => r.Type).WithMany();
-
-            ////modelBuilder.Entity<Room>().HasMany(r => r.Bookings).WithOne().OnDelete(DeleteBehavior.NoAction);
-
-            //modelBuilder.Entity<Periphery>().HasOne(p => p.GamingRoom).WithMany();
-            //modelBuilder.Entity<GameConsole>().HasOne(gc => gc.ConsoleRoom).WithMany();
-
             modelBuilder.Entity<UserRefreshToken>().HasOne(urt => urt.User).WithMany().OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Booking>().HasOne(b => b.User).WithMany(u => u.Bookings).OnDelete(DeleteBehavior.Cascade);
-            //modelBuilder.Entity<Periphery>().HasOne(p => p.Type).WithMany();
-
-
-
-            ////modelBuilder.Entity<Booking>().HasMany(b => b.Seats).WithMany(s => s.Bookings);
-            //modelBuilder.Entity<Booking>().HasMany(b => b.GamesToDownloadBefore).WithMany();
-            //modelBuilder.Entity<Booking>().HasOne(b => b.Tariff).WithOne().HasForeignKey<Booking>();
-            //modelBuilder.Entity<Booking>().HasOne(b => b.Room).WithMany(r => r.Bookings).OnDelete(DeleteBehavior.NoAction);
         }
 
         private void ConstraintsConfiguration(ModelBuilder modelBuilder)
