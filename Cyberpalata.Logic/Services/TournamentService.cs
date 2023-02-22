@@ -110,29 +110,45 @@ namespace Cyberpalata.Logic.Services
             return viewModel;
         }
 
-        public async Task<Result> RegisterTeam(RegisterTeamViewModel viewModel)
+        public async Task<Result<TeamRegistrationViewModel>> RegisterTeam(RegisterTeamViewModel viewModel)
         {
             var team = await _teamRepository.ReadAsync(viewModel.TeamId);
             if (team.HasNoValue)
-                return Result.Failure("Team with sended id doesn't exist");
+                return Result.Failure<TeamRegistrationViewModel>("Team with sended id doesn't exist");
             var tournament = await _tournamentRepository.ReadAsync(viewModel.TournamentId);
             if (tournament.HasNoValue)
-                return Result.Failure("Tournament with sended id doesn't exist");
+                return Result.Failure<TeamRegistrationViewModel>("Tournament with sended id doesn't exist");
 
             tournament.Value.Teams.Add(team.Value);
-            var round = tournament.Value.Rounds.First(r=>r.Number == 0);
+            var round = tournament.Value.Rounds.FirstOrDefault(r=>r.Number == 0);
 
-            if(round.Batles.Count == 0)
-                round.Batles.Add(new Batle {Id = Guid.NewGuid(), FirstTeam = team.Value, FirstTeamScore = 0 });
-            else
+            AddingTeamIntoBatle(round, team.Value);
+            //var qrCodeBytes = _qrCodeService.TeamRegistrationQrCodeGeneration(new Models.QrCode.TeamRegistrationQrCodeModel
+            //{
+            //    Url = _configuration["ConfirmTeamComing"],
+            //    TeamId = viewModel.TeamId,
+            //    TournamentId = viewModel.TournamentId
+            //});
+
+            //var teamRegistrationQrCode = new TeamRegistrationQrCode
+            //{
+            //    Id = Guid.NewGuid(),
+            //    BitmapBytes = qrCodeBytes,
+            //    Date = DateTime.UtcNow,
+            //    Team = team.Value,
+            //    Tournament = tournament.Value
+            //};
+
+            //_teamRegistrationQrCodeRepository.CreateAsync(teamRegistrationQrCode);
+
+            var responseViewModel = new TeamRegistrationViewModel
             {
-                var hasNullSecondTeam = round.Batles.FirstOrDefault(r => r.SecondTeam == null);
+                TeamId = team.Value.Id,
+                TournamentId = tournament.Value.Id,
+            };
 
-                if (hasNullSecondTeam != null)
-                {
-                    hasNullSecondTeam.SecondTeam = team.Value;
-                    hasNullSecondTeam.SecondTeamScore = 0;
-                }
+            return Result.Success(responseViewModel);
+        }
                 else
                 {
                     round.Batles.Add(new Batle { Id = Guid.NewGuid(), FirstTeam = team.Value, FirstTeamScore = 0 });
