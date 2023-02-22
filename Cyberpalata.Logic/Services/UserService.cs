@@ -41,7 +41,7 @@ namespace Cyberpalata.Logic.Services
                 Surname = request.Surname,
                 Phone = request.Phone,
                 Salt = _hashGenerator.GenerateSalt(),
-                Roles = new List<Role>()
+                Roles = new Role()
             };
 
             var password = $"{request.Password}{newUser.Salt}";
@@ -147,7 +147,7 @@ namespace Cyberpalata.Logic.Services
             var role = await _roleRepository.ReadAsync(roleName);
             if (role.HasNoValue)
                 return Result.Failure("Role not found");
-            user.Roles.Add(role.Value);
+            user.Roles = role.Value;
             return Result.Success();
         }
     }
