@@ -14,6 +14,25 @@
     border-radius: 11px;
 }
 
+a{
+  text-decoration: none;
+  color:black;
+}
+
+a:hover
+{
+  color:red;
+}
+
+.customUl
+{
+  font-size: 30px;
+  margin-left: 3vw;
+  list-style: circle red;
+}
+/* style={{"listStyle":"","fontSize":"30px","marginLeft":"3vw"}} */
+
+
 .loungeLink
 {
     box-sizing: border-box;
@@ -35,6 +54,16 @@
     filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.3));
     border-radius: 1vw;
 }
+
+.leftSide
+{
+  /* background: url(./../imgs/left.jpg); */
+  background-position: center;
+  background-size: contain;
+  height: 100vh;
+  width: 60%;
+}
+/* style={{"background":"url('./../../imgs/left.jpg')","height":"100vh","width":"60%"}} */
 
 .gamingRoomLink
 {
