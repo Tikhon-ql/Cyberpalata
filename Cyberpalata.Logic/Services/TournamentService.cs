@@ -38,12 +38,12 @@ namespace Cyberpalata.Logic.Services
             return id;
         }
 
-        public async Task<List<GetTournamentViewModel>> GetActualTournaments()
-        {
-            var tournaments = _tournamentRepository.GetAll();
-            var actualTournaments = tournaments.Where(t=>t.Date > DateTime.UtcNow);
-            return _mapper.Map<List<GetTournamentViewModel>>(actualTournaments);
-        }
+        //public async Task<List<GetTournamentViewModel>> GetActualTournaments()
+        //{
+        //    var tournaments = _tournamentRepository.GetAll();
+        //    var actualTournaments = tournaments.Where(t=>t.Date > DateTime.UtcNow);
+        //    return _mapper.Map<List<GetTournamentViewModel>>(actualTournaments);
+        //}
 
         public async Task<TournamentDetailedViewModel> GetTournamentDetailed(Guid tournamentId)
         {
