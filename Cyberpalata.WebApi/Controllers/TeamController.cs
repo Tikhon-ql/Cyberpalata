@@ -32,12 +32,24 @@ namespace Cyberpalata.WebApi.Controllers
             return await ReturnSuccess();
         }
 
-        [Authorize]
-        [HttpGet]
-        public async Task<IActionResult> GetTeamDetail(Guid teamId)
+        [HttpGet("getTeam")]
+        public async Task<IActionResult> GetTeam(Guid teamId)
         {
-            return await ReturnSuccess();
+            var viewModel = await _teamService.GetTeamDetailed(teamId);
+            if(viewModel.HasNoValue)
+                return BadRequest(viewModel);
+            return await ReturnSuccess(viewModel.Value);
         }
+
+        [HttpGet("getTeamInTournament")]
+        public async Task<IActionResult> GetTeamInTournament(Guid teamId, Guid tournamentId)
+        {
+            var viewModelResult = await _teamService.GetTeamInTournament(teamId, tournamentId);
+            if (viewModelResult.IsFailure)
+                return BadRequestJson(viewModelResult);
+            return await ReturnSuccess(viewModelResult.Value);
+        }
+
 
         [HttpPut]
         public async Task<IActionResult> SetTeamHiringState(Guid teamId)
@@ -64,18 +76,6 @@ namespace Cyberpalata.WebApi.Controllers
             });
             return await ReturnSuccess(viewModel);
         }
-
-        //[HttpPut]
-        //public async Task<IActionResult> AddTeamMember()
-        //{
-
-        //}
-
-        //[HttpGet]
-        //public async Task<IActionResult> SetTeamRecruting()
-        //{
-
-        //}
 
         /// Add to hiring teams. User send request. Then user and team captain discuss in the chat and captain accepts team hiring.
 
