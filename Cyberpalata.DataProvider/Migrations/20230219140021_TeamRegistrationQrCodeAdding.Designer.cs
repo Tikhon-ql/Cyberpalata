@@ -4,6 +4,7 @@ using Cyberpalata.DataProvider.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cyberpalata.DataProvider.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230219140021_TeamRegistrationQrCodeAdding")]
+    partial class TeamRegistrationQrCodeAdding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -259,12 +262,12 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e9631d62-f546-4d86-9c0e-7fc7a1aeea76"),
+                            Id = new Guid("7cddab76-081b-44c9-b4b3-90f674dc7f20"),
                             Name = "User"
                         },
                         new
                         {
-                            Id = new Guid("d4e6695f-9591-401c-87e8-7ea968ce31b4"),
+                            Id = new Guid("d6a19fe5-23b7-4d44-b788-61266541e6f7"),
                             Name = "Admin"
                         });
                 });
@@ -289,9 +292,6 @@ namespace Cyberpalata.DataProvider.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("RolesId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Salt")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -305,8 +305,6 @@ namespace Cyberpalata.DataProvider.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RolesId");
 
                     b.ToTable("Users");
                 });
@@ -403,6 +401,33 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.HasIndex("RoomId");
 
                     b.ToTable("Seats");
+                });
+
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.TeamRegistrationQrCode", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("BitmapBytes")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("TeamId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TournamentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TeamId");
+
+                    b.HasIndex("TournamentId");
+
+                    b.ToTable("QrCodes");
                 });
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Tournaments.Batle", b =>
@@ -543,6 +568,21 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.ToTable("Tournaments");
                 });
 
+            modelBuilder.Entity("RoleUser", b =>
+                {
+                    b.Property<Guid>("RolesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("RolesId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RoleUser");
+                });
+
             modelBuilder.Entity("SeatsBookings", b =>
                 {
                     b.Property<Guid>("BookingsId")
@@ -621,17 +661,6 @@ namespace Cyberpalata.DataProvider.Migrations
                         .HasForeignKey("BookingId");
                 });
 
-            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Identity.User", b =>
-                {
-                    b.HasOne("Cyberpalata.DataProvider.Models.Identity.Role", "Roles")
-                        .WithMany()
-                        .HasForeignKey("RolesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Roles");
-                });
-
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Identity.UserRefreshToken", b =>
                 {
                     b.HasOne("Cyberpalata.DataProvider.Models.Identity.User", "User")
@@ -682,6 +711,25 @@ namespace Cyberpalata.DataProvider.Migrations
                         .IsRequired();
 
                     b.Navigation("Room");
+                });
+
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.TeamRegistrationQrCode", b =>
+                {
+                    b.HasOne("Cyberpalata.DataProvider.Models.Tournaments.Team", "Team")
+                        .WithMany()
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Cyberpalata.DataProvider.Models.Tournaments.Tournament", "Tournament")
+                        .WithMany()
+                        .HasForeignKey("TournamentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Team");
+
+                    b.Navigation("Tournament");
                 });
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Tournaments.Batle", b =>
@@ -743,6 +791,21 @@ namespace Cyberpalata.DataProvider.Migrations
                         .HasForeignKey("WinnerId");
 
                     b.Navigation("Winner");
+                });
+
+            modelBuilder.Entity("RoleUser", b =>
+                {
+                    b.HasOne("Cyberpalata.DataProvider.Models.Identity.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RolesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Cyberpalata.DataProvider.Models.Identity.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SeatsBookings", b =>

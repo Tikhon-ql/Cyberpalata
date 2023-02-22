@@ -4,6 +4,7 @@ using Cyberpalata.DataProvider.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cyberpalata.DataProvider.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230220165019_UserRoleManyToManyDeleting")]
+    partial class UserRoleManyToManyDeleting
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -259,12 +262,12 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e9631d62-f546-4d86-9c0e-7fc7a1aeea76"),
+                            Id = new Guid("51b2ae5e-8e90-4c87-88a5-d9fe4d6b65ea"),
                             Name = "User"
                         },
                         new
                         {
-                            Id = new Guid("d4e6695f-9591-401c-87e8-7ea968ce31b4"),
+                            Id = new Guid("70f8a8eb-6bd6-4708-a7d0-8571eaf5b879"),
                             Name = "Admin"
                         });
                 });
@@ -403,6 +406,33 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.HasIndex("RoomId");
 
                     b.ToTable("Seats");
+                });
+
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.TeamRegistrationQrCode", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("BitmapBytes")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("TeamId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TournamentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TeamId");
+
+                    b.HasIndex("TournamentId");
+
+                    b.ToTable("QrCodes");
                 });
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Tournaments.Batle", b =>
@@ -682,6 +712,25 @@ namespace Cyberpalata.DataProvider.Migrations
                         .IsRequired();
 
                     b.Navigation("Room");
+                });
+
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.TeamRegistrationQrCode", b =>
+                {
+                    b.HasOne("Cyberpalata.DataProvider.Models.Tournaments.Team", "Team")
+                        .WithMany()
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Cyberpalata.DataProvider.Models.Tournaments.Tournament", "Tournament")
+                        .WithMany()
+                        .HasForeignKey("TournamentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Team");
+
+                    b.Navigation("Tournament");
                 });
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Tournaments.Batle", b =>
