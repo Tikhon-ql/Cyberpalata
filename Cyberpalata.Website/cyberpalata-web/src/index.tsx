@@ -5,5 +5,5 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import {Index} from './Components/Index';
 
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLBodyElement);
 root.render(<Index />);
