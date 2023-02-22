@@ -19,6 +19,11 @@ namespace Cyberpalata.WebApi.Controllers
             await _unitOfWork.CommitAsync();
             return Ok((data));
         }
+        protected async Task<IActionResult> ReturnFileSuccess(byte[] bytes)
+        {
+            await _unitOfWork.CommitAsync();
+            return File(bytes,"image/bmp");
+        }
         protected async Task<IActionResult> ReturnSuccess()
         {
             await _unitOfWork.CommitAsync();
