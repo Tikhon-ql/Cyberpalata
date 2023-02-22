@@ -50,6 +50,13 @@ export type Tournament = {
     name:string
 }
 
+export type UserTournament = {
+    id:string,
+    name:string,
+    teamId: string
+}
+
+
 export type TournamentDetailed = {
     name:string,
     date:string,
@@ -76,4 +83,15 @@ export type Round = {
     batles: Batle[],
     batlesMaxCount: number,
     date: string,
+}
+
+export type QrCode ={
+    tournamentId:string,
+    teamId:string
+}
+
+export type TeamInfo = {
+    name: string,
+    captainName:string,
+    members: string[]   
 }

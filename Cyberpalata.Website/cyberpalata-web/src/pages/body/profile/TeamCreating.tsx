@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import api from "./../../../Components/api"
-
+import React from "react";
 
 export const TeamCreating = () => {
 

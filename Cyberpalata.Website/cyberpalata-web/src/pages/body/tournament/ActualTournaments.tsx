@@ -6,7 +6,10 @@ import React from 'react'
 
 export const ActualTournaments = ()=>{
 
-    const [tournaments, setTournaments] = useState<Tournament[]>([]);
+    const [tournaments, setTournaments] = useState<Tournament[]>([{
+        id:"slfksfsf",
+        name: "NBAALLSTAR"
+    }]);
 
     useEffect(()=>{
         api.get(`/tournaments/getActualTournaments`).then(res=>{

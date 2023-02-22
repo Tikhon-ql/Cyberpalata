@@ -48,7 +48,7 @@ export const OneBookingView = ()=>{
     for(let i = 0;i < rowCount * columnCount;i+=columnCount)
     {
         let chunk = seats.slice(i, i + columnCount);
-        seatsPerRow.push(chunk);
+        // seatsPerRow.push(chunk);
     }
    
 
@@ -78,7 +78,7 @@ export const OneBookingView = ()=>{
                     {seatsPerRow.map(row=>{
 
                         return <tr>
-                            {row.map((cell: Seat)=>{
+                            {/* {row.map((cell: Seat)=>{
                                 console.dir(cell);
 
                                 return <>
@@ -86,7 +86,7 @@ export const OneBookingView = ()=>{
                                 {cell.type.name == "IsTaken" && <td className="seat p-2"><button id = {`button${cell.number}`} className="btn btn-dark">{cell.number}</button></td>}
                                 {cell.type.name == "UsersSeat" && <td className="seat p-2"><button id = {`button${cell.number}`} className="btn btn-primary">{cell.number}</button></td>}
                                 </>
-                            })}
+                            })} */}
                         </tr>
                     })}
                     </tbody>         

@@ -4,6 +4,7 @@ import api from "../../../Components/api";
 import BarLoader from "react-spinners/BarLoader";
 import stateStore from "../../../store/stateStore";
 import { observer } from "mobx-react-lite";
+import React from "react";
 
 export const ProfileComponent = observer(() => {
     const [editingActive, setEditingActive] = useState<boolean>(false);
@@ -150,6 +151,7 @@ export const ProfileComponent = observer(() => {
                         <Link to='/' className="btn btn-outline-dark btn-sm m-2">Home page</Link>
                     </div>}
                     <Link to='/teamCreating' className="btn btn-outline-dark btn-sm m-2">Create team</Link> 
+                    <Link to='/usersTournaments' className="btn btn-outline-dark btn-sm m-2">Show tournaments</Link>
                     <Link to='/registerTeam' className="btn btn-outline-dark btn-sm m-2">Registet team to tournament</Link>
                 </div>
                 </form> 

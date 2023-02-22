@@ -33,7 +33,7 @@ export const Header = observer((props) => {
                 <li className='nav-item text-dark' style={{"marginTop":"2vh"}}>
                     <Link to="/gamesLibrary" className='text-decoration-none text-white h4 m-5 mya' style={{"paddingBottom":"5px"}} onClick={()=>{stateStore.stateChange()}}>Games library</Link>
                 </li>
-                {accessToken && accessToken.role.includes("Admin") &&
+                {accessToken && accessToken.role === "Admin" &&
                 <li className='nav-item text-dark' style={{"marginTop":"2vh"}}>
                     <Link to="/createTournament" className='text-decoration-none text-white h4 m-5 mya' style={{"paddingBottom":"5px"}}>Create tournament</Link>
                 </li>

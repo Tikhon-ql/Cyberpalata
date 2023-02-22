@@ -71,8 +71,8 @@ export const TournamentNetwork = ({name, date, teamsMaxCount,rounds}:Props) => {
 	// 	reverseRounds.push(i);
 	// }
 	console.log("Rounds");
-	console.dir(rounds);
-	console.log("Lenght:" + rounds[0].batles.length);
+	//console.dir(rounds);
+	// console.log("Lenght:" + rounds[0].batles.length);
 	// 16 -> 8 -> 4 -> 2 -> 1
 
     return <div>

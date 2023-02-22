@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react"
 import api from "./../../../Components/api";
-import { Team, Tournament } from "./../../../types/types";
+import { QrCode, Team, Tournament } from "./../../../types/types";
 import React from 'react'
 import { useParams } from "react-router-dom";
+import { QRCodeCanvas } from "qrcode.react";
 
 export const TournamentTeamRegistration =   ()=>{
 
     const {tournamentId} = useParams();
     const [teams, setTeams] = useState<Team[]>([]);
+    const [qrCodeInfo,setQrCodeInfo] = useState<QrCode>();
+    const [isRegistered, setIsRegistered] = useState<boolean>(false);
     useEffect(()=>{
         api.get('/teams/getByUserId').then(res=>{
             console.dir(res);
@@ -25,7 +28,10 @@ export const TournamentTeamRegistration =   ()=>{
             "tournamentId":tournamentId,
             "teamId": event.target[0].value
         };
-        api.put(`/tournaments/registerTeam`,requestBody).then(res=>res).catch(err=>err);
+        api.put(`/tournaments/registerTeam`,requestBody).then(res=>{
+            setQrCodeInfo(res.data);
+            setIsRegistered(true);
+        }).catch(err=>err);
     }
 
     return <>
@@ -38,6 +44,14 @@ export const TournamentTeamRegistration =   ()=>{
                 })}
             </select>
             <input type="submit" value="Register"/>
+            {isRegistered &&  <QRCodeCanvas
+                id="qrCode"
+                value={`http://dotnetinternship2022.norwayeast.cloudapp.azure.com:83/checkTeam/${qrCodeInfo?.tournamentId}/${qrCodeInfo?.teamId}`}
+                size={300}
+                bgColor={"#00ff00"}
+                level={"H"}
+            />}
         </form>
+        
     </>
 }
