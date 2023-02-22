@@ -18,10 +18,12 @@ namespace Cyberpalata.WebApi.Controllers
     public class UserController : BaseController
     {
         private readonly IUserService _userService;
+        private readonly ITournamentService _tournamentService;
 
-        public UserController(IUserService userService, IUnitOfWork uinOfWork) : base(uinOfWork)
+        public UserController(IUserService userService, IUnitOfWork uinOfWork, ITournamentService tournamentService) : base(uinOfWork)
         {
             _userService = userService;
+            _tournamentService = tournamentService;
         }
 
         [HttpPost("register")]
@@ -95,5 +97,45 @@ namespace Cyberpalata.WebApi.Controllers
                 return BadRequest(result.Error);
             return await ReturnSuccess();
         }
+
+        //[Authorize]
+        //[HttpGet]
+        //public async Task<IActionResult> GetActualTournamentsUsersTeamIsRegistered()
+        //{
+
+        //}
+
+        //[Authorize]
+        //[HttpGet("getUsersQrCode")]
+        //public async Task<IActionResult> GetUsersQrCodes(Guid tournamentId)
+        //{
+        //    var userId = Guid.Parse(User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sid).Value);
+
+        //    var filter = new TeamQrCodeFilterBL
+        //    {
+        //        CaptainId = userId,
+        //        CurrentPage = 1,
+        //        PageSize = 10
+        //    };
+        //    var list = await _teamRegistrationQrCodeService.GetPagedListAsync(filter);
+
+        //    var viewModel = new List<QrCodeViewModel>();
+        //    foreach (var item in list.Items)
+        //    {
+        //        var qrCode = new QrCodeViewModel
+        //        {
+        //            Date = item.Date,
+        //            Team = item.Team.Name,
+        //            Tournament = item.Tournament.Name,
+        //            QrCode = File(item.BitmapBytes, "image/bmp")
+        //        };
+        //        //using(var stream = new MemoryStream(item.BitmapBytes))
+        //        //{
+        //        //    qrCode.QrCode = Image.FromStream(stream);
+        //        //}
+        //        viewModel.Add(qrCode);
+        //    }
+        //    return Ok(viewModel);
+        //}
     }
 }
