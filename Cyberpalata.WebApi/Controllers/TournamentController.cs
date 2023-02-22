@@ -26,20 +26,37 @@ namespace Cyberpalata.WebApi.Controllers
             var id = _tournamentService.CreateTournament(viewModel);
             return await ReturnSuccess();
         }
-        [Authorize]
+        //[Authorize]
         [HttpPut("registerTeam")]
         public async Task<IActionResult> RegisterTeam(RegisterTeamViewModel viewModel)
         {
             var result = await _tournamentService.RegisterTeam(viewModel);
             if (result.IsFailure)
                 return BadRequestJson(result);
-            return await ReturnSuccess();
+            return await ReturnSuccess(result.Value);
         }
         [Authorize]
         [HttpGet("getActualTournaments")]
         public async Task<IActionResult> GetActualTournaments()
         {
-            var viewModel = await _tournamentService.GetActualTournaments();
+
+            var filter = new TournamentFilterBL
+            {
+                IsActual = true,
+                CurrentPage = 1,
+                PageSize = 10   
+            };
+            var result = await _tournamentService.GetPagedList(filter);
+            var viewModel = new List<GetTournamentViewModel>();
+            foreach (var item in result.Items) 
+            {
+                viewModel.Add(new GetTournamentViewModel
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                });
+            }
+
             return await ReturnSuccess(viewModel);
         }
         //[Authorize]
@@ -48,6 +65,33 @@ namespace Cyberpalata.WebApi.Controllers
         {
             var viewModel = await _tournamentService.GetTournamentDetailed(tournamentId);
             return await ReturnSuccess(viewModel);
+        }
+
+        [HttpGet("getUsersTournaments")]
+        public async Task<IActionResult> GetActualTournamentsUsersTeamIsRegistered()
+        {
+            var userId = Guid.Parse(User.Claims.First(c=>c.Type == JwtRegisteredClaimNames.Sid).Value);
+
+            var filter = new TournamentFilterBL
+            {
+                CaptainId = userId,
+                IsActual = true,
+                CurrentPage = 1,
+                PageSize = 10
+            };
+            var result = await _tournamentService.GetPagedList(filter);
+            var viewModel = new List<UserTournamentViewModel>();
+            foreach (var item in result.Items)
+            {
+                var teamInTournament = item.Teams.FirstOrDefault(t=> t.Captain.Member.Id == userId);
+                viewModel.Add(new UserTournamentViewModel
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    TeamId = teamInTournament.Id,
+                });
+            }
+            return Ok(viewModel);
         }
     }
 }
