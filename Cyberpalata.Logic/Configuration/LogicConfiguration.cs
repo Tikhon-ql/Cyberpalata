@@ -32,6 +32,7 @@ namespace Cyberpalata.Logic.Configuration
             services.AddScoped<ITournamentService, TournamentService>();
             services.AddScoped<ITeamService, TeamService>();
             services.AddScoped<IGameService, GameService>();
+            services.AddScoped<IQrCodeService, QrCodeService>();
         }
     }
 }
