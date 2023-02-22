@@ -1,3 +1,5 @@
+import React from 'react';
+
 export const Pagination = ({
     pageCount,
     curPage,
@@ -5,8 +7,8 @@ export const Pagination = ({
     totalItemsCount
 }: any) =>
 {
-    let pages = [];
-    for(let i = 1; i <= Math.ceil(totalItemsCount / pageCount);i++)
+    var pages:number[] = [];
+    for(var i:number = 1; i <= Math.ceil(totalItemsCount / pageCount);i++)
     {
         pages.push(i);
     }
