@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using CSharpFunctionalExtensions;
-using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Interfaces;
-using Cyberpalata.DataProvider.Models;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Seats;
 using Cyberpalata.ViewModel.Request.Seats;

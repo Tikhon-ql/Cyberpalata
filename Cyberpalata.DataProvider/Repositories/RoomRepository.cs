@@ -1,12 +1,7 @@
-﻿using CSharpFunctionalExtensions;
-using Cyberpalata.Common;
-using Cyberpalata.Common.Enums;
-using Cyberpalata.DataProvider.Context;
+﻿using Cyberpalata.DataProvider.Context;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System.ComponentModel.DataAnnotations;
 
 namespace Cyberpalata.DataProvider.Repositories
 {

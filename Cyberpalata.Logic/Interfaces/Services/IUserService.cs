@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.Logic.Models.Identity;
 using Cyberpalata.ViewModel.Request.Identity;
 using System.ComponentModel.DataAnnotations;

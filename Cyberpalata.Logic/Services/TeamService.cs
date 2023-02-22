@@ -1,24 +1,16 @@
 ﻿using AutoMapper;
 using CSharpFunctionalExtensions;
+using CSharpFunctionalExtensions.ValueTasks;
 using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Filters;
 using Cyberpalata.DataProvider.Interfaces;
-using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.DataProvider.Models.Tournaments;
-using Cyberpalata.Logic.Configuration.MapperConfiguration;
 using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
-using Cyberpalata.Logic.Models.Room;
 using Cyberpalata.Logic.Models.Tournament;
 using Cyberpalata.ViewModel.Request.Tournament;
+using Cyberpalata.ViewModel.Response;
 using Cyberpalata.ViewModel.Response.Tournament;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net.WebSockets;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cyberpalata.Logic.Services
 {
@@ -27,12 +19,14 @@ namespace Cyberpalata.Logic.Services
         private readonly ITeamRepository _repository;
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
+        private readonly ITournamentRepository _tournamentRepository;
 
-        public TeamService(ITeamRepository repository, IUserRepository userRepository, IMapper mapper)
+        public TeamService(ITeamRepository repository, IUserRepository userRepository, IMapper mapper,ITournamentRepository tournamentRepository)
         {
             _repository = repository;
             _mapper = mapper;
             _userRepository = userRepository;
+            _tournamentRepository = tournamentRepository;
         }
 
         public async Task CreateAsync(CreateTeamViewModel request)
@@ -49,7 +43,6 @@ namespace Cyberpalata.Logic.Services
                 IsCaptain = true,
                 TeamId = team.Id
             });
-            //team.Members.Add(user.Value);
             await _repository.CreateAsync(team);
         }
 
@@ -64,7 +57,23 @@ namespace Cyberpalata.Logic.Services
             var team = await _repository.ReadAsync(teamId);
             if (team.HasNoValue)
                 return Maybe.None;
-            return _mapper.Map<TeamDetailViewModel>(team);
+            var teamDto = _mapper.Map<TeamDto>(team.Value);
+            return _mapper.Map<TeamDetailViewModel>(teamDto);
+        }
+
+        public async Task<Result<TeamDetailViewModel>> GetTeamInTournament(Guid teamId, Guid tournamentId)
+        {
+            var team = await _repository.ReadAsync(teamId);
+            if (team.HasNoValue)
+                return Result.Failure<TeamDetailViewModel>($"Team with id: {teamId} doesn't exist");
+            var tournament = await _tournamentRepository.ReadAsync(tournamentId);
+            if (team.HasNoValue)
+                return Result.Failure<TeamDetailViewModel>($"Tournament with id: {teamId} doesn't exist");
+            if(!tournament.Value.Teams.Any(t=>t.Id == t.Id))
+                return Result.Failure<TeamDetailViewModel>($"This team doesn't apart in tournament");
+
+            var teamDto = _mapper.Map<TeamDto>(team.Value);
+            return _mapper.Map<TeamDetailViewModel>(teamDto);
         }
 
         public async Task SetHiringState(Guid teamId, bool state)

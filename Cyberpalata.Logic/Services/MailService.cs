@@ -2,7 +2,6 @@
 using System.Net;
 using Microsoft.Extensions.Configuration;
 using Cyberpalata.Logic.Interfaces.Services;
-using Microsoft.AspNetCore.Html;
 using Cyberpalata.DataProvider.Interfaces;
 
 namespace Cyberpalata.Logic.Services

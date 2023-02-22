@@ -5,7 +5,6 @@ using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Identity;
 using Cyberpalata.ViewModel.Request.Identity;
-using Microsoft.Extensions.Configuration;
 using System.ComponentModel.DataAnnotations;
 
 namespace Cyberpalata.Logic.Services

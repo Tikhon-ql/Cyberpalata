@@ -1,15 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Cyberpalata.Common;
-using Cyberpalata.DataProvider.Models;
 using Cyberpalata.DataProvider.Models.Tournaments;
-using Cyberpalata.Logic.Models.Booking;
-using Cyberpalata.Logic.Models.Seats;
 using Cyberpalata.Logic.Models.Tournament;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Cyberpalata.ViewModel.Request.Tournament;
 using Cyberpalata.ViewModel.Response.Tournament;
 
@@ -31,8 +23,9 @@ namespace Cyberpalata.Logic.Configuration.MapperConfiguration
                 .ForMember(dst => dst.Tournaments, opt => opt.MapFrom(src => src.Tournaments))
                 .ForMember(dst => dst.Members, opt => opt.MapFrom(src => src.Members));
             profile.CreateMap<CreateTeamViewModel,TeamDto>();
-            profile.CreateMap<Team, TeamDetailViewModel>()
+            profile.CreateMap<TeamDto, TeamDetailViewModel>()
                 .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dst=>dst.CaptainName, opt=>opt.MapFrom(src=>$"{src.Captain.Member.Username} {src.Captain.Member.Surname}"))
                 .ForMember(dst => dst.Members, 
                 opt => opt.MapFrom(src => src.Members.Select(s => $"{s.Member.Username} {s.Member.Surname}")));
         }

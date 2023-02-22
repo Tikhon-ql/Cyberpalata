@@ -1,9 +1,7 @@
 ﻿using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Interfaces.Services;
-using Cyberpalata.Logic.Models.Identity;
 using Cyberpalata.ViewModel;
 using Cyberpalata.ViewModel.Request.Identity;
-using Cyberpalata.WebApi.ActionFilters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

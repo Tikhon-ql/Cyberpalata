@@ -1,18 +1,8 @@
-﻿using CSharpFunctionalExtensions;
-using Cyberpalata.Common;
-using Cyberpalata.DataProvider.Models;
+﻿using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Models.Tournaments;
-using Cyberpalata.Logic.Models.Booking;
-using Cyberpalata.Logic.Models.Seats;
 using Cyberpalata.Logic.Models.Tournament;
 using Cyberpalata.ViewModel.Request.Tournament;
 using Cyberpalata.ViewModel.Response.Tournament;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cyberpalata.Logic.Configuration.MapperConfiguration
 {
@@ -33,6 +23,7 @@ namespace Cyberpalata.Logic.Configuration.MapperConfiguration
             profile.CreateMap<Tournament, GetTournamentViewModel>()
                 .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name));
+            profile.CreateMap<PagedList<Tournament>, PagedList<TournamentDto>>();
         }
     }
 }

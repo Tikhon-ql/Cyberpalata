@@ -1,12 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
-using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Context;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
-using Cyberpalata.DataProvider.Models.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics.Internal;
-using Microsoft.Extensions.Configuration;
 
 namespace Cyberpalata.DataProvider.Repositories
 {

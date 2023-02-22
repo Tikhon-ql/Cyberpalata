@@ -4,11 +4,9 @@ using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Devices;
-using Cyberpalata.Logic.Models.Room;
 using Cyberpalata.ViewModel.Request.Room;
 using Cyberpalata.ViewModel.Response.Rooms;
 using Cyberpalata.ViewModel.Response.Rooms.GamingRoom;
-using Cyberpalata.WebApi.ActionFilters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cyberpalata.WebApi.Controllers

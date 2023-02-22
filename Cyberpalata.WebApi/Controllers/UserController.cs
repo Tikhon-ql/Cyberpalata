@@ -1,12 +1,14 @@
 ﻿using Cyberpalata.Common.Intefaces;
+using Cyberpalata.DataProvider.Models.Tournaments;
+using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.ViewModel.Request.Identities;
 using Cyberpalata.ViewModel.Request.Identity;
+using Cyberpalata.ViewModel.Response;
 using Cyberpalata.ViewModel.User;
-using Cyberpalata.WebApi.ActionFilters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
+using System.Drawing;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace Cyberpalata.WebApi.Controllers

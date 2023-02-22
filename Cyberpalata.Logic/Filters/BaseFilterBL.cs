@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Cyberpalata.Logic.Filters
+﻿namespace Cyberpalata.Logic.Filters
 {
     public class BaseFilterBL
     {

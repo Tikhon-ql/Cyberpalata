@@ -6,7 +6,6 @@ using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Identity;
 using Cyberpalata.ViewModel;
 using Cyberpalata.ViewModel.Request.Identity;
-using Cyberpalata.ViewModel.Response.Rooms.GamingRoom;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -171,12 +170,8 @@ namespace Cyberpalata.Logic.Services
                 new Claim(JwtRegisteredClaimNames.Sid, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Name,user.Username),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim("role", user.Roles.Name)
             };
-
-            foreach(var role in user.Roles)
-            { 
-                claims.Add(new Claim("role", role.Name));
-            }
 
             //Add token settings to work with config.
 

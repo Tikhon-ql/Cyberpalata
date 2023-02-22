@@ -1,12 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
 using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Interfaces.Services;
-using Cyberpalata.Logic.Models.Seats;
-using Cyberpalata.ViewModel;
 using Cyberpalata.ViewModel.Request.Seats;
 using Cyberpalata.ViewModel.Response;
 using Cyberpalata.ViewModel.Response.Booking.Enum;
-using Cyberpalata.WebApi.ActionFilters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

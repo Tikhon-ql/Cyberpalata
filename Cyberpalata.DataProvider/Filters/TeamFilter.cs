@@ -1,11 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
 using Cyberpalata.DataProvider.Models.Tournaments;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cyberpalata.DataProvider.Filters
 {
@@ -17,7 +11,7 @@ namespace Cyberpalata.DataProvider.Filters
         public override IQueryable<Team> EnrichQuery(IQueryable<Team> query)
         {
             if (UserId.HasValue && UserId.Value != Guid.Empty)
-                query = query.ToList().Where(q => q.Members.FirstOrDefault(m => m.IsCaptain && m.MemberId == UserId) != null).ToList().AsQueryable();
+                query = query.ToList().Where(q => q.Members.FirstOrDefault(m => m.IsCaptain && m.MemberId == UserId.Value) != null).ToList().AsQueryable();
             if (IsHiring.HasValue)
                 query = query.Where(q => q.IsHiring == IsHiring.Value);
             return query.ToList().AsQueryable();
