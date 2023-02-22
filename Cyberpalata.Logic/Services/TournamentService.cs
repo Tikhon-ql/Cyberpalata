@@ -56,7 +56,6 @@ namespace Cyberpalata.Logic.Services
                 Date = tournament.Value.Date.ToString("d"),
                 TeamsMaxCount = tournament.Value.TeamsMaxCount,
                 Rounds = new List<RoundViewModel>()
-                //Batles = new List<TeamBatleViewModel>()
             };
 
             int index = 0;
@@ -85,27 +84,6 @@ namespace Cyberpalata.Logic.Services
                 index++;
                 viewModel.Rounds.Add(roundViewModel);
             }
-
-            //for(int i = 1;i < tournament.Value.Teams.Count;i+=2)
-            //{
-            //    viewModel.Batles.Add(new TeamBatleViewModel
-            //    {
-            //        FirstTeamName = tournament.Value.Teams[i - 1].Name,
-            //        SecondTeamName = tournament.Value.Teams[i].Name,
-            //        FirstTeamScore = 0,
-            //        SecondTeamScore = 0,
-            //    });
-            //}
-            //for(int i = viewModel.Batles.Count;i < viewModel.TeamsMaxCount - 1;i+=2)
-            //{
-            //    viewModel.Batles.Add(new TeamBatleViewModel
-            //    {
-            //        FirstTeamName = "Navi",
-            //        SecondTeamName = "Vp",
-            //        FirstTeamScore = 1,
-            //        SecondTeamScore = 10,
-            //    });
-            //}
             viewModel.Rounds.Sort((a,b)=>a.Number - b.Number);
             return viewModel;
         }
