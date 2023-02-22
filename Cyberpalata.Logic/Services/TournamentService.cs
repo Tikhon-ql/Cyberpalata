@@ -149,12 +149,27 @@ namespace Cyberpalata.Logic.Services
 
             return Result.Success(responseViewModel);
         }
+
+        private void AddingTeamIntoBatle(Round round, Team team)///??? Can i do like that
+        {
+            if (round != null)
+            {
+                if (round.Batles.Count == 0)
+                    round.Batles.Add(new Batle { Id = Guid.NewGuid(), FirstTeam = team, FirstTeamScore = 0 });
                 else
                 {
-                    round.Batles.Add(new Batle { Id = Guid.NewGuid(), FirstTeam = team.Value, FirstTeamScore = 0 });
+                    var hasNullSecondTeam = round.Batles.FirstOrDefault(r => r.SecondTeam == null);
+                    if (hasNullSecondTeam != null)
+                    {
+                        hasNullSecondTeam.SecondTeam = team;
+                        hasNullSecondTeam.SecondTeamScore = 0;
+                    }
+                    else
+                    {
+                        round.Batles.Add(new Batle { Id = Guid.NewGuid(), FirstTeam = team, FirstTeamScore = 0 });
+                    }
                 }
-            }         
-            return Result.Success();
+            }
         }
 
         public async Task<PagedList<TournamentDto>> GetPagedList(TournamentFilterBL filter)
