@@ -18,12 +18,17 @@ namespace Cyberpalata.Logic.Services
     {
         private readonly ITournamentRepository _tournamentRepository;
         private readonly ITeamRepository _teamRepository;
+        private readonly IQrCodeService _qrCodeService;
         private readonly IMapper _mapper;
-        public TournamentService(ITournamentRepository repository, ITeamRepository teamRepository, IMapper mapper)
+        private readonly IConfiguration _configuration;
+        public TournamentService(ITournamentRepository repository, ITeamRepository teamRepository, 
+                                 IMapper mapper, IQrCodeService qrCodeService, IConfiguration configuration)
         {
             _tournamentRepository = repository;
             _teamRepository = teamRepository;
             _mapper = mapper;
+            _qrCodeService = qrCodeService;
+            _configuration = configuration;
         }
 
         public async Task<Guid> CreateTournament(CreateTournamentViewModel viewModel)
