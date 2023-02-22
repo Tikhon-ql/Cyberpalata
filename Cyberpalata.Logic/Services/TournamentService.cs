@@ -140,5 +140,12 @@ namespace Cyberpalata.Logic.Services
             }         
             return Result.Success();
         }
+
+        public async Task<PagedList<TournamentDto>> GetPagedList(TournamentFilterBL filter)
+        {
+            var list = await _tournamentRepository.GetPageListAsync(_mapper.Map<TournamentFilter>(filter));
+            return _mapper.Map<PagedList<TournamentDto>>(list);
+        }
+
     }
 }
