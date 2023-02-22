@@ -29,6 +29,10 @@ import { TournamentTeamRegistration } from './../pages/body/tournament/Tournamen
 import { TournamentNetwork } from './../pages/body/tournament/TournamentNetwork';
 import { ActualTournaments } from '../pages/body/tournament/ActualTournaments';
 import { TournamentDetailedView } from '../pages/body/tournament/TournamentDetailedView';
+import { TeamRegistrationQrCode } from '../pages/body/profile/TeamRegistrationQrCode';
+import { UsersTournaments } from '../pages/body/profile/UsersTournaments';
+import { ShowQrCode } from '../pages/body/profile/ShowQrCode';
+import { CheckTeam } from '../pages/organisation/CheckTeam';
 
 export const Index = () => {
 
@@ -49,13 +53,16 @@ export const Index = () => {
                 <Route path="/logout" element = {<LogoutComponent />}/>                
                 <Route path="/register" element = {<RegistrationComponent/>}/>
                 <Route path="/profile" element={<ProfileComponent/>}/>
+                <Route path="/usersTournaments" element={<UsersTournaments/>}/>
                 <Route path="/teamCreating" element={<TeamCreating/>}/>
                 <Route path="/booking/:roomId/:roomName/:roomType" element={<BookingComponent/>}/>
                 <Route path="/emailConfirm/:email/:userId" element={<EmailConfirm/>}/>
                 <Route path="/bookingView" element={<BookingViewComponent/>}/>
                 <Route path="/bookingView/:id" element={<OneBookingView/>}/>
+                <Route path="/checkTeam/:tournamentId/:teamId" element={<CheckTeam/>}/>
                 <Route path="/searchRoom" element={<RoomSearch/>}/>
                 <Route path="/createTournament" element={<TournamentCreating/>}/>
+                <Route path="/showQrCode/:tournamentId/:teamId" element={<ShowQrCode/>}/>
                 <Route path="/404" element={<NotFound/>}/>
                 {/* <Route path="*" element={<Navigate replace to="/404" />} /> */}
                 <Route path="/index" element={<Index/>}></Route>
