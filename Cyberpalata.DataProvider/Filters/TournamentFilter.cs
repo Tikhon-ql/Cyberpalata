@@ -18,9 +18,10 @@ namespace Cyberpalata.DataProvider.Filters
         {   
             if (CaptainId.HasValue)
             {
-                query = query.Where(q => q.Teams.Any(tm => tm.Members.Any(m => m.IsCaptain && m.MemberId == CaptainId.Value)));
+                query = query.Where(q => q.Batles.Any(b => b.FirstTeam.Members.Any(m => m.IsCaptain && m.MemberId == CaptainId.Value) 
+                || b.SecondTeam.Members.Any(m => m.IsCaptain && m.MemberId == CaptainId.Value)));
             }
-            if(IsActual.HasValue)
+            if (IsActual.HasValue)
             {
                 if(IsActual.Value)
                     query = query.Where(q=>q.Date > DateTime.UtcNow);

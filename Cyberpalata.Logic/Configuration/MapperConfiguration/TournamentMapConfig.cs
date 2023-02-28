@@ -12,12 +12,14 @@ namespace Cyberpalata.Logic.Configuration.MapperConfiguration
         {
             profile.CreateMap<Tournament, TournamentDto>();
             profile.CreateMap<TournamentDto, Tournament>()
-                .ForMember(dst => dst.TeamsMaxCount, opt => opt.MapFrom(src => src.TeamsMaxCount))
+                .ForMember(dst => dst.RoundsCount, opt => opt.MapFrom(src => src.RoundCount))
                 .ForMember(dst => dst.Date, opt => opt.MapFrom(src => src.Date))
                 .ForMember(dst=>dst.Winner, opt=>opt.MapFrom(src=>src.Winner))
-                .ForMember(dst=>dst.Teams, opt=>opt.MapFrom(src=>src.Teams))
+                .ForMember(dst=>dst.Batles, opt=>opt.MapFrom(src=>src.Batles))
+                .ForMember(dst=>dst.BatleResults, opt=>opt.MapFrom(src=>src.BatleResults))
+                //.ForMember(dst=>dst.Teams, opt=>opt.MapFrom(src=>src.Teams))
                 .ForMember(dst=>dst.Prizes, opt=>opt.MapFrom(src=>src.Prizes))
-                .ForMember(dst=>dst.Rounds, opt=>opt.MapFrom(src=>src.Rounds))
+                //.ForMember(dst=>dst.Rounds, opt=>opt.MapFrom(src=>src.Rounds))
                 .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name));
             profile.CreateMap<CreateTournamentViewModel, TournamentDto>();
             profile.CreateMap<Tournament, GetTournamentViewModel>()

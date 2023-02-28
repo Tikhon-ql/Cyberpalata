@@ -8,8 +8,10 @@ namespace Cyberpalata.Logic.Models.Tournament
 {
     public class BatleDto
     {
-        //public DateTime Date { get; set; }
-        public virtual TeamDto? FirstTeam { get; set; }
-        public virtual TeamDto? SecondTeam { get; set; }
+        public DateTime Date { get; set; }
+        public TeamDto? FirstTeam { get; set; }
+        public TeamDto? SecondTeam { get; set; }
+        //public BatleResultDto? Result { get;set; }
+        public int RoundNumber { get; set; }
     }
 }

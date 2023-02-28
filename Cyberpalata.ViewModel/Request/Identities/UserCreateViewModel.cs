@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Cyberpalata.Common;
+using FluentValidation;
+using System.ComponentModel.DataAnnotations;
 
 namespace Cyberpalata.ViewModel.Request.Identity
 {
@@ -22,5 +24,13 @@ namespace Cyberpalata.ViewModel.Request.Identity
         [DataType(DataType.Password)]
         [Compare("Password")]
         public string PasswordConfirm { get; set; }
+    }
+    public class UserCreateViewModelValidator : AbstractValidator<UserCreateViewModel>
+    {
+        public UserCreateViewModelValidator()
+        {
+            RuleFor(x => x.Password).Password();
+            RuleFor(x => x.PasswordConfirm).Password();
+        }
     }
 }

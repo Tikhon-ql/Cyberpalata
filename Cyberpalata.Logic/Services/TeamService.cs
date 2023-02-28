@@ -69,7 +69,7 @@ namespace Cyberpalata.Logic.Services
             var tournament = await _tournamentRepository.ReadAsync(tournamentId);
             if (team.HasNoValue)
                 return Result.Failure<TeamDetailViewModel>($"Tournament with id: {teamId} doesn't exist");
-            if(!tournament.Value.Teams.Any(t=>t.Id == t.Id))
+            if (!tournament.Value.Batles.Any(b => b.FirstTeam.Id == teamId || b.SecondTeam.Id == teamId))
                 return Result.Failure<TeamDetailViewModel>($"This team doesn't apart in tournament");
 
             var teamDto = _mapper.Map<TeamDto>(team.Value);

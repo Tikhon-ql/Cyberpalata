@@ -8,6 +8,7 @@ namespace Cyberpalata.Logic.Configuration.MapperConfiguration
         public static void CreateMap(AppMappingProfile profile)
         {
             profile.CreateMap<Batle, BatleDto>();
+            profile.CreateMap<BatleDto, Batle>();
         }
     }
 }

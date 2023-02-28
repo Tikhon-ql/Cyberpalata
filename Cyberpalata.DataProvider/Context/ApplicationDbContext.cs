@@ -43,7 +43,6 @@ namespace Cyberpalata.DataProvider.Context
 
         private void ConfigureIdAutoGeneration(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Round>().Property(r => r.Id).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<TeamMember>().Property(r => r.Id).HasDefaultValueSql("NEWID()");
         }
 
@@ -55,10 +54,10 @@ namespace Cyberpalata.DataProvider.Context
                   j => j.HasOne<Seat>().WithMany().OnDelete(DeleteBehavior.NoAction),
                   j => j.HasOne<Booking>().WithMany().OnDelete(DeleteBehavior.NoAction));
 
-            modelBuilder.Entity<Tournament>().HasMany(t => t.Teams).WithMany(t => t.Tournaments)
-                    .UsingEntity<Dictionary<Guid, Guid>>("TeamsTournaments",
-                    j => j.HasOne<Team>().WithMany().OnDelete(DeleteBehavior.NoAction),
-                    j => j.HasOne<Tournament>().WithMany().OnDelete(DeleteBehavior.NoAction));
+            //modelBuilder.Entity<Tournament>().HasMany(t => t.Teams).WithMany(t => t)
+            //        .UsingEntity<Dictionary<Guid, Guid>>("TeamsTournaments",
+            //        j => j.HasOne<Team>().WithMany().OnDelete(DeleteBehavior.NoAction),
+            //        j => j.HasOne<Tournament>().WithMany().OnDelete(DeleteBehavior.NoAction));
 
             modelBuilder.Entity<TeamMember>().HasOne(t => t.Member).WithMany().OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Tournament>().HasOne(t => t.Winner).WithMany();

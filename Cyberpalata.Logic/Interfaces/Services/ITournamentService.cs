@@ -15,6 +15,7 @@ namespace Cyberpalata.Logic.Interfaces.Services
         Task<Result<TeamRegistrationViewModel>> RegisterTeam(RegisterTeamViewModel viewModel);
         //Task<List<GetTournamentViewModel>> GetActualTournaments();
         Task<TournamentDetailedViewModel> GetTournamentDetailed(Guid tournamentId);
+        Task<TournamentSmalViewModel> GetTournamentSmall(Guid tournamentId);
         Task<PagedList<TournamentDto>> GetPagedList(TournamentFilterBL filter);
     }
 }

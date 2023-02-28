@@ -2,6 +2,8 @@
 {
     public class RoomCollectionViewModel
     {
-        public List<RoomItemViewModel> Infos { get; set; } = new();
+        public List<RoomItemViewModel> Items { get; set; } = new();
+        public int TotalItemsCount { get; set; }
+        public int PageSize { get; set; }
     }
 }

@@ -13,6 +13,7 @@ namespace Cyberpalata.Logic.Configuration.MapperConfiguration
             profile.CreateMap<BookingFilterBL, BookingFilter>();
             profile.CreateMap<TeamFilterBL,TeamFilter>();
             profile.CreateMap<TournamentFilterBL, TournamentFilter>();
+            profile.CreateMap<BatleFilterBL, BatleFilter>();
         }
     }
 }

@@ -16,7 +16,9 @@ namespace Cyberpalata.ViewModel.Request.Tournament
         public string Name { get; set; }
         [Required]
         public DateTime Date { get; set; }
-        public int TeamsMaxCount { get; set; }
-        public List<RoundCreateViewModel> Rounds { get; set; }
+        [Required]
+        public int RoundCount { get; set; }
+        //public int TeamsMaxCount { get; set; }
+        //public List<RoundCreateViewModel> Rounds { get; set; }
     }
 }
