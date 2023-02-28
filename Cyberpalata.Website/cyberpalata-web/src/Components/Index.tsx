@@ -33,19 +33,21 @@ import { TeamRegistrationQrCode } from '../pages/body/profile/TeamRegistrationQr
 import { UsersTournaments } from '../pages/body/profile/UsersTournaments';
 import { ShowQrCode } from '../pages/body/profile/ShowQrCode';
 import { CheckTeam } from '../pages/organisation/CheckTeam';
+import { SelectWinner } from '../pages/body/tournament/SelectWinner';
+import { HashRouter } from 'react-router-dom';
 
 export const Index = () => {
 
     const[isAuth, setIsAuth] = useState(false);
 
     return <div>
-        <BrowserRouter basename='/'>
+        <HashRouter basename='/'>
             <Header/>
             <Routes>
                 <Route path='/' element={<Home />} />
                 <Route path="/gamingRoomTypeChoosing" element = {<GamingRoomTypeChoosing/>}/>
-                <Route path="/gamingRooms/:type" element = {<GamingRoomList/>}/>
-                <Route path="/gamingRooms/:id/:name/:type" element = {<GamingRoom/>}/> 
+                <Route path="/gamingRooms" element = {<GamingRoomList/>}/>
+                <Route path="/gamingRooms/:id/:name" element = {<GamingRoom/>}/> 
                 <Route path="/gamesLibrary" element = {<GameLibrary/>}/>          
                 <Route path="/login" element = {<LoginComponent/>}/>                
                 <Route path="/passwordRecovering" element = {<PasswordRecovering/>}/>                
@@ -55,23 +57,24 @@ export const Index = () => {
                 <Route path="/profile" element={<ProfileComponent/>}/>
                 <Route path="/usersTournaments" element={<UsersTournaments/>}/>
                 <Route path="/teamCreating" element={<TeamCreating/>}/>
-                <Route path="/booking/:roomId/:roomName/:roomType" element={<BookingComponent/>}/>
+                <Route path="/booking/:roomId/:roomName/" element={<BookingComponent/>}/>
                 <Route path="/emailConfirm/:email/:userId" element={<EmailConfirm/>}/>
-                <Route path="/bookingView" element={<BookingViewComponent/>}/>
-                <Route path="/bookingView/:id" element={<OneBookingView/>}/>
+                <Route path="/bookingView/:isActual" element={<BookingViewComponent/>}/>
+                <Route path="/bookingViewDetail/:id" element={<OneBookingView/>}/>
                 <Route path="/checkTeam/:tournamentId/:teamId" element={<CheckTeam/>}/>
                 <Route path="/searchRoom" element={<RoomSearch/>}/>
                 <Route path="/createTournament" element={<TournamentCreating/>}/>
                 <Route path="/showQrCode/:tournamentId/:teamId" element={<ShowQrCode/>}/>
                 <Route path="/404" element={<NotFound/>}/>
-                {/* <Route path="*" element={<Navigate replace to="/404" />} /> */}
+                <Route path="*" element={<Navigate replace to="/404" />} />
                 <Route path="/index" element={<Index/>}></Route>
                 <Route path="/registerTeam/:tournamentId" element={<TournamentTeamRegistration/>}></Route>   
                 {/* <Route path="/tournamentNetwork" element={<TournamentNetwork/>}></Route> */}
                 <Route path="/showActualTournaments" element={<ActualTournaments/>}></Route>
                 <Route path="/showTournamentDetailed/:id" element={<TournamentDetailedView/>}></Route>
+                <Route path="/selectWinner/:tournamentId/:batleId/:firstTeamName/:firstTeamId/:secondTeamName/:secondTeamId" element={<SelectWinner/>}></Route>
             </Routes>
             <AccessTokenVerify/>          
-        </BrowserRouter>
+        </HashRouter>
     </div>
 }

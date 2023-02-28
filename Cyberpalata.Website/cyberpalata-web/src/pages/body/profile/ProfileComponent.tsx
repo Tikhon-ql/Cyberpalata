@@ -112,50 +112,52 @@ export const ProfileComponent = observer(() => {
                     loading={loading}
                     />
             </div>
-             : 
-             <div className="d-flex align-items-center justify-content-center">
-              <div className="p-5 m-2 bg-info text-white shadow rounded-2">
-                <form  method="post" onSubmit={editingSubmit}>
-                    <h1 className="pt-2 text-dark">User profile</h1>
-                    <hr></hr>
-                    {editingActive ?  
-                        <div>
-                          
-                            {otherError != "" && <div className="m-1 text-danger">{otherError}</div>}
-                            <div className="d-flex flex-row"><h2 className="text-dark">Name: </h2><input id="nameInput" name="name" type="text" onInput={clearErrors} className="form-control bg-transparent border-0 text-white" defaultValue={name} /></div>
-                            {usernameError != "" && <div className="m-1 text-danger">{usernameError}</div>}
-                            <div className="d-flex flex-row"><h2 className="text-dark">Surname: </h2><input id="surnameInput" name="surname" type="text" onInput={clearErrors} className="form-control bg-transparent border-0 text-white" defaultValue={surname}/></div>
-                            {surnameError != "" && <div className="m-1 text-danger">{surnameError}</div>}
-                            <div className="d-flex flex-row"><h2 className="text-dark">Email: </h2><input id="emailInput" name="email" type="email" onInput={clearErrors} className="form-control bg-transparent border-0 text-white" defaultValue={email} /></div>
-                            {emailError != "" && <div className="m-1 text-danger">{emailError}</div>}
-                            <div className="d-flex flex-row"><h2 className="text-dark">Phone: </h2><input id="phoneInput" name="phone" type="tel" onInput={clearErrors} className="form-control bg-transparent border-0 text-white" defaultValue={phone}/></div>
-                            {phoneError != "" && <div className="m-1 text-danger">{phoneError}</div>}
-                        </div>
-                        : 
-                        <div>
-                            <div className="d-flex flex-row"><h2 className="text-dark">Name: </h2><div id = "name" className="h3 m-1">{name}</div></div>
-                            <div className="d-flex flex-row"><h2 className="text-dark">Surname: </h2><div id="surname" className="h3 m-1">{surname}</div></div>
-                            <div className="d-flex flex-row"><h2 className="text-dark">Email: </h2><div id="email" className="h3 m-1">{email}</div></div>
-                            <div className="d-flex flex-row"><h2 className="text-dark">Phone: </h2><div id="phone" className="h3 m-1">{phone}</div></div>
-                        </div>
-                    }
-                     <div>
-                    {!editingActive ? <div className="d-flex">
+             :
 
-                        <button onClick={editingEnableButtonClick} className="btn btn-outline-dark btn-sm w-25 m-2"><div>Edit profile</div></button>
-                        <Link to='/' className="btn btn-outline-dark btn-sm m-2">Home page</Link>
+            <div className="align-items-center justify-content-center text-white">
+                <h1 className="text-white" style={{"textAlign":"center","marginBottom":"1vw"}}>User profile</h1><hr/>
+                <div style={{"display":"flex"}}>
+                    <div style={{"display":"flex","flexDirection":"column","justifyContent":"start", "marginRight":"1vw"}}>
+                        <Link to='/teamCreating' style={{"border":"1px solid","padding":"1vh","borderRadius":"1vh", "marginRight":"1vw",marginBottom:"0"}}>Create team</Link><br />
+                        <Link to='/usersTournaments'  style={{"border":"1px solid","padding":"1vh","borderRadius":"1vh","marginRight":"1vw"}}>Show tournaments</Link><br />
+                        <Link to='/'style={{"border":"1px solid","padding":"1vh","borderRadius":"1vh","marginRight":"1vw",marginBottom:"3vh"}}>Home page</Link>
+                        {!editingActive ?
+                            <button onClick={editingEnableButtonClick} style={{"background":"none","border":"1px solid","padding":"1vh","borderRadius":"1vh","marginRight":"1vw",textAlign:"start"}}><div>Edit profile</div></button>
+                            :<button onClick={editingEnableButtonClick} style={{"background":"none","border":"1px solid","padding":"1vh","borderRadius":"1vh","marginRight":"1vw",textAlign:"start"}}><div>Stop editing profile</div></button>}
                     </div>
-                    :<div className="d-flex">
-                        <input type="submit" className="btn btn-outline-dark btn-sm m-2" value="Save changes"/> 
-                        <button onClick={editingEnableButtonClick} className="btn btn-outline-dark btn-sm m-2"><div>Stop editing profile</div></button>
-                        <Link to='/' className="btn btn-outline-dark btn-sm m-2">Home page</Link>
-                    </div>}
-                    <Link to='/teamCreating' className="btn btn-outline-dark btn-sm m-2">Create team</Link> 
-                    <Link to='/usersTournaments' className="btn btn-outline-dark btn-sm m-2">Show tournaments</Link>
-                    <Link to='/registerTeam' className="btn btn-outline-dark btn-sm m-2">Registet team to tournament</Link>
+                    <div>
+                        <form  method="post" onSubmit={editingSubmit}>
+                            {editingActive ?  
+                                <div>
+                                    {otherError != "" && <div className="m-1 text-danger">{otherError}</div>}
+                                    <div className="d-flex flex-row"><h2 className="text-white">Name: </h2><input id="nameInput" name="name" type="text" onInput={clearErrors} className="form-control bg-transparent border-0 text-white" defaultValue={name} /></div>
+                                    {usernameError != "" && <div className="m-1 text-danger">{usernameError}</div>}
+                                    <div className="d-flex flex-row"><h2 className="text-white">Surname: </h2><input id="surnameInput" name="surname" type="text" onInput={clearErrors} className="form-control bg-transparent border-0 text-white" defaultValue={surname}/></div>
+                                    {surnameError != "" && <div className="m-1 text-danger">{surnameError}</div>}
+                                    <div className="d-flex flex-row"><h2 className="text-white">Email: </h2><input id="emailInput" name="email" type="email" onInput={clearErrors} className="form-control bg-transparent border-0 text-white" defaultValue={email} /></div>
+                                    {emailError != "" && <div className="m-1 text-danger">{emailError}</div>}
+                                    <div className="d-flex flex-row"><h2 className="text-white">Phone: </h2><input id="phoneInput" name="phone" type="tel" onInput={clearErrors} className="form-control bg-transparent border-0 text-white" defaultValue={phone}/></div>
+                                    {phoneError != "" && <div className="m-1 text-danger">{phoneError}</div>}
+                                </div>
+                                : 
+                                <div>
+                                    <div className="d-flex flex-row"><h2 className="text-white" style={{"marginRight":"1vw"}}>Name: </h2><div id = "name" className="h3">{name}</div></div>
+                                    <div className="d-flex flex-row"><h2 className="text-white" style={{"marginRight":"1vw"}}>Surname: </h2><div id="surname" className="h3">{surname}</div></div>
+                                    <div className="d-flex flex-row"><h2 className="text-white" style={{"marginRight":"1vw"}}>Email: </h2><div id="email" className="h3">{email}</div></div>
+                                    <div className="d-flex flex-row"><h2 className="text-white"style={{"marginRight":"1vw"}}>Phone: </h2><div id="phone" className="h3">{phone}</div></div>
+                                </div>
+                            }
+                            <div>
+                            {editingActive &&
+                                <input type="submit" style={{"border":"1px solid","padding":"1vh","borderRadius":"1vh"}} value="Save changes"/>}
+                            </div>
+                        </form>
+                    </div>   
                 </div>
-                </form> 
-                </div>
-         </div>}
+            </div>
+           }
         </div>
 })
+
+
+

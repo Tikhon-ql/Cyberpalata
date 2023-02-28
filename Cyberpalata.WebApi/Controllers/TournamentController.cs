@@ -14,9 +14,11 @@ namespace Cyberpalata.WebApi.Controllers
     public class TournamentController : BaseController
     {
         private readonly ITournamentService _tournamentService;
-        public TournamentController(ITournamentService tournamentService,IUnitOfWork uinOfWork) : base(uinOfWork)
+        private readonly ITeamService _teamService;
+        public TournamentController(ITournamentService tournamentService,IUnitOfWork uinOfWork, ITeamService teamService) : base(uinOfWork)
         {
             _tournamentService = tournamentService;
+            _teamService = teamService;
         }
 
         [Authorize]
@@ -37,14 +39,14 @@ namespace Cyberpalata.WebApi.Controllers
         }
         [Authorize]
         [HttpGet("getActualTournaments")]
-        public async Task<IActionResult> GetActualTournaments()
+        public async Task<IActionResult> GetActualTournaments(int page)
         {
 
             var filter = new TournamentFilterBL
             {
                 IsActual = true,
-                CurrentPage = 1,
-                PageSize = 10   
+                CurrentPage = page,
+                PageSize = 5   
             };
             var result = await _tournamentService.GetPagedList(filter);
             var viewModel = new List<GetTournamentViewModel>();
@@ -57,7 +59,7 @@ namespace Cyberpalata.WebApi.Controllers
                 });
             }
 
-            return await ReturnSuccess(viewModel);
+            return Ok(new { PageSize = result.PageSize, TotalItemsCount = result.TotalItemsCount, Items = viewModel });
         }
         //[Authorize]
         [HttpGet("getTournamentDetaile")]
@@ -66,9 +68,17 @@ namespace Cyberpalata.WebApi.Controllers
             var viewModel = await _tournamentService.GetTournamentDetailed(tournamentId);
             return await ReturnSuccess(viewModel);
         }
+        [Authorize]
+        [HttpGet("getTournamentSmall")]
+        public async Task<IActionResult> GetTournamentSmall(Guid id)
+        {
+            var viewModel = await _tournamentService.GetTournamentSmall(id);
+            return Ok(viewModel);
+        }
 
+        [Authorize]
         [HttpGet("getUsersTournaments")]
-        public async Task<IActionResult> GetActualTournamentsUsersTeamIsRegistered()
+        public async Task<IActionResult> GetActualTournamentsUsersTeamIsRegistered(int page)
         {
             var userId = Guid.Parse(User.Claims.First(c=>c.Type == JwtRegisteredClaimNames.Sid).Value);
 
@@ -76,14 +86,16 @@ namespace Cyberpalata.WebApi.Controllers
             {
                 CaptainId = userId,
                 IsActual = true,
-                CurrentPage = 1,
-                PageSize = 10
+                CurrentPage = page,
+                PageSize = 3
             };
             var result = await _tournamentService.GetPagedList(filter);
             var viewModel = new List<UserTournamentViewModel>();
             foreach (var item in result.Items)
             {
-                var teamInTournament = item.Teams.FirstOrDefault(t=> t.Captain.Member.Id == userId);
+                var teamInTournament = item.Batles.FirstOrDefault(t => t.FirstTeam.Captain.Member.Id == userId).FirstTeam;
+                if(teamInTournament == null)
+                    teamInTournament = item.Batles.FirstOrDefault(t => t.FirstTeam.Captain.Member.Id == userId).SecondTeam;
                 viewModel.Add(new UserTournamentViewModel
                 {
                     Id = item.Id,
@@ -91,7 +103,7 @@ namespace Cyberpalata.WebApi.Controllers
                     TeamId = teamInTournament.Id,
                 });
             }
-            return Ok(viewModel);
+            return Ok(new {PageSize = result.PageSize, TotalItemsCount = result.TotalItemsCount,Items = viewModel });
         }
     }
 }

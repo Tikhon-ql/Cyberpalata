@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import api from "./../../../Components/api";
 import BarLoader from "react-spinners/BarLoader";
 import { useState } from "react";
+import React from "react";
+
 
 export const RegistrationComponent = ()=>{
     let navigate = useNavigate();
@@ -99,8 +101,24 @@ export const RegistrationComponent = ()=>{
 
         // size={30}
         /> : 
-
-        <div className="d-flex align-items-center justify-content-center">
+        <div className="myForm">
+            <h1>Registration</h1>
+            <form method="post" onSubmit={(e)=>{sendRegisterRequest(e)}}>
+                <div className="d-flex">
+                    <input type="text" style={{"marginRight":"0.3vw"}} onInput={clearErrors} onChange={(e)=>{setUsername(e.target.value)}} id="username" name="username" placeholder="Name" required/>
+                    <input type="text" style={{"marginLeft":"0.3vw"}} id="surname" onChange={(e)=>{setSurname(e.target.value)}} name="surname" placeholder="Surname" required/>
+                </div>
+                <input type="email" id="email" name="email" onChange={(e)=>{setEmail(e.target.value)}} placeholder="Email" required/>
+                <input type="tel" id="phone" name="phone" aria-describedby="phoneHelp" onChange={(e)=>{setPhone(e.target.value)}} placeholder="Phone" required/>
+                <input type="password" name="password" id="password" placeholder="Password" required/>
+                <input type="password" name="passwordConfirm" id="passwordConfirm" placeholder="Password confirm" required/>
+                <button type="submit" className="btn btn-primary btn-block btn-large">Register</button>
+            </form>
+        </div>}
+    </div>
+}
+{/* 
+<div className="d-flex align-items-center justify-content-center">
         <form className="p-5 m-2 bg-info text-white shadow rounded-2" onSubmit={sendRegisterRequest}>
             {otherError != "" && <div className="m-1 text-danger">{otherError}</div>}
             <div className="d-flex"> 
@@ -142,6 +160,5 @@ export const RegistrationComponent = ()=>{
                 <Link to='/' className="btn btn-outline-dark btn-sm text-white w-50 m-1">Cancel</Link>
             </div>
         </form>
-        </div>}
-    </div> 
-}
+        </div>
+  */}

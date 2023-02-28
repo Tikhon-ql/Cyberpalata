@@ -61,16 +61,16 @@ export const OneBookingView = ()=>{
                 />
         </div> 
 
-        :<div className="d-flex align-items-center justify-content-center">
-            <div className="p-5 m-2 bg-info text-white shadow rounded-2">
-                <div className="bg-light rounded p-2 w-50">
+        :<div>
+            <div style={{color:"white"}}>
+                <div className="rounded p-2 w-50">
                     <div className="d-flex">
-                        <div className="m-1 bg-dark p-1 rounded">Room: {roomName}</div>
-                        <div className="m-1 bg-dark p-1 rounded">Price: {price}</div> 
+                        <div className="">Room: {roomName}</div>
+                        <div className="">Price: {price}</div> 
                     </div>
                     <div className="d-flex">
-                        <div className="m-1 bg-dark p-1 rounded">Begining: {begining}</div>
-                        <div className="m-1 bg-dark p-1 rounded">Hours count: {hours}</div>
+                        <div className="">Begining: {begining}</div>
+                        <div className="">Hours count: {hours}</div>
                     </div>
                 </div>
                 <table className="table w-50 m-auto">
@@ -91,7 +91,7 @@ export const OneBookingView = ()=>{
                     })}
                     </tbody>         
                 </table>
-                <Link to='/bookingView' className="btn btn-dark btn-sm m-2">Back</Link>
+                <Link to='/bookingView' style={{"border":"1px solid","padding":"0.5vh 1.5vh 0.5vh 1.5vh","borderRadius":"1vh","marginRight":"1vw",marginBottom:"3vh"}}>Back</Link>
             </div>
      
     </div>

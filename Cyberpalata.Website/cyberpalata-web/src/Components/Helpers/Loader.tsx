@@ -1,3 +1,4 @@
+import React from "react";
 import BarLoader from "react-spinners/BarLoader";
 
 export const Loader = (loading:boolean, size:number) =>

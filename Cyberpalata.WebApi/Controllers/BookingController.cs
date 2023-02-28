@@ -37,9 +37,9 @@ namespace Cyberpalata.WebApi.Controllers
 
         [Authorize]
         [HttpGet("calculateBookingPrice")]
-        public async Task<IActionResult> CalculateBookingPrice(TimeSpan beg, int hours)
+        public async Task<IActionResult> CalculateBookingPrice(TimeSpan beg, int hours,int seatsCount)
         {
-            return Ok(hours);
+            return Ok(hours * seatsCount);
         }
 
         [Authorize]
@@ -56,13 +56,14 @@ namespace Cyberpalata.WebApi.Controllers
 
         [Authorize]
         [HttpGet("getBookingSmallInfo")]
-        public async Task<IActionResult> GetBookingsSmallInfo(int page)
+        public async Task<IActionResult> GetBookingsSmallInfo(int page, bool isActual)
         {
             var userId = Guid.Parse(User.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Sid).Value);
             //var user = await _userService.ReadAsync(userId);
 
             var filter = new BookingFilterBL
             {
+                IsActual = isActual,
                 CurrentPage = page,
                 UserId = userId
             };

@@ -59,18 +59,18 @@ export const EmailConfirm = ()=>{
     }
 
 
-    return <div className="d-flex align-items-center justify-content-center">
-        <div className="p-5 m-2 bg-info text-white shadow rounded-2">
-            <div>On your email we send a message</div>
+    return <div style={{display:"flex",justifyContent:"center",alignItems:"center",width:"100%",height:"80vh"}}>
+        <div>
+            <div style={{color:"white",marginBottom:"2vh"}}>On your email we send a message</div>
             <form onSubmit={sendActivateRequest}>
                 <div className="mb-3">
                     <label htmlFor="exampleInputEmail1" className="form-label"></label>
-                    <input type="number" name="code" className="form-control" id="exampleInputEmail1" onChange={(e)=>{e.preventDefault()}} required placeholder="Enter six-digit code here..." aria-describedby="emailHelp"/>
+                    <input type="number" name="code" id="exampleInputEmail1" onChange={(e)=>{e.preventDefault()}} required placeholder="Enter six-digit code here..." aria-describedby="emailHelp"/>
                     <div id="emailHelp" className="form-text text-white">We'll never share your code with anyone else.</div>
                 </div>
                 <div className="d-flex justify-content-around">
-                    <button type="submit" className="btn btn-outline-dark btn-sm text-white w-50 m-1">Confirm</button>
-                    <Link to='/' className="btn btn-outline-dark btn-sm text-white w-50 m-1">Cancel</Link>
+                    <button type="submit" style={{background:"none","border":"1px solid","padding":"1vh","borderRadius":"1vh","marginRight":"1vw"}}>Confirm</button>
+                    <Link to='/' style={{"border":"1px solid","padding":"1vh","borderRadius":"1vh","marginRight":"1vw"}}>Cancel</Link>
                 </div>
             </form>
         </div>

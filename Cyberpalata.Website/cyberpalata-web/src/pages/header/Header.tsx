@@ -24,13 +24,39 @@ export const Header = observer((props) => {
         accessToken = jwtDecode(localStorage.getItem('accessToken') || "");
         console.dir(accessToken);
     }
-    useEffect(()=>{},[headerRerenderStore.state])
+    useEffect(()=>{console.log("ASJF:LJ")},[headerRerenderStore.state])
     console.dir(accessToken);
 
+    //                                                                 background: -webkit-linear-gradient(90deg, #583544,#463951,#3614e1);/* Chrome 10-25, Safari 5.1-6 */                         ;/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */                                             
+
     return <>
-        <nav id="headerId" className="navbar navbar-light bg-dark">
-            <ul className="nav nav-pills d-flex justify-content-between w-100">
-                <li className='nav-item text-dark' style={{"marginTop":"2vh"}}>
+        <nav id="headerId" className="navbar navbar-light" style={{background: "linear-gradient(90deg, #583544,#463951,#3614e1)"}}>
+            <ul style={{"height":"5vh", "display":"flex","width":"100%","justifyContent":"end","alignItems":"center","listStyle":"none"}}>
+                <li className='whiteLink' style={{"color":"white","marginRight":"2vw","marginTop":"2vh","fontSize":"20px"}}>
+                        <Link to="/">Home</Link>
+                </li>
+                {accessToken && accessToken.role === "Admin" &&
+                    <li className='whiteLink' style={{"color":"white","marginRight":"2vw","marginTop":"2vh","fontSize":"20px"}}>
+                        <Link to="/createTournament">Create tournament</Link>
+                    </li>
+                }
+                {(AuthVerify() && accessToken) && <li style={{"marginTop":"2vh"}}>
+                    <Link to="/profile" style={{"color":"white","marginRight":"1vw","marginTop":"2vh","fontSize":"20px"}}>Profile</Link>
+                </li>}
+                {!AuthVerify() ? 
+                    <li style={{"color":"white","marginRight":"2vw","marginTop":"2vh","fontSize":"20px"}}>
+                        <Link to="/login">Sign In</Link>
+                    </li>:
+                       <Link to="" style={{"color":"white","marginRight":"2vw","marginTop":"2vh","fontSize":"20px"}} onClick={()=>{setModalActive(true)}}>SignOut</Link>
+                }
+                {!AuthVerify() && 
+                    <li className='whiteLink' style={{"color":"white","marginRight":"2vw","marginTop":"2vh","fontSize":"20px"}}>
+                        <Link to="/register">Register</Link>
+                    </li>
+                }
+
+
+                {/* <li className='nav-item text-dark' style={{"marginTop":"2vh"}}>
                     <Link to="/gamesLibrary" className='text-decoration-none text-white h4 m-5 mya' style={{"paddingBottom":"5px"}} onClick={()=>{stateStore.stateChange()}}>Games library</Link>
                 </li>
                 {accessToken && accessToken.role === "Admin" &&
@@ -60,7 +86,7 @@ export const Header = observer((props) => {
                     </div>
 
                     : <Link to="/login" className='text-decoration-none text-white h4 mya m-5' style={{"paddingBottom":"5px"}}>Login</Link>}
-                </li>
+                </li> */}
             </ul>
             <Modal active={modalActive} setActive={setModalActive}>
                 <LogoutComponent setModalActive={setModalActive}/>

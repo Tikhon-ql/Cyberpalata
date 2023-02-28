@@ -16,10 +16,10 @@ export const Pagination = ({
     return(
 
         <ul className="pagination mt-2">
-            {pages.map((page,index) => {
-
-                return <li key={index} onClick={()=>{setCurPage(page)}} className = {page == curPage? 'page-item active' : 'page-item'}><a className="page-link">{page}</a></li>
-            })}
+            {pages.length > 1 && <div>
+                {pages.map((page,index) => {
+                    return <li key={index} onClick={()=>{setCurPage(page)}} className = {page == curPage? 'page-item active' : 'page-item'}><a className="page-link">{page}</a></li>
+                })}</div>}
         </ul>
     )
 };

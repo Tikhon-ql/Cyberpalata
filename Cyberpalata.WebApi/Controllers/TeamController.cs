@@ -77,7 +77,7 @@ namespace Cyberpalata.WebApi.Controllers
             return await ReturnSuccess(viewModel);
         }
 
-        /// Add to hiring teams. User send request. Then user and team captain discuss in the chat and captain accepts team hiring.
+        /// Add to hiring teams. User send request. Then user and team captain discuss in the chat and   captain accepts team hiring.
 
         [Authorize]
         [HttpGet("getByUserId")]

@@ -28,7 +28,7 @@ namespace Cyberpalata.WebApi.Controllers
         }
 
         [HttpGet("getRoomByType")]
-        public async Task<IActionResult> GetRoomByType(bool isVip)
+        public async Task<IActionResult> GetRoomByType(int page)
         {
 
             // add to enum 
@@ -42,9 +42,9 @@ namespace Cyberpalata.WebApi.Controllers
             var filter = new RoomFilterBL
             {
                 Type = RoomType.GamingRoom,
-                IsVip = isVip,
-                PageSize = 10,
-                CurrentPage = 1
+                IsVip = true,
+                PageSize = 2,
+                CurrentPage = page
             };
 
             var rooms = await _roomService.GetPagedListAsync(filter);
@@ -52,7 +52,9 @@ namespace Cyberpalata.WebApi.Controllers
 
             var viewModel = new RoomCollectionViewModel
             {
-                Infos = rooms.Items.Select(x => new RoomItemViewModel { Id = x.Id.ToString(), Name = x.Name }).ToList()
+                Items = rooms.Items.Select(x => new RoomItemViewModel { Id = x.Id.ToString(), Name = x.Name }).ToList(),
+                TotalItemsCount = rooms.TotalItemsCount,
+                PageSize = rooms.PageSize
             };
             return await ReturnSuccess(viewModel);
         }

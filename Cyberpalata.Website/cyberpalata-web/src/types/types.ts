@@ -60,8 +60,8 @@ export type UserTournament = {
 export type TournamentDetailed = {
     name:string,
     date:string,
-    teamsMaxCount: number,
-    rounds:Round[]
+    // teamsMaxCount: number,
+    // rounds:Round[]
 }
 
 export type Batle = {
@@ -95,3 +95,15 @@ export type TeamInfo = {
     captainName:string,
     members: string[]   
 }
+
+export type TreeData = {
+    batleId:string,
+    firstTeamId:string,
+    secondTeamId: string,
+    firstTeamName:string,
+    secondTeamName: string,
+    name: string,
+    roundNumber: number,
+    children: TreeData[]
+};
+

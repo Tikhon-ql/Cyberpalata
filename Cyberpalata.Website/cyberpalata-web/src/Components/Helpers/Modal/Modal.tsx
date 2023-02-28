@@ -1,5 +1,6 @@
 import { Children } from 'react'
 import './Modal.css'
+import React from 'react'
 
 export const Modal = ({
     active,

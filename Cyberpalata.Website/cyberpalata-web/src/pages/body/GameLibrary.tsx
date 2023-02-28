@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom";
 import api from "./../../Components/api";
 import BarLoader from "react-spinners/BarLoader";
+import React from "react";
 
 const GameLibrary = () => {
     const navigate = useNavigate();

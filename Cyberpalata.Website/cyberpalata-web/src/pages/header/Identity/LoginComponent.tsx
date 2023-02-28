@@ -39,7 +39,7 @@ const LoginComponent = () => {
             var dec = jwt_decode(res.data.accessToken);
             console.dir(dec);
 
-            headerRerenderStore.stateChange();
+            headerRerenderStore.state = !headerRerenderStore.state;
             navigate("/");
         }).catch(error=>{
             if(error.code && error.code == "ERR_NETWORK")
@@ -77,30 +77,43 @@ return <div style={{"display":"flex","justifyContent":"center","alignItems":"cen
             // size={30}
             />
         </div> : 
-
-        <div className="d-flex align-items-center justify-content-center">
-            <form className="p-5 m-2 bg-info text-white shadow rounded-2" onSubmit={sendLoginRequest}>
-                <div className="mb-3">
-                    {otherError != "" && <div className="text-danger m-1 rounded">{otherError}</div>}
-                    <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
-                    <input type="email" name="email" onInput={clearErrors} onChange={(event)=>{setEmail(event.target.value)}} className="form-control" id="exampleInputEmail1" defaultValue={email} aria-describedby="emailHelp"/>
-                    {emailError != "" && <div className="text-danger m-1 rounded">{emailError}</div>}
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
-                    <input type="password" name="password" onInput={clearErrors} className="form-control" id="exampleInputPassword1"/>
-                    {passwordError != "" && <div className="text-danger m-1 rounded">{passwordError}</div>}
-                </div>
-                <div className="d-flex justify-content-around">
-                    <button type="submit" className="btn  btn-outline-dark btn-sm m-2 text-white">Login</button> 
-                    <Link to='/passwordRecovering' className="btn btn-outline-dark btn-sm m-2 text-white">Forgot password</Link>
-                    <Link to='/register' className="btn  btn-outline-dark btn-sm m-2 text-white">Register</Link>
-                    <Link to='/' className="btn  btn-outline-dark btn-sm m-2 text-white">Cancel</Link>
-                </div>  
+        <div className="myForm">
+            <h1>SignIn</h1>
+            <form method="post" onSubmit={(e)=>{sendLoginRequest(e)}}>
+                {otherError != "" && <div className="text-danger m-1 rounded">{otherError}</div>}
+                <input type="email" name="email" onInput={clearErrors} onChange={(event)=>{setEmail(event.target.value)}} placeholder="Email" required/>
+                {emailError != "" && <div className="text-danger m-1 rounded">{emailError}</div>}
+                <input type="password"  name="password" onInput={clearErrors} placeholder="Password" required/>
+                {passwordError != "" && <div className="text-danger m-1 rounded">{passwordError}</div>}
+                <button type="submit" className="btn btn-primary btn-block btn-large">Let me in.</button>
             </form>
-        </div>
+      </div>
     }
     </div>
 }
 
 export default observer(LoginComponent);
+
+
+
+  // <div classNameNameNameName="d-flex align-items-center justify-content-center">
+        //     <htmlhtmlForm classNameNameNameName="p-5 m-2 bg-info text-white shadow rounded-2" onSubmit={sendLoginRequest}>
+        //         <div classNameNameNameName="mb-3">
+        //             {otherError != "" && <div classNameNameNameName="text-danger m-1 rounded">{otherError}</div>}
+        //             <label htmlhtmlhtmlFor="exampleInputEmail1" classNameNameNameName="htmlhtmlForm-label">Email address</label>
+        //             <input type="email" name="email" onInput={clearErrors} onChange={(event)=>{setEmail(event.target.value)}} classNameNameNameName="htmlhtmlForm-control" id="exampleInputEmail1" defaultValue={email} aria-describedby="emailHelp"/>
+        //             {emailError != "" && <div classNameNameNameName="text-danger m-1 rounded">{emailError}</div>}
+        //         </div>
+        //         <div classNameNameNameName="mb-3">
+        //             <label htmlhtmlhtmlFor="exampleInputPassword1" classNameNameNameName="htmlhtmlForm-label">Password</label>
+        //             <input type="password" name="password" onInput={clearErrors} classNameNameNameName="htmlhtmlForm-control" id="exampleInputPassword1"/>
+        //             {passwordError != "" && <div classNameNameNameName="text-danger m-1 rounded">{passwordError}</div>}
+        //         </div>
+        //         <div classNameNameNameName="d-flex justify-content-around">
+        //             <button type="submit" classNameNameNameName="btn  btn-outline-dark btn-sm m-2 text-white">Login</button> 
+        //             <Link to='/passwordRecovering' classNameNameNameName="btn btn-outline-dark btn-sm m-2 text-white">htmlhtmlForgot password</Link>
+        //             <Link to='/register' classNameNameNameName="btn  btn-outline-dark btn-sm m-2 text-white">Register</Link>
+        //             <Link to='/' classNameNameNameName="btn  btn-outline-dark btn-sm m-2 text-white">Cancel</Link>
+        //         </div>  
+        //     </htmlhtmlForm>
+        // </div>

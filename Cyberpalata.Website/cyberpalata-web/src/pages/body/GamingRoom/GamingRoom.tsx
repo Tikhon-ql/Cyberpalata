@@ -49,11 +49,10 @@ const GamingRoom = () => {
                 />
             </div> 
 
-            : <div className="d-flex align-items-center justify-content-center">
-                <div className="p-5 m-2 bg-info text-white shadow rounded-2" >
-                    <div style={{"display":"flex"}}>
-                        <div><h1>{name}</h1></div>
-                        
+            : <div className="d-flex align-items-center justify-content-center text-white">
+                <div className="" >
+                    <div style={{"display":"flex","alignItems":"center"}}>
+                        <div style={{"justifyContent":"start"}}><h1>{name}</h1></div><Link to={`/booking/${id}/${name}`} style={{"marginLeft":"1vw","border":"1px solid","padding":"0.5vh 1vh 0.5vh 1vh","borderRadius":"10%"}}>Booking</Link>
                     </div>
                     <hr></hr>
                     <div className='d-flex'>
@@ -61,13 +60,12 @@ const GamingRoom = () => {
                             <h2>Devices</h2>
                             <table className='table'>
                                 <thead>
-                                    <th scope='col'>Type</th>
-                                    <th scope='col'>Name</th>
+                                    <th scope='col' className='text-white'>Type</th>
+                                    <th scope='col' className='text-white'>Name</th>
                                 </thead>
                                 <tbody>
                                 {device.map((item)=>{
-
-                                    return <tr><td>{item.type}</td><td>{item.name}</td></tr>
+                                    return <tr className='text-white'><td>{item.type}</td><td>{item.name}</td></tr>
                                 })}
                                 </tbody>
                             </table>
@@ -76,13 +74,13 @@ const GamingRoom = () => {
                             <h2>Peripheries</h2>
                             <table className='table'>
                                 <thead>
-                                    <th scope='col'>Type</th>
-                                    <th scope='col'>Name</th>
+                                    <th scope='col' className='text-white'>Type</th>
+                                    <th scope='col' className='text-white'>Name</th>
                                 </thead>
                                 <tbody>
                                 {peripheries.map((item)=>{
 
-                                    return <tr><td>{item.typeName}</td><td>{item.name}</td></tr>
+                                    return <tr className='text-white'><td>{item.typeName}</td><td>{item.name}</td></tr>
                                 })}
                                 </tbody>
                             </table>
@@ -90,8 +88,6 @@ const GamingRoom = () => {
                     </div>
                    
                     <div className='d-flex w-100'>
-                        <Link to={`/booking/${id}/${name}/${type}`} className="btn btn-outline-dark w-50 btn-sm m-1">Booking</Link>
-                        <Link to={`/gamingRooms`} className="btn btn-outline-dark w-50 btn-sm m-1">Back</Link>
                     </div>
                 
             </div>

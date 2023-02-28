@@ -45,11 +45,11 @@ export const LogoutComponent = observer(({setModalActive}: any) => {
 
     return <>
     <div className="d-flex align-items-center justify-content-center pt-4" >
-        <div className="p-5 m-2 bg-info text-white shadow rounded-2">
+        <div style={{background:"rgba(68, 50, 72,0.5)",padding:"2vw 5vw 2vw 5vw", borderRadius:"1vw", color:"white"}}>
             <h2>You really want logout?</h2>
-            <div style={{'display': 'flex'}}>
-                <button onClick={logout} className="btn btn-outline-dark btn-sm text-white w-50 m-1">Ok</button>
-                <button onClick={()=>{setModalActive(false)}} className="btn btn-outline-dark btn-sm text-white w-50 m-1">Cancel</button>
+            <div style={{'display': 'flex',justifyContent:"center",marginTop:"3vh"}}>
+                <Link to="" style={{"border":"1px solid","padding":"0.5vh 1.5vh 0.5vh 1.5vh","borderRadius":"1vh","marginRight":"5vw",marginBottom:"3vh"}} onClick={logout}>Ok</Link>
+                <Link to="" style={{"border":"1px solid","padding":"0.5vh 1.5vh 0.5vh 1.5vh","borderRadius":"1vh","marginRight":"1vw",marginBottom:"3vh"}} onClick={()=>{setModalActive(false)}}>Cancel</Link>
             </div>
         </div>
     </div>

@@ -1,5 +1,5 @@
 import { useEffect, useState} from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../../../Components/api";
 import { Pagination } from "../../../Components/Helpers/Pagination";
 import BarLoader from "react-spinners/BarLoader";
@@ -13,9 +13,12 @@ export const BookingViewComponent = (props: any) => {
     const[curPage, setCurPage] = useState(1);
     const[totalItemsCount, setTotalItemsCount] = useState(0);
     const [loading,setLoading] = useState(false);
+
+    const {isActual} = useParams();
     useEffect(()=>{
         setLoading(true);
-        api.get(`/booking/getBookingSmallInfo?page=${curPage}`).then(res=>{
+        var flag: boolean = isActual == "actual" ? true : false;
+        api.get(`/booking/getBookingSmallInfo?page=${curPage}&isActual=${flag}`).then(res=>{
             console.dir(res.data);
             setBookingCollection(res.data.viewModel);
             setTotalItemsCount(res.data.totalItemsCount);
@@ -40,13 +43,12 @@ export const BookingViewComponent = (props: any) => {
                 // size={30}
                 />
         </div>:
-        <div className="d-flex align-items-center justify-content-center w-75">
-            <div className="p-5 m-2 bg-info text-white shadow rounded-2 w-50 h-100">
+        <div className="d-flex align-items-center justify-content-center w-75" style={{color:"white"}}>
+            <div className="w-100 h-100">
                 <h1>Bookings</h1>  
-                <div className="list-group bg-light w-100 p-2">
+                <div className="list-group w-100 p-2">
                     {bookingCollection.map((item: BookingCollection,index)=>{
-
-                        return <Link to={`/bookingView/${item.id}`} key={index} className="list-group-item list-group-item-action list-group-item-dark bg-transparent rounded">
+                        return <Link to={`/bookingViewDetail/${item.id}`} key={index} style={{color:"white"}} className="list-group-item list-group-item-action bg-transparent rounded">
                                 <div className="w-100">
                                     <div className="d-flex w-100">
                                         <div className="m-1">Room: {item.roomName}</div>
