@@ -7,6 +7,8 @@ import headerRerenderStore from '../../store/headerRerenderStore';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { log } from 'console';
+import { AuthVerify } from '../../Components/AuthVerify';
+import jwtDecode from 'jwt-decode';
 
 // const img = React.lazy(() => import())
 
@@ -22,12 +24,19 @@ export const Home = () => {
         "./second.jpg",
         "./third.jpg",
         "./forth.jpg",
-        "./fiveth.jpg"
+        "./fiveth.jpg",
+        "./first.jpg"
     ]
 
     const [curImage, setCurImage] = useState<number>(0);
     const [img, setImg] = useState<string>("./first.jpg");
 
+    let accessToken;
+    if(localStorage.getItem('accessToken'))
+    {
+        accessToken = jwtDecode(localStorage.getItem('accessToken') || "");
+        console.dir(accessToken);
+    }
     
     function liFocus(event:any)
     {   
@@ -53,7 +62,7 @@ export const Home = () => {
                             liFocus(e)
                         }}  
                         className="dropdown">
-                            <button value={0} className="dropbtn">Booking</button>
+                           {(AuthVerify() && accessToken) && <button value={0} className="dropbtn">Booking</button>}
                             <div className="dropdown-content">
                                 <Link to="/gamingRooms">Add</Link>
                                 <Link to="/bookingView/actual">Current</Link>
@@ -66,9 +75,10 @@ export const Home = () => {
                                 <Link to="/showActualTournaments">Actual</Link>
                             </div>
                         </li>
-                        <Link to="/" onMouseOver={(e)=>{liFocus(e)}}><li value={2}>Game library</li></Link>
-                        <Link to="/" onMouseOver={(e)=>{liFocus(e)}}><li value={3}>Contacts</li></Link>
-                        <Link to="/" onMouseOver={(e)=>{liFocus(e)}}><li value={4}>Location</li></Link>
+                        <Link to="/gamesLibrary" onMouseOver={(e)=>{liFocus(e)}}><li value={2}>Game library</li></Link>
+                        <Link to="/location" onMouseOver={(e)=>{liFocus(e)}}><li value={5}>Show room</li></Link>
+                        <Link to="/contacts" onMouseOver={(e)=>{liFocus(e)}}><li value={3}>Contacts</li></Link>
+                        <Link to="/location" onMouseOver={(e)=>{liFocus(e)}}><li value={4}>Location</li></Link>
                     </ul>
                 </div>
             </div>

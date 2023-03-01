@@ -107,3 +107,7 @@ export type TreeData = {
     children: TreeData[]
 };
 
+export type Game = {
+    name: string,
+    imageUrl: string
+}

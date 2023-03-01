@@ -43,7 +43,7 @@ namespace Cyberpalata.WebApi.Controllers
             {
                 Type = RoomType.GamingRoom,
                 IsVip = true,
-                PageSize = 2,
+                PageSize = 5,
                 CurrentPage = page
             };
 

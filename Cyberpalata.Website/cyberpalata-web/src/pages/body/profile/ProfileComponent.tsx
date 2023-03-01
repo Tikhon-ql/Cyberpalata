@@ -5,6 +5,7 @@ import BarLoader from "react-spinners/BarLoader";
 import stateStore from "../../../store/stateStore";
 import { observer } from "mobx-react-lite";
 import React from "react";
+import { ClimbingBoxLoader } from "react-spinners";
 
 export const ProfileComponent = observer(() => {
     const [editingActive, setEditingActive] = useState<boolean>(false);
@@ -107,8 +108,8 @@ export const ProfileComponent = observer(() => {
     return <div style={{"display":"flex","justifyContent":"center","alignItems":"center","width":"100%","height":"80vh"}}>{loading ?
 
             <div>
-                 <BarLoader
-                    color={"#123abc"}
+                 <ClimbingBoxLoader
+                    color={"white"}
                     loading={loading}
                     />
             </div>
@@ -120,7 +121,7 @@ export const ProfileComponent = observer(() => {
                     <div style={{"display":"flex","flexDirection":"column","justifyContent":"start", "marginRight":"1vw"}}>
                         <Link to='/teamCreating' style={{"border":"1px solid","padding":"1vh","borderRadius":"1vh", "marginRight":"1vw",marginBottom:"0"}}>Create team</Link><br />
                         <Link to='/usersTournaments'  style={{"border":"1px solid","padding":"1vh","borderRadius":"1vh","marginRight":"1vw"}}>Show tournaments</Link><br />
-                        <Link to='/'style={{"border":"1px solid","padding":"1vh","borderRadius":"1vh","marginRight":"1vw",marginBottom:"3vh"}}>Home page</Link>
+                        {/* <Link to='/'style={{"border":"1px solid","padding":"1vh","borderRadius":"1vh","marginRight":"1vw",marginBottom:"3vh"}}>Home page</Link> */}
                         {!editingActive ?
                             <button onClick={editingEnableButtonClick} style={{"background":"none","border":"1px solid","padding":"1vh","borderRadius":"1vh","marginRight":"1vw",textAlign:"start"}}><div>Edit profile</div></button>
                             :<button onClick={editingEnableButtonClick} style={{"background":"none","border":"1px solid","padding":"1vh","borderRadius":"1vh","marginRight":"1vw",textAlign:"start"}}><div>Stop editing profile</div></button>}

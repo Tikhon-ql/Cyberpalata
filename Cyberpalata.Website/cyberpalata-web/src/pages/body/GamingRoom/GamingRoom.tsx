@@ -8,6 +8,7 @@ import BarLoader from "react-spinners/BarLoader";
 import React from 'react';
 import { Periphery } from './../../../types/types';
 import { Pc } from './../../../types/types';
+import { ClimbingBoxLoader } from 'react-spinners';
 
 const GamingRoom = () => {
     let navigate = useNavigate();
@@ -43,8 +44,8 @@ const GamingRoom = () => {
         {loading ?
 
             <div>
-                <BarLoader
-                color={"#123abc"}
+                <ClimbingBoxLoader
+                color={"white"}
                 loading={loading}
                 />
             </div> 

@@ -24,8 +24,7 @@ namespace Cyberpalata.WebApi.Controllers
         [Authorize]
         [HttpPost("createTeam")]
         public async Task<IActionResult> CreateTeam(CreateTeamViewModel viewModel)
-        {
-            
+        {    
             var id = Guid.Parse(User.Claims.First(c=>c.Type == JwtRegisteredClaimNames.Sid).Value);
             viewModel.CaptainId = id;
             await _teamService.CreateAsync(viewModel);

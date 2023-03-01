@@ -29,8 +29,23 @@ namespace Cyberpalata.ViewModel.Request.Identity
     {
         public UserCreateViewModelValidator()
         {
-            RuleFor(x => x.Password).Password();
-            RuleFor(x => x.PasswordConfirm).Password();
+            RuleFor(x => x.Password)
+                    .NotEmpty().WithMessage("Your password cannot be empty")
+                    .MinimumLength(8).WithMessage("Your password length must be at least 8.")
+                    .MaximumLength(16).WithMessage("Your password length must not exceed 16.")
+                    .Matches(@"[A-Z]+").WithMessage("Password must contain uppercase letter.")
+                    .Matches(@"[a-z]+").WithMessage("Password must contain lowercase letter.")
+                    .Matches(@"[0-9]+").WithMessage("Password must contain number.");
+                    //.Matches(@"[\!\?\*\.]+").WithMessage("Password must contain (!? *.).");
+            
+            //RuleFor(x => x.PasswordConfirm)
+            //        .NotEmpty().WithMessage("Your password cannot be empty")
+            //        .MinimumLength(8).WithMessage("Your password length must be at least 8.")
+            //        .MaximumLength(16).WithMessage("Your password length must not exceed 16.")
+            //        .Matches(@"[A-Z]+").WithMessage("Your password must contain at least one uppercase letter.")
+            //        .Matches(@"[a-z]+").WithMessage("Your password must contain at least one lowercase letter.")
+            //        .Matches(@"[0-9]+").WithMessage("Your password must contain at least one number.")
+            //        .Matches(@"[\!\?\*\.]+").WithMessage("Your password must contain at least one (!? *.)."); ;
         }
     }
 }

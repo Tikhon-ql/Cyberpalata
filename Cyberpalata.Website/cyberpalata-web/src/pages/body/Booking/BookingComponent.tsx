@@ -6,6 +6,7 @@ import api from "./../../../Components/api";
 import BarLoader from "react-spinners/BarLoader";
 import React from 'react';
 import { Seat } from "./../../../types/types";
+import { ClimbingBoxLoader } from "react-spinners";
 
 export const BookingComponent = () => {
     
@@ -15,7 +16,7 @@ export const BookingComponent = () => {
     const [seats,setSeats] = useState<Seat[]>([]);
     const [price, setPrice] = useState(0);
     const [begTime, setBegTime] = useState();
-    const [hoursCount, setHoursCount] = useState<number>(0);
+    const [hoursCount, setHoursCount] = useState<number>(10);
     const [updatePrice, setUpdatePrice] = useState<boolean>(false);
     const [clickedSeats, setClickedSeats] = useState<number[]>([]);
     const [loading, setLoading] = useState(false);
@@ -23,6 +24,7 @@ export const BookingComponent = () => {
     const [dateError, setDateError] = useState("");
     const [priceError, setPriceError] = useState("");
     const [hoursCountError,setHoursCountError] = useState("");
+    const [date, setDate] = useState("");
     const apiUrl = `https://localhost:7227;`;
 
     let accessToken = localStorage.getItem('accessToken');
@@ -50,6 +52,7 @@ export const BookingComponent = () => {
         setHoursCount(hours);
         setBegTime(beg);
         setUpdatePrice(!updatePrice);
+        setDate(date);
         if(hours)
         {
             (document.getElementById("rangeVal") as HTMLInputElement).innerText = hours;
@@ -63,6 +66,8 @@ export const BookingComponent = () => {
                 "hoursCount":hours
             }
             api.post(`/seats/getSeats`,requestBody).then(res=>{
+                console.log("Seatasastast");
+                console.dir(res.data);
                 setSeats(res.data);
             }).catch(err=>{
                 if(err.response.status >= 500 && err.response.status <= 599)
@@ -115,7 +120,7 @@ export const BookingComponent = () => {
         {
 
             let accessToken = jwtDecode(localStorage.getItem(`accessToken`) || "");
-            let price = (document.getElementById("price") as HTMLInputElement).innerHTML;
+            // let price = (document.getElementById("price") as HTMLInputElement).innerHTML;
             console.dir(accessToken);
             let requestBody = { 
                 "roomId":roomId,
@@ -189,8 +194,8 @@ export const BookingComponent = () => {
         {loading ? 
 
       <div> 
-        <BarLoader
-            color={"#123abc"}
+        <ClimbingBoxLoader
+            color={"white"}
             loading={loading}
             />
             </div>
@@ -203,16 +208,16 @@ export const BookingComponent = () => {
                     <div className="">
                         <label htmlFor="date" className="m-3">
                             <div>Date</div>
-                            <input id="date" name="data" onChange={(e) => onTimeChange(e)} type="date"/>
+                            <input id="date" name="data" value={date} onChange={(e) => onTimeChange(e)} type="date"/>
                             {dateError != "" && <div className="text-danger m-1 rounded">{dateError}</div>}
                         </label>
                         <label htmlFor="begining" className="m-3">
                             <div>Begining</div>
-                            <input id="begining" name="begining" onChange={onTimeChange} type="time"/>
+                            <input id="begining" name="begining" value={begTime} onChange={onTimeChange} type="time"/>
                         </label>
                         <label htmlFor="hoursCount" className="m-3 w-100 ">
                             <div className="d-flex">Hours count ( 0-10 ) :<div id="rangeVal" style={{"marginLeft":"5px"}}>10</div></div>
-                            <input id="hours" name="hours" className="w-50" onChange={onTimeChange} type="range" min = "1" max = "10"/>
+                            <input id="hours" name="hours" className="w-50" onMouseUp={onTimeChange} type="range" min = "1" max = "10"/>
                             {hoursCountError != "" && <div className="text-danger m-1 rounded">{hoursCountError}</div>}
                         </label>
                     </div>

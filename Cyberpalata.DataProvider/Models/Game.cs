@@ -7,5 +7,6 @@ namespace Cyberpalata.DataProvider.Models
         [MaxLength(50)] 
         [Required] 
         public string GameName { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

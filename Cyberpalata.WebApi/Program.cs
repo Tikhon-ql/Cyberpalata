@@ -21,6 +21,14 @@ builder.Services.AddControllers(config =>
     config.Filters.Add(new ModelStateValidationFilter());
 }).AddNewtonsoftJson();
 
+builder.Services.AddCors(o => o.AddPolicy("AllowAnyOrigin",
+                     builder =>
+                     {
+                         builder.AllowAnyOrigin()
+                                 .AllowAnyMethod()
+                                 .AllowAnyHeader();
+                     }));
+
 builder.Services.AddCors();
 
 builder.Services.AddScoped<ModelStateValidationFilter>();
@@ -63,12 +71,14 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors(options =>
-{
-    options.AllowAnyOrigin()
-        .AllowAnyHeader()
-        .AllowAnyMethod();
-});
+//app.UseCors(options =>
+//{
+//    options.AllowAnyOrigin()
+//        .AllowAnyHeader()
+//        .AllowAnyMethod();
+//});
+
+app.UseCors("AllowAnyOrigin");
 
 app.UseAuthorization();
 

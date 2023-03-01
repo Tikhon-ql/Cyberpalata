@@ -1,5 +1,7 @@
 import api from "./../../../Components/api"
 import React, {useState,useEffect} from 'react';
+import { ClimbingBoxLoader } from "react-spinners";
+import { useNavigate } from "react-router-dom";
 
 export type Round = {
     number:number,
@@ -9,7 +11,17 @@ export type Round = {
 export const TournamentCreating = ()=>{
     const [rounds, setRounds] = useState<Round[]>([]);
     const [maxState, setMaxState] = useState<boolean>(false);
+    const [isLoading, setLoading] = useState<boolean>(false);
 
+    const [tournamentName, setTournamentName] = useState<string>("");
+    const [date, setDate] = useState("");
+    const [roundCount, setRoundCount] = useState<string>("");
+    const [otherError, setOtherError] = useState<string>("");
+    const [tournamentNameError, setTournamentNameError] = useState<string>("");
+    const [dateError, setDateError] = useState<string>("");
+    const [roundCountError, setRoundCountError] = useState<string>("");
+
+    const navigate = useNavigate();
     useEffect(()=>{
 
     },[maxState])
@@ -17,19 +29,48 @@ export const TournamentCreating = ()=>{
     function sendTournamentCreatingRequest(event:any)
     {
         event.preventDefault();
+        setLoading(true)
         console.dir(event.target.elements);
         var requestBody = {
-            "name":event.target.elements.name.value,
-            "date":event.target.elements.date.value,
-            "roundCount":event.target.elements.roundCount.value
+            "name":tournamentName,
+            "date":date,
+            "roundCount":roundCount
             //"teamsMaxCount":event.target.elements.teamsMaxCount.value,
             //"rounds": rounds
         };
         console.dir(requestBody);
         api.post(`/tournaments/createTournament`,requestBody)
-        .then(res=>res)
-        .catch(err=>err)
-        .finally(()=>{});
+        .then(res=>{navigate("/");})
+        .catch(err=>
+            {
+                const data = err.response.data;
+                console.log("Error");
+                console.dir(err);
+                if(data.Other)
+                {
+                    setOtherError(data.Other);
+                }
+                if(data.Name)
+                {
+                    setTournamentNameError(data.Name);
+                }
+                if(data.Date)
+                {
+                    setDateError(data.Date);
+                }
+                if(data.RoundCount)
+                {
+                    setRoundCountError(data.RoundCount);
+                }
+            })
+        .finally(()=>{setLoading(false);});
+    }
+    function clearErrors()
+    {
+        setOtherError("");
+        setTournamentNameError("");
+        setDateError("");
+        setRoundCountError("");
     }
 
     // function teamsMaxCountChanged(event: any)
@@ -73,27 +114,40 @@ export const TournamentCreating = ()=>{
     // }
 
     return <div style={{"display":"flex","justifyContent":"center", "alignItems":"center","width":"100%","height":"80vh"}}>
-        <form className="form p-5 bg-white rounded"  onSubmit={(event) => {sendTournamentCreatingRequest(event)}}>
-                <div className ="m-1">
-                    <input id="name" name="name" className="w-100"  type="text" placeholder="Name here..."/>
-                </div>
-                <div  className ="m-1">
-                    <input id="date" name="date" className="w-100" type="date" placeholder="Date here..."/>
-                </div>
-                <div  className ="m-1">
-                    <input id="roundCount" name="roundCount" className="w-100" type="number" min="2" max="6" placeholder="Round count..."/>
-                </div>
-                {/* <div className ="m-1">
-                    <input id="teamsMaxCount" className="w-100" name="teamsMaxCount" type="number" onChange={(event)=>{teamsMaxCountChanged(event)}}  placeholder="Teams max count here..." min={8} max={40}/>
-                </div> */}
-            {/* {rounds.map((item:Round, index)=>{
-                return <div className="m-1">
-                    <h6 className="m-1">Round number {item.number + 1}</h6>
-                    <input id="roundDate" name="roundDate" type="date" onChange={(e)=>{rounds[item.number].date = e.target.value}} className="m-2" placeholder="Round date here..."/>
-                </div>
-            })} */}
-            <input type="submit" className="m-2" value ="Create"/>
+        {isLoading ? <div>
+            <ClimbingBoxLoader
+            color="white"
+            loading={isLoading}
+            />
+        </div>
+        :<form onSubmit={(event) => {sendTournamentCreatingRequest(event)}}>
+            <div className="w-100">
+                {otherError != "" && <div className="m-1 text-danger">{otherError}</div>}
+                <div className="w-100">
+                        <input id="name" name="name" className="w-100" onChange={(e)=>{setTournamentName(e.target.value);clearErrors()}} type="text" value={tournamentName} placeholder="Name here..."/>
+                        {tournamentNameError != "" && <div className="m-1 text-danger">{tournamentNameError}</div>}
+                    </div>
+                    <div>
+                        <input id="date" name="date" className="w-100" onChange={(e)=>{setDate(e.target.value);clearErrors()}} type="date" value={date} placeholder="Date here..."/>
+                        {dateError != "" && <div className="m-1 text-danger">{dateError}</div>}
+                    </div>
+                    <div >
+                        <input id="roundCount" name="roundCount" className="w-100" onChange={(e)=>{setRoundCount(e.target.value);clearErrors()}} value={roundCount} type="number" min="2" max="6" placeholder="Round count..."/>
+                        {roundCountError != "" && <div className="m-1 text-danger">{roundCountError}</div>}
+                    </div>
+                    {/* <div className ="m-1">
+                        <input id="teamsMaxCount" className="w-100" name="teamsMaxCount" type="number" onChange={(event)=>{teamsMaxCountChanged(event)}}  placeholder="Teams max count here..." min={8} max={40}/>
+                    </div> */}
+                {/* {rounds.map((item:Round, index)=>{
+                    return <div className="m-1">
+                        <h6 className="m-1">Round number {item.number + 1}</h6>
+                        <input id="roundDate" name="roundDate" type="date" onChange={(e)=>{rounds[item.number].date = e.target.value}} className="m-2" placeholder="Round date here..."/>
+                    </div>
+                })} */}
+                <input type="submit" className="w-100" value ="Create"/>
+            </div>         
         </form>
+        }    
     </div>
 
 }

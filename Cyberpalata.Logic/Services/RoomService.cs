@@ -58,10 +58,15 @@ namespace Cyberpalata.Logic.Services
         private List<Seat> GetFreeSeats(BookingCreateViewModel viewModel, Room room)
         {
             var freeSeats = new List<Seat>();
-            foreach(var seat in viewModel.Seats)
+            var bookings = room.Bookings.Where(b => (b.Date == viewModel.Date
+                && ((viewModel.Begining <= b.Begining
+                    && viewModel.Date.Add(viewModel.Begining).AddHours(viewModel.HoursCount) > b.Date.Add(b.Begining))
+                || (b.Begining <= viewModel.Begining
+                    && viewModel.Date.Add(viewModel.Begining) < b.Date.Add(b.Begining).AddHours(b.HoursCount))))).ToList();
+            foreach (var seat in viewModel.Seats)
             {
                 bool isFree = true;
-                foreach(var booking in room.Bookings)
+                foreach(var booking in bookings)
                 {
                     bool isBookingHasSeat = booking.Seats.FirstOrDefault(s=>s.Number == seat) != null;
                     if(isBookingHasSeat)
@@ -101,7 +106,9 @@ namespace Cyberpalata.Logic.Services
         public async Task<Result> AddBookingToRoom(Guid userId, BookingCreateViewModel viewModel)
         {
 
-            ValidateBooking(viewModel);
+            var result = ValidateBooking(viewModel);
+            if (result.IsFailure)
+                return result;
 
             var room = await _repository.ReadAsync(viewModel.RoomId);
             if (room.HasNoValue)

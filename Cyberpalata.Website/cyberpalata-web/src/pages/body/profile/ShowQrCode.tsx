@@ -27,7 +27,7 @@ export const ShowQrCode = () => {
                     level={"H"}
                 />
                 <div style={{textAlign:"center", color:"white"}}>
-                    <div style={{marginBottom:"1vh"}}><h4>Name: </h4>{tournament?.name}</div>
+                    <div style={{marginBottom:"1vh"}}><h4>Tournament: </h4>{tournament?.name}</div>
                     <div><h4>Date: </h4>{tournament?.date}</div>
                 </div>
         </div>  

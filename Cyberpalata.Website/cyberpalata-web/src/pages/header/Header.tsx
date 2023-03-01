@@ -24,7 +24,7 @@ export const Header = observer((props) => {
         accessToken = jwtDecode(localStorage.getItem('accessToken') || "");
         console.dir(accessToken);
     }
-    useEffect(()=>{console.log("ASJF:LJ")},[headerRerenderStore.state])
+    useEffect(()=>{},[headerRerenderStore.state])
     console.dir(accessToken);
 
     //                                                                 background: -webkit-linear-gradient(90deg, #583544,#463951,#3614e1);/* Chrome 10-25, Safari 5.1-6 */                         ;/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */                                             
@@ -40,14 +40,16 @@ export const Header = observer((props) => {
                         <Link to="/createTournament">Create tournament</Link>
                     </li>
                 }
-                {(AuthVerify() && accessToken) && <li style={{"marginTop":"2vh"}}>
-                    <Link to="/profile" style={{"color":"white","marginRight":"1vw","marginTop":"2vh","fontSize":"20px"}}>Profile</Link>
+                {(AuthVerify() && accessToken) && <li style={{"color":"white","marginRight":"2vw","marginTop":"2vh","fontSize":"20px"}}>
+                    <Link to="/profile" >Profile</Link>
                 </li>}
                 {!AuthVerify() ? 
                     <li style={{"color":"white","marginRight":"2vw","marginTop":"2vh","fontSize":"20px"}}>
                         <Link to="/login">Sign In</Link>
                     </li>:
-                       <Link to="" style={{"color":"white","marginRight":"2vw","marginTop":"2vh","fontSize":"20px"}} onClick={()=>{setModalActive(true)}}>SignOut</Link>
+                    <li style={{"color":"white","marginRight":"2vw","marginTop":"2vh","fontSize":"20px"}}>
+                        <a onClick={()=>{setModalActive(true)}}>SignOut</a>
+                    </li>
                 }
                 {!AuthVerify() && 
                     <li className='whiteLink' style={{"color":"white","marginRight":"2vw","marginTop":"2vh","fontSize":"20px"}}>

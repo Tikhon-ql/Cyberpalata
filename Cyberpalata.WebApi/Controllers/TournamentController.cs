@@ -28,7 +28,7 @@ namespace Cyberpalata.WebApi.Controllers
             var id = _tournamentService.CreateTournament(viewModel);
             return await ReturnSuccess();
         }
-        //[Authorize]
+        [Authorize]
         [HttpPut("registerTeam")]
         public async Task<IActionResult> RegisterTeam(RegisterTeamViewModel viewModel)
         {
@@ -37,7 +37,7 @@ namespace Cyberpalata.WebApi.Controllers
                 return BadRequestJson(result);
             return await ReturnSuccess(result.Value);
         }
-        [Authorize]
+        //[Authorize]
         [HttpGet("getActualTournaments")]
         public async Task<IActionResult> GetActualTournaments(int page)
         {
@@ -68,7 +68,7 @@ namespace Cyberpalata.WebApi.Controllers
             var viewModel = await _tournamentService.GetTournamentDetailed(tournamentId);
             return await ReturnSuccess(viewModel);
         }
-        [Authorize]
+        //[Authorize]
         [HttpGet("getTournamentSmall")]
         public async Task<IActionResult> GetTournamentSmall(Guid id)
         {
@@ -87,7 +87,7 @@ namespace Cyberpalata.WebApi.Controllers
                 CaptainId = userId,
                 IsActual = true,
                 CurrentPage = page,
-                PageSize = 3
+                PageSize = 5
             };
             var result = await _tournamentService.GetPagedList(filter);
             var viewModel = new List<UserTournamentViewModel>();

@@ -54,6 +54,15 @@ namespace Cyberpalata.Logic.Services
 
         public async Task<Result> ValidateUserAsync(UserCreateViewModel request)
         {
+            var validator = new UserCreateViewModelValidator();
+            var result = validator.Validate(request);
+            if (!result.IsValid)
+            {
+                string error = "";
+                foreach (var item in result.Errors)
+                    error += item + "\n";
+                return Result.Failure(error);
+            }
             var user = await _userRepository.ReadAsync(request.Email);
 
             if (user.HasValue && user.Value.IsActivated)

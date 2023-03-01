@@ -22,6 +22,8 @@ namespace Cyberpalata.Logic.Configuration.MapperConfiguration
                 //.ForMember(dst=>dst.Rounds, opt=>opt.MapFrom(src=>src.Rounds))
                 .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name));
             profile.CreateMap<CreateTournamentViewModel, TournamentDto>();
+                //.ForMember(dst => dst.RoundCount, opt => opt.MapFrom(src => src.RoundCount))
+                //.ForMember(dst => dst.Date, opt => opt.MapFrom(src => src.Date));
             profile.CreateMap<Tournament, GetTournamentViewModel>()
                 .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name));

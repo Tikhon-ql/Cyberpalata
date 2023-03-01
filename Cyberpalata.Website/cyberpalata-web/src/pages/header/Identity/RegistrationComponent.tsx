@@ -4,6 +4,7 @@ import api from "./../../../Components/api";
 import BarLoader from "react-spinners/BarLoader";
 import { useState } from "react";
 import React from "react";
+import { ClimbingBoxLoader } from "react-spinners";
 
 
 export const RegistrationComponent = ()=>{
@@ -26,10 +27,10 @@ export const RegistrationComponent = ()=>{
         event.preventDefault();
         setLoading(true);
         const data = {
-            "username": event.target.elements.username.value,
-            "surname": event.target.elements.surname.value,
-            "email":event.target.elements.email.value,
-            "phone":event.target.elements.phone.value,
+            "username": username,
+            "surname": surname,
+            "email": email,
+            "phone": phone,
             "password":event.target.elements.password.value,
             "passwordConfirm" : event.target.elements.passwordConfirm.value
         }
@@ -95,8 +96,8 @@ export const RegistrationComponent = ()=>{
     return <div style={{"display":"flex","justifyContent":"center","alignItems":"center","width":"100%","height":"80vh"}}>
         {loading ?  
 
-         <BarLoader
-        color={"#123abc"}
+         <ClimbingBoxLoader
+        color={"white"}
         loading={loading}
 
         // size={30}
@@ -104,14 +105,25 @@ export const RegistrationComponent = ()=>{
         <div className="myForm">
             <h1>Registration</h1>
             <form method="post" onSubmit={(e)=>{sendRegisterRequest(e)}}>
+                {otherError != "" && <div className="m-1 text-danger">{otherError}</div>}
                 <div className="d-flex">
-                    <input type="text" style={{"marginRight":"0.3vw"}} onInput={clearErrors} onChange={(e)=>{setUsername(e.target.value)}} id="username" name="username" placeholder="Name" required/>
-                    <input type="text" style={{"marginLeft":"0.3vw"}} id="surname" onChange={(e)=>{setSurname(e.target.value)}} name="surname" placeholder="Surname" required/>
+                    <div>
+                        {usernameError != "" && <div className="m-1 text-danger">{usernameError}</div>}
+                        <input type="text" style={{"marginRight":"0.3vw"}} onInput={clearErrors} onChange={(e)=>{setUsername(e.target.value)}} value={username} id="username" name="username" placeholder="Name"/>
+                    </div>
+                    <div>
+                        {surnameError != "" && <div className="m-1 text-danger">{surnameError}</div>}
+                        <input type="text" style={{"marginLeft":"0.3vw"}} id="surname" onInput={clearErrors} onChange={(e)=>{setSurname(e.target.value)}} name="surname" value={surname} placeholder="Surname"/>
+                    </div>
                 </div>
-                <input type="email" id="email" name="email" onChange={(e)=>{setEmail(e.target.value)}} placeholder="Email" required/>
-                <input type="tel" id="phone" name="phone" aria-describedby="phoneHelp" onChange={(e)=>{setPhone(e.target.value)}} placeholder="Phone" required/>
-                <input type="password" name="password" id="password" placeholder="Password" required/>
-                <input type="password" name="passwordConfirm" id="passwordConfirm" placeholder="Password confirm" required/>
+                {emailError != "" && <div className="m-1 text-danger">{emailError}</div>}
+                <input type="email" id="email" name="email" onInput={clearErrors} onChange={(e)=>{setEmail(e.target.value)}} value={email} placeholder="Email" />
+                {phoneError != "" && <div className="m-1 text-danger">{phoneError}</div>}
+                <input type="tel" id="phone" name="phone" onInput={clearErrors} aria-describedby="phoneHelp" value={phone} onChange={(e)=>{setPhone(e.target.value)}} placeholder="Phone"/>
+                {passwordError != "" && <div className="m-1 text-danger">{passwordError}</div>}
+                <input type="password" name="password" onInput={clearErrors} id="password" placeholder="Password"/>
+                {passwordConfirmError != "" && <div className="m-1 text-danger">{passwordConfirmError}</div>}
+                <input type="password" name="passwordConfirm" onInput={clearErrors} id="passwordConfirm" placeholder="Password confirm"/>
                 <button type="submit" className="btn btn-primary btn-block btn-large">Register</button>
             </form>
         </div>}

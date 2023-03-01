@@ -45,8 +45,8 @@ export const LogoutComponent = observer(({setModalActive}: any) => {
 
     return <>
     <div className="d-flex align-items-center justify-content-center pt-4" >
-        <div style={{background:"rgba(68, 50, 72,0.5)",padding:"2vw 5vw 2vw 5vw", borderRadius:"1vw", color:"white"}}>
-            <h2>You really want logout?</h2>
+        <div style={{background:"rgba(68, 50, 72,0.5)",padding:"2vh 2vw 2vh 2vw", borderRadius:"1vw", color:"white"}}>
+            <h2>Do you really want ot sign out?</h2>
             <div style={{'display': 'flex',justifyContent:"center",marginTop:"3vh"}}>
                 <Link to="" style={{"border":"1px solid","padding":"0.5vh 1.5vh 0.5vh 1.5vh","borderRadius":"1vh","marginRight":"5vw",marginBottom:"3vh"}} onClick={logout}>Ok</Link>
                 <Link to="" style={{"border":"1px solid","padding":"0.5vh 1.5vh 0.5vh 1.5vh","borderRadius":"1vh","marginRight":"1vw",marginBottom:"3vh"}} onClick={()=>{setModalActive(false)}}>Cancel</Link>

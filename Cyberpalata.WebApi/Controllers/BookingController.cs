@@ -65,6 +65,7 @@ namespace Cyberpalata.WebApi.Controllers
             {
                 IsActual = isActual,
                 CurrentPage = page,
+                PageSize = 5,
                 UserId = userId
             };
 
@@ -83,7 +84,7 @@ namespace Cyberpalata.WebApi.Controllers
                     RoomName = item.Room.Name
                 });
             }
-            return Ok(new { viewModel, bookings.TotalItemsCount });
+            return Ok(new {Items = viewModel, TotalItemsCount = bookings.TotalItemsCount, PageSize = 5});
         }
     }
 }

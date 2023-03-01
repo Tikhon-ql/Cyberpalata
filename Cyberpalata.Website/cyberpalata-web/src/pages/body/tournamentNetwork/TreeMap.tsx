@@ -5,6 +5,8 @@ import { TreeData } from '../../../types/types';
 import Tree from 'react-d3-tree';
 import api from './../../../Components/api';
 import { useNavigate } from 'react-router-dom';
+import jwtDecode from 'jwt-decode';
+// import {Node} from './Node';
 
 export type Props = {
     tournamentId: string,
@@ -49,16 +51,24 @@ const renderForeignObjectNode = ({
   );
   
 export const TreeMap = ({treeData, tournamentId}:Props)=>{
-    const separation = { siblings: 1, nonSiblings: 1};
+    const separation = { siblings: 3, nonSiblings: 3};
     const nodeSize = { x: 100, y: 100 };
     const foreignObjectProps = { width: nodeSize.x, height: nodeSize.y, x: -125 };
     const [translate, containerRef] = useCenteredTree();
     const navigate = useNavigate();
+    let accessToken: any;
+    if(localStorage.getItem('accessToken'))
+    {
+        accessToken = jwtDecode(localStorage.getItem('accessToken') || "");
+    }
 
     function nodeClicked(e)
     {
       console.dir(e);
-      navigate(`/selectWinner/${tournamentId}/${e.data.batleId}/${e.data.firstTeamName}/${e.data.firstTeamId}/${e.data.secondTeamName}/${e.data.secondTeamId}`);
+      if(e.data.batleId && e.data.firstTeamName && e.data.firstTeamId && e.data.secondTeamName && e.data.secondTeamId)
+      {
+         navigate(`/selectWinner/${tournamentId}/${e.data.batleId}/${e.data.firstTeamName}/${e.data.firstTeamId}/${e.data.secondTeamName}/${e.data.secondTeamId}`);
+      }
 
       // var requestBody = {
       //   batleId: treeData.batleId,
@@ -78,7 +88,17 @@ export const TreeMap = ({treeData, tournamentId}:Props)=>{
             branchNodeClassName="node__branch"
             leafNodeClassName="node__leaf"
             orientation="vertical"
-            onNodeClick={(e)=>{nodeClicked(e)}}
+            translate={{ x: 900, y: 150 }}
+            onNodeClick = {accessToken?.role === "Admin" ? (e)=>{nodeClicked(e)} : (e)=>{}}
+            // nodeLabelComponent={{
+            //   render: <Node/>,
+            //   foreignObjectWrapper: {
+            //     width: 220,
+            //     height: 200,
+            //     y: -50,
+            //     x: -100
+            //   }
+            // }}
             />
         </div>
     )

@@ -8,6 +8,7 @@ import { observer } from 'mobx-react-lite';
 import headerRerenderStore from '../../../store/headerRerenderStore';
 import React from 'react';
 import jwt_decode from "jwt-decode";
+import { ClimbingBoxLoader } from 'react-spinners';
 
 const LoginComponent = () => {
     const [email, setEmail] = useState<string>("");
@@ -70,8 +71,8 @@ const LoginComponent = () => {
     }
 
 return <div style={{"display":"flex","justifyContent":"center","alignItems":"center","width":"100%","height":"80vh"}}>{loading ? <div> 
-        <BarLoader
-            color={"#123abc"}
+        <ClimbingBoxLoader
+            color={"white"}
             loading={loading}
 
             // size={30}
@@ -81,10 +82,10 @@ return <div style={{"display":"flex","justifyContent":"center","alignItems":"cen
             <h1>SignIn</h1>
             <form method="post" onSubmit={(e)=>{sendLoginRequest(e)}}>
                 {otherError != "" && <div className="text-danger m-1 rounded">{otherError}</div>}
-                <input type="email" name="email" onInput={clearErrors} onChange={(event)=>{setEmail(event.target.value)}} placeholder="Email" required/>
                 {emailError != "" && <div className="text-danger m-1 rounded">{emailError}</div>}
-                <input type="password"  name="password" onInput={clearErrors} placeholder="Password" required/>
+                <input type="email" name="email" onInput={clearErrors} value={email} onChange={(event)=>{setEmail(event.target.value)}} placeholder="Email"/>
                 {passwordError != "" && <div className="text-danger m-1 rounded">{passwordError}</div>}
+                <input type="password"  name="password" onInput={clearErrors} placeholder="Password"/>
                 <button type="submit" className="btn btn-primary btn-block btn-large">Let me in.</button>
             </form>
       </div>

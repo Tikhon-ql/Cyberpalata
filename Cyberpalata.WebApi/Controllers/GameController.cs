@@ -19,16 +19,20 @@ namespace Cyberpalata.WebApi.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get()
+        [HttpGet("getGames")]
+        public async Task<IActionResult> Get(int page)
         {
             var filter = new BaseFilterBL
             {
-                CurrentPage = 1,
+                CurrentPage = page,
                 PageSize = 10,
             };
             var games = await _gameService.GetPagedListAsync(filter);
-            var viewModel = new GameLibraryViewModel { Games = games.Items.Select(g => g.GameName).ToList() };
+            var viewModel = new List<GameViewModel>();
+            foreach(var item in games.Items)
+            {
+                viewModel.Add(new GameViewModel { Name = item.GameName,ImageUrl = item.ImageUrl});
+            }
             return await ReturnSuccess(viewModel);
         }
     }

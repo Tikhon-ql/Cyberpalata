@@ -1,7 +1,8 @@
 ﻿namespace Cyberpalata.ViewModel.Response.GameLibrary
 {
-    public class GameLibraryViewModel
+    public class GameViewModel
     {
-        public List<string> Games { get; set; }
+        public string Name { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

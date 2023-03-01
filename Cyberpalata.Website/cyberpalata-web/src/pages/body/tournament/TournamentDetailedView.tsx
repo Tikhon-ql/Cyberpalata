@@ -56,7 +56,7 @@ export const TournamentDetailedView = ()=> {
         }
         if(list[left].firstTeamName != "" && list[left].secondTeamName != "")
         {
-            list[left].name = `${list[left].firstTeamName} VS ${list[left].secondTeamName} ${list[left].roundNumber}`;
+            list[left].name = `${list[left].firstTeamName} VS ${list[left].secondTeamName}`;
         }
         node.children.push(list[left]);
         initTree(node.children[0],list,left);
@@ -71,7 +71,7 @@ export const TournamentDetailedView = ()=> {
         }
         if(list[right].firstTeamName != "" && list[right].secondTeamName != "")
         {
-            list[right].name = `${list[right].firstTeamName} VS ${list[right].secondTeamName} ${list[right].roundNumber}`;
+            list[right].name = `${list[right].firstTeamName} VS ${list[right].secondTeamName}`;
         }
         //list[right].name = `${list[right].firstTeamName} VS ${list[right].secondTeamName} ${list[right].roundNumber}`;
         node.children.push(list[right]);
@@ -104,7 +104,7 @@ export const TournamentDetailedView = ()=> {
             }
             if(treeData.firstTeamName != "" && treeData.secondTeamName != "")
             {
-                treeData.name = `${treeData.firstTeamName} VS ${treeData.secondTeamName} ${treeData.roundNumber}`;
+                treeData.name = `${treeData.firstTeamName} VS ${treeData.secondTeamName}`;
             }
             //treeData.name = `${treeData.firstTeamName} VS ${treeData.secondTeamName} ${treeData.roundNumber}`;
             initTree(treeData,res.data.batles, 0);

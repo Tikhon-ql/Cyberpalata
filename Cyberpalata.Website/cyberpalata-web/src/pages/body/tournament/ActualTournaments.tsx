@@ -4,6 +4,7 @@ import api from "./../../../Components/api";
 import {Link} from "react-router-dom";
 import React from 'react'
 import { Pagination } from "../../../Components/Helpers/Pagination";
+import { ClimbingBoxLoader } from "react-spinners";
 
 export type TournamentList = {
     items: Tournament[],
@@ -15,16 +16,23 @@ export const ActualTournaments = ()=>{
 
     const [tournamentList, setTournamentList] = useState<TournamentList>();
     const [curPage, setCurPage] = useState<number>(1);
-    const [isLoaded, setIsLoaded] = useState<boolean>(false);
+    const [isLoading, setIsLoaded] = useState<boolean>(false);
 
     useEffect(()=>{
         setIsLoaded(true);
         api.get(`/tournaments/getActualTournaments?page=${curPage}`).then(res=>{
             console.dir(res.data);
             setTournamentList(res.data);
-        }).finally(()=>{setIsLoaded(true)});
+        }).finally(()=>{setIsLoaded(false)});
     },[curPage]);
-     return <>{isLoaded && <div style={{"display":"flex","justifyContent":"center","alignItems":"center","width":"100%","height":"80vh"}}>
+     return <div style={{display:"flex",justifyContent:"center",alignItems:"center",height:"80vh"}}>
+    {isLoading ? 
+     <div>
+        <ClimbingBoxLoader
+          color={"white"}
+          loading={isLoading}/>
+     </div>:
+     <div style={{"display":"flex","justifyContent":"center","alignItems":"center","width":"100%","height":"80vh"}}>
      <ul className="list-style-non w-50" style={{"listStyle":"none"}}>
              {tournamentList?.items.map((item:Tournament, index)=>{
                  return <li key={index} className="text-decoration-none m-1">       
@@ -39,7 +47,7 @@ export const ActualTournaments = ()=>{
              })}
      </ul>
      <Pagination totalItemsCount = {tournamentList?.totalItemsCount} pageCount = {tournamentList?.pageSize} curPage = {curPage} setCurPage = {setCurPage}/>
-    </div>}</>
+    </div>}</div>
 }
 
 
