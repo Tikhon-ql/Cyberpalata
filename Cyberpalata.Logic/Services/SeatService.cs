@@ -55,6 +55,7 @@ namespace Cyberpalata.Logic.Services
             if (actualRoomBookings.HasNoValue)
                 return resultSeats;
 
+            //TODO: PUSH IT INTO SEPARATE METHODE
             var bookings = actualRoomBookings.Value
                 .Where(b => (b.Date == viewModel.Date
                 && ((viewModel.Begining <= b.Begining 

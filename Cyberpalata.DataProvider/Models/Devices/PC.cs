@@ -5,9 +5,6 @@ namespace Cyberpalata.DataProvider.Models.Devices
 {
     public class Pc : BaseEntity
     {
-        //[Key]
-        //[Required] 
-        //public Guid Id { get; set; }
         [Required]
         [MaxLength(50)]
         public string Gpu { get; set; } = String.Empty;

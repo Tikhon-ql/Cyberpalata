@@ -90,7 +90,7 @@ namespace Cyberpalata.Logic.Services
         }
 
 
-        // move tempalte to db
+        //TODO: GET HTML FROM DB
         public async Task PasswordRecoveryAsync([EmailAddress]string email)
         {
             //A.K.:url is hardcoded - how it will be changed for PROD env?
@@ -114,6 +114,7 @@ namespace Cyberpalata.Logic.Services
             return Result.Success();
         }
 
+        //TODO: GET HTML FROM DB
         public async Task<Result<int>> SendCodeToMailAsync(EmailConfirmViewModel viewModel)
         {
             var user = await _userRepository.ReadAsync(viewModel.UserId);

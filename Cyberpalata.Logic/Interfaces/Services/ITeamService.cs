@@ -3,7 +3,6 @@ using Cyberpalata.Common;
 using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Models.Tournament;
 using Cyberpalata.ViewModel.Request.Tournament;
-using Cyberpalata.ViewModel.Response;
 using Cyberpalata.ViewModel.Response.Tournament;
 
 namespace Cyberpalata.Logic.Interfaces.Services
@@ -13,7 +12,7 @@ namespace Cyberpalata.Logic.Interfaces.Services
         Task CreateAsync(CreateTeamViewModel request);
         Task<PagedList<TeamDto>> GetPagedList(TeamFilterBL filter);
         Task<Maybe<TeamDetailViewModel>> GetTeamDetailed(Guid teamId);
-        Task SetHiringState(Guid teamId,bool state);///???? Guid comes outside
+        Task SetHiringState(Guid teamId,bool state);
         Task<Result<TeamDetailViewModel>> GetTeamInTournament(Guid teamId, Guid tournamentId);
     }
 }

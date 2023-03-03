@@ -66,11 +66,6 @@ namespace Cyberpalata.Logic.Services
                     Type = SeatType.Free,
                 });
             }));
-            //resultSeats = resultSeats.OrderBy(seat => seat.Number).ToList();
-            //foreach (var bookingSeat in booking.Value.Seats)
-            //{
-            //    resultSeats[bookingSeat.Number - 1].Type = SeatType.UsersSeat;
-            //}
             SetUsersSeats(resultSeats, booking.Value.Seats);
             viewModel.Seats = resultSeats;
             return Result.Success(viewModel);

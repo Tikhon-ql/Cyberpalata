@@ -1,12 +1,9 @@
 using Cyberpalata.Logic.Configuration;
-using Cyberpalata.Logic.Interfaces;
-using Cyberpalata.WebApi.ActionFilters;
+using Cyberpalata.WebApi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Serialization;
-using NLog;
 using NLog.Web;
 using System.Text;
 
@@ -70,13 +67,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-//app.UseCors(options =>
-//{
-//    options.AllowAnyOrigin()
-//        .AllowAnyHeader()
-//        .AllowAnyMethod();
-//});
 
 app.UseCors("AllowAnyOrigin");
 

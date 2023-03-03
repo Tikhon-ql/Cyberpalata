@@ -14,13 +14,11 @@ namespace Cyberpalata.WebApi.Controllers
     public class BookingController : BaseController
     {
         private readonly IBookingService _bookingService;
-        private readonly ISeatService _seatService;
         private readonly IRoomService _roomService;
 
-        public BookingController(IBookingService bookingService, ISeatService seatService, IUnitOfWork uinOfWork, IRoomService roomService) : base(uinOfWork)
+        public BookingController(IBookingService bookingService, IUnitOfWork uinOfWork, IRoomService roomService) : base(uinOfWork)
         {
             _bookingService = bookingService;
-            _seatService = seatService;
             _roomService = roomService;
         }
 
@@ -59,7 +57,6 @@ namespace Cyberpalata.WebApi.Controllers
         public async Task<IActionResult> GetBookingsSmallInfo(int page, bool isActual)
         {
             var userId = Guid.Parse(User.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Sid).Value);
-            //var user = await _userService.ReadAsync(userId);
 
             var filter = new BookingFilterBL
             {

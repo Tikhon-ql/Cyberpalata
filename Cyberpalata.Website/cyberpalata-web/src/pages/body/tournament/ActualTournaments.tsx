@@ -46,7 +46,7 @@ export const ActualTournaments = ()=>{
                  </li>
              })}
      </ul>
-     <Pagination totalItemsCount = {tournamentList?.totalItemsCount} pageCount = {tournamentList?.pageSize} curPage = {curPage} setCurPage = {setCurPage}/>
+     {/* <Pagination totalItemsCount = {tournamentList?.totalItemsCount} pageCount = {tournamentList?.pageSize} curPage = {curPage} setCurPage = {setCurPage}/> */}
     </div>}</div>
 }
 

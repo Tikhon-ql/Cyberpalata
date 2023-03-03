@@ -263,12 +263,12 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b2fa7483-1a45-44ab-b014-3b0235037df2"),
+                            Id = new Guid("5d4bbdd0-f6a1-402f-b45a-c5f541764244"),
                             Name = "User"
                         },
                         new
                         {
-                            Id = new Guid("be8349de-a9cd-41ba-bc9b-2d5cda5c220d"),
+                            Id = new Guid("651ec25f-b02a-4851-af5f-7fcc90f8f245"),
                             Name = "Admin"
                         });
                 });
@@ -503,6 +503,31 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.ToTable("Teams");
                 });
 
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Tournaments.TeamJoinRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TeamId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("TeamMemberId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TeamId");
+
+                    b.HasIndex("TeamMemberId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Requests");
+                });
+
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Tournaments.TeamMember", b =>
                 {
                     b.Property<Guid>("Id")
@@ -735,6 +760,29 @@ namespace Cyberpalata.DataProvider.Migrations
                         .HasForeignKey("TournamentId");
                 });
 
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Tournaments.TeamJoinRequest", b =>
+                {
+                    b.HasOne("Cyberpalata.DataProvider.Models.Tournaments.Team", "Team")
+                        .WithMany()
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Cyberpalata.DataProvider.Models.Tournaments.TeamMember", null)
+                        .WithMany("JoinRequests")
+                        .HasForeignKey("TeamMemberId");
+
+                    b.HasOne("Cyberpalata.DataProvider.Models.Identity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Team");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Tournaments.TeamMember", b =>
                 {
                     b.HasOne("Cyberpalata.DataProvider.Models.Identity.User", "Member")
@@ -811,6 +859,11 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.Navigation("Members");
 
                     b.Navigation("Tournaments");
+                });
+
+            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Tournaments.TeamMember", b =>
+                {
+                    b.Navigation("JoinRequests");
                 });
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Tournaments.Tournament", b =>

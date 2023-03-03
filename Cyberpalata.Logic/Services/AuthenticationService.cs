@@ -74,12 +74,6 @@ namespace Cyberpalata.Logic.Services
             return isRefreshTokenExpired;
         }
 
-        //private bool ValidateAccessToken(string accessToken)
-        //{
-        //    var jwt = new JwtSecurityTokenHandler();
-            
-        //}
-
         private async Task<Result<UserRefreshToken>> ValidateRefreshToken(TokenViewModel viewModel)
         {
             var refreshToken = await _refreshTokenRepository.ReadAsync(viewModel.RefreshToken);
@@ -202,18 +196,9 @@ namespace Cyberpalata.Logic.Services
             if (userRefreshToken.HasNoValue)
                 return Result.Failure("Refresh token isn't exist!");
 
-            ///??? If i will get only id from Token probably i should rewrite GetClaim method to check owner id validation
             var userIdResult = GetIdClaim(tokenDto.AccessToken, JwtRegisteredClaimNames.Sid);
             if (userIdResult.IsFailure)
                 return Result.Failure(userIdResult.Error);
-
-            //var claimId = userIdClaim.Value;
-
-            //if (!Guid.TryParse(claimId.Value, out Guid userId))
-            //    return Result.Failure("Cannot parse id");
-
-            //if (userId != userRefreshToken.Value.User.Id)
-            //    return Result.Failure("Your aren't owner of the refresh token");
 
             if (userIdResult.Value != userRefreshToken.Value.User.Id)
                 return Result.Failure("Your aren't owner of the refresh token");

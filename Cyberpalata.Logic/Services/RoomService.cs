@@ -102,37 +102,19 @@ namespace Cyberpalata.Logic.Services
             return booking;
         }
 
-        // comes 1 2 3 4 5 3 and 5 are taken
         public async Task<Result> AddBookingToRoom(Guid userId, BookingCreateViewModel viewModel)
         {
-
             var result = ValidateBooking(viewModel);
             if (result.IsFailure)
                 return result;
-
             var room = await _repository.ReadAsync(viewModel.RoomId);
             if (room.HasNoValue)
                 return Result.Failure($"There aren't roo with id:{viewModel.RoomId}");
-
-            //var bookingDto = _mapper.Map<BookingDto>(viewModel);
-            //var booking = _mapper.Map<Booking>(viewModel);
-            //booking.Seats = GetFreeSeats(viewModel, room.Value);
-
-            //foreach (var seat in booking.Seats)
-            //{
-            //    seat.Bookings.Add(booking);
-            //}
             var booking = CreateBookingWithSeats(viewModel, room.Value);
-
             var user = await _userRepository.ReadAsync(userId);
             booking.User = user.Value;
-
             booking.Room = room.Value;
             room.Value.Bookings.Add(booking);
-
-            //booking.User.Id = userId;
-            //bookingDto.Room = _mapper.Map<RoomDto>(room.Value);
-            //await _repository.AddBookingToRoomAsync(viewModel.RoomId, _mapper.Map<Booking>(bookingDto));
             await _bookingRepository.CreateAsync(booking);
             return Result.Success();
         }
@@ -141,8 +123,6 @@ namespace Cyberpalata.Logic.Services
         {
             if (viewModel.Seats.Count == 0)
                 return Result.Failure("Seats collection is empty");
-
-            //??? Date trouble UTC
             int bookingMakingMaxAheadDays = int.Parse(_configuration["BookingSettings:BookingMaxMakingAheadDays"]);
             if ((viewModel.Date - DateTime.Now).Days >= bookingMakingMaxAheadDays)
                 return Result.Failure("Incorrect date: You can make a booking only on 2 weeks ahead");
@@ -150,7 +130,7 @@ namespace Cyberpalata.Logic.Services
         }
 
    
-
+        //TODO: REFACTOR IT
         public async Task<Maybe<List<RoomDto>>> SearchRooms(SearchRoomViewModel viewModel)
         {
             var rooms = await _repository.GetAll();
@@ -185,8 +165,7 @@ namespace Cyberpalata.Logic.Services
                         break;
                     }
                 }
-            }
-            
+            }     
             return resultList;
         }
     }

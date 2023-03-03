@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CSharpFunctionalExtensions;
-using CSharpFunctionalExtensions.ValueTasks;
 using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Filters;
 using Cyberpalata.DataProvider.Interfaces;
@@ -9,7 +8,6 @@ using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Tournament;
 using Cyberpalata.ViewModel.Request.Tournament;
-using Cyberpalata.ViewModel.Response;
 using Cyberpalata.ViewModel.Response.Tournament;
 
 namespace Cyberpalata.Logic.Services

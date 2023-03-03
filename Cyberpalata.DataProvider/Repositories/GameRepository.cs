@@ -13,11 +13,5 @@ namespace Cyberpalata.DataProvider.Repositories
         {
             await _context.Games.AddRangeAsync(games);
         }
-
-        //public override async Task<PagedList<Game>> GetPageListAsync(BaseFilter filter)
-        //{
-        //    var list = await _context.Games.Skip((filter.CurrentPage - 1) * filter.PageSize).Take(filter.PageSize).ToListAsync();
-        //    return new PagedList<Game>(list, filter.CurrentPage, filter.PageSize, _context.Games.Count());
-        //}
     }
 }

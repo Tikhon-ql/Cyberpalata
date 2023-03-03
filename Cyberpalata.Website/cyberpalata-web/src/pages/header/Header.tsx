@@ -33,7 +33,10 @@ export const Header = observer((props) => {
         <nav id="headerId" className="navbar navbar-light" style={{background: "linear-gradient(90deg, #583544,#463951,#3614e1)"}}>
             <ul style={{"height":"5vh", "display":"flex","width":"100%","justifyContent":"end","alignItems":"center","listStyle":"none"}}>
                 <li className='whiteLink' style={{"color":"white","marginRight":"2vw","marginTop":"2vh","fontSize":"20px"}}>
-                        <Link to="/">Home</Link>
+                    <Link to="/">Home</Link>
+                </li>
+                <li className='whiteLink' style={{"color":"white","marginRight":"2vw","marginTop":"2vh","fontSize":"20px"}}>
+                    <Link to="/hiringTeam">Hiring team</Link>
                 </li>
                 {accessToken && accessToken.role === "Admin" &&
                     <li className='whiteLink' style={{"color":"white","marginRight":"2vw","marginTop":"2vh","fontSize":"20px"}}>
@@ -45,10 +48,10 @@ export const Header = observer((props) => {
                 </li>}
                 {!AuthVerify() ? 
                     <li style={{"color":"white","marginRight":"2vw","marginTop":"2vh","fontSize":"20px"}}>
-                        <Link to="/login">Sign In</Link>
+                        <Link to="/login">Login</Link>
                     </li>:
                     <li style={{"color":"white","marginRight":"2vw","marginTop":"2vh","fontSize":"20px"}}>
-                        <a onClick={()=>{setModalActive(true)}}>SignOut</a>
+                        <a onClick={()=>{setModalActive(true)}}>Logout</a>
                     </li>
                 }
                 {!AuthVerify() && 

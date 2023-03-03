@@ -12,14 +12,6 @@ namespace Cyberpalata.DataProvider.Repositories
         {
         }
 
-        //public override async Task<PagedList<Booking>> GetPageListAsync(BookingFilter filter)
-        //{
-        //    var bookings = await base.GetPageListAsync(filter);
-        //    if (filter.UserId.HasValue)
-        //        bookings.Items = bookings.Items.Where(b => b.User.Id == filter.UserId.Value);
-        //    return bookings;
-        //}
-
         public async Task<Maybe<List<Booking>>> GetActualBookingsByRoomId(Guid roomId)
         {
             var bookings = await _context.Bookings.Where(b => b.Date > DateTime.Now && b.RoomId == roomId).ToListAsync();

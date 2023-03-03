@@ -35,6 +35,7 @@ import { ShowQrCode } from '../pages/body/profile/ShowQrCode';
 import { CheckTeam } from '../pages/organisation/CheckTeam';
 import { SelectWinner } from '../pages/body/tournament/SelectWinner';
 import { HashRouter } from 'react-router-dom';
+import { HiringTeam } from '../pages/body/Teams/HiringTeam';
 
 export const Index = () => {
 
@@ -68,6 +69,8 @@ export const Index = () => {
                 <Route path="/404" element={<NotFound/>}/>
                 <Route path="*" element={<Navigate replace to="/404" />} />
                 <Route path="/index" element={<Index/>}></Route>
+                <Route path="/hiringTeam" element={<HiringTeam/>}></Route>
+                <Route path="/sendTeamJoinRequest" element={<Home/>}></Route>
                 <Route path="/registerTeam/:tournamentId" element={<TournamentTeamRegistration/>}></Route>   
                 {/* <Route path="/tournamentNetwork" element={<TournamentNetwork/>}></Route> */}
                 <Route path="/showActualTournaments" element={<ActualTournaments/>}></Route>

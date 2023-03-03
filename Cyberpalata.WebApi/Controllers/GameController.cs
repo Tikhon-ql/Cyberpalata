@@ -11,12 +11,10 @@ namespace Cyberpalata.WebApi.Controllers
     public class GameController : BaseController
     {
         private readonly IGameService _gameService;
-        private readonly ILogger<GameController> _logger;
 
-        public GameController(IGameService gameService, IUnitOfWork unitOfWork, ILogger<GameController> logger) : base(unitOfWork)
+        public GameController(IGameService gameService, IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             _gameService = gameService;
-            _logger = logger;
         }
 
         [HttpGet("getGames")]

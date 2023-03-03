@@ -9,9 +9,6 @@ namespace Cyberpalata.Logic.Interfaces.Services
 {
     public interface IRoomService
     {
-        //Task<PagedList<RoomDto>> GetPagedListAsync(int pageNumber, RoomType type);
-        //Task<PagedList<RoomDto>> GetVipRoomsAsync(int pageNumber, RoomType type);
-        //Task<PagedList<RoomDto>> GetCommonRoomsAsync(int pageNumber, RoomType type);
         Task<PagedList<RoomDto>> GetPagedListAsync(RoomFilterBL filter);
         Task<Result> AddBookingToRoom(Guid userId, BookingCreateViewModel request);
         Task<Maybe<List<RoomDto>>> SearchRooms(SearchRoomViewModel request);

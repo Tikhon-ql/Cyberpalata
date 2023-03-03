@@ -1,5 +1,4 @@
-﻿using Cyberpalata.DataProvider.Models.Tournaments;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Cyberpalata.DataProvider.Models.Identity
 {

@@ -37,7 +37,6 @@ namespace Cyberpalata.WebApi.Controllers
                 return BadRequestJson(result);
             return await ReturnSuccess(result.Value);
         }
-        //[Authorize]
         [HttpGet("getActualTournaments")]
         public async Task<IActionResult> GetActualTournaments(int page)
         {
@@ -61,14 +60,12 @@ namespace Cyberpalata.WebApi.Controllers
 
             return Ok(new { PageSize = result.PageSize, TotalItemsCount = result.TotalItemsCount, Items = viewModel });
         }
-        //[Authorize]
         [HttpGet("getTournamentDetaile")]
         public async Task<IActionResult> GetTournamentDetaile(Guid tournamentId)
         {
             var viewModel = await _tournamentService.GetTournamentDetailed(tournamentId);
             return await ReturnSuccess(viewModel);
         }
-        //[Authorize]
         [HttpGet("getTournamentSmall")]
         public async Task<IActionResult> GetTournamentSmall(Guid id)
         {

@@ -18,27 +18,16 @@ namespace Cyberpalata.WebApi.Controllers
         private readonly IPcService _pcService;
         private readonly IPeripheryService _peripheryService;
         private readonly IRoomService _roomService;
-        private readonly ILogger<GamingRoomController> _logger;
-        public GamingRoomController(IPcService pcService, IPeripheryService peripheryService, IRoomService roomService, IUnitOfWork uinOfWork,ILogger<GamingRoomController> logger) : base(uinOfWork)
+        public GamingRoomController(IPcService pcService, IPeripheryService peripheryService, IRoomService roomService, IUnitOfWork uinOfWork) : base(uinOfWork)
         {
             _pcService = pcService;
             _peripheryService = peripheryService;
             _roomService = roomService;
-            _logger = logger;
         }
 
         [HttpGet("getRoomByType")]
         public async Task<IActionResult> GetRoomByType(int page)
         {
-
-            // add to enum 
-            //if (type != "vip" && type != "common")
-            //    if (type != "vip" && type != "common")
-            //    return BadRequest("Bad type query parametr");
-
-            //var rooms = type == "vip"
-            //    ? await _roomService.GetVipRoomsAsync(1, RoomType.GamingRoom)
-            //    : await _roomService.GetCommonRoomsAsync(1, RoomType.GamingRoom);
             var filter = new RoomFilterBL
             {
                 Type = RoomType.GamingRoom,
@@ -70,15 +59,6 @@ namespace Cyberpalata.WebApi.Controllers
                 pcInfo = roomsPc.Value;        
 
             var pcInfoList = new List<PcViewModel>();
-            //foreach (var item in pcInfo.GetType().GetProperties())
-            //{
-            //    if (item.Name != "Id")
-            //    {
-            //        string type = item.Name;
-            //        string name = item.GetValue(pcInfo).ToString();
-            //        pcInfoList.Add(new PcInfo(type, name));
-            //    }
-            //}
             var viewModel = new GamingRoomViewModel
             {
                 PcInfos= pcInfoList,

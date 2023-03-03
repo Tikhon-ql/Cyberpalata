@@ -2,12 +2,10 @@
 using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.ViewModel.Request.Tournament;
-using Cyberpalata.ViewModel.Response;
 using Cyberpalata.ViewModel.Response.Tournament;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.JsonWebTokens;
-using System.Drawing;
 
 namespace Cyberpalata.WebApi.Controllers
 {
@@ -16,16 +14,19 @@ namespace Cyberpalata.WebApi.Controllers
     public class TeamController : BaseController
     {
         private readonly ITeamService _teamService;
-        public TeamController(ITeamService teamService,IUnitOfWork uinOfWork) : base(uinOfWork)
+        private readonly ITeamMemberService _teamMemberService;
+        public TeamController(ITeamService teamService,ITeamMemberService teamMemberService, IUnitOfWork uinOfWork) : base(uinOfWork)
         {
             _teamService = teamService;
+            _teamMemberService = teamMemberService;
         }
+
 
         [Authorize]
         [HttpPost("createTeam")]
         public async Task<IActionResult> CreateTeam(CreateTeamViewModel viewModel)
-        {    
-            var id = Guid.Parse(User.Claims.First(c=>c.Type == JwtRegisteredClaimNames.Sid).Value);
+        {
+            var id = Guid.Parse(User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Sid).Value);
             viewModel.CaptainId = id;
             await _teamService.CreateAsync(viewModel);
             return await ReturnSuccess();
@@ -35,7 +36,7 @@ namespace Cyberpalata.WebApi.Controllers
         public async Task<IActionResult> GetTeam(Guid teamId)
         {
             var viewModel = await _teamService.GetTeamDetailed(teamId);
-            if(viewModel.HasNoValue)
+            if (viewModel.HasNoValue)
                 return BadRequest(viewModel);
             return await ReturnSuccess(viewModel.Value);
         }
@@ -58,25 +59,27 @@ namespace Cyberpalata.WebApi.Controllers
         }
 
         [HttpGet("getHiringTeams")]
-        public async Task<IActionResult> GetHiringTeams()
+        public async Task<IActionResult> GetHiringTeams(int page)
         {
-            var filter = new TeamFilterBL
+            var teamFilter = new TeamFilterBL
             {
-                CurrentPage = 1,
+                CurrentPage = page,
                 PageSize = 5,
                 IsHiring = true,
             };
-            var hiringTeams = await _teamService.GetPagedList(filter);
-            var viewModel = hiringTeams.Items.Select(team => new GetTeamViewModel 
-            {
-                Id = team.Id,
-                Name = team.Name,
-                CaptainName = $"{team.Captain.Member.Username} {team.Captain.Member.Surname}",
-            });
-            return await ReturnSuccess(viewModel);
-        }
 
-        /// Add to hiring teams. User send request. Then user and team captain discuss in the chat and   captain accepts team hiring.
+            var result = await _teamService.GetPagedList(teamFilter);
+            var viewModel = new List<HiringTeamViewModel>();
+            foreach (var team in result.Items)
+            {
+                viewModel.Add(new HiringTeamViewModel
+                {
+                    Id = team.Id,
+                    Name = team.Name
+                });
+            }
+            return Ok(new { Items = viewModel, PageSize = result.PageSize, TotalItemsCount = result.TotalItemsCount });
+        }
 
         [Authorize]
         [HttpGet("getByUserId")]
@@ -91,7 +94,7 @@ namespace Cyberpalata.WebApi.Controllers
             };
             var list = await _teamService.GetPagedList(filter);
             var viewModel = new List<GetTeamViewModel>();
-            foreach(var team in list.Items)
+            foreach (var team in list.Items)
             {
                 viewModel.Add(new GetTeamViewModel
                 {
@@ -101,6 +104,19 @@ namespace Cyberpalata.WebApi.Controllers
                 });
             }
             return await ReturnSuccess(viewModel);
+        }
+
+        [Authorize]
+        [HttpPost("createJoinRequest")]
+        public async Task<IActionResult> CreateJoinRequest(Guid teamId)
+        {
+            var userId = Guid.Parse(User.Claims.First(c=>c.Type == JwtRegisteredClaimNames.Sid).Value);
+            var result = await _teamMemberService.AddJoinRequest(teamId, userId);
+
+            if(result.IsFailure)
+                return BadRequest(result);
+
+            return await ReturnSuccess();
         }
     }
 }

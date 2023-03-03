@@ -1,9 +1,4 @@
 ﻿using Cyberpalata.Logic.Models.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cyberpalata.Logic.Models.Tournament
 {
@@ -12,5 +7,6 @@ namespace Cyberpalata.Logic.Models.Tournament
         public UserDto Member { get; set; }
         public TeamDto Team { get; set; }
         public bool IsCaptain { get; set; }
+        public List<TeamJoinRequestDto> JoinRequests { get; set; }     
     }
 }

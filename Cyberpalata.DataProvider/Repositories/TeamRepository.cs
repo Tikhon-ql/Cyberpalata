@@ -1,8 +1,6 @@
-﻿using CSharpFunctionalExtensions;
-using Cyberpalata.DataProvider.Context;
+﻿using Cyberpalata.DataProvider.Context;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Tournaments;
-using Microsoft.EntityFrameworkCore;
 
 namespace Cyberpalata.DataProvider.Repositories
 {

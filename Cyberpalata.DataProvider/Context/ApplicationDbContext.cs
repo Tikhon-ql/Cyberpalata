@@ -31,6 +31,7 @@ namespace Cyberpalata.DataProvider.Context
         public DbSet<HtmlContent> Htmls { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<BatleResult> BatleResults { get; set; }
+        public DbSet<TeamJoinRequest> Requests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -95,76 +96,6 @@ namespace Cyberpalata.DataProvider.Context
                             </html>";
             modelBuilder.Entity<HtmlContent>().HasData(new HtmlContent { Id = "ResetPasswordHtml",Html = resetPasswordHtml });
             modelBuilder.Entity<HtmlContent>().HasData(new HtmlContent { Id = "EmailVerificationHtml", Html = emailVerificationHtml });
-
-            var user1 = new User
-            {
-                Id = Guid.NewGuid(),
-                Username = "user1",
-                Surname = "Userovich",
-                Email = "user1@mail.ru",
-                Phone = "+375257175402",
-                Salt = "salt1",
-                Password = "password1salt1",
-                IsActivated= true,
-            };
-            var user2 = new User
-            {
-                Id = Guid.NewGuid(),
-                Username = "user2",
-                Surname = "Userovich2",
-                Email = "user2@mail.ru",
-                Phone = "+375257175402",
-                Salt = "salt2",
-                Password = "password2salt2",
-                IsActivated = true,
-            };
-            var user3 = new User
-            {
-                Id = Guid.NewGuid(),
-                Username = "user3",
-                Surname = "Userovich3",
-                Email = "user3@mail.ru",
-                Phone = "+375257175402",
-                Salt = "salt3",
-                Password = "password3salt3",
-                IsActivated = true,
-            };
-
-            var user4 = new User
-            {
-                Id = Guid.NewGuid(),
-                Username = "user4",
-                Surname = "Userovich4",
-                Email = "user4@mail.ru",
-                Phone = "+375257175402",
-                Salt = "salt4",
-                Password = "password4salt4",
-                IsActivated = true,
-            };
-
-            var user5 = new User
-            {
-                Id = Guid.NewGuid(),
-                Username = "user5",
-                Surname = "Userovich5",
-                Email = "user5@mail.ru",
-                Phone = "+375257175402",
-                Salt = "salt5",
-                Password = "password5salt5",
-                IsActivated = true,
-            };
-
-            var user6 = new User
-            {
-                Id = Guid.NewGuid(),
-                Username = "user6",
-                Surname = "Userovich6",
-                Email = "user6@mail.ru",
-                Phone = "+375257175402",
-                Salt = "salt6",
-                Password = "password6salt6",
-                IsActivated = true,
-            };
 
             var userRole = new Role { Id = Guid.NewGuid(), Name = "User" };
             var adminRole = new Role { Id = Guid.NewGuid(), Name= "Admin" };

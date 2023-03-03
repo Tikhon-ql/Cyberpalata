@@ -20,7 +20,7 @@ export const Pagination = ({
         <ul className="pagination">
           {/* <li><a href=""><span>First</span></a></li>
           <li><a href=""><span>Previous</span></a></li> */}
-          {pages.length > 1 && pages.map((item:number, index)=>{
+          {pages.map((item:number, index)=>{
                 return <li key={index} onClick={()=>{setCurPage(item)}}><a>{item}</a></li>
           })}
           {/* <li><a href=""><span>Next</span></a></li>

@@ -2,17 +2,18 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
 
-namespace Cyberpalata.WebApi.ActionFilters
+namespace Cyberpalata.WebApi
 {
     public class ModelStateValidationFilter : IActionFilter
     {
         public void OnActionExecuted(ActionExecutedContext context)
         {
+            throw new NotImplementedException();
         }
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            if (!context.ModelState.IsValid)
+            if(!context.ModelState.IsValid)
             {
                 var modelState = context.ModelState;
                 var errorList = modelState.ToDictionary(

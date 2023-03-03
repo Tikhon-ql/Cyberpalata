@@ -11,17 +11,11 @@ namespace Cyberpalata.WebApi.Controllers
     [Route("/authentication")]
     public class AuthenticationController : BaseController
     {
-        private readonly IUserService _userService;
         private readonly IAuthenticationService _authenticationService;
-        private readonly IUserRefreshTokenService _refreshTokenService;
-        private readonly ILogger<AuthenticationController> _logger;
 
-        public AuthenticationController(IUserService userService, IAuthenticationService authenticationService, IUserRefreshTokenService refreshTokenService,ILogger<AuthenticationController> logger, IUnitOfWork uinOfWork) : base(uinOfWork)
+        public AuthenticationController(IAuthenticationService authenticationService, IUnitOfWork uinOfWork) : base(uinOfWork)
         {
-            _userService = userService;
             _authenticationService = authenticationService;
-            _refreshTokenService = refreshTokenService;
-            _logger = logger;
         }
 
         [HttpPost("login")]

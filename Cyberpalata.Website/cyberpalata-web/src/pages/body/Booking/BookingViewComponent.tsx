@@ -29,6 +29,7 @@ export const BookingViewComponent = (props: any) => {
         api.get(`/booking/getBookingSmallInfo?page=${curPage}&isActual=${flag}`).then(res=>{
             console.dir(res.data);
             setBookingCollection(res.data);
+
             // setTotalItemsCount(res.data.totalItemsCount);
             setLoading(false);
         }).catch(error=>{
