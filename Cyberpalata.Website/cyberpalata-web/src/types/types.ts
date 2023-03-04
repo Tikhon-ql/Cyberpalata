@@ -111,3 +111,8 @@ export type Game = {
     name: string,
     imageUrl: string
 }
+
+export type Notification = {
+    date: string,
+    text: string
+}

@@ -29,5 +29,14 @@ namespace Cyberpalata.Logic.Services
             var list = await _repository.GetPageListAsync(_mappper.Map<NotificationFilter>(filter));
             return _mappper.Map<PagedList<NotificationDto>>(list);
         }
+
+        public async Task SetNotificationsCheckedState(List<NotificationDto> notifications)
+        {
+            foreach(var item in notifications)
+            {
+                var notification = await _repository.ReadAsync(item.Id);
+                notification.Value.IsChecked = true;
+            }
+        }
     }
 }

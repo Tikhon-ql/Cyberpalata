@@ -36,6 +36,8 @@ import { CheckTeam } from '../pages/organisation/CheckTeam';
 import { SelectWinner } from '../pages/body/tournament/SelectWinner';
 import { HashRouter } from 'react-router-dom';
 import { HiringTeam } from '../pages/body/Teams/HiringTeam';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 
 export const Index = () => {
 
@@ -77,7 +79,17 @@ export const Index = () => {
                 <Route path="/showTournamentDetailed/:id" element={<TournamentDetailedView/>}></Route>
                 <Route path="/selectWinner/:tournamentId/:batleId/:firstTeamName/:firstTeamId/:secondTeamName/:secondTeamId" element={<SelectWinner/>}></Route>
             </Routes>
-            <AccessTokenVerify/>          
+            <AccessTokenVerify/> 
+            <ToastContainer position="bottom-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"/>         
         </HashRouter>
     </div>
 }

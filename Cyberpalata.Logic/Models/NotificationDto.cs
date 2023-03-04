@@ -10,8 +10,10 @@ namespace Cyberpalata.Logic.Models
 {
     public class NotificationDto
     {
+        public Guid Id { get; set; }
         public virtual UserDto User { get; set; }
         public string Text { get; set; }
         public DateTime Date { get; set; }
+        public bool IsChecked { get; set; }
     }
 }

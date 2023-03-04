@@ -12,6 +12,7 @@ namespace Cyberpalata.DataProvider.Filters
     {
         public Maybe<bool> IsActual { get; set; }
         public Maybe<Guid> UserId { get; set; }
+        public Maybe<bool> IsChecked { get; set; }
         public override IQueryable<Notification> EnrichQuery(IQueryable<Notification> query)
         {
             if(IsActual.HasValue)
@@ -23,6 +24,8 @@ namespace Cyberpalata.DataProvider.Filters
             }
             if (UserId.HasValue)
                 query = query.Where(q=>q.User.Id == UserId.Value);
+            if (IsChecked.HasValue)
+                query = query.Where(q => q.IsChecked == IsChecked.Value);
             return query;
         }
     }

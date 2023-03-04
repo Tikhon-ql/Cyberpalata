@@ -10,9 +10,28 @@ import { observer } from 'mobx-react-lite';
 import headerRerenderStore from '../../store/headerRerenderStore';
 import stateStore from '../../store/stateStore';
 import React from 'react';
+import api from '../../Components/api';
+import { Notification } from '../../types/types';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 export const Header = observer((props) => {
+
+    const [notifications, setNotifications] = useState<Notification[]>([
+        // {text:"Tikhon have sent a team join request.\n Go to profile for more info"},
+    ]);
+
+    useEffect(()=>{
+        if(AuthVerify())
+        {
+            api.get(`/notifications/getNotifications`).then(res=>{
+                console.log("djhgbkifkbsdnvndfkbnldfb vjksjnv bkdjvbkjsdjkhjdsbnflidsblfods fks      xmjbnlkdfjfo");
+                console.dir(res);
+                setNotifications(res.data);
+            })
+        }
+    },[])
     stateStore.state = false;
     headerRerenderStore.state = false;
     let accessToken;
@@ -26,6 +45,15 @@ export const Header = observer((props) => {
     }
     useEffect(()=>{},[headerRerenderStore.state])
     console.dir(accessToken);
+
+
+    function showNotifications()
+    {
+        notifications.forEach(element => {
+            toast.success(`${element?.date} ${element?.text}`);
+        });
+        setNotifications([]);
+    }
 
     //                                                                 background: -webkit-linear-gradient(90deg, #583544,#463951,#3614e1);/* Chrome 10-25, Safari 5.1-6 */                         ;/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */                                             
 
@@ -43,15 +71,19 @@ export const Header = observer((props) => {
                         <Link to="/createTournament">Create tournament</Link>
                     </li>
                 }
-                {(AuthVerify() && accessToken) && <li style={{"color":"white","marginRight":"2vw","marginTop":"2vh","fontSize":"20px"}}>
-                    <Link to="/profile" >Profile</Link>
+                {(AuthVerify() && accessToken) && <li style={{"color":"white","marginTop":"2vh","fontSize":"20px"}}>
+                    <Link to="/profile">Profile</Link>
                 </li>}
+                {notifications?.length > 0 && <a className='notification' onClick={()=>{showNotifications()}}>
+                        <img src={require(`./../../imgs/notifications.png`)} className='icon'/>
+                        <div className='counter'>{notifications.length}</div>
+                    </a>}
                 {!AuthVerify() ? 
                     <li style={{"color":"white","marginRight":"2vw","marginTop":"2vh","fontSize":"20px"}}>
                         <Link to="/login">Login</Link>
                     </li>:
-                    <li style={{"color":"white","marginRight":"2vw","marginTop":"2vh","fontSize":"20px"}}>
-                        <a onClick={()=>{setModalActive(true)}}>Logout</a>
+                    <li>
+                        <a onClick={()=>{setModalActive(true)}}><img className='icon'  src={require(`./../../imgs/turn-off.png`)}/></a>
                     </li>
                 }
                 {!AuthVerify() && 

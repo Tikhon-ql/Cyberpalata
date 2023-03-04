@@ -164,7 +164,7 @@ namespace Cyberpalata.Logic.Services
                 new Claim(JwtRegisteredClaimNames.Sid, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Name,user.Username),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("role", user.Roles.Name)
+                new Claim("role", user.Role.Name)
             };
 
             //Add token settings to work with config.

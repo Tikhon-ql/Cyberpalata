@@ -1,6 +1,7 @@
 ﻿using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
+using Cyberpalata.ViewModel.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -28,12 +29,23 @@ namespace Cyberpalata.WebApi.Controllers
             var filter = new NotificationFilterBL
             {
                 CurrentPage = 1,
-                PageSize = 10,
+                PageSize = int.MaxValue,
                 IsActual = true,
                 UserId = userId,
+                IsChecked = false
             };
             var notifications = await _notificationService.GetPagedList(filter);
-            return Ok(notifications);
+            var viewModel = new List<NotificationViewModel>();
+            //await _notificationService.SetNotificationsCheckedState(notifications.Items.ToList());
+            foreach(var notification in notifications.Items)
+            {
+                viewModel.Add(new NotificationViewModel
+                {
+                    Date = notification.Date.ToString("f"),
+                    Text = notification.Text,
+                });
+            }
+            return Ok(viewModel);
         }
     }
 }
