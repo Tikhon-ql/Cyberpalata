@@ -11,7 +11,6 @@ namespace Cyberpalata.WebApi.Controllers
     {
 
         private readonly IGameConsoleService _gameConsoleService;
-
         public GameConsoleRoomController(IGameConsoleService gameConsoleService, IUnitOfWork uinOfWork) : base(uinOfWork)
         {
             _gameConsoleService = gameConsoleService;

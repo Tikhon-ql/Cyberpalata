@@ -4,7 +4,6 @@ import api from "../../../Components/api";
 import { TournamentDetailed } from "../../../types/types";
 import { TournamentNetwork } from "./TournamentNetwork";
 import React from 'react';
-import Tree from 'react-d3-tree';
 import './custom-tree.css';
 import { useCenteredTree } from "./helpers";
 import { TreeMap } from "../tournamentNetwork/TreeMap";

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CSharpFunctionalExtensions;
 using Cyberpalata.DataProvider.Interfaces;
+using Cyberpalata.DataProvider.Models;
 using Cyberpalata.DataProvider.Models.Tournaments;
 using Cyberpalata.Logic.Interfaces.Services;
 
@@ -9,18 +10,16 @@ namespace Cyberpalata.Logic.Services
     internal class TeamMemberService : ITeamMemberService
     {
         private readonly ITeamRepository _teamRepository;
-        private readonly ITeamMemberRepository _teamMemberRepository;
         private readonly ITeamJoinRequestRepository _teamJoinRequestRepository;
         private readonly IUserRepository _userRepository;
-        private readonly IMapper _mapper;
+        private readonly INotificationRepository _notificationRepository;
 
-        public TeamMemberService(ITeamRepository teamRepository, IMapper mapper,ITeamMemberRepository teamMemberRepository, ITeamJoinRequestRepository teamJoinRequestRepository,IUserRepository userRepository)
+        public TeamMemberService(ITeamRepository teamRepository, ITeamJoinRequestRepository teamJoinRequestRepository,IUserRepository userRepository, INotificationRepository notificationRepository)
         {
             _teamRepository = teamRepository;
-            _teamMemberRepository = teamMemberRepository;
-            _mapper = mapper;
             _teamJoinRequestRepository = teamJoinRequestRepository;
             _userRepository = userRepository;
+            _notificationRepository = notificationRepository;
         }
 
         public async Task<Result> AddJoinRequest(Guid teamId, Guid userId)
@@ -34,7 +33,15 @@ namespace Cyberpalata.Logic.Services
                 Team = captain.Value.Team,
                 User = user.Value
             };
+            var notification = new Notification
+            {
+                User = captain.Value.Member,
+                Text = $"{user.Value.Username} {user.Value.Surname} have sent you a join request\nTo accept go to profile",
+                Date = DateTime.UtcNow,
+            };
+            captain.Value.Member.Notifications.Add(notification);
             captain.Value.JoinRequests.Add(request);
+            await _notificationRepository.CreateAsync(notification);
             await _teamJoinRequestRepository.CreateAsync(request);
             return Result.Success();
         }

@@ -32,6 +32,7 @@ namespace Cyberpalata.DataProvider.Context
         public DbSet<Role> Roles { get; set; }
         public DbSet<BatleResult> BatleResults { get; set; }
         public DbSet<TeamJoinRequest> Requests { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -97,10 +98,10 @@ namespace Cyberpalata.DataProvider.Context
             modelBuilder.Entity<HtmlContent>().HasData(new HtmlContent { Id = "ResetPasswordHtml",Html = resetPasswordHtml });
             modelBuilder.Entity<HtmlContent>().HasData(new HtmlContent { Id = "EmailVerificationHtml", Html = emailVerificationHtml });
 
-            var userRole = new Role { Id = Guid.NewGuid(), Name = "User" };
-            var adminRole = new Role { Id = Guid.NewGuid(), Name= "Admin" };
-            modelBuilder.Entity<Role>().HasData(userRole);
-            modelBuilder.Entity<Role>().HasData(adminRole);
+            //var userRole = new Role { Id = Guid.NewGuid(), Name = "User" };
+            //var adminRole = new Role { Id = Guid.NewGuid(), Name= "Admin" };
+            //modelBuilder.Entity<Role>().HasData(userRole);
+            //modelBuilder.Entity<Role>().HasData(adminRole);
             //{ code}
         }/*{_configuration["PasswordResetPageUrl"]}*/
 

@@ -35,6 +35,7 @@ namespace Cyberpalata.Logic.Configuration
             services.AddScoped<IBatleResultService, BatleResultService>();
             services.AddScoped<IBatleService, BatleService>();
             services.AddScoped<ITeamMemberService, TeamMemberService>();
+            services.AddScoped<INotificationService, NotificationService>();
         }
     }
 }

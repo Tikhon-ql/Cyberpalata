@@ -29,6 +29,7 @@ namespace Cyberpalata.Logic.Configuration
             BatleMapConfig.CreateMap(this);
             BatleResultMapConfig.CreateMap(this);
             TeamJoinRequestMapConfig.CreateMap(this);
+            NotificationMapConfig.CreateMap(this);
         }
     }
 }

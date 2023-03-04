@@ -4,6 +4,7 @@ using Cyberpalata.DataProvider.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cyberpalata.DataProvider.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230303215227_NotificationAdding")]
+    partial class NotificationAdding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -259,6 +262,18 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("5e629d4f-c940-439e-b81f-53d173b6bb59"),
+                            Name = "User"
+                        },
+                        new
+                        {
+                            Id = new Guid("0cd11805-0dba-4038-846a-553f9e42b398"),
+                            Name = "Admin"
+                        });
                 });
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Identity.User", b =>
@@ -281,7 +296,7 @@ namespace Cyberpalata.DataProvider.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("RoleId")
+                    b.Property<Guid>("RolesId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Salt")
@@ -298,7 +313,7 @@ namespace Cyberpalata.DataProvider.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("RolesId");
 
                     b.ToTable("Users");
                 });
@@ -656,13 +671,13 @@ namespace Cyberpalata.DataProvider.Migrations
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Identity.User", b =>
                 {
-                    b.HasOne("Cyberpalata.DataProvider.Models.Identity.Role", "Role")
+                    b.HasOne("Cyberpalata.DataProvider.Models.Identity.Role", "Roles")
                         .WithMany()
-                        .HasForeignKey("RoleId")
+                        .HasForeignKey("RolesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Role");
+                    b.Navigation("Roles");
                 });
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Identity.UserRefreshToken", b =>
