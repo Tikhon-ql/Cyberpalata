@@ -38,6 +38,7 @@ import { HashRouter } from 'react-router-dom';
 import { HiringTeam } from '../pages/body/Teams/HiringTeam';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
+import { JoinRequests } from '../pages/body/Teams/JoinRequests';
 
 export const Index = () => {
 
@@ -71,6 +72,7 @@ export const Index = () => {
                 <Route path="/404" element={<NotFound/>}/>
                 <Route path="*" element={<Navigate replace to="/404" />} />
                 <Route path="/index" element={<Index/>}></Route>
+                <Route path="/joinRequests" element={<JoinRequests/>}></Route>
                 <Route path="/hiringTeam" element={<HiringTeam/>}></Route>
                 <Route path="/sendTeamJoinRequest" element={<Home/>}></Route>
                 <Route path="/registerTeam/:tournamentId" element={<TournamentTeamRegistration/>}></Route>   

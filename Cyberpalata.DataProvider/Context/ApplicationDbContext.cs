@@ -33,6 +33,7 @@ namespace Cyberpalata.DataProvider.Context
         public DbSet<BatleResult> BatleResults { get; set; }
         public DbSet<TeamJoinRequest> Requests { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<JoinRequestState> JoinRequests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -83,6 +84,10 @@ namespace Cyberpalata.DataProvider.Context
             modelBuilder.Entity<PeripheryType>().HasData(PeripheryType.Mouse);
             modelBuilder.Entity<PeripheryType>().HasData(PeripheryType.Screen);
             modelBuilder.Entity<PeripheryType>().HasData(PeripheryType.Chair);
+
+            modelBuilder.Entity<JoinRequestState>().HasData(JoinRequestState.InProgress);
+            modelBuilder.Entity<JoinRequestState>().HasData(JoinRequestState.Accepted);
+            modelBuilder.Entity<JoinRequestState>().HasData(JoinRequestState.Rejected);
 
             string resetPasswordHtml = @$"<html>
                                     <div>

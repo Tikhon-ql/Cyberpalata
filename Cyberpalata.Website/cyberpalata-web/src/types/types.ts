@@ -116,3 +116,10 @@ export type Notification = {
     date: string,
     text: string
 }
+
+export type JoinRequest = {
+    userId: string,
+    teamId: string,
+    username:string,
+    usersurname:string
+}

@@ -15,6 +15,8 @@ using AutoMapper;
 using Cyberpalata.DataProvider.Filters;
 using Castle.Core.Logging;
 using Microsoft.Extensions.Logging;
+using Cyberpalata.Common.Enums;
+using Cyberpalata.ViewModel.Request.Tournament;
 
 namespace Cyberpalata.Logic.Services
 {
@@ -27,14 +29,45 @@ namespace Cyberpalata.Logic.Services
         private readonly IMapper _mapper;
         private readonly ILogger<TeamJoinRequestService> _logger;
 
-        public TeamJoinRequestService(ITeamRepository teamRepository, ITeamJoinRequestRepository teamJoinRequestRepository, IUserRepository userRepository, INotificationRepository notificationRepository, ILogger<TeamJoinRequestService> logger)
+        public TeamJoinRequestService(ITeamRepository teamRepository,IMapper mapper, ITeamJoinRequestRepository teamJoinRequestRepository, IUserRepository userRepository, INotificationRepository notificationRepository, ILogger<TeamJoinRequestService> logger)
         {
             _teamRepository = teamRepository;
             _teamJoinRequestRepository = teamJoinRequestRepository;
             _userRepository = userRepository;
             _notificationRepository = notificationRepository;
+            _mapper = mapper;
             _logger = logger;
         }
+
+        public async Task<Result> SetJoinRequestState(JoinRequestStateSettingViewModel viewModel)
+        {
+            var userToJoin = await _userRepository.ReadAsync(viewModel.UserToJoinId);
+            if (userToJoin.HasNoValue)
+                return Result.Failure($"User with id: ${viewModel.UserToJoinId} not found");
+
+            var filter = new TeamJoinRequestFilter()
+            {
+                CurrentPage = 1,
+                PageSize = 1,
+                TeamId = viewModel.TeamId,
+                UserToJoinId = viewModel.UserToJoinId,
+                State = JoinRequestState.InProgress
+            };
+            var request = (await _teamJoinRequestRepository.GetPageListAsync(filter)).Items.ElementAt(0);
+            var state = JoinRequestState.Parse(viewModel.State);
+            request.State = state;
+
+            var notification = new Notification
+            {
+                User = userToJoin.Value,
+                CreatedDate = DateTime.UtcNow,
+                Text = $"Your request had been {state.Name}"
+            };
+            await _notificationRepository.CreateAsync(notification);
+
+            return Result.Success();
+        }
+
         public async Task<Result> CreateJoinRequest(Guid teamId, Guid userId)
         {
             var captain = await ReadCaptainByTeamId(teamId);

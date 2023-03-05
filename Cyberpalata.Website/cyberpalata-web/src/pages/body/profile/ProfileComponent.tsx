@@ -125,6 +125,7 @@ export const ProfileComponent = observer(() => {
                         {!editingActive ?
                             <button onClick={editingEnableButtonClick} style={{"background":"none","border":"1px solid","padding":"1vh","borderRadius":"1vh","marginRight":"1vw",textAlign:"start"}}><div>Edit profile</div></button>
                             :<button onClick={editingEnableButtonClick} style={{"background":"none","border":"1px solid","padding":"1vh","borderRadius":"1vh","marginRight":"1vw",textAlign:"start"}}><div>Stop editing profile</div></button>}
+                        <Link to='/joinRequests'  style={{"border":"1px solid","padding":"1vh","borderRadius":"1vh","marginRight":"1vw"}}>Show join request</Link><br />
                     </div>
                     <div>
                         <form  method="post" onSubmit={editingSubmit}>

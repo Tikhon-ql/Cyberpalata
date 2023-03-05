@@ -1,4 +1,5 @@
-﻿using Cyberpalata.DataProvider.Models.Tournaments;
+﻿using CSharpFunctionalExtensions;
+using Cyberpalata.DataProvider.Models.Tournaments;
 
 namespace Cyberpalata.DataProvider.Interfaces
 {

@@ -20,6 +20,7 @@ export const LogoutComponent = observer(({setModalActive}: any) => {
                 accessToken : accessToken,
                 refreshToken : refreshToken
             };
+            headerRerenderStore.stateChange();
             api.post(`/authentication/logout`, requestBody).then(()=>
             {
                 

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import api from "../../../Components/api"
 import { Team } from "../../../types/types"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export type TeamList = {
     items: Team[],
@@ -40,17 +42,12 @@ export const HiringTeam = ()=>{
 
     function sendTeamJoinRequest(event)
     {
-        console.log("kfbgsofsfdsf");
-        console.dir(teamList);
-        console.dir(event);
-        alert(event.target.id);
         var requestBody = {
             teamId: event.target.id
         };
-        console.log("fdfghjgfdghjklhgfdfghjkfhfgbn,jhtrdfhj,hfghnmhfhvbjghbnb");
         // console.dir(requestBody);
-        api.post(`/teams/createJoinRequest?teamId=${event.target.id}`).then(res=>{
-            alert("Request sended successfully");
+        api.post(`/joinRequests/createJoinRequest?teamId=${event.target.id}`).then(res=>{
+            toast.success("Request sended successfully");
         });
     }
 

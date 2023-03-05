@@ -10,5 +10,6 @@ namespace Cyberpalata.Logic.Filters
     public class TeamJoinRequestFilterBL : BaseFilterBL
     {
         public Maybe<Guid> TeamId { get; set; }
+        public Maybe<Guid> UserToJoinId { get; set; }
     }
 }

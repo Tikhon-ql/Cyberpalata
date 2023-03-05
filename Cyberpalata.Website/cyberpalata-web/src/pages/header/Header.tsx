@@ -43,7 +43,7 @@ export const Header = observer((props) => {
         accessToken = jwtDecode(localStorage.getItem('accessToken') || "");
         console.dir(accessToken);
     }
-    useEffect(()=>{},[headerRerenderStore.state])
+    useEffect(()=>{},[headerRerenderStore.state,notifications])
     console.dir(accessToken);
 
 

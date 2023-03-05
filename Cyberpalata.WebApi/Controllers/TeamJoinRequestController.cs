@@ -2,6 +2,8 @@
 using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
+using Cyberpalata.ViewModel.Request.Tournament;
+using Cyberpalata.ViewModel.Response.Tournament;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
@@ -31,8 +33,18 @@ namespace Cyberpalata.WebApi.Controllers
             var result = await _teamJoinRequestService.CreateJoinRequest(teamId, userId);
 
             if (result.IsFailure)
-                return BadRequest(result);
+                return BadRequestJson(result);
 
+            return await ReturnSuccess();
+        }
+
+        [Authorize]
+        [HttpPut("setJoinRequestState")]
+        public async Task<IActionResult> SetJoinRequestState(JoinRequestStateSettingViewModel viewModel)
+        {
+            var result = await _teamJoinRequestService.SetJoinRequestState(viewModel);
+            if(result.IsFailure)
+                return BadRequestJson(result);
             return await ReturnSuccess();
         }
 
@@ -63,7 +75,19 @@ namespace Cyberpalata.WebApi.Controllers
 
             var requests = await _teamJoinRequestService.GetPagedList(teamJoinFilter);
 
-            return Ok(requests);
+            var viewModel = new List<TeamJoinRequestViewModel>();
+            foreach (var item in requests.Items)
+            {
+                viewModel.Add(new TeamJoinRequestViewModel
+                {
+                    UserId = item.User.Id,
+                    TeamId = item.TeamId,
+                    Username = item.User.Username,
+                    Usersurname = item.User.Surname
+                });
+            }
+
+            return Ok(viewModel);
         }
     }
 }
