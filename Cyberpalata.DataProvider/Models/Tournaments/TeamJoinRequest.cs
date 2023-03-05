@@ -6,5 +6,6 @@ namespace Cyberpalata.DataProvider.Models.Tournaments
     {
         public virtual Team Team { get; set; }
         public virtual User User { get; set; }
+        //public bool  { get;set; } add enum state InProgress Accepted Rejected
     }
 }

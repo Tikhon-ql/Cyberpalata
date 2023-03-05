@@ -90,7 +90,7 @@ namespace Cyberpalata.WebApi.Controllers
             {
                 CurrentPage = 1,
                 PageSize = 10,
-                UserId = userId
+                CaptainId = userId
             };
             var list = await _teamService.GetPagedList(filter);
             var viewModel = new List<GetTeamViewModel>();
@@ -106,17 +106,6 @@ namespace Cyberpalata.WebApi.Controllers
             return await ReturnSuccess(viewModel);
         }
 
-        [Authorize]
-        [HttpPost("createJoinRequest")]
-        public async Task<IActionResult> CreateJoinRequest(Guid teamId)
-        {
-            var userId = Guid.Parse(User.Claims.First(c=>c.Type == JwtRegisteredClaimNames.Sid).Value);
-            var result = await _teamMemberService.AddJoinRequest(teamId, userId);
-
-            if(result.IsFailure)
-                return BadRequest(result);
-
-            return await ReturnSuccess();
-        }
+     
     }
 }

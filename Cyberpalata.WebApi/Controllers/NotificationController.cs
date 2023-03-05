@@ -30,13 +30,12 @@ namespace Cyberpalata.WebApi.Controllers
             {
                 CurrentPage = 1,
                 PageSize = int.MaxValue,
-                IsActual = true,
                 UserId = userId,
-                IsChecked = false
+                NotificationProceded = false
             };
             var notifications = await _notificationService.GetPagedList(filter);
             var viewModel = new List<NotificationViewModel>();
-            //await _notificationService.SetNotificationsCheckedState(notifications.Items.ToList());
+            await _notificationService.SetNotificationProcededDate(notifications.Items.ToList(), userId);
             foreach(var notification in notifications.Items)
             {
                 viewModel.Add(new NotificationViewModel
@@ -45,7 +44,7 @@ namespace Cyberpalata.WebApi.Controllers
                     Text = notification.Text,
                 });
             }
-            return Ok(viewModel);
+            return await ReturnSuccess(viewModel);
         }
     }
 }

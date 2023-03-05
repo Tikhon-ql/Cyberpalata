@@ -8,5 +8,5 @@ namespace Cyberpalata.DataProvider.Filters
         public int PageSize { get; set; } = 10;
 
         public virtual IQueryable<T> EnrichQuery(IQueryable<T> query) { return query; }
-    }   
+    }
 }

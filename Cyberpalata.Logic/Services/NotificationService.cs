@@ -30,12 +30,19 @@ namespace Cyberpalata.Logic.Services
             return _mappper.Map<PagedList<NotificationDto>>(list);
         }
 
-        public async Task SetNotificationsCheckedState(List<NotificationDto> notifications)
+        public async Task SetNotificationProcededDate(List<NotificationDto> notifications, Guid userId)
         {
-            foreach(var item in notifications)
+            var filter = new NotificationFilter
             {
-                var notification = await _repository.ReadAsync(item.Id);
-                notification.Value.IsChecked = true;
+                CurrentPage = 1,
+                PageSize = int.MaxValue,
+                UserId = userId,
+                NotificationIds = notifications.Select(n=>n.Id).ToList()
+            };
+            var notificationList = await _repository.GetPageListAsync(filter);
+            foreach(var notification in notificationList.Items)
+            {
+                notification.SentDate = DateTime.UtcNow;
             }
         }
     }

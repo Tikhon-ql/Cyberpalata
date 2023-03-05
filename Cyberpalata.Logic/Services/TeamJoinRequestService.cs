@@ -1,28 +1,41 @@
-﻿using AutoMapper;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using Cyberpalata.DataProvider.Interfaces;
-using Cyberpalata.DataProvider.Models;
 using Cyberpalata.DataProvider.Models.Tournaments;
+using Cyberpalata.DataProvider.Models;
 using Cyberpalata.Logic.Interfaces.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Cyberpalata.Common;
+using Cyberpalata.Logic.Models.Tournament;
+using Cyberpalata.Logic.Filters;
+using AutoMapper;
+using Cyberpalata.DataProvider.Filters;
+using Castle.Core.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace Cyberpalata.Logic.Services
 {
-    internal class TeamMemberService : ITeamMemberService
+    internal class TeamJoinRequestService : ITeamJoinRequestService
     {
         private readonly ITeamRepository _teamRepository;
         private readonly ITeamJoinRequestRepository _teamJoinRequestRepository;
         private readonly IUserRepository _userRepository;
         private readonly INotificationRepository _notificationRepository;
+        private readonly IMapper _mapper;
+        private readonly ILogger<TeamJoinRequestService> _logger;
 
-        public TeamMemberService(ITeamRepository teamRepository, ITeamJoinRequestRepository teamJoinRequestRepository,IUserRepository userRepository, INotificationRepository notificationRepository)
+        public TeamJoinRequestService(ITeamRepository teamRepository, ITeamJoinRequestRepository teamJoinRequestRepository, IUserRepository userRepository, INotificationRepository notificationRepository, ILogger<TeamJoinRequestService> logger)
         {
             _teamRepository = teamRepository;
             _teamJoinRequestRepository = teamJoinRequestRepository;
             _userRepository = userRepository;
             _notificationRepository = notificationRepository;
+            _logger = logger;
         }
-
-        public async Task<Result> AddJoinRequest(Guid teamId, Guid userId)
+        public async Task<Result> CreateJoinRequest(Guid teamId, Guid userId)
         {
             var captain = await ReadCaptainByTeamId(teamId);
             if (captain.HasNoValue)
@@ -36,14 +49,22 @@ namespace Cyberpalata.Logic.Services
             var notification = new Notification
             {
                 User = captain.Value.Member,
-                Text = $"{user.Value.Username} {user.Value.Surname} have sent you a join request\nTo accept go to profile",
-                Date = DateTime.UtcNow,
+                Text = $"{user.Value.Username} {user.Value.Surname} have sent you a join request.\nTo accept go to profile",
+                CreatedDate = DateTime.UtcNow,
             };
             captain.Value.Member.Notifications.Add(notification);
             captain.Value.JoinRequests.Add(request);
             await _notificationRepository.CreateAsync(notification);
             await _teamJoinRequestRepository.CreateAsync(request);
             return Result.Success();
+        }
+
+        public async Task<PagedList<TeamJoinRequestDto>> GetPagedList(TeamJoinRequestFilterBL filter)
+        {
+            _logger.LogCritical(filter.ToString());
+            _logger.LogCritical(filter.TeamId.Value.ToString());
+            var list = await _teamJoinRequestRepository.GetPageListAsync(_mapper.Map<TeamJoinRequestFilter>(filter));
+            return _mapper.Map<PagedList<TeamJoinRequestDto>>(list);
         }
 
         private async Task<Maybe<TeamMember>> ReadCaptainByTeamId(Guid teamId)

@@ -11,7 +11,7 @@ namespace Cyberpalata.Logic.Interfaces.Services
 {
     public interface INotificationService
     {
-        Task SetNotificationsCheckedState(List<NotificationDto> notifications);
+        Task SetNotificationProcededDate(List<NotificationDto> notifications, Guid userId);
         Task<PagedList<NotificationDto>> GetPagedList(NotificationFilterBL filter);
     }
 }

@@ -15,6 +15,8 @@ namespace Cyberpalata.Logic.Configuration.MapperConfiguration
             profile.CreateMap<TournamentFilterBL, TournamentFilter>();
             profile.CreateMap<BatleFilterBL, BatleFilter>();
             profile.CreateMap<NotificationFilterBL, NotificationFilter>();
+            profile.CreateMap<TeamJoinRequestFilterBL, TeamJoinRequestFilter>();
+            profile.CreateMap<TeamJoinRequestFilter, TeamJoinRequestFilterBL>();
         }
     }
 }

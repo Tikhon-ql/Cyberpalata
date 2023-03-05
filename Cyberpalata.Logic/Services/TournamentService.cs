@@ -38,19 +38,19 @@ namespace Cyberpalata.Logic.Services
 
         public async Task<TournamentDetailedViewModel> GetTournamentDetailed(Guid tournamentId)
         {
-            var tournament = await _tournamentRepository.ReadAsync(tournamentId);
+            var tournament = (await _tournamentRepository.ReadAsync(tournamentId)).Value;
 
             var viewModel = new TournamentDetailedViewModel
             {
-                TournamentId = tournament.Value.Id,
-                Name = tournament.Value.Name,
-                Date = tournament.Value.Date.ToString("d"),
+                TournamentId = tournament.Id,
+                Name = tournament.Name,
+                Date = tournament.Date.ToString("d"),
             };
-
-            for(int i = 0;i < tournament.Value.RoundsCount;i++)
+            #region Move to separate method
+            for (int i = 0;i < tournament.RoundsCount;i++)
             {
-                var roundBatles = tournament.Value.Batles.Where(b=>b.RoundNumber == i).ToList();
-                var maxBaltesCount = Math.Pow(2.0, tournament.Value.RoundsCount - i - 1);
+                var roundBatles = tournament.Batles.Where(b=>b.RoundNumber == i).ToList();
+                var maxBaltesCount = Math.Pow(2.0, tournament.RoundsCount - i - 1);
                 if (roundBatles.Count < maxBaltesCount)
                 {
                     for (int j = 0; j < roundBatles.Count; j++)
@@ -95,7 +95,7 @@ namespace Cyberpalata.Logic.Services
                     }
                 }
             }
-
+            #endregion
             viewModel.Batles = viewModel.Batles.OrderByDescending(b => b.RoundNumber).ToList();
 
             return viewModel;

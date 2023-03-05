@@ -1,4 +1,5 @@
 ﻿using Cyberpalata.Common.Intefaces;
+using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.ViewModel.Request.Tournament;
@@ -14,14 +15,12 @@ namespace Cyberpalata.WebApi.Controllers
     public class TournamentController : BaseController
     {
         private readonly ITournamentService _tournamentService;
-        private readonly ITeamService _teamService;
-        public TournamentController(ITournamentService tournamentService,IUnitOfWork uinOfWork, ITeamService teamService) : base(uinOfWork)
+        public TournamentController(ITournamentService tournamentService,IUnitOfWork uinOfWork) : base(uinOfWork)
         {
             _tournamentService = tournamentService;
-            _teamService = teamService;
         }
 
-        [Authorize]
+        [Authorize(Roles="Admin")]
         [HttpPost("createTournament")]
         public async Task<IActionResult> CreateTournament(CreateTournamentViewModel viewModel)
         {

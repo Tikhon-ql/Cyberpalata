@@ -1,4 +1,5 @@
-﻿using Cyberpalata.DataProvider.Models.Tournaments;
+﻿using Cyberpalata.Common;
+using Cyberpalata.DataProvider.Models.Tournaments;
 using Cyberpalata.Logic.Models.Tournament;
 
 namespace Cyberpalata.Logic.Configuration.MapperConfiguration
@@ -9,6 +10,8 @@ namespace Cyberpalata.Logic.Configuration.MapperConfiguration
         {
             profile.CreateMap<TeamJoinRequest, TeamJoinRequestDto>();
             profile.CreateMap<TeamJoinRequestDto, TeamJoinRequest>();
+            profile.CreateMap<PagedList<TeamJoinRequest>, PagedList<TeamJoinRequestDto>>();
+            profile.CreateMap<PagedList<TeamJoinRequestDto>, PagedList<TeamJoinRequest>>();
         }
     }
 }

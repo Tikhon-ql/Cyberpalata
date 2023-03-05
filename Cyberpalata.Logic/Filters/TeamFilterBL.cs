@@ -1,8 +1,10 @@
-﻿namespace Cyberpalata.Logic.Filters
+﻿using CSharpFunctionalExtensions;
+
+namespace Cyberpalata.Logic.Filters
 {
     public class TeamFilterBL : BaseFilterBL
     {
-        public Guid UserId { get; set; } = Guid.Empty;
-        public bool IsHiring { get; set; }
+        public Maybe<Guid> CaptainId { get; set; }
+        public Maybe<bool> IsHiring { get; set; }
     }
 }

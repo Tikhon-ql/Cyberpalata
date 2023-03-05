@@ -11,7 +11,7 @@ namespace Cyberpalata.DataProvider.Models
     {
         public virtual User User { get; set; }
         public string Text { get; set; }
-        public bool IsChecked { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime? SentDate { get; set; }
     }
 }
