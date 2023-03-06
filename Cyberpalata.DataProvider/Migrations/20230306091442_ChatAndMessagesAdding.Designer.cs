@@ -4,6 +4,7 @@ using Cyberpalata.DataProvider.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cyberpalata.DataProvider.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230306091442_ChatAndMessagesAdding")]
+    partial class ChatAndMessagesAdding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,11 +59,6 @@ namespace Cyberpalata.DataProvider.Migrations
                         {
                             Id = 3,
                             Name = "Rejected"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "None"
                         });
                 });
 
@@ -179,7 +177,7 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CaptainId")
+                    b.Property<Guid>("CaptainIdId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
@@ -190,7 +188,7 @@ namespace Cyberpalata.DataProvider.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CaptainId");
+                    b.HasIndex("CaptainIdId");
 
                     b.HasIndex("UserToJoinId");
 
@@ -403,15 +401,15 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.Property<Guid>("ChatId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("MessageText")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid>("SenderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("SentDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -729,9 +727,9 @@ namespace Cyberpalata.DataProvider.Migrations
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Chat", b =>
                 {
-                    b.HasOne("Cyberpalata.DataProvider.Models.Identity.User", "Captain")
+                    b.HasOne("Cyberpalata.DataProvider.Models.Identity.User", "CaptainId")
                         .WithMany()
-                        .HasForeignKey("CaptainId")
+                        .HasForeignKey("CaptainIdId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -741,7 +739,7 @@ namespace Cyberpalata.DataProvider.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Captain");
+                    b.Navigation("CaptainId");
 
                     b.Navigation("UserToJoin");
                 });

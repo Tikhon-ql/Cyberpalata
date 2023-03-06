@@ -4,6 +4,7 @@ using Cyberpalata.DataProvider.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cyberpalata.DataProvider.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230305232201_RequestAdding")]
+    partial class RequestAdding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,28 +43,6 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("JoinRequestState");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "InProgress"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Accepted"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Rejected"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "None"
-                        });
                 });
 
             modelBuilder.Entity("Cyberpalata.Common.Enums.PeripheryType", b =>
@@ -172,29 +153,6 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Bookings");
-                });
-
-            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Chat", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CaptainId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("UserToJoinId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CaptainId");
-
-                    b.HasIndex("UserToJoinId");
-
-                    b.ToTable("Chats");
                 });
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Devices.GameConsole", b =>
@@ -395,33 +353,6 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Message", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ChatId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("MessageText")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("SenderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("SentDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChatId");
-
-                    b.HasIndex("SenderId");
-
-                    b.ToTable("Messages");
-                });
-
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Notification", b =>
                 {
                     b.Property<Guid>("Id")
@@ -615,7 +546,7 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("StateId")
+                    b.Property<int>("StateId")
                         .HasColumnType("int");
 
                     b.Property<Guid>("TeamId")
@@ -727,25 +658,6 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Chat", b =>
-                {
-                    b.HasOne("Cyberpalata.DataProvider.Models.Identity.User", "Captain")
-                        .WithMany()
-                        .HasForeignKey("CaptainId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Cyberpalata.DataProvider.Models.Identity.User", "UserToJoin")
-                        .WithMany()
-                        .HasForeignKey("UserToJoinId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Captain");
-
-                    b.Navigation("UserToJoin");
-                });
-
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Devices.GameConsole", b =>
                 {
                     b.HasOne("Cyberpalata.DataProvider.Models.Room", "ConsoleRoom")
@@ -801,25 +713,6 @@ namespace Cyberpalata.DataProvider.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Message", b =>
-                {
-                    b.HasOne("Cyberpalata.DataProvider.Models.Chat", "Chat")
-                        .WithMany("Messages")
-                        .HasForeignKey("ChatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Cyberpalata.DataProvider.Models.Identity.User", "Sender")
-                        .WithMany()
-                        .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Chat");
-
-                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Notification", b =>
@@ -931,7 +824,9 @@ namespace Cyberpalata.DataProvider.Migrations
                 {
                     b.HasOne("Cyberpalata.Common.Enums.JoinRequestState", "State")
                         .WithMany()
-                        .HasForeignKey("StateId");
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Cyberpalata.DataProvider.Models.Tournaments.Team", "Team")
                         .WithMany()
@@ -1006,11 +901,6 @@ namespace Cyberpalata.DataProvider.Migrations
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Booking", b =>
                 {
                     b.Navigation("GamesToDownloadBefore");
-                });
-
-            modelBuilder.Entity("Cyberpalata.DataProvider.Models.Chat", b =>
-                {
-                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("Cyberpalata.DataProvider.Models.Identity.User", b =>
