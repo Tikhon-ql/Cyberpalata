@@ -21,15 +21,17 @@ namespace Cyberpalata.Logic.Configuration
             RoomMapConfig.CreateMap(this);
             BookingMapConfig.CreateMap(this);
             PrizeMapConfig.CreateMap(this);
+            TeamMemberMapConfig.CreateMap(this);
             TeamMapConfig.CreateMap(this);
             UserMapConfig.CreateMap(this);
             TournamentMapConfig.CreateMap(this);
             FiltersMapConfig.CreateMap(this);
-            TeamMemberMapConfig.CreateMap(this);
             BatleMapConfig.CreateMap(this);
             BatleResultMapConfig.CreateMap(this);
             TeamJoinRequestMapConfig.CreateMap(this);
             NotificationMapConfig.CreateMap(this);
+            MessageMapConfig.CreateMap(this);
+            ChatMapConfig.CreateMap(this);
         }
     }
 }
