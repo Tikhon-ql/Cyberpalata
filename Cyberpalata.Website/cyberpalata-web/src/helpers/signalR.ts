@@ -1,6 +1,6 @@
 import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 
-export const joinRoom = async(user, chat, setConnection)=>{
+export const joinRoom = async(user, chat, setConnection, messageList)=>{
     try
     {
         const connection = new HubConnectionBuilder()
@@ -9,12 +9,38 @@ export const joinRoom = async(user, chat, setConnection)=>{
         .build();
 
         connection.on("ReceiveMessage",(user,message)=>{
-            console.log("message received: ", message);
+            messageList.items.push({user, message});
+        })
+
+        connection.onclose(e=>{
+            setConnection();
+            messageList = {}; 
         })
 
         await connection.start();
         await connection.invoke("JoinRoom",{user, chat})
         setConnection(connection);
+    }
+    catch(e)
+    {
+        console.log(e);
+    }
+}
+
+export const sendMessage = async(message, connection)=>{
+    try{
+        await connection.invoke("SendMessage", message);
+    }
+    catch(e)
+    {
+        console.log(e);
+    }
+}
+
+export const closeConnection = async(connection)=>{
+    try
+    {
+        await connection.stop();
     }
     catch(e)
     {

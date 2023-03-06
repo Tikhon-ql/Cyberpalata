@@ -19,16 +19,18 @@ builder.Services.AddControllers(config =>
     config.Filters.Add(new ModelStateValidationFilter());
 }).AddNewtonsoftJson();
 
-//builder.Services.AddCors(o => o.AddPolicy("AllowAnyOrigin",
-//                     builder =>
-//                     {
-//                         builder.AllowAnyOrigin()
-//                                 .AllowAnyMethod()
-//                                 .AllowAnyHeader();
-//                     }));
-builder.Services.AddCors();
+builder.Services.AddCors(o => o.AddPolicy("AllowAnyOrigin",
+                     builder =>
+                     {
+                         builder.AllowAnyOrigin()
+                                 .AllowAnyMethod()
+                                 .AllowAnyHeader();
+                     }));
+//builder.Services.AddCors();
 
 builder.Services.AddScoped<ModelStateValidationFilter>();
+
+builder.Services.AddSingleton<IDictionary<string, UserConnection>>(opts => new Dictionary<string, UserConnection>());
 
 builder.Services.Configure<ApiBehaviorOptions>(options
     => options.SuppressModelStateInvalidFilter = true);
@@ -73,10 +75,9 @@ app.UseHttpsRedirection();
 //app.UseCors("AllowAnyOrigin");
 app.UseCors(x =>
 {
-    x.WithOrigins("http://localhost:3000")
-    .AllowAnyHeader()
+    x.AllowAnyOrigin()
     .AllowAnyMethod()
-    .AllowCredentials();
+    .AllowAnyHeader();
 });
 
 

@@ -41,7 +41,7 @@ namespace Cyberpalata.DataProvider.Migrations
                 column: "StateId",
                 principalTable: "JoinRequestState",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.NoAction);
         }
 
         /// <inheritdoc />

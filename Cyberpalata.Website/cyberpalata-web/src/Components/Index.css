@@ -549,3 +549,21 @@ input:focus { box-shadow: inset 0 -5px 45px rgba(100,100,100,0.4), 0 1px 1px rgb
   width: 45%;
   height: 75%;
 }
+
+.message
+{
+  display: inline-flex;
+  margin: 0px auto 0px auto;
+  padding: 5px;
+  font-size: 18px;
+  color:white;
+  border-radius: 20px;
+  margin-top: 3px;
+}
+
+.from-user
+{
+  font-size: small;
+  margin-bottom: 3px;
+  margin-right: 5px;
+}

@@ -135,3 +135,9 @@ export type ChatUser = {
     name:string,
     surname:string
 }
+
+export type Message = {
+    messageText: string,
+    SentDate:string,
+    username:string
+}
