@@ -17,6 +17,8 @@ using Castle.Core.Logging;
 using Microsoft.Extensions.Logging;
 using Cyberpalata.Common.Enums;
 using Cyberpalata.ViewModel.Request.Tournament;
+using Cyberpalata.Logic.Models.Identity;
+using Cyberpalata.DataProvider.Models.Identity;
 
 namespace Cyberpalata.Logic.Services
 {
@@ -26,10 +28,11 @@ namespace Cyberpalata.Logic.Services
         private readonly ITeamJoinRequestRepository _teamJoinRequestRepository;
         private readonly IUserRepository _userRepository;
         private readonly INotificationRepository _notificationRepository;
+        private readonly IChatRepository _chatRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<TeamJoinRequestService> _logger;
 
-        public TeamJoinRequestService(ITeamRepository teamRepository,IMapper mapper, ITeamJoinRequestRepository teamJoinRequestRepository, IUserRepository userRepository, INotificationRepository notificationRepository, ILogger<TeamJoinRequestService> logger)
+        public TeamJoinRequestService(IChatRepository chatRepository,ITeamRepository teamRepository,IMapper mapper, ITeamJoinRequestRepository teamJoinRequestRepository, IUserRepository userRepository, INotificationRepository notificationRepository, ILogger<TeamJoinRequestService> logger)
         {
             _teamRepository = teamRepository;
             _teamJoinRequestRepository = teamJoinRequestRepository;
@@ -37,9 +40,29 @@ namespace Cyberpalata.Logic.Services
             _notificationRepository = notificationRepository;
             _mapper = mapper;
             _logger = logger;
+            _chatRepository = chatRepository;
         }
 
-        public async Task<Result> SetJoinRequestState(JoinRequestStateSettingViewModel viewModel)
+        private async Task CreateNewChat(Team team, User userToJoin)
+        {
+            var captain = await ReadCaptainByTeamId(team.Id);
+
+            var chat = new Chat
+            {
+                Captain = captain.Value.Member,
+                UserToJoin = userToJoin,
+            };
+            await _chatRepository.CreateAsync(chat);
+            var notification = new Notification
+            {
+                User = userToJoin,
+                Text = $"{team.Name} ready to chat with you",
+                CreatedDate = DateTime.UtcNow,
+            };
+            await _notificationRepository.CreateAsync(notification);
+        }
+
+        public async Task<Result> SetJoinRequestState(JoinRequestStateSettingViewModel viewModel, JoinRequestState state)
         {
             var userToJoin = await _userRepository.ReadAsync(viewModel.UserToJoinId);
             if (userToJoin.HasNoValue)
@@ -51,11 +74,15 @@ namespace Cyberpalata.Logic.Services
                 PageSize = 1,
                 TeamId = viewModel.TeamId,
                 UserToJoinId = viewModel.UserToJoinId,
-                State = JoinRequestState.InProgress
+                State = JoinRequestState.None
             };
             var request = (await _teamJoinRequestRepository.GetPageListAsync(filter)).Items.ElementAt(0);
-            var state = JoinRequestState.Parse(viewModel.State);
             request.State = state;
+
+            if(state == JoinRequestState.Accepted)
+            {
+                await CreateNewChat(request.Team, userToJoin.Value);
+            }
 
             var notification = new Notification
             {
@@ -77,7 +104,8 @@ namespace Cyberpalata.Logic.Services
             var request = new TeamJoinRequest
             {
                 Team = captain.Value.Team,
-                User = user.Value
+                User = user.Value,
+                State = JoinRequestState.None,
             };
             var notification = new Notification
             {

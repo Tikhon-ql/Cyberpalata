@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react"
 import api from "../../../Components/api";
 import { JoinRequest } from "../../../types/types";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const JoinRequests = ()=>{
 
@@ -17,11 +19,13 @@ export const JoinRequests = ()=>{
 
     function setJoinRequestState(state: string)
     {
+        console.log("sdoufbiodsf");
         var requestBody = {
             userToJoinId: joinRequest?.userId,
             teamId: joinRequest?.teamId,
             state: state
         }
+        api.put(`/joinRequests/acceptJoinRequest`,requestBody).then(res=>{toast.success("Accepted successfully")});
     }
 
     return <div className="myConteiner">
@@ -36,7 +40,7 @@ export const JoinRequests = ()=>{
             </div>
             <div className="links">
                 <a className="blackLink" style={{marginBottom:"2vh"}}><img src={require(`./../../../imgs/skipArrow.png`)}  onClick={()=>{setJoinRequestState("Rejected")}} style={{"width":"15px", height:"15px",marginBottom:"0.5vh"}}/> Skip</a>
-                <a  className="blackLink" style={{marginBottom:"2vh"}}><img src={require(`./../../../imgs/messenger.png`)} onClick={()=>{setJoinRequestState("Accepted")}}  style={{"width":"15px", height:"15px",marginBottom:"0.5vh"}}/> Open chat</a>
+                <a  className="blackLink" style={{marginBottom:"2vh"}}><img src={require(`./../../../imgs/messenger.png`)} onClick={()=>{setJoinRequestState("InProgress")}}  style={{"width":"15px", height:"15px",marginBottom:"0.5vh"}}/> Open chat</a>
             </div>
         </div>
     </div> 

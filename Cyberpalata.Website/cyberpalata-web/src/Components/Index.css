@@ -541,3 +541,11 @@ input:focus { box-shadow: inset 0 -5px 45px rgba(100,100,100,0.4), 0 1px 1px rgb
   color:black;
   margin: 1vw;
 }
+
+.chatPlaceholder
+{
+  margin: 10vw 10vh;
+  background-color: white;
+  width: 45%;
+  height: 75%;
+}

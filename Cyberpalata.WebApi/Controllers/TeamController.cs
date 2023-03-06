@@ -14,11 +14,9 @@ namespace Cyberpalata.WebApi.Controllers
     public class TeamController : BaseController
     {
         private readonly ITeamService _teamService;
-        private readonly ITeamMemberService _teamMemberService;
-        public TeamController(ITeamService teamService,ITeamMemberService teamMemberService, IUnitOfWork uinOfWork) : base(uinOfWork)
+        public TeamController(ITeamService teamService, IUnitOfWork uinOfWork) : base(uinOfWork)
         {
             _teamService = teamService;
-            _teamMemberService = teamMemberService;
         }
 
 

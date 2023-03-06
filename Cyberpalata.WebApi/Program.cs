@@ -1,5 +1,6 @@
 using Cyberpalata.Logic.Configuration;
 using Cyberpalata.WebApi;
+using Cyberpalata.WebApi.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,14 +19,13 @@ builder.Services.AddControllers(config =>
     config.Filters.Add(new ModelStateValidationFilter());
 }).AddNewtonsoftJson();
 
-builder.Services.AddCors(o => o.AddPolicy("AllowAnyOrigin",
-                     builder =>
-                     {
-                         builder.AllowAnyOrigin()
-                                 .AllowAnyMethod()
-                                 .AllowAnyHeader();
-                     }));
-
+//builder.Services.AddCors(o => o.AddPolicy("AllowAnyOrigin",
+//                     builder =>
+//                     {
+//                         builder.AllowAnyOrigin()
+//                                 .AllowAnyMethod()
+//                                 .AllowAnyHeader();
+//                     }));
 builder.Services.AddCors();
 
 builder.Services.AddScoped<ModelStateValidationFilter>();
@@ -58,6 +58,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.ConfigureLogicLayer(builder.Configuration);
 
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -68,12 +70,22 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowAnyOrigin");
+//app.UseCors("AllowAnyOrigin");
+app.UseCors(x =>
+{
+    x.WithOrigins("http://localhost:3000")
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowCredentials();
+});
 
-app.UseAuthorization();
 
 app.UseHttpLogging();
 
 app.MapControllers();
+
+app.MapHub<ChatHub>("/chat");
+
+app.UseAuthorization();
 
 app.Run();

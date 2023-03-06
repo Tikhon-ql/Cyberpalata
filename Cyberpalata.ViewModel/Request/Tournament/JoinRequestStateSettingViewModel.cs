@@ -10,6 +10,5 @@ namespace Cyberpalata.ViewModel.Request.Tournament
     {
         public Guid UserToJoinId { get;set; }
         public Guid TeamId { get;set; }
-        public string State { get; set; }
     }
 }

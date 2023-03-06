@@ -123,3 +123,15 @@ export type JoinRequest = {
     username:string,
     usersurname:string
 }
+
+export type Chat = {
+    chatId: string,
+    otherUserName: string,
+    otherUserSurname: string,
+}
+
+export type ChatUser = {
+    id:string,
+    name:string,
+    surname:string
+}

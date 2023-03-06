@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Cyberpalata.Common.Enums;
 using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
@@ -39,10 +40,10 @@ namespace Cyberpalata.WebApi.Controllers
         }
 
         [Authorize]
-        [HttpPut("setJoinRequestState")]
-        public async Task<IActionResult> SetJoinRequestState(JoinRequestStateSettingViewModel viewModel)
+        [HttpPut("acceptJoinRequest")]
+        public async Task<IActionResult> AcceptJoinRequest(JoinRequestStateSettingViewModel viewModel)
         {
-            var result = await _teamJoinRequestService.SetJoinRequestState(viewModel);
+            var result = await _teamJoinRequestService.SetJoinRequestState(viewModel,JoinRequestState.Accepted);
             if(result.IsFailure)
                 return BadRequestJson(result);
             return await ReturnSuccess();
@@ -64,14 +65,9 @@ namespace Cyberpalata.WebApi.Controllers
             {
                 CurrentPage = 1,
                 PageSize = 1,
-                TeamId = team.Items.ElementAt(0).Id
+                TeamId = team.Items.ElementAt(0).Id,
+                State = JoinRequestState.None
             };
-
-            if(teamJoinFilter.TeamId == Maybe.None)
-                _logger.LogCritical("TeamID: is null");
-            else
-                _logger.LogCritical("TeamID: is not null");
-
 
             var requests = await _teamJoinRequestService.GetPagedList(teamJoinFilter);
 
@@ -81,7 +77,7 @@ namespace Cyberpalata.WebApi.Controllers
                 viewModel.Add(new TeamJoinRequestViewModel
                 {
                     UserId = item.User.Id,
-                    TeamId = item.TeamId,
+                    TeamId = item.Team.Id,
                     Username = item.User.Username,
                     Usersurname = item.User.Surname
                 });

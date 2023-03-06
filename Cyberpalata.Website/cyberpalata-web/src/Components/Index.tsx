@@ -39,6 +39,8 @@ import { HiringTeam } from '../pages/body/Teams/HiringTeam';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import { JoinRequests } from '../pages/body/Teams/JoinRequests';
+import { ChatList } from '../pages/body/Teams/ChatList';
+import { Chat } from '../pages/body/Teams/Chat';
 
 export const Index = () => {
 
@@ -74,6 +76,8 @@ export const Index = () => {
                 <Route path="/index" element={<Index/>}></Route>
                 <Route path="/joinRequests" element={<JoinRequests/>}></Route>
                 <Route path="/hiringTeam" element={<HiringTeam/>}></Route>
+                <Route path="/chats" element={<ChatList/>}></Route>
+                <Route path="/chats/:chatId" element={<Chat/>}></Route>
                 <Route path="/sendTeamJoinRequest" element={<Home/>}></Route>
                 <Route path="/registerTeam/:tournamentId" element={<TournamentTeamRegistration/>}></Route>   
                 {/* <Route path="/tournamentNetwork" element={<TournamentNetwork/>}></Route> */}
