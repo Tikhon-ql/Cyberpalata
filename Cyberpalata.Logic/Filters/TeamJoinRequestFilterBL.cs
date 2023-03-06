@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Cyberpalata.Common.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace Cyberpalata.Logic.Filters
     {
         public Maybe<Guid> TeamId { get; set; }
         public Maybe<Guid> UserToJoinId { get; set; }
+        public Maybe<JoinRequestState> State { get; set; }
     }
 }
