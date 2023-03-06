@@ -16,7 +16,17 @@ namespace Cyberpalata.Logic.Configuration.MapperConfiguration
                 .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dst => dst.Tournaments, opt => opt.MapFrom(src => src.Tournaments))
                 .ForMember(dst => dst.Members, opt => opt.MapFrom(src => src.Members));
-            profile.CreateMap<PagedList<Team>,PagedList<TeamDto>>();
+
+            profile.CreateMap<PagedList<Team>, PagedList<TeamDto>>()
+                .ForMember(dst => dst.Items, opt => opt.MapFrom(src => src.Items.AsEnumerable()))
+                .ForMember(dst => dst.CurrentPageNumber, opt => opt.MapFrom(src => src.CurrentPageNumber))
+                .ForMember(dst => dst.PageSize, opt => opt.MapFrom(src => src.PageSize))
+                .ForMember(dst => dst.TotalItemsCount, opt => opt.MapFrom(src => src.TotalItemsCount));
+            profile.CreateMap<PagedList<TeamDto>,PagedList<Team>>()
+                .ForMember(dst => dst.Items, opt => opt.MapFrom(src => src.Items.AsEnumerable()))
+                .ForMember(dst => dst.CurrentPageNumber, opt => opt.MapFrom(src => src.CurrentPageNumber))
+                .ForMember(dst => dst.PageSize, opt => opt.MapFrom(src => src.PageSize))
+                .ForMember(dst => dst.TotalItemsCount, opt => opt.MapFrom(src => src.TotalItemsCount));
             profile.CreateMap<TeamDto, Team>()
                 .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name))

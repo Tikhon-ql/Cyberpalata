@@ -8,7 +8,10 @@ namespace Cyberpalata.Logic.Configuration.MapperConfiguration
     {
         public static void CreateMap(AppMappingProfile profile)
         {
-            profile.CreateMap<TeamJoinRequest, TeamJoinRequestDto>();
+            profile.CreateMap<TeamJoinRequest, TeamJoinRequestDto>()
+                .ForMember(dst => dst.Team, opt => opt.MapFrom(src => src.Team))
+                .ForMember(dst => dst.User, opt => opt.MapFrom(src => src.User))
+                .ForMember(dst => dst.State, opt => opt.MapFrom(src => src.State));
             profile.CreateMap<TeamJoinRequestDto, TeamJoinRequest>();
             profile.CreateMap<PagedList<TeamJoinRequest>, PagedList<TeamJoinRequestDto>>();
             profile.CreateMap<PagedList<TeamJoinRequestDto>, PagedList<TeamJoinRequest>>();
