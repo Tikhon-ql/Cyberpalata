@@ -40,6 +40,8 @@ namespace Cyberpalata.DataProvider.Configuration
             services.AddScoped<ITeamJoinRequestRepository, TeamJoinRequestRepository>();
             services.AddScoped<ITeamMemberRepository, TeamMemberRepository>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
+            services.AddScoped<IChatRepository, ChatRepository>();
+            services.AddScoped<IMessageRepository,MessageRepository>();
         }
     }
 }
