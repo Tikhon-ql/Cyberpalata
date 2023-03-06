@@ -1,5 +1,7 @@
 ﻿using Cyberpalata.Common.Enums;
 using Cyberpalata.DataProvider.Models.Identity;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cyberpalata.DataProvider.Models.Tournaments
 {
@@ -7,8 +9,6 @@ namespace Cyberpalata.DataProvider.Models.Tournaments
     {
         public virtual Team Team { get; set; }
         public virtual User User { get; set; }
-        public virtual JoinRequestState State { get; set; }
-
-        //public bool  { get;set; } add enum state InProgress Accepted Rejected
+        public virtual JoinRequestState? State { get; set; }
     }
 }
