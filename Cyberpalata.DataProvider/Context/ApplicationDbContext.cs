@@ -33,7 +33,8 @@ namespace Cyberpalata.DataProvider.Context
         public DbSet<BatleResult> BatleResults { get; set; }
         public DbSet<TeamJoinRequest> Requests { get; set; }
         public DbSet<Notification> Notifications { get; set; }
-        public DbSet<JoinRequestState> JoinRequests { get; set; }
+        public DbSet<Chat> Chats { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -88,6 +89,7 @@ namespace Cyberpalata.DataProvider.Context
             modelBuilder.Entity<JoinRequestState>().HasData(JoinRequestState.InProgress);
             modelBuilder.Entity<JoinRequestState>().HasData(JoinRequestState.Accepted);
             modelBuilder.Entity<JoinRequestState>().HasData(JoinRequestState.Rejected);
+            modelBuilder.Entity<JoinRequestState>().HasData(JoinRequestState.None);
 
             string resetPasswordHtml = @$"<html>
                                     <div>
