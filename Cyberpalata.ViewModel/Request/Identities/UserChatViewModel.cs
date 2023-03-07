@@ -9,7 +9,6 @@ namespace Cyberpalata.ViewModel.Request.Identities
     public class UserChatViewModel
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Surname { get; set; }
+        public string Email { get; set; }
     }
 }

@@ -137,7 +137,7 @@ export type ChatUser = {
 }
 
 export type Message = {
-    messageText: string,
+    message: string,
     SentDate:string,
-    username:string
+    user:string
 }

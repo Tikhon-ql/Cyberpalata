@@ -18,6 +18,7 @@ namespace Cyberpalata.Logic.Configuration.MapperConfiguration
             profile.CreateMap<TeamJoinRequestFilterBL, TeamJoinRequestFilter>();
             profile.CreateMap<TeamJoinRequestFilter, TeamJoinRequestFilterBL>();
             profile.CreateMap<ChatFilterBL, ChatFilter>();
+            profile.CreateMap<MessageFilterBL, MessageFilter>();
         }
     }
 }

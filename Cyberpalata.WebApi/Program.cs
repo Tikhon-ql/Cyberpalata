@@ -19,13 +19,13 @@ builder.Services.AddControllers(config =>
     config.Filters.Add(new ModelStateValidationFilter());
 }).AddNewtonsoftJson();
 
-builder.Services.AddCors(o => o.AddPolicy("AllowAnyOrigin",
-                     builder =>
-                     {
-                         builder.AllowAnyOrigin()
-                                 .AllowAnyMethod()
-                                 .AllowAnyHeader();
-                     }));
+//builder.Services.AddCors(o => o.AddPolicy("AllowAnyOrigin",
+//                     builder =>
+//                     {
+//                         builder.AllowAnyOrigin()
+//                                 .AllowAnyMethod()
+//                                 .AllowAnyHeader();
+//                     }));
 //builder.Services.AddCors();
 
 builder.Services.AddScoped<ModelStateValidationFilter>();
@@ -41,6 +41,15 @@ builder.Services.AddLogging(logginBuilder =>
     logginBuilder.AddDebug();
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+        builder.SetIsOriginAllowed(_ => true)
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials());
+});
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
@@ -54,6 +63,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecurityKey"]))
     };
 });
+
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -72,21 +83,24 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-//app.UseCors("AllowAnyOrigin");
-app.UseCors(x =>
-{
-    x.AllowAnyOrigin()
-    .AllowAnyMethod()
-    .AllowAnyHeader();
-});
+
+//app.UseCors(x =>
+//{
+//    x.AllowAnyOrigin()
+//    .AllowAnyMethod()
+//    .AllowAnyHeader();
+//});
 
 
 app.UseHttpLogging();
+
+app.UseCors();
 
 app.MapControllers();
 
 app.MapHub<ChatHub>("/chat");
 
 app.UseAuthorization();
+
 
 app.Run();

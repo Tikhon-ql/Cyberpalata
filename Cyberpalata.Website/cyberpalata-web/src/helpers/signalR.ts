@@ -1,25 +1,33 @@
 import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import jwt_decode from "jwt-decode";
 
-export const joinRoom = async(user, chat, setConnection, messageList)=>{
+export const joinRoom = async(user, chat, setConnection, setMessageList)=>{
     try
     {
-        const connection = new HubConnectionBuilder()
-        .withUrl("https://localhost:7227/chat")
-        .configureLogging(LogLevel.Information)
-        .build();
-
-        connection.on("ReceiveMessage",(user,message)=>{
-            messageList.items.push({user, message});
-        })
-
-        connection.onclose(e=>{
-            setConnection();
-            messageList = {}; 
-        })
-
-        await connection.start();
-        await connection.invoke("JoinRoom",{user, chat})
-        setConnection(connection);
+        let accessToken = localStorage.getItem('accessToken');
+        if(accessToken)
+        {
+            // console.log(accessToken);
+            const connection = new HubConnectionBuilder()
+            .withUrl("https://localhost:7227/chat",{ accessTokenFactory: () => accessToken })
+            .configureLogging(LogLevel.Information)
+            .build();
+    
+            connection.on("ReceiveMessage",(user,message)=>{
+                console.log(message);
+                
+                setMessageList(messages=>[...messages, {user, message}]);
+            })
+    
+            connection.onclose(e=>{
+                setConnection();
+                setMessageList([]);
+            })
+    
+            await connection.start();
+            await connection.invoke("JoinRoom",{user, chat})
+            setConnection(connection);
+        }   
     }
     catch(e)
     {

@@ -79,7 +79,7 @@ namespace Cyberpalata.Logic.Services
             var request = (await _teamJoinRequestRepository.GetPageListAsync(filter)).Items.ElementAt(0);
             request.State = state;
 
-            if(state == JoinRequestState.Accepted)
+            if(state == JoinRequestState.InProgress)
             {
                 await CreateNewChat(request.Team, userToJoin.Value);
             }
@@ -105,7 +105,7 @@ namespace Cyberpalata.Logic.Services
             {
                 Team = captain.Value.Team,
                 User = user.Value,
-                State = JoinRequestState.None,
+                //State = JoinRequestState.None,
             };
             var notification = new Notification
             {

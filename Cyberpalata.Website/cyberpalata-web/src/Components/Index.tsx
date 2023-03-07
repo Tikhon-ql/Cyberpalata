@@ -39,8 +39,8 @@ import { HiringTeam } from '../pages/body/Teams/HiringTeam';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import { JoinRequests } from '../pages/body/Teams/JoinRequests';
-import { ChatList } from '../pages/body/Teams/ChatList';
-import { Chat } from '../pages/body/Teams/Chat';
+import { ChatList } from '../pages/body/Teams/Chat/ChatList';
+import { Chat } from '../pages/body/Teams/Chat/Chat';
 
 export const Index = () => {
 

@@ -13,10 +13,12 @@ namespace Cyberpalata.WebApi.Controllers
     public class ChatController : BaseController
     {
         private readonly IChatService _chatService;
+        private readonly IMessageService _messageService;
 
-        public ChatController(IUnitOfWork uinOfWork,IChatService chatService) : base(uinOfWork)
+        public ChatController(IUnitOfWork uinOfWork,IChatService chatService, IMessageService messageService) : base(uinOfWork)
         {
             _chatService = chatService;
+            _messageService = messageService;
         }
 
         [Authorize]
@@ -43,6 +45,23 @@ namespace Cyberpalata.WebApi.Controllers
                 });
             }
             return Ok(new { PageSize = chatsResult.PageSize, TotalItemsCount = chatsResult.TotalItemsCount, Items = viewModel });
+        }
+
+        [Authorize]
+        [HttpGet("getMessages")]
+        public async Task<IActionResult> GetMessages()
+        {
+            var userId = Guid.Parse(User.Claims.First(claim=>claim.Type == JwtRegisteredClaimNames.Sid).Value);
+
+            return null;
+            //var filter = new MessageFilterBL
+            //{
+            //    CurrentPage = 1,
+            //    PageSize = int.MaxValue,
+            //    UserId = userId
+            //};
+            //var result = await _messageService.GetPagedList(filter);
+            //return Ok(result);
         }
     }
 }
