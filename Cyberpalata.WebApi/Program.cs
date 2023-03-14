@@ -1,5 +1,7 @@
+using Cyberpalata.Logic.BackgroundWorkers;
 using Cyberpalata.Logic.Configuration;
 using Cyberpalata.WebApi;
+using Cyberpalata.WebApi.Connections;
 using Cyberpalata.WebApi.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +32,8 @@ builder.Services.AddControllers(config =>
 
 builder.Services.AddScoped<ModelStateValidationFilter>();
 
-builder.Services.AddSingleton<IDictionary<string, UserConnection>>(opts => new Dictionary<string, UserConnection>());
+builder.Services.AddSingleton<IDictionary<string, ChatConnection>>(opts => new Dictionary<string, ChatConnection>());
+builder.Services.AddSingleton<IDictionary<string, NotificationViewModel>>(opts => new Dictionary<string, NotificationViewModel>());
 
 builder.Services.Configure<ApiBehaviorOptions>(options
     => options.SuppressModelStateInvalidFilter = true);
@@ -70,6 +73,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.ConfigureLogicLayer(builder.Configuration);
+
+builder.Services.AddHostedService<TournamentBackgroundWorker>();
+
 
 builder.Services.AddSignalR();
 
