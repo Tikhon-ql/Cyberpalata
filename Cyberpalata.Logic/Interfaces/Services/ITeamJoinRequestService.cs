@@ -16,6 +16,6 @@ namespace Cyberpalata.Logic.Interfaces.Services
     {
         Task<Result> CreateJoinRequest(Guid teamId, Guid userId);
         Task<PagedList<TeamJoinRequestDto>> GetPagedList(TeamJoinRequestFilterBL filter);
-        Task<Result> SetJoinRequestState(JoinRequestStateSettingViewModel viewModel, JoinRequestState state);
+        Task<Result> SetJoinRequestState(JoinRequestStateSettingViewModel viewModel,JoinRequestState currentState, JoinRequestState stateToSet);
     }
 }
