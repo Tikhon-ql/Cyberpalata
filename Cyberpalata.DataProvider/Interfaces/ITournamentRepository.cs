@@ -2,7 +2,7 @@
 
 namespace Cyberpalata.DataProvider.Interfaces
 {
-    public interface ITournamentRepository : IRepository<Tournament>
+    public interface ITournamentRepository : IRepository<Tournament>, IDisposable
     {
         List<Tournament> GetAll();
     }
