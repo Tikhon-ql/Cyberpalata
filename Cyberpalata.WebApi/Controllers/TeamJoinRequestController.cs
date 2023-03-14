@@ -17,13 +17,15 @@ namespace Cyberpalata.WebApi.Controllers
     {
         private readonly ITeamJoinRequestService _teamJoinRequestService;
         private readonly ITeamService _teamService;
+        private readonly IChatService _chatService;
         private readonly ILogger<TeamJoinRequestController> _logger;
 
-        public TeamJoinRequestController(IUnitOfWork uinOfWork, ITeamJoinRequestService teamJoinRequestService, ITeamService teamService,ILogger<TeamJoinRequestController> logger) : base(uinOfWork)
+        public TeamJoinRequestController(IUnitOfWork uinOfWork, ITeamJoinRequestService teamJoinRequestService, ITeamService teamService,ILogger<TeamJoinRequestController> logger, IChatService chatService) : base(uinOfWork)
         {
             _teamJoinRequestService = teamJoinRequestService;
             _teamService = teamService;
             _logger = logger;
+            _chatService = chatService;
         }
 
         [Authorize]
@@ -40,12 +42,36 @@ namespace Cyberpalata.WebApi.Controllers
         }
 
         [Authorize]
-        [HttpPut("acceptJoinRequest")]
-        public async Task<IActionResult> AcceptJoinRequest(JoinRequestStateSettingViewModel viewModel)
+        [HttpPut("inProgressJoinRequest")]
+        public async Task<IActionResult> inProgressJoinRequest(JoinRequestStateSettingViewModel viewModel)
         {
-            var result = await _teamJoinRequestService.SetJoinRequestState(viewModel,JoinRequestState.Accepted);
+            var result = await _teamJoinRequestService.SetJoinRequestState(viewModel,JoinRequestState.None, JoinRequestState.InProgress);
             if(result.IsFailure)
                 return BadRequestJson(result);
+            return await ReturnSuccess();
+        }
+
+        [Authorize]
+        [HttpPut("answerJoinRequest")]
+        public async Task<IActionResult> AnswerJoinRequest(AnswerJoinRequestViewModel viewModel)
+        {
+            var joinRequestViewModel = new JoinRequestStateSettingViewModel()
+            {
+                TeamId = viewModel.TeamId,
+                UserToJoinId = viewModel.UserToJoinId
+            };
+            var joinRequestStateChangeResult = await _teamJoinRequestService.SetJoinRequestState(joinRequestViewModel,JoinRequestState.InProgress ,viewModel.IsAccepted ? JoinRequestState.Accepted : JoinRequestState.Rejected);
+            if (joinRequestStateChangeResult.IsFailure)
+                return BadRequestJson(joinRequestStateChangeResult);
+
+            var addingUserToTeamResult = await _teamService.AddUserToTeam(viewModel.UserToJoinId, viewModel.TeamId);
+            if(addingUserToTeamResult.IsFailure)
+                return BadRequestJson(addingUserToTeamResult);
+
+            var chatStateChangeResult = await _chatService.SetIsDeletedState(viewModel.ChatId, true);
+            if (chatStateChangeResult.IsFailure)
+                return BadRequestJson(chatStateChangeResult);
+
             return await ReturnSuccess();
         }
 
