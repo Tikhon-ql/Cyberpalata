@@ -114,6 +114,8 @@ namespace Cyberpalata.Logic.Services
             var user = await _userRepository.ReadAsync(userId);
             booking.User = user.Value;
             booking.Room = room.Value;
+            booking.IsPaid = false;
+            booking.Price = viewModel.Price;
             room.Value.Bookings.Add(booking);
             await _bookingRepository.CreateAsync(booking);
             return Result.Success();
@@ -123,6 +125,8 @@ namespace Cyberpalata.Logic.Services
         {
             if (viewModel.Seats.Count == 0)
                 return Result.Failure("Seats collection is empty");
+            if (viewModel.Date.Add(viewModel.Begining) < DateTime.UtcNow)
+                return Result.Failure("You can’t go back in time");
             int bookingMakingMaxAheadDays = int.Parse(_configuration["BookingSettings:BookingMaxMakingAheadDays"]);
             if ((viewModel.Date - DateTime.Now).Days >= bookingMakingMaxAheadDays)
                 return Result.Failure("Incorrect date: You can make a booking only on 2 weeks ahead");
