@@ -62,7 +62,7 @@ namespace Cyberpalata.Logic.Services
             await _notificationRepository.CreateAsync(notification);
         }
 
-        public async Task<Result> SetJoinRequestState(JoinRequestStateSettingViewModel viewModel, JoinRequestState state)
+        public async Task<Result> SetJoinRequestState(JoinRequestStateSettingViewModel viewModel,JoinRequestState currentState, JoinRequestState stateToSet)
         {
             var userToJoin = await _userRepository.ReadAsync(viewModel.UserToJoinId);
             if (userToJoin.HasNoValue)
@@ -74,12 +74,12 @@ namespace Cyberpalata.Logic.Services
                 PageSize = 1,
                 TeamId = viewModel.TeamId,
                 UserToJoinId = viewModel.UserToJoinId,
-                State = JoinRequestState.None
+                State = currentState
             };
             var request = (await _teamJoinRequestRepository.GetPageListAsync(filter)).Items.ElementAt(0);
-            request.State = state;
+            request.State = stateToSet;
 
-            if(state == JoinRequestState.InProgress)
+            if(stateToSet == JoinRequestState.InProgress)
             {
                 await CreateNewChat(request.Team, userToJoin.Value);
             }
@@ -88,7 +88,7 @@ namespace Cyberpalata.Logic.Services
             {
                 User = userToJoin.Value,
                 CreatedDate = DateTime.UtcNow,
-                Text = $"Your request had been {state.Name}"
+                Text = $"Your request had been {stateToSet.Name}"
             };
             await _notificationRepository.CreateAsync(notification);
 
