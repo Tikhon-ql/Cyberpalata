@@ -21,7 +21,7 @@ namespace Cyberpalata.Logic.Services
 
         public async Task<PagedList<GameDto>> GetPagedListAsync(BaseFilterBL filter)
         {
-            var list = await _repository.GetPageListAsync(_mapper.Map<BaseFilter<Game>>(filter));
+            var list = await _repository.GetPageListAsync(_mapper.Map<GameFilter>(filter));
             return _mapper.Map<PagedList<GameDto>>(list);
         }
     }
