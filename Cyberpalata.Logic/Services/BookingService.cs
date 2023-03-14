@@ -1,4 +1,7 @@
-﻿using AutoMapper;
+﻿using AuthorizeNet.Api.Contracts.V1;
+using AuthorizeNet.Api.Controllers;
+using AuthorizeNet.Api.Controllers.Bases;
+using AutoMapper;
 using CSharpFunctionalExtensions;
 using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Filters;
@@ -6,10 +9,13 @@ using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models;
 using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
+using Cyberpalata.Logic.Models;
 using Cyberpalata.Logic.Models.Booking;
+using Cyberpalata.ViewModel.Request.Bookings;
 using Cyberpalata.ViewModel.Response;
 using Cyberpalata.ViewModel.Response.Booking;
 using Cyberpalata.ViewModel.Response.Booking.Enum;
+using Cyberpalata.ViewModel.Response.Rooms.GamingRoom;
 
 namespace Cyberpalata.Logic.Services
 {
@@ -18,17 +24,20 @@ namespace Cyberpalata.Logic.Services
         private readonly IBookingRepository _repository;
         private readonly IUserRepository _userRepository;
         private readonly ISeatService _seatService;
+        private readonly IPaymentService _paymentService;
         private readonly IMapper _mapper;
 
         public BookingService(IBookingRepository repository,
             IUserRepository userRepository, 
             IMapper mapper, 
-            ISeatService seatService)
+            ISeatService seatService,
+            IPaymentService paymentService)
         {
             _repository = repository;
             _userRepository = userRepository;
             _mapper = mapper;
             _seatService = seatService;
+            _paymentService = paymentService;
         }
         public async Task<Maybe<BookingDto>> ReadAsync(Guid id)
         {
@@ -77,6 +86,34 @@ namespace Cyberpalata.Logic.Services
             {
                 resultSeats[bookingSeat.Number - 1].Type = SeatType.UsersSeat;
             }
+        }
+
+        private async Task<Result> SetIsPaidState(Guid bookingId)
+        {
+            var booking = await _repository.ReadAsync(bookingId);
+            if (booking.HasNoValue)
+                return Result.Failure($"Booking with id: {bookingId} not found");
+            booking.Value.IsPaid = true;
+            return Result.Success();
+        }
+
+        public async Task<Result> BookingPay(BookingFinalizationViewModel viewModel)
+        {
+            var booking = await _repository.ReadAsync(viewModel.BookingId);
+
+            if (booking.HasNoValue)
+                return Result.Failure($"Booking with id: {viewModel.BookingId} not found");
+
+            var transactionResult = _paymentService.MakeTransaction(new Card
+            {
+                CardCvv = viewModel.CardCvv,
+                CardDate = viewModel.CardDate,
+                CardNumber = viewModel.CardNumber
+            },booking.Value.Price);
+            if (transactionResult.IsFailure)
+                return transactionResult;
+            var bookingIsPaidStateSettingResult = await SetIsPaidState(viewModel.BookingId);
+            return bookingIsPaidStateSettingResult;
         }
     }
 }
