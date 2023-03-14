@@ -27,7 +27,6 @@ namespace Cyberpalata.DataProvider.Context
         public DbSet<Tournament> Tournaments { get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<TeamMember> TeamMembers { get; set; }
-        public DbSet<Prize> Prizes { get;set; }
         public DbSet<HtmlContent> Htmls { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<BatleResult> BatleResults { get; set; }
