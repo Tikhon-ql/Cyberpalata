@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cyberpalata.DataProvider.Repositories
 {
-    internal class BaseRepository<T> : IRepository<T> where T : BaseEntity
+    internal class BaseRepository<T> : IRepository<T>, IDisposable where T : BaseEntity
     {                                                      
         
         protected readonly ApplicationDbContext _context;
@@ -26,12 +26,19 @@ namespace Cyberpalata.DataProvider.Repositories
         }   
 
         public virtual void Delete(T entity) => _context.Remove(entity);
+
+        public void Dispose()
+        {
+            _context.Dispose();
+        }
+
         public virtual async Task<PagedList<T>> GetPageListAsync(BaseFilter<T> filter)
         {
             IQueryable<T> list = _entitySet.AsQueryable<T>();
             list = filter.EnrichQuery(list);
+            int totalItemsCount = list.Count();
             list = list.Skip(((filter.CurrentPage - 1) * filter.PageSize)).Take(filter.PageSize);
-            return new PagedList<T>(list.ToList(), filter.CurrentPage, filter.PageSize, _entitySet.Count());
+            return new PagedList<T>(list.ToList(), filter.CurrentPage, filter.PageSize, totalItemsCount);
         }
 
         public virtual async Task<Maybe<T>> ReadAsync(Guid id) => await _entitySet.FirstOrDefaultAsync(e=>e.Id == id);
