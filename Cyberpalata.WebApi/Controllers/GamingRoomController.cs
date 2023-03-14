@@ -1,13 +1,16 @@
 ﻿using CSharpFunctionalExtensions;
 using Cyberpalata.Common.Enums;
 using Cyberpalata.Common.Intefaces;
+using Cyberpalata.DataProvider.Models;
 using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Devices;
+using Cyberpalata.ViewModel.Request.Filters;
 using Cyberpalata.ViewModel.Request.Room;
 using Cyberpalata.ViewModel.Response.Rooms;
 using Cyberpalata.ViewModel.Response.Rooms.GamingRoom;
 using Microsoft.AspNetCore.Mvc;
+using System.Formats.Asn1;
 
 namespace Cyberpalata.WebApi.Controllers
 {
@@ -30,9 +33,7 @@ namespace Cyberpalata.WebApi.Controllers
         {
             var filter = new RoomFilterBL
             {
-                Type = RoomType.GamingRoom,
-                IsVip = true,
-                PageSize = 5,
+                PageSize = 10,
                 CurrentPage = page
             };
 
@@ -45,8 +46,34 @@ namespace Cyberpalata.WebApi.Controllers
                 TotalItemsCount = rooms.TotalItemsCount,
                 PageSize = rooms.PageSize
             };
-            return await ReturnSuccess(viewModel);
+            return Ok(new { Items = viewModel.Items, TotalItemsCount = rooms.TotalItemsCount, PageSize = filter.PageSize });
         }
+
+        [HttpPost("getRooms")]
+        public async Task<IActionResult> GetRooms([FromBody]RoomFilterViewModel filterViewModel)
+        {
+            var filter = new RoomFilterBL
+            {
+                PageSize = 5,
+                SearchName = string.IsNullOrWhiteSpace(filterViewModel.SearchName) ? Maybe.None: filterViewModel.SearchName,
+                HoursCount = filterViewModel.HoursCount == 0 ? Maybe.None : filterViewModel.HoursCount,
+                Begining = !TimeSpan.TryParse(filterViewModel.Begining, out var beg) ? Maybe.None : beg,
+                Date = !DateTime.TryParse(filterViewModel.Date, out var date) ? Maybe.None : date,
+                CurrentPage = filterViewModel.Page,
+                FreeSeatsCount = filterViewModel.FreeSeatsCount == 0 ? Maybe.None : filterViewModel.FreeSeatsCount,
+                FreeSeatsInRowCount = filterViewModel.FreeSeatsInRowCount == 0 ? Maybe.None : filterViewModel.FreeSeatsInRowCount,
+            };
+
+            var rooms = await _roomService.GetPagedListAsync(filter);
+            var viewModel = new RoomCollectionViewModel
+            {
+                Items = rooms.Items.Select(x => new RoomItemViewModel { Id = x.Id.ToString(), Name = x.Name }).ToList(),
+                TotalItemsCount = rooms.TotalItemsCount,
+                PageSize = rooms.PageSize
+            };
+            return Ok(new { Items = viewModel.Items, TotalItemsCount = rooms.TotalItemsCount, PageSize = filter.PageSize });
+        }
+
         [HttpGet("getRoomInfo")]
         public async Task<IActionResult> GetRoomInfo(Guid id)
         {
