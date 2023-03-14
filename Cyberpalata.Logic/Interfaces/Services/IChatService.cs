@@ -1,4 +1,5 @@
-﻿using Cyberpalata.Common;
+﻿using CSharpFunctionalExtensions;
+using Cyberpalata.Common;
 using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Models;
 using System;
@@ -14,5 +15,6 @@ namespace Cyberpalata.Logic.Interfaces.Services
         Task CreateChat(ChatDto chat);
         Task<Maybe<ChatDto>> ReadAsync(Guid chatId);
         Task<PagedList<ChatDto>> GetPagedList(ChatFilterBL filter);
+        Task<Result> SetIsDeletedState(Guid chatId, bool isDeletedState);
     }
 }
