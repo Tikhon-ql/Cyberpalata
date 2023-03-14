@@ -21,6 +21,7 @@ namespace Cyberpalata.DataProvider.Models
         public int HoursCount { get; set; }
         [Required]
         public decimal Price { get;set; }
+        public bool? IsPaid { get; set; }
         public virtual List<Seat> Seats { get; set; }
         public virtual List<Game> GamesToDownloadBefore { get; set; }
     }
