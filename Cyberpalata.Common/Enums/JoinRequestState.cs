@@ -16,16 +16,5 @@ namespace Cyberpalata.Common.Enums
         public JoinRequestState(int id, string name) : base(id, name)
         {
         }
-
-        public static JoinRequestState Parse(string name)
-        {
-            if(name == "InProgress")
-                return InProgress;
-            if(name == "Accepted")
-                return Accepted;
-            if(name == "Rejected")
-                return Rejected;
-            return new JoinRequestState(-1, name);
-        }
     }
 }
