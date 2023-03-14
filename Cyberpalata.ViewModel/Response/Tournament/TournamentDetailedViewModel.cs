@@ -6,5 +6,6 @@
         public string Name { get; set; }
         public string Date { get; set; }
         public List<TournamentBatleViewModel> Batles { get; set; } = new();
+        public string Winner { get; set; }
     }
 }
