@@ -1,4 +1,5 @@
-﻿using Cyberpalata.Common.Intefaces;
+﻿using CSharpFunctionalExtensions;
+using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.ViewModel.Request.Tournament;
@@ -49,8 +50,8 @@ namespace Cyberpalata.WebApi.Controllers
         }
 
 
-        [HttpPut]
-        public async Task<IActionResult> SetTeamHiringState(Guid teamId)
+        [HttpPut("setRecruting")]
+        public async Task<IActionResult> SetTeamRecrutingState(Guid teamId)
         {
             await _teamService.SetHiringState(teamId, true);
             return await ReturnSuccess();
@@ -79,6 +80,55 @@ namespace Cyberpalata.WebApi.Controllers
             return Ok(new { Items = viewModel, PageSize = result.PageSize, TotalItemsCount = result.TotalItemsCount });
         }
 
+        //[Authorize]
+        [HttpGet("topTeams")]
+        public async Task<IActionResult> GetTopTeams(int page)
+        {
+            var filter = new TeamFilterBL
+            {
+                CurrentPage = page,
+                PageSize = 10,
+                IsTop = true,
+            };
+            var teams = await _teamService.GetPagedList(filter);
+            var viewModel = new List<TeamTopViewModel>();
+            foreach(var team in teams.Items)
+            {
+                viewModel.Add(new TeamTopViewModel
+                {
+                    Name = team.Name,
+                    WinCount = team.WinCount
+                });
+            }
+            return Ok(new { Items = viewModel, PageSize = teams.PageSize, TotalItemsCount = teams.TotalItemsCount });
+        }
+
+        [Authorize]
+        [HttpGet("getUserTeam")]
+        public async Task<IActionResult> GetUserTeam()
+        {
+            var userId = Guid.Parse(User.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Sid).Value);
+            var filter = new TeamFilterBL
+            {
+                CurrentPage = 1,
+                PageSize = 1,
+                MemberId = userId,
+            };
+            var team = (await _teamService.GetPagedList(filter)).Items.ElementAt(0);
+
+            var viewModel = new TeamDetailViewModel
+            {
+                Id = team.Id,
+                CaptainName = $"{team.Captain.Member.Username} {team.Captain.Member.Surname}",
+                Name = team.Name,
+                Members = team.Members.Select(m => new TeamMemberViewModel {
+                    Name = $"{m.Member.Username} {m.Member.Surname}",
+                    Position = m.IsCaptain ? "Captain" : "Member"
+                }).ToList(),
+            };
+            return Ok(viewModel);
+        }
+
         [Authorize]
         [HttpGet("getByUserId")]
         public async Task<IActionResult> GetTeamsByUserId()
@@ -87,7 +137,7 @@ namespace Cyberpalata.WebApi.Controllers
             var filter = new TeamFilterBL
             {
                 CurrentPage = 1,
-                PageSize = 10,
+                PageSize = int.MaxValue,
                 CaptainId = userId
             };
             var list = await _teamService.GetPagedList(filter);
@@ -103,7 +153,5 @@ namespace Cyberpalata.WebApi.Controllers
             }
             return await ReturnSuccess(viewModel);
         }
-
-     
     }
 }
