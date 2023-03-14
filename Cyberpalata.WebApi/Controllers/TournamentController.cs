@@ -1,7 +1,10 @@
-﻿using Cyberpalata.Common.Intefaces;
+﻿using AutoMapper;
+using CSharpFunctionalExtensions;
+using Cyberpalata.Common.Intefaces;
 using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
+using Cyberpalata.ViewModel.Request.Filters;
 using Cyberpalata.ViewModel.Request.Tournament;
 using Cyberpalata.ViewModel.Response.Tournament;
 using Microsoft.AspNetCore.Authorization;
@@ -15,35 +18,64 @@ namespace Cyberpalata.WebApi.Controllers
     public class TournamentController : BaseController
     {
         private readonly ITournamentService _tournamentService;
-        public TournamentController(ITournamentService tournamentService,IUnitOfWork uinOfWork) : base(uinOfWork)
+        private readonly ITeamService _teamService;
+        public TournamentController(ITournamentService tournamentService,ITeamService teamService,IUnitOfWork uinOfWork) : base(uinOfWork)
         {
             _tournamentService = tournamentService;
+            _teamService = teamService;
         }
 
         [Authorize(Roles="Admin")]
         [HttpPost("createTournament")]
         public async Task<IActionResult> CreateTournament(CreateTournamentViewModel viewModel)
         {
-            var id = _tournamentService.CreateTournament(viewModel);
+            var result = await _tournamentService.CreateTournament(viewModel);
+            if (result.IsFailure)
+                return BadRequestJson(result);
             return await ReturnSuccess();
         }
         [Authorize]
         [HttpPut("registerTeam")]
         public async Task<IActionResult> RegisterTeam(RegisterTeamViewModel viewModel)
         {
-            var result = await _tournamentService.RegisterTeam(viewModel);
+            var userId = Guid.Parse(User.Claims.First(claim=>claim.Type == JwtRegisteredClaimNames.Sid).Value);
+            var result = await _tournamentService.RegisterTeam(viewModel, userId);
             if (result.IsFailure)
                 return BadRequestJson(result);
             return await ReturnSuccess(result.Value);
         }
-        [HttpGet("getActualTournaments")]
-        public async Task<IActionResult> GetActualTournaments(int page)
-        {
 
+        private async Task<bool> IsCaptain(Guid userId)
+        {
+            if (userId == Guid.Empty)
+                return false;
+            var teamFilter = new TeamFilterBL()
+            {
+                MemberId = userId,
+                PageSize = 1,
+                CurrentPage = 1
+            };
+
+            var team = await _teamService.GetPagedList(teamFilter);
+
+            if (team.Items.Count != 0)
+            {
+               return team.Items.ElementAt(0).Captain.Member.Id == userId;
+            };
+            return false;
+        }
+
+        [HttpPost("getTournaments")]
+        public async Task<IActionResult> GetTournaments([FromBody]TournamentFilterViewModel filterViewModel)
+        {
+            var claim = User.Claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Sid);
+            var userId = claim != null ? Guid.Parse(claim.Value) : Guid.Empty;
             var filter = new TournamentFilterBL
             {
-                IsActual = true,
-                CurrentPage = page,
+                SearchName = filterViewModel.SearchName,
+                IsActual = filterViewModel.ActualTournaments ? true 
+                           : filterViewModel.AllTournaments ? Maybe.None : false,
+                CurrentPage = filterViewModel.Page,
                 PageSize = 5   
             };
             var result = await _tournamentService.GetPagedList(filter);
@@ -54,10 +86,13 @@ namespace Cyberpalata.WebApi.Controllers
                 {
                     Id = item.Id,
                     Name = item.Name,
+                    TeamsCount = item.TeamsCount,
+                    Date = item.Date.ToString("d"),
+                    Begining = item.Begining.ToString(),
                 });
             }
 
-            return Ok(new { PageSize = result.PageSize, TotalItemsCount = result.TotalItemsCount, Items = viewModel });
+            return Ok(new { PageSize = result.PageSize, TotalItemsCount = result.TotalItemsCount, Items = viewModel, IsCaptain = await IsCaptain(userId) });
         }
         [HttpGet("getTournamentDetaile")]
         public async Task<IActionResult> GetTournamentDetaile(Guid tournamentId)
@@ -76,21 +111,21 @@ namespace Cyberpalata.WebApi.Controllers
         [HttpGet("getUsersTournaments")]
         public async Task<IActionResult> GetActualTournamentsUsersTeamIsRegistered(int page)
         {
-            var userId = Guid.Parse(User.Claims.First(c=>c.Type == JwtRegisteredClaimNames.Sid).Value);
+            var userId = Guid.Parse(User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Sid).Value);
 
             var filter = new TournamentFilterBL
             {
                 CaptainId = userId,
                 IsActual = true,
                 CurrentPage = page,
-                PageSize = 5
+                PageSize = 3
             };
             var result = await _tournamentService.GetPagedList(filter);
             var viewModel = new List<UserTournamentViewModel>();
             foreach (var item in result.Items)
             {
                 var teamInTournament = item.Batles.FirstOrDefault(t => t.FirstTeam.Captain.Member.Id == userId).FirstTeam;
-                if(teamInTournament == null)
+                if (teamInTournament == null)
                     teamInTournament = item.Batles.FirstOrDefault(t => t.FirstTeam.Captain.Member.Id == userId).SecondTeam;
                 viewModel.Add(new UserTournamentViewModel
                 {
@@ -99,7 +134,17 @@ namespace Cyberpalata.WebApi.Controllers
                     TeamId = teamInTournament.Id,
                 });
             }
-            return Ok(new {PageSize = result.PageSize, TotalItemsCount = result.TotalItemsCount,Items = viewModel });
+            return Ok(new { PageSize = result.PageSize, TotalItemsCount = result.TotalItemsCount, Items = viewModel });
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("approveTeam")]
+        public async Task<IActionResult> ApproveTeam(Guid teamId, Guid tournamentId)
+        {
+            var result = await _tournamentService.ApproveTeam(teamId, tournamentId);
+            if (result.IsFailure)
+                return BadRequestJson(result);
+            return await ReturnSuccess();
         }
     }
 }
