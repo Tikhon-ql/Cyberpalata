@@ -21,7 +21,12 @@ namespace Cyberpalata.DataProvider.Filters
             if(UserToJoinId.HasValue)
                 query = query.Where(q=>q.User.Id == UserToJoinId.Value);
             if (State.HasValue)
-                query = query.Where(q => q.State.Name == State.Value.Name);
+            {
+                if (State.Value == JoinRequestState.None)
+                    query = query.Where(q => q.State == null);
+                else
+                    query = query.Where(q => q.State == State.Value);
+            }
             return query;
         }
     }
