@@ -31,8 +31,12 @@ namespace Cyberpalata.WebApi.Controllers
         }
         protected IActionResult BadRequestJson(Result error)
         {
+            return BadRequestJson(error.Error);
+        }
+        protected IActionResult BadRequestJson(string error)
+        {
             var errorsDictionary = new Dictionary<string, string>();
-            errorsDictionary.Add("Other", error.Error);
+            errorsDictionary.Add("Other", error);
             var json = JsonConvert.SerializeObject(errorsDictionary);
             return BadRequest(json);
         }
