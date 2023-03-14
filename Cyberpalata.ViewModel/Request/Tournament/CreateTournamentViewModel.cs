@@ -12,5 +12,7 @@ namespace Cyberpalata.ViewModel.Request.Tournament
         public string Date { get; set; }
         [Required]
         public string RoundCount { get; set; }
+        [Required]
+        public TimeSpan Begining { get; set; }
     }
 }
