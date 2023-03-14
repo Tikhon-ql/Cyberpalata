@@ -20,7 +20,6 @@ namespace Cyberpalata.Logic.Configuration
             UserRefreshTokenMapConfig.CreateMap(this);
             RoomMapConfig.CreateMap(this);
             BookingMapConfig.CreateMap(this);
-            PrizeMapConfig.CreateMap(this);
             TeamMemberMapConfig.CreateMap(this);
             TeamMapConfig.CreateMap(this);
             UserMapConfig.CreateMap(this);
