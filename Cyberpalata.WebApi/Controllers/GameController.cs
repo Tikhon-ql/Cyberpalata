@@ -1,8 +1,11 @@
 ﻿using Cyberpalata.Common.Intefaces;
+using Cyberpalata.DataProvider.Models;
 using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
+using Cyberpalata.ViewModel.Request;
 using Cyberpalata.ViewModel.Response.GameLibrary;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Cyberpalata.WebApi.Controllers
 {
@@ -20,7 +23,7 @@ namespace Cyberpalata.WebApi.Controllers
         [HttpGet("getGames")]
         public async Task<IActionResult> Get(int page)
         {
-            var filter = new BaseFilterBL
+            var filter = new GameFilterBl
             {
                 CurrentPage = page,
                 PageSize = 10,
@@ -31,7 +34,7 @@ namespace Cyberpalata.WebApi.Controllers
             {
                 viewModel.Add(new GameViewModel { Name = item.GameName,ImageUrl = item.ImageUrl});
             }
-            return await ReturnSuccess(viewModel);
+            return Ok(new { Items = viewModel, TotalItemsCount = games.TotalItemsCount, PageSize = games.PageSize });
         }
     }
 }
