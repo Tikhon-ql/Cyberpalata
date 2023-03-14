@@ -10,14 +10,20 @@ namespace Cyberpalata.Logic.Configuration.MapperConfiguration
     {
         public static void CreateMap(AppMappingProfile profile)
         {
-            profile.CreateMap<Tournament, TournamentDto>();
+            profile.CreateMap<Tournament, TournamentDto>()
+                .ForMember(dst => dst.RoundCount, opt => opt.MapFrom(src => src.RoundsCount))
+                .ForMember(dst => dst.Date, opt => opt.MapFrom(src => src.Date))
+                .ForMember(dst => dst.Winner, opt => opt.MapFrom(src => src.Winner))
+                .ForMember(dst => dst.Begining, opt => opt.MapFrom(src => src.Date - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)))
+                .ForMember(dst => dst.Batles, opt => opt.MapFrom(src => src.Batles))
+                .ForMember(dst => dst.BatleResults, opt => opt.MapFrom(src => src.BatleResults))
+                .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name));
             profile.CreateMap<TournamentDto, Tournament>()
                 .ForMember(dst => dst.RoundsCount, opt => opt.MapFrom(src => src.RoundCount))
-                .ForMember(dst => dst.Date, opt => opt.MapFrom(src => src.Date))
-                .ForMember(dst=>dst.Winner, opt=>opt.MapFrom(src=>src.Winner))
-                .ForMember(dst=>dst.Batles, opt=>opt.MapFrom(src=>src.Batles))
-                .ForMember(dst=>dst.BatleResults, opt=>opt.MapFrom(src=>src.BatleResults))
-                .ForMember(dst=>dst.Prizes, opt=>opt.MapFrom(src=>src.Prizes))
+                .ForMember(dst => dst.Date, opt => opt.MapFrom(src => src.Date.Add(src.Begining)))
+                .ForMember(dst => dst.Winner, opt => opt.MapFrom(src => src.Winner))
+                .ForMember(dst => dst.Batles, opt => opt.MapFrom(src => src.Batles))
+                .ForMember(dst => dst.BatleResults, opt => opt.MapFrom(src => src.BatleResults))
                 .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name));
             profile.CreateMap<CreateTournamentViewModel, TournamentDto>();
             profile.CreateMap<Tournament, GetTournamentViewModel>()

@@ -16,6 +16,8 @@ namespace Cyberpalata.Logic.Configuration.MapperConfiguration
         {
             profile.CreateMap<Chat, ChatDto>();
             profile.CreateMap<ChatDto, Chat>();
+            profile.CreateMap<Maybe<ChatDto>, Maybe<Chat>>();
+            profile.CreateMap<Maybe<Chat>, Maybe<ChatDto>>();
             profile.CreateMap<PagedList<ChatDto>, PagedList<Chat>>();
             profile.CreateMap<PagedList<Chat>, PagedList<ChatDto>>();
         }
