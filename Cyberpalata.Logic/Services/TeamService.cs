@@ -27,8 +27,48 @@ namespace Cyberpalata.Logic.Services
             _tournamentRepository = tournamentRepository;
         }
 
-        public async Task CreateAsync(CreateTeamViewModel request)
+        public async Task<Result> AddUserToTeam(Guid userId, Guid teamId)
         {
+            var user = await _userRepository.ReadAsync(userId);
+            if (user.HasNoValue)
+                return Result.Failure($"User with id: {userId} not found");
+            var team = await _repository.ReadAsync(teamId);
+            if(team.HasNoValue)
+                return Result.Failure($"Team with id: {teamId} not found");
+            team.Value.Members.Add(new TeamMember()
+            {
+                Id = Guid.NewGuid(),
+                Member = user.Value,
+                Team = team.Value,
+                IsCaptain = false,
+            });
+
+            return Result.Success();
+        }
+
+        private async Task<Result> ValidateTeam(CreateTeamViewModel viewModel)
+        {
+            if (viewModel.Name.Contains(' ') || viewModel.Name.Contains(';') || viewModel.Name.Contains('>')
+             || viewModel.Name.Contains(';') || viewModel.Name.Contains('<')
+             || viewModel.Name.Contains('-') || viewModel.Name.Contains('*')
+             || viewModel.Name.Contains('+') || viewModel.Name.Contains('-')
+             || viewModel.Name.Contains('(') || viewModel.Name.Contains(')')
+             || viewModel.Name.Contains('[') || viewModel.Name.Contains(']')
+             || viewModel.Name.Contains('{') || viewModel.Name.Contains('}')
+             || viewModel.Name.Contains('\\') || viewModel.Name.Contains('/')
+             || viewModel.Name.Contains('.') || viewModel.Name.Contains('\'')
+             || viewModel.Name.Contains(',') || viewModel.Name.Contains('?')
+             || viewModel.Name.Contains('!') || viewModel.Name.Contains('_'))
+                return Result.Failure("Team name contains bad symbol");
+            return Result.Success();
+        }
+ 
+        public async Task<Result> CreateAsync(CreateTeamViewModel request)
+        {
+            var validationResult = await ValidateTeam(request);
+            if (validationResult.IsFailure)
+                return validationResult;
+            var captain = await _userRepository.ReadAsync(request.CaptainId);
             var team = new Team
             {
                 Id = Guid.NewGuid(),
@@ -41,7 +81,9 @@ namespace Cyberpalata.Logic.Services
                 IsCaptain = true,
                 TeamId = team.Id
             });
+            captain.Value.Team = team;
             await _repository.CreateAsync(team);
+            return Result.Success();
         }
 
         public async Task<PagedList<TeamDto>> GetPagedList(TeamFilterBL filter)
