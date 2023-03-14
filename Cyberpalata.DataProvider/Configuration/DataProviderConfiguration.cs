@@ -1,4 +1,5 @@
 ﻿using Cyberpalata.Common.Intefaces;
+using Cyberpalata.DataProvider;
 using Cyberpalata.DataProvider.Context;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Repositories;
@@ -19,7 +20,7 @@ namespace Cyberpalata.DataProvider.Configuration
                 options.UseSqlServer(connectionString).UseLazyLoadingProxies();
                 options.EnableSensitiveDataLogging();
             });
-      
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRoomRepository, RoomRepository>();
@@ -41,7 +42,8 @@ namespace Cyberpalata.DataProvider.Configuration
             services.AddScoped<ITeamMemberRepository, TeamMemberRepository>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
             services.AddScoped<IChatRepository, ChatRepository>();
-            services.AddScoped<IMessageRepository,MessageRepository>();
+            services.AddScoped<IMessageRepository, MessageRepository>();
         }
     }
 }
+
