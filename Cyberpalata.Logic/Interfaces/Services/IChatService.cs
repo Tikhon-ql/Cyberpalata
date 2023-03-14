@@ -12,6 +12,7 @@ namespace Cyberpalata.Logic.Interfaces.Services
     public interface IChatService
     {
         Task CreateChat(ChatDto chat);
+        Task<Maybe<ChatDto>> ReadAsync(Guid chatId);
         Task<PagedList<ChatDto>> GetPagedList(ChatFilterBL filter);
     }
 }
