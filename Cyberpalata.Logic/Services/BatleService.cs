@@ -29,31 +29,40 @@ namespace Cyberpalata.Logic.Services
             if(batle.HasNoValue)
                 return Result.Failure($"Batle with id: {viewModel.TournamentId} doesn't exist");
             var winner = await _teamRepository.ReadAsync(viewModel.WinnerId);
-            var batleResult = new BatleResult
+            if(batle.Value.RoundNumber == tournament.Value.RoundsCount - 1)
             {
-                Id = Guid.NewGuid(),
-                Batle = batle.Value,
-                Date = DateTime.UtcNow,
-                RoundNumber = batle.Value.RoundNumber,
-                Winner = winner.Value,
-            };
-            tournament.Value.BatleResults.Add(batleResult);
-            var isFirstTeamSet = tournament.Value.Batles.Where(b=>b.RoundNumber == batle.Value.RoundNumber + 1).FirstOrDefault(b=>b.SecondTeam == null);
-            if(isFirstTeamSet != null)
-            {
-                isFirstTeamSet.SecondTeam = winner.Value;
-                isFirstTeamSet.Date = DateTime.UtcNow;
+                tournament.Value.Winner = winner.Value;
+                winner.Value.WinCount++;
             }
             else
             {
-                tournament.Value.Batles.Add(new Batle
+                var isFirstTeamSet = tournament.Value.Batles.Where(b => b.RoundNumber == batle.Value.RoundNumber + 1 && b.Number == batle.Value.Number / 2).FirstOrDefault(b => b.SecondTeam == null);
+                if (isFirstTeamSet != null)
                 {
-                    Id = Guid.NewGuid(),
-                    FirstTeam = winner.Value,
-                    Tournament = tournament.Value,
-                    RoundNumber = batle.Value.RoundNumber + 1
-                });
+                    isFirstTeamSet.SecondTeam = winner.Value;
+                    isFirstTeamSet.Date = DateTime.UtcNow;
+                }
+                else
+                {
+                    tournament.Value.Batles.Add(new Batle
+                    {
+                        Id = Guid.NewGuid(),
+                        FirstTeam = winner.Value,
+                        Tournament = tournament.Value,
+                        RoundNumber = batle.Value.RoundNumber + 1,
+                        Number = batle.Value.Number / 2
+                    });
+                }
             }
+            //var batleResult = new BatleResult
+            //{
+            //    Id = Guid.NewGuid(),
+            //    Batle = batle.Value,
+            //    Date = DateTime.UtcNow,
+            //    RoundNumber = batle.Value.RoundNumber,
+            //    Winner = winner.Value,
+            //};
+            //tournament.Value.BatleResults.Add(batleResult);
             return Result.Success();
         }
     }
