@@ -8,6 +8,7 @@ namespace Cyberpalata.DataProvider.Models.Tournaments
         [Required]
         public virtual List<TeamMember> Members { get; set; }
         public virtual List<Tournament>? Tournaments { get; set; }
+        public int WinCount { get; set; }
         public bool IsHiring { get; set; }
     }
 }
