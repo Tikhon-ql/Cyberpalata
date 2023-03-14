@@ -25,7 +25,7 @@ namespace Cyberpalata.Logic.Configuration
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IPcService, PcService>();
             services.AddScoped<IPeripheryService, PeripheryService>();
-            services.AddScoped<IHashGenerator,HashGenerator>();
+            services.AddScoped<IHashGenerator, HashGenerator>();
             services.AddScoped<IBookingService, BookingService>();
             services.AddScoped<ISeatService, SeatService>();
             services.AddScoped<IMailService, MailService>();
@@ -38,6 +38,7 @@ namespace Cyberpalata.Logic.Configuration
             services.AddScoped<ITeamJoinRequestService, TeamJoinRequestService>();
             services.AddScoped<IChatService, ChatService>();
             services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<IPaymentService, PaymentService>();
         }
     }
 }
