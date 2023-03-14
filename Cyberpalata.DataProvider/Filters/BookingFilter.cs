@@ -7,6 +7,7 @@ namespace Cyberpalata.DataProvider.Filters
     {
         public Maybe<bool> IsActual { get; set; }
         public Maybe<Guid> UserId { get; set; }
+        public Maybe<bool> IsPaid { get; set; }
 
         public override IQueryable<Booking> EnrichQuery(IQueryable<Booking> query)
         {
@@ -19,6 +20,8 @@ namespace Cyberpalata.DataProvider.Filters
             }
             if(UserId.HasValue && UserId.Value != Guid.Empty)
                 query = query.Where(b=>b.User.Id == UserId.Value);
+            if(IsPaid.HasValue)
+                query = query.Where(b=>b.IsPaid == IsPaid.Value);             
             return query;
         }
     }
