@@ -4,6 +4,7 @@ using Cyberpalata.DataProvider.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cyberpalata.DataProvider.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230310162823_BatleNumberAdding")]
+    partial class BatleNumberAdding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -530,12 +533,6 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.Property<Guid?>("FirstTeamId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsFirstTeamApproved")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsSecondTeamApproved")
-                        .HasColumnType("bit");
-
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
@@ -610,18 +607,12 @@ namespace Cyberpalata.DataProvider.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsApproved")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsHiring")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("WinCount")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -688,9 +679,6 @@ namespace Cyberpalata.DataProvider.Migrations
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsGone")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
