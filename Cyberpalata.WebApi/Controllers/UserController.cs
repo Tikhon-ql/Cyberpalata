@@ -1,4 +1,5 @@
 ﻿using Cyberpalata.Common.Intefaces;
+using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.ViewModel.Request.Identities;
 using Cyberpalata.ViewModel.Request.Identity;
@@ -14,10 +15,12 @@ namespace Cyberpalata.WebApi.Controllers
     public class UserController : BaseController
     {
         private readonly IUserService _userService;
+        private readonly ITeamService _teamService;
 
-        public UserController(IUserService userService, IUnitOfWork uinOfWork) : base(uinOfWork)
+        public UserController(IUserService userService,ITeamService teamService, IUnitOfWork uinOfWork) : base(uinOfWork)
         {
             _userService = userService;
+            _teamService = teamService;
         }
 
         [HttpPost("register")]
@@ -63,13 +66,30 @@ namespace Cyberpalata.WebApi.Controllers
         {
             var id = Guid.Parse(User.Claims.Single(claim => claim.Type == JwtRegisteredClaimNames.Sid).Value.ToString());
             var user = await _userService.ReadAsync(id);
-            return Ok(new ProfileViewModel
+
+            var profile = new ProfileViewModel
             {
                 Username = user.Value.Username,
                 Surname = user.Value.Surname,
                 Email = user.Value.Email,
                 Phone = user.Value.Phone,
-            });
+                HasTeam = false,
+                IsCaptain = false
+            };
+
+            var filter = new TeamFilterBL
+            {
+                MemberId = id,
+                CurrentPage = 1,
+                PageSize = 1,
+            };
+            var team = await _teamService.GetPagedList(filter);
+            if(team.Items.Count != 0)
+            {
+                profile.HasTeam = true;
+                profile.IsCaptain = team.Items.ElementAt(0).Captain.Member.Id == id;
+            };
+            return Ok(profile);
         }
         
 
