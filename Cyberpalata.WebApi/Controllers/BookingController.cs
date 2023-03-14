@@ -1,7 +1,9 @@
-﻿using Cyberpalata.Common.Intefaces;
+﻿using CSharpFunctionalExtensions;
+using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.ViewModel.Request.Booking;
+using Cyberpalata.ViewModel.Request.Bookings;
 using Cyberpalata.ViewModel.Response.Booking;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -82,6 +84,47 @@ namespace Cyberpalata.WebApi.Controllers
                 });
             }
             return Ok(new {Items = viewModel, TotalItemsCount = bookings.TotalItemsCount, PageSize = 5});
+        }
+
+        [Authorize]
+        [HttpPost("finalizeBooking")]
+        public async Task<IActionResult> FinalizeBooking(BookingFinalizationViewModel viewModel)
+        {
+            var result = await _bookingService.BookingPay(viewModel);
+            if(result.IsFailure)
+                return BadRequestJson(result);
+            return await ReturnSuccess();
+        }
+
+        [Authorize]
+        [HttpGet("getBasket")]
+        public async Task<IActionResult> GetBasket()
+        {
+            var userId = Guid.Parse(User.Claims.First(claim=>claim.Type == JwtRegisteredClaimNames.Sid).Value);
+            var filter = new BookingFilterBL
+            {
+                CurrentPage = 1,
+                PageSize = int.MaxValue,
+                IsActual = true,
+                UserId = userId,
+                IsPaid = false
+            };
+            var bookings = await _bookingService.GetPagedListAsync(filter);
+
+            var viewModel = new List<BookingCollectionViewModel>();
+            foreach (var item in bookings.Items)
+            {
+                viewModel.Add(new BookingCollectionViewModel
+                {
+                    Id = item.Id,
+                    Begining = item.Begining.ToString(@"hh\:mm"),
+                    HoursCount = item.HoursCount,
+                    Price = item.Price,
+                    Date = item.Date.ToString("yyyy-MM-dd"),
+                    RoomName = item.Room.Name
+                });
+            }
+            return Ok(viewModel);
         }
     }
 }
