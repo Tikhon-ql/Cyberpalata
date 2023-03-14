@@ -35,7 +35,7 @@ namespace Cyberpalata.Logic.Services
             var newMessage = new Message
             {
                 Chat = chat.Value,
-                MessageText = message.MessageText,
+                MessageText = message.Message,
                 SentDate = DateTime.UtcNow,
                 Sender = user.Value
             };
