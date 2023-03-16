@@ -35,16 +35,31 @@ namespace Cyberpalata.WebApi.Controllers
             };
             var notifications = await _notificationService.GetPagedList(filter);
             var viewModel = new List<NotificationViewModel>();
-            await _notificationService.SetNotificationProcededDate(notifications.Items.ToList(), userId);
             foreach(var notification in notifications.Items)
             {
                 viewModel.Add(new NotificationViewModel
                 {
-                    Date = notification.Date.ToString("f"),
+                    Date = notification.CreatedDate.ToString("f"),
                     Text = notification.Text,
                 });
             }
             return await ReturnSuccess(viewModel);
+        }
+        [Authorize]
+        [HttpPut("setCheckedState")]
+        public async Task<IActionResult> SetCheckedState()
+        {
+            var userId = Guid.Parse(User.Claims.First(claim=>claim.Type == JwtRegisteredClaimNames.Sid).Value);
+            var filter = new NotificationFilterBL
+            {
+                CurrentPage = 1,
+                PageSize = int.MaxValue,
+                UserId = userId,
+                NotificationProceded = false
+            };
+            var notifications = await _notificationService.GetPagedList(filter);
+            await _notificationService.SetNotificationProcededDate(notifications.Items.ToList(), userId);
+            return await ReturnSuccess();
         }
     }
 }

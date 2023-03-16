@@ -42,7 +42,7 @@ namespace Cyberpalata.WebApi.Controllers
 
             var viewModel = new RoomCollectionViewModel
             {
-                Items = rooms.Items.Select(x => new RoomItemViewModel { Id = x.Id.ToString(), Name = x.Name }).ToList(),
+                Items = rooms.Items.Select(x => new RoomItemViewModel { Id = x.Id, Name = x.Name }).ToList(),
                 TotalItemsCount = rooms.TotalItemsCount,
                 PageSize = rooms.PageSize
             };
@@ -65,31 +65,66 @@ namespace Cyberpalata.WebApi.Controllers
             };
 
             var rooms = await _roomService.GetPagedListAsync(filter);
-            var viewModel = new RoomCollectionViewModel
+
+            var viewModel = new List<RoomItemViewModel>();
+
+            foreach (var room in rooms.Items) 
             {
-                Items = rooms.Items.Select(x => new RoomItemViewModel { Id = x.Id.ToString(), Name = x.Name }).ToList(),
-                TotalItemsCount = rooms.TotalItemsCount,
-                PageSize = rooms.PageSize
-            };
-            return Ok(new { Items = viewModel.Items, TotalItemsCount = rooms.TotalItemsCount, PageSize = filter.PageSize });
+                viewModel.Add(new RoomItemViewModel
+                {
+                    Id = room.Id,
+                    Name = room.Name,
+                    FreeSeatsCount = (await _roomService.GetFreeSeatsCount(room.Id, filterViewModel)).Value
+                });
+
+            }
+
+            //var viewModel = new RoomCollectionViewModel
+            //{
+            //    TotalItemsCount = rooms.TotalItemsCount,
+            //    PageSize = rooms.PageSize
+            //};
+            return Ok(new { Items = viewModel, TotalItemsCount = rooms.TotalItemsCount, PageSize = filter.PageSize,CurrentPage = rooms.CurrentPageNumber });
         }
 
         [HttpGet("getRoomInfo")]
         public async Task<IActionResult> GetRoomInfo(Guid id)
         {
-            var peripheries = await _peripheryService.GetByGamingRoomId(id);
-            var roomsPc = await _pcService.GetByGamingRoomId(id);
 
-            var pcInfo = default(PcDto);
+            var peripheryFilter = new PeripheriesFilterBl
+            {
+                CurrentPage = 1,
+                PageSize = int.MaxValue,
+                RoomId = id
+            };
 
-            if (roomsPc.HasValue)
-                pcInfo = roomsPc.Value;        
+            var peripheries = await _peripheryService.GetPageList(peripheryFilter);
+
+            var pcFilter = new PcFilterBl
+            {
+                CurrentPage = 1,
+                PageSize = int.MaxValue,
+                RoomId = id
+            };
+
+            var pc = (await _pcService.GetPagedList(pcFilter)).Items.ElementAt(0);
 
             var pcInfoList = new List<PcViewModel>();
+
+            foreach(var prop in pc.GetType().GetProperties())
+            {
+                pcInfoList.Add(new PcViewModel
+                {
+                    Name = prop.GetValue(pc).ToString(),
+                    Type = prop.Name
+                });
+            }
+            pcInfoList.RemoveAt(0);
+
             var viewModel = new GamingRoomViewModel
             {
                 PcInfos= pcInfoList,
-                Peripheries = peripheries.Value.Select(p => new PeripheryViewModel(p.Name, p.Type.Name)).ToList(),
+                Peripheries = peripheries.Items.Select(p => new PeripheryViewModel(p.Name, p.Type.Name)).ToList(),
             };
             return await ReturnSuccess(viewModel);
         }

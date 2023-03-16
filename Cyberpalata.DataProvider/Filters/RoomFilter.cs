@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using Cyberpalata.Common.Enums;
 using Cyberpalata.DataProvider.Models;
 
 namespace Cyberpalata.DataProvider.Filters

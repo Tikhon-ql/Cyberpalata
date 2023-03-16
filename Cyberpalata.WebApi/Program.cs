@@ -75,6 +75,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.ConfigureLogicLayer(builder.Configuration);
 
 builder.Services.AddHostedService<TournamentBackgroundWorker>();
+builder.Services.AddHostedService<ChatDeleteingBackgroundWorker>();
 
 
 builder.Services.AddSignalR();
@@ -105,6 +106,8 @@ app.UseCors();
 app.MapControllers();
 
 app.MapHub<ChatHub>("/chat");
+app.MapHub<NotificationHub>("/notify");
+///once send request;
 
 app.UseAuthorization();
 

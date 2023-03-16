@@ -1,7 +1,5 @@
 ﻿using Cyberpalata.Common.Enums;
 using Cyberpalata.DataProvider.Models.Identity;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cyberpalata.DataProvider.Models.Tournaments
 {

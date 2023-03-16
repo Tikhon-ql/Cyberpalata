@@ -1,10 +1,7 @@
 ﻿using Cyberpalata.Common.Intefaces;
-using Cyberpalata.DataProvider.Models;
-using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.ViewModel.Request;
 using Cyberpalata.WebApi.Connections;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Cyberpalata.WebApi.Hubs

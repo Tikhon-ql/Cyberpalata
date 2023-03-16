@@ -3,16 +3,12 @@ using CSharpFunctionalExtensions;
 using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Filters;
 using Cyberpalata.DataProvider.Interfaces;
-using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.DataProvider.Models.Tournaments;
 using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Tournament;
 using Cyberpalata.ViewModel.Request.Tournament;
 using Cyberpalata.ViewModel.Response.Tournament;
-using Microsoft.Extensions.Configuration;
-using System.ComponentModel;
-using System.Formats.Asn1;
 
 namespace Cyberpalata.Logic.Services
 {

@@ -10,6 +10,7 @@ namespace Cyberpalata.DataProvider.Models.Devices
         public string ConsoleName { get; set; }
         public Guid RoomId { get; set; }
         [ForeignKey("RoomId")]
+        
         public virtual Room ConsoleRoom { get; set; }
     }
 }

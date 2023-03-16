@@ -20,7 +20,6 @@ namespace Cyberpalata.WebApi.Controllers
             _teamService = teamService;
         }
 
-
         [Authorize]
         [HttpPost("createTeam")]
         public async Task<IActionResult> CreateTeam(CreateTeamViewModel viewModel)
@@ -50,6 +49,28 @@ namespace Cyberpalata.WebApi.Controllers
         }
 
 
+        [Authorize]
+        [HttpDelete("deleteTeam")]
+        public async Task<IActionResult> DeleteTeam(Guid teamId)
+        {
+            var result = await _teamService.DeleteTeam(teamId);
+            if (result.IsFailure)
+                return BadRequestJson(result);
+            return await ReturnSuccess();
+        }
+
+        [Authorize]
+        [HttpDelete("leaveTeam")]
+        public async Task<IActionResult> LeaveTeam(Guid teamId)
+        {
+            var userId = Guid.Parse(User.Claims.First(claim=>claim.Type == JwtRegisteredClaimNames.Sid).Value);
+            var result = await _teamService.KickMember(teamId, userId);
+            if (result.IsFailure)
+                return BadRequestJson(result);
+            return await ReturnSuccess();
+        }
+
+
         [HttpPut("setRecruting")]
         public async Task<IActionResult> SetTeamRecrutingState(Guid teamId)
         {
@@ -58,7 +79,7 @@ namespace Cyberpalata.WebApi.Controllers
         }
 
         [HttpGet("getHiringTeams")]
-        public async Task<IActionResult> GetHiringTeams(int page)
+        public async Task<IActionResult> GetRecrutingTeams(int page)
         {
             var teamFilter = new TeamFilterBL
             {
@@ -68,12 +89,13 @@ namespace Cyberpalata.WebApi.Controllers
             };
 
             var result = await _teamService.GetPagedList(teamFilter);
-            var viewModel = new List<HiringTeamViewModel>();
+            var viewModel = new List<RecrutingTeamViewModel>();
             foreach (var team in result.Items)
             {
-                viewModel.Add(new HiringTeamViewModel
+                viewModel.Add(new RecrutingTeamViewModel
                 {
                     Id = team.Id,
+                    CaptainId = team.Captain.Member.Id,
                     Name = team.Name
                 });
             }

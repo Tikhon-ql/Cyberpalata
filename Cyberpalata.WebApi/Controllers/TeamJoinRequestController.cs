@@ -1,5 +1,4 @@
-﻿using CSharpFunctionalExtensions;
-using Cyberpalata.Common.Enums;
+﻿using Cyberpalata.Common.Enums;
 using Cyberpalata.Common.Intefaces;
 using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
@@ -71,7 +70,6 @@ namespace Cyberpalata.WebApi.Controllers
             var chatStateChangeResult = await _chatService.SetIsDeletedState(viewModel.ChatId, true);
             if (chatStateChangeResult.IsFailure)
                 return BadRequestJson(chatStateChangeResult);
-
             return await ReturnSuccess();
         }
 
@@ -92,7 +90,7 @@ namespace Cyberpalata.WebApi.Controllers
                 CurrentPage = 1,
                 PageSize = 1,
                 TeamId = team.Items.ElementAt(0).Id,
-                State = JoinRequestState.None
+                State = new List<JoinRequestState> { JoinRequestState.None }
             };
 
             var requests = await _teamJoinRequestService.GetPagedList(teamJoinFilter);

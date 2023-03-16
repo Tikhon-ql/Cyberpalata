@@ -1,5 +1,4 @@
 ﻿using Cyberpalata.Common.Intefaces;
-using Cyberpalata.DataProvider;
 using Cyberpalata.DataProvider.Context;
 using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Repositories;

@@ -2,14 +2,10 @@
 using Cyberpalata.Common;
 using Cyberpalata.DataProvider.Filters;
 using Cyberpalata.DataProvider.Interfaces;
+using Cyberpalata.DataProvider.Models;
 using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cyberpalata.Logic.Services
 {
@@ -22,6 +18,11 @@ namespace Cyberpalata.Logic.Services
         {
             _repository = repository;
             _mappper = mapper;
+        }
+
+        public async Task CreateNotificaiton(NotificationDto notification)
+        {
+            await _repository.CreateAsync(_mappper.Map<Notification>(notification));
         }
 
         public async Task<PagedList<NotificationDto>> GetPagedList(NotificationFilterBL filter)

@@ -37,8 +37,12 @@ namespace Cyberpalata.DataProvider.Repositories
             IQueryable<T> list = _entitySet.AsQueryable<T>();
             list = filter.EnrichQuery(list);
             int totalItemsCount = list.Count();
-            list = list.Skip(((filter.CurrentPage - 1) * filter.PageSize)).Take(filter.PageSize);
-            return new PagedList<T>(list.ToList(), filter.CurrentPage, filter.PageSize, totalItemsCount);
+            int currentPage = filter.CurrentPage;
+            if (totalItemsCount > filter.PageSize)
+                list = list.Skip(((filter.CurrentPage - 1) * filter.PageSize)).Take(filter.PageSize);
+            else
+                currentPage = 1;
+            return new PagedList<T>(list.ToList(), currentPage, filter.PageSize, totalItemsCount);
         }
 
         public virtual async Task<Maybe<T>> ReadAsync(Guid id) => await _entitySet.FirstOrDefaultAsync(e=>e.Id == id);

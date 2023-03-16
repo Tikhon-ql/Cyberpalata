@@ -11,6 +11,6 @@ namespace Cyberpalata.DataProvider.Models
         public Guid RoomId { get; set; }
         [ForeignKey("RoomId")]
         public virtual Room Room { get; set; }
-        public virtual List<Booking> Bookings { get; set; }
+        public virtual List<Booking>? Bookings { get; set; }
     }
 }

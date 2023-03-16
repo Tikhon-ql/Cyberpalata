@@ -1,11 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Cyberpalata.Common.Enums;
 using Cyberpalata.DataProvider.Models.Tournaments;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cyberpalata.DataProvider.Filters
 {
@@ -13,7 +8,7 @@ namespace Cyberpalata.DataProvider.Filters
     {
         public Maybe<Guid> TeamId { get; set; }
         public Maybe<Guid> UserToJoinId { get; set; }
-        public Maybe<JoinRequestState> State { get; set; } 
+        public Maybe<List<JoinRequestState>> State { get; set; } 
         public override IQueryable<TeamJoinRequest> EnrichQuery(IQueryable<TeamJoinRequest> query)
         {
             if(TeamId.HasValue)
@@ -22,10 +17,10 @@ namespace Cyberpalata.DataProvider.Filters
                 query = query.Where(q=>q.User.Id == UserToJoinId.Value);
             if (State.HasValue)
             {
-                if (State.Value == JoinRequestState.None)
+                if (State.Value.Contains(JoinRequestState.None))
                     query = query.Where(q => q.State == null);
                 else
-                    query = query.Where(q => q.State == State.Value);
+                    query = query.Where(q => State.Value.Contains(q.State));
             }
             return query;
         }

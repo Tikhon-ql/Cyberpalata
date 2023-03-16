@@ -3,21 +3,14 @@ using Cyberpalata.DataProvider.Interfaces;
 using Cyberpalata.DataProvider.Models.Tournaments;
 using Cyberpalata.DataProvider.Models;
 using Cyberpalata.Logic.Interfaces.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Cyberpalata.Common;
 using Cyberpalata.Logic.Models.Tournament;
 using Cyberpalata.Logic.Filters;
 using AutoMapper;
 using Cyberpalata.DataProvider.Filters;
-using Castle.Core.Logging;
 using Microsoft.Extensions.Logging;
 using Cyberpalata.Common.Enums;
 using Cyberpalata.ViewModel.Request.Tournament;
-using Cyberpalata.Logic.Models.Identity;
 using Cyberpalata.DataProvider.Models.Identity;
 
 namespace Cyberpalata.Logic.Services
@@ -74,7 +67,7 @@ namespace Cyberpalata.Logic.Services
                 PageSize = 1,
                 TeamId = viewModel.TeamId,
                 UserToJoinId = viewModel.UserToJoinId,
-                State = currentState
+                State = new List<JoinRequestState> { currentState }
             };
             var request = (await _teamJoinRequestRepository.GetPageListAsync(filter)).Items.ElementAt(0);
             request.State = stateToSet;
@@ -95,8 +88,52 @@ namespace Cyberpalata.Logic.Services
             return Result.Success();
         }
 
+        private async Task<Result> ValidateIsAlredySentRequest(Guid teamId, Guid userId)
+        {
+            var filter = new TeamJoinRequestFilter()
+            {
+                CurrentPage = 1,
+                PageSize = 1,
+                TeamId = teamId,
+                UserToJoinId = userId,
+                State = new List<JoinRequestState> { JoinRequestState.None, JoinRequestState.InProgress }
+            };
+            var requests = await _teamJoinRequestRepository.GetPageListAsync(filter);
+            if (requests.Items.Count > 0)
+                return Result.Failure("You already sent request");
+            return Result.Success();
+        }
+        private async Task<Result> ValidateUserHasTeam(Guid userId)
+        {
+            var teamFilter = new TeamFilter
+            {
+                CurrentPage = 1,
+                PageSize = int.MaxValue,
+                MemberId = userId,
+            };
+            var teams = await _teamRepository.GetPageListAsync(teamFilter);
+            if (teams.Items.Count > 0)
+                return Result.Failure("You are already participate in the team.\nYou can leave it in your profile");
+            return Result.Success();
+        }
+
+        private async Task<Result> ValidateRequest(Guid teamId, Guid userId)
+        {
+            var isSentResult = await ValidateIsAlredySentRequest(teamId, userId);
+            if (isSentResult.IsFailure)
+                return isSentResult;
+            var isHasTeamResult = await ValidateUserHasTeam(userId);
+            if (isHasTeamResult.IsFailure)
+                return isHasTeamResult;
+            return Result.Success();
+        }
+
         public async Task<Result> CreateJoinRequest(Guid teamId, Guid userId)
         {
+            var result = await ValidateRequest(teamId, userId);
+            if (result.IsFailure)
+                return result;
+
             var captain = await ReadCaptainByTeamId(teamId);
             if (captain.HasNoValue)
                 return Result.Failure("Captain not found");

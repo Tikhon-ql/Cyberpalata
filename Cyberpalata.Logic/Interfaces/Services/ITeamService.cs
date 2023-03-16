@@ -15,5 +15,7 @@ namespace Cyberpalata.Logic.Interfaces.Services
         Task SetHiringState(Guid teamId,bool state);
         Task<Result<TeamDetailViewModel>> GetTeamInTournament(Guid teamId, Guid tournamentId);
         Task<Result> AddUserToTeam(Guid userId, Guid teamId);
+        Task<Result> DeleteTeam(Guid teamId);
+        Task<Result> KickMember(Guid teamId, Guid memberId);
     }
 }

@@ -123,5 +123,32 @@ namespace Cyberpalata.Logic.Services
                 return;
             team.Value.IsHiring = state;
         }
+
+        public async Task<Result> DeleteTeam(Guid teamId)
+        {
+            var team = await _repository.ReadAsync(teamId);
+            if (team.HasNoValue)
+                return Result.Failure($"Team with id {teamId} not found");
+            foreach (var member in team.Value.Members.ToList())
+            {
+                var result = await KickMember(teamId, member.MemberId.Value);
+                if (result.IsFailure)
+                    return result;
+            }
+            _repository.Delete(team.Value);
+            return Result.Success();
+        }
+
+        public async Task<Result> KickMember(Guid teamId,Guid memberId)
+        {
+            var team = await _repository.ReadAsync(teamId);
+            if (team.HasNoValue)
+                return Result.Failure($"Team with id {teamId} not found");
+            var member = team.Value.Members.FirstOrDefault(m => m.MemberId == memberId);
+            if (member == null)
+                return Result.Failure("User doesn't participate in the team");
+            team.Value.Members.Remove(member);
+            return Result.Success();
+        }
     }
 }

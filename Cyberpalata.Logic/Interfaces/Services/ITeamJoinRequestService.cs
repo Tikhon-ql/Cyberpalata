@@ -4,11 +4,6 @@ using Cyberpalata.Common.Enums;
 using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Models.Tournament;
 using Cyberpalata.ViewModel.Request.Tournament;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cyberpalata.Logic.Interfaces.Services
 {

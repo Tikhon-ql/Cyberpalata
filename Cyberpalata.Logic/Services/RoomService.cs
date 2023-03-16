@@ -8,6 +8,7 @@ using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Room;
 using Cyberpalata.ViewModel.Request.Booking;
+using Cyberpalata.ViewModel.Request.Filters;
 using Cyberpalata.ViewModel.Request.Room;
 using Cyberpalata.ViewModel.Request.Seats;
 using Microsoft.Extensions.Configuration;
@@ -171,6 +172,20 @@ namespace Cyberpalata.Logic.Services
                 }
             }     
             return resultList;
+        }
+
+        public async Task<Maybe<int>> GetFreeSeatsCount(Guid roomId,RoomFilterViewModel filter)
+        {
+            var result = await _seatService.GetSeatsByRoomInRangeIdAsync(new SeatsGettingViewModel
+            {
+                Date = DateTime.Parse(filter.Date),
+                Begining = TimeSpan.Parse(filter.Begining),
+                RoomId = roomId,
+                HoursCount = filter.HoursCount
+            });
+            if (result.HasNoValue)
+                return Maybe.None;
+            return result.Value.Count();
         }
     }
 }

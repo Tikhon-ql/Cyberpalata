@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using CSharpFunctionalExtensions;
+using Cyberpalata.Common;
+using Cyberpalata.DataProvider.Filters;
 using Cyberpalata.DataProvider.Interfaces;
+using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Devices;
 
@@ -8,22 +11,19 @@ namespace Cyberpalata.Logic.Services
 {
     public class PcService : IPcService
     {
-        private readonly IRoomRepository _roomRepository;
+        private readonly IPcRepository _repository;
         private readonly IMapper _mapper;
 
-        public PcService(IRoomRepository roomRepository, IMapper mapper)
+        public PcService(IPcRepository repository, IMapper mapper)
         {
-            _roomRepository = roomRepository;
+            _repository = repository;
             _mapper = mapper;
         }
 
-        public async Task<Maybe<PcDto>> GetByGamingRoomId(Guid roomId)
+        public async Task<PagedList<PcDto>> GetPagedList(PcFilterBl filter)
         {
-            var room = await _roomRepository.ReadAsync(roomId);
-            if (room.HasNoValue)
-                return Maybe.None;
-            var pc = room.Value.Pc;
-            return _mapper.Map<PcDto>(pc);
-        }   
+            var list = await _repository.GetPageListAsync(_mapper.Map<PcFilter>(filter));
+            return _mapper.Map<PagedList<PcDto>>(list); 
+        }
     }
 }

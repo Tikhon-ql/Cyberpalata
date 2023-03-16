@@ -16,10 +16,10 @@ namespace Cyberpalata.DataProvider.Models
         [ForeignKey("TypeId")]
         public virtual RoomType Type { get; set; }
         public bool IsVip { get; set; }
-        public virtual List<Seat> Seats { get; set; } = new();
-        public virtual List<Booking> Bookings { get; set; } = new();
-        public virtual List<GameConsole> Consoles { get; set; } = new();
-        public virtual Pc Pc { get; set; }
-        public virtual List<Periphery> Peripheries { get; set; } = new();
+        public virtual List<Seat>? Seats { get; set; } = new();
+        public virtual List<Booking>? Bookings { get; set; } = new();
+        public virtual List<GameConsole>? Consoles { get; set; } = new();//DELETE
+        public virtual Pc? Pc { get; set; }//DELETE
+        public virtual List<Periphery>? Peripheries { get; set; } = new();
     }
 }

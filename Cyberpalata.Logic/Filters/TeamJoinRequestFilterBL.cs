@@ -12,6 +12,6 @@ namespace Cyberpalata.Logic.Filters
     {
         public Maybe<Guid> TeamId { get; set; }
         public Maybe<Guid> UserToJoinId { get; set; }
-        public Maybe<JoinRequestState> State { get; set; }
+        public Maybe<List<JoinRequestState>> State { get; set; }
     }
 }

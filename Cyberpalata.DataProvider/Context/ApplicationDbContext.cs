@@ -56,16 +56,14 @@ namespace Cyberpalata.DataProvider.Context
                   .UsingEntity<Dictionary<Guid, Guid>>("SeatsBookings",
                   j => j.HasOne<Seat>().WithMany().OnDelete(DeleteBehavior.NoAction),
                   j => j.HasOne<Booking>().WithMany().OnDelete(DeleteBehavior.NoAction));
-
-            //modelBuilder.Entity<Tournament>().HasMany(t => t.Teams).WithMany(t => t)
-            //        .UsingEntity<Dictionary<Guid, Guid>>("TeamsTournaments",
-            //        j => j.HasOne<Team>().WithMany().OnDelete(DeleteBehavior.NoAction),
-            //        j => j.HasOne<Tournament>().WithMany().OnDelete(DeleteBehavior.NoAction));
-
-            modelBuilder.Entity<TeamMember>().HasOne(t => t.Member).WithMany().OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<Tournament>().HasOne(t => t.Winner).WithMany();
-            modelBuilder.Entity<UserRefreshToken>().HasOne(urt => urt.User).WithMany().OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<Booking>().HasOne(b => b.User).WithMany(u => u.Bookings).OnDelete(DeleteBehavior.Cascade);
+            
+            modelBuilder.Entity<Chat>().HasOne(c => c.UserToJoin).WithMany().OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Message>().HasOne(c => c.Sender).WithMany().OnDelete(DeleteBehavior.NoAction);
+            //modelBuilder.Entity<TeamJoinRequest>().HasOne(tjr => tjr.TeamMember).WithMany().OnDelete(DeleteBehavior.NoAction);
+            //modelBuilder.Entity<Tournament>().HasOne(t => t.Winner).WithMany();
+            //modelBuilder.Entity<UserRefreshToken>().HasOne(urt => urt.User).WithMany().OnDelete(DeleteBehavior.Cascade);
+            //modelBuilder.Entity<Booking>().HasOne(b => b.User).WithMany(u => u.Bookings).OnDelete(DeleteBehavior.Cascade);
+            //modelBuilder.Entity<Chat>().HasOne(c => c.UserToJoin).WithOne().OnDelete(DeleteBehavior.NoAction);
         }
 
         private void ConstraintsConfiguration(ModelBuilder modelBuilder)
@@ -101,8 +99,38 @@ namespace Cyberpalata.DataProvider.Context
                                     <div><b></b></div>
                                 </div>
                             </html>";
-            modelBuilder.Entity<HtmlContent>().HasData(new HtmlContent { Id = "ResetPasswordHtml",Html = resetPasswordHtml });
+            modelBuilder.Entity<HtmlContent>().HasData(new HtmlContent { Id = "ResetPasswordHtml", Html = resetPasswordHtml });
             modelBuilder.Entity<HtmlContent>().HasData(new HtmlContent { Id = "EmailVerificationHtml", Html = emailVerificationHtml });
+
+            var rooms = new List<Room>();
+            for (int i = 0; i < 10; i++)
+            {
+                rooms.Add(new Room
+                {
+                    Id = Guid.NewGuid(),
+                    Name = $"Generated room {i + 1}",
+                    TypeId = 3,
+                    IsVip = true,
+                });
+            }
+
+            modelBuilder.Entity<Room>().HasData(rooms); 
+            for(int i = 0;i < rooms.Count();i++)
+            {
+                var seatList = new List<Seat>();
+                for (int j = 0; j < 30; j++)
+                {
+                    seatList.Add(new Seat
+                    {
+                        Id = Guid.NewGuid(),
+                        Number = j + 1,
+                        RoomId = rooms.ElementAt(i).Id,
+                    });
+                }
+                modelBuilder.Entity<Seat>().HasData(seatList);
+            }
+
+
 
             //var userRole = new Role { Id = Guid.NewGuid(), Name = "User" };
             //var adminRole = new Role { Id = Guid.NewGuid(), Name= "Admin" };

@@ -13,8 +13,8 @@ namespace Cyberpalata.DataProvider.Models.Peripheral
         public int TypeId { get; set; }
         [ForeignKey("TypeId")]
         public virtual PeripheryType Type { get; set; }
-        public Guid RoomId { get; set; }
+        public Guid? RoomId { get; set; }
         [ForeignKey("RoomId")]
-        public virtual Room GamingRoom { get; set; }
+        public virtual Room? GamingRoom { get; set; }
     }
 }

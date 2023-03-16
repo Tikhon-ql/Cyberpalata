@@ -9,6 +9,5 @@
         public virtual List<Batle>? Batles { get; set; }
         public virtual List<BatleResult> BatleResults { get; set; } 
         public bool IsGone { get; set; }
-        //public virtual List<Round>? Rounds { get; set; }
     }
 }

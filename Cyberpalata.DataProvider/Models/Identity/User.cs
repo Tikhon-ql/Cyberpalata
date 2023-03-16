@@ -22,10 +22,10 @@ namespace Cyberpalata.DataProvider.Models.Identity
         public string Password { get; set; }
         [Required] 
         public string Salt { get; set; }
-        public virtual List<Booking> Bookings { get; set; }
-        public virtual Role Role { get; set; }
+        public virtual List<Booking>? Bookings { get; set; }
+        public virtual Role? Role { get; set; }
         public bool IsActivated { get; set; }
         public virtual Team? Team { get; set; }
-        public virtual List<Notification> Notifications { get; set; }
+        public virtual List<Notification>? Notifications { get; set; }
     }
 }

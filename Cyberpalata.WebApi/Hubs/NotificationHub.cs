@@ -1,24 +1,17 @@
-﻿using Cyberpalata.WebApi.Connections;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 
 namespace Cyberpalata.WebApi.Hubs
 {
-
     public class NotificationHub : Hub
     {
-        private readonly IDictionary<string, NotificationViewModel> _connections;
-        public NotificationHub(IDictionary<string, NotificationViewModel> connections)
+        public async Task JoinNotificationsBroadcasting(Guid userId)
         {
-            _connections = connections;
-        }
+            await Groups.AddToGroupAsync(Context.ConnectionId, userId.ToString());       
+        }   
 
-        public NotificationHub() { }
-        public async Task SendNotification(NotificationViewModel notification)
+        public async Task SendNotification(Guid receiver)
         {
-            if(_connections.TryGetValue(Context.ConnectionId, out var connection))
-            {
-                await Clients.Group(connection.Connection.ToString()).SendAsync("ReceiveMessage", $"", notification.User);
-            }
+            await Clients.Group(receiver.ToString()).SendAsync("ReceiveNotification", "refreshUI","bot");
         }
     }
 }

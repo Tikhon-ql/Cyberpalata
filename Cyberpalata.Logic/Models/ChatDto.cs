@@ -1,10 +1,4 @@
-﻿using Cyberpalata.DataProvider.Models.Identity;
-using Cyberpalata.DataProvider.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Cyberpalata.DataProvider.Models;
 using Cyberpalata.Logic.Models.Identity;
 
 namespace Cyberpalata.Logic.Models
