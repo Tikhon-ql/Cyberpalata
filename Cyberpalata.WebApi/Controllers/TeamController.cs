@@ -49,7 +49,7 @@ namespace Cyberpalata.WebApi.Controllers
         }
 
 
-        [Authorize]
+        //[Authorize]
         [HttpDelete("deleteTeam")]
         public async Task<IActionResult> DeleteTeam(Guid teamId)
         {

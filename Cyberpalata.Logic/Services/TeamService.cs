@@ -147,7 +147,9 @@ namespace Cyberpalata.Logic.Services
             var member = team.Value.Members.FirstOrDefault(m => m.MemberId == memberId);
             if (member == null)
                 return Result.Failure("User doesn't participate in the team");
+            member.Member.Team = null;
             team.Value.Members.Remove(member);
+            //member.Member.Team = null;
             return Result.Success();
         }
     }
