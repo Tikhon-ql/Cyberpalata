@@ -11,6 +11,6 @@ namespace Cyberpalata.Logic.Interfaces.Services
 {
     public interface IPaymentService
     {
-        Result MakeTransaction(Card card, decimal price);
+        Result MakeTransaction(Card card, decimal price, Guid userId);
     }
 }

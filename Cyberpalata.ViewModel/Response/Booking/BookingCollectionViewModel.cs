@@ -8,5 +8,6 @@
         public string Begining { get; set; }
         public int HoursCount { get; set; }
         public decimal Price { get; set; }
+        public List<int> Seats { get; set; }
     }
 }

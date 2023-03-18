@@ -90,7 +90,8 @@ namespace Cyberpalata.WebApi.Controllers
         [HttpPost("finalizeBooking")]
         public async Task<IActionResult> FinalizeBooking(BookingFinalizationViewModel viewModel)
         {
-            var result = await _bookingService.BookingPay(viewModel);
+            var userId = Guid.Parse(User.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Sid).Value);
+            var result = await _bookingService.BookingPay(viewModel, userId);
             if(result.IsFailure)
                 return BadRequestJson(result);
             return await ReturnSuccess();
@@ -121,7 +122,8 @@ namespace Cyberpalata.WebApi.Controllers
                     HoursCount = item.HoursCount,
                     Price = item.Price,
                     Date = item.Date.ToString("yyyy-MM-dd"),
-                    RoomName = item.Room.Name
+                    RoomName = item.Room.Name,
+                    Seats = item.Seats.Select(seat=>seat.Number).ToList(),
                 });
             }
             return Ok(viewModel);

@@ -97,7 +97,7 @@ namespace Cyberpalata.Logic.Services
             return Result.Success();
         }
 
-        public async Task<Result> BookingPay(BookingFinalizationViewModel viewModel)
+        public async Task<Result> BookingPay(BookingFinalizationViewModel viewModel, Guid userId)
         {
             var booking = await _repository.ReadAsync(viewModel.BookingId);
 
@@ -109,7 +109,7 @@ namespace Cyberpalata.Logic.Services
                 CardCvv = viewModel.CardCvv,
                 CardDate = viewModel.CardDate,
                 CardNumber = viewModel.CardNumber
-            },booking.Value.Price);
+            },booking.Value.Price, userId);
             if (transactionResult.IsFailure)
                 return transactionResult;
             var bookingIsPaidStateSettingResult = await SetIsPaidState(viewModel.BookingId);

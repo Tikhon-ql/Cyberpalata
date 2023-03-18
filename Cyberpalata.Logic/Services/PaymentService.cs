@@ -28,7 +28,7 @@ namespace Cyberpalata.Logic.Services
             _logger = logger;
         }
 
-        private transactionRequestType GetTransactionRequestType(Card card, decimal price)
+        private transactionRequestType GetTransactionRequestType(Card card, decimal price,Guid userId)
         {
             ApiOperationBase<ANetApiRequest, ANetApiResponse>.RunEnvironment = AuthorizeNet.Environment.SANDBOX;
             ApiOperationBase<ANetApiRequest, ANetApiResponse>.MerchantAuthentication = new merchantAuthenticationType()
@@ -46,19 +46,23 @@ namespace Cyberpalata.Logic.Services
             };
 
             var paymentType = new paymentType { Item = creditCard };
+            var lineItems = new lineItemType[1];
+            lineItems[0] = new lineItemType { itemId = "1", name = "userId", description = userId.ToString()};
+
 
             var transactionRequest = new transactionRequestType
             {
                 transactionType = transactionTypeEnum.authCaptureTransaction.ToString(),
                 amount = price,
                 payment = paymentType,
+                lineItems = lineItems
             };
             return transactionRequest;
         }
 
-        public Result MakeTransaction(Card card, decimal price)
+        public Result MakeTransaction(Card card, decimal price, Guid userId)
         {
-            var transactionRequest = GetTransactionRequestType(card,price);
+            var transactionRequest = GetTransactionRequestType(card,price, userId);
             var request = new createTransactionRequest { transactionRequest = transactionRequest };
             var controller = new createTransactionController(request);
             controller.Execute();
