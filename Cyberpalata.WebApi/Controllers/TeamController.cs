@@ -72,9 +72,9 @@ namespace Cyberpalata.WebApi.Controllers
 
 
         [HttpPut("setRecruting")]
-        public async Task<IActionResult> SetTeamRecrutingState(Guid teamId)
+        public async Task<IActionResult> SendTeamRecrutingStateChange(TeamRecrutingStateChangeViewModel viewModel)
         {
-            await _teamService.SetHiringState(teamId, true);
+            await _teamService.SetHiringState(viewModel.TeamId, viewModel.State);
             return await ReturnSuccess();
         }
 
@@ -147,6 +147,7 @@ namespace Cyberpalata.WebApi.Controllers
                     Name = $"{m.Member.Username} {m.Member.Surname}",
                     Position = m.IsCaptain ? "Captain" : "Member"
                 }).ToList(),
+                IsTeamRecruting = team.IsHiring
             };
             return Ok(viewModel);
         }

@@ -148,6 +148,10 @@ namespace Cyberpalata.Logic.Services
             if (member == null)
                 return Result.Failure("User doesn't participate in the team");
             member.Member.Team = null;
+            foreach(var request in member.JoinRequests.ToList())
+            {
+                member.JoinRequests.Remove(request);
+            }
             team.Value.Members.Remove(member);
             //member.Member.Team = null;
             return Result.Success();
