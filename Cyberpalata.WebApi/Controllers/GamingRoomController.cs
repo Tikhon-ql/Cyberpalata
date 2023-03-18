@@ -74,7 +74,7 @@ namespace Cyberpalata.WebApi.Controllers
                 {
                     Id = room.Id,
                     Name = room.Name,
-                    FreeSeatsCount = (await _roomService.GetFreeSeatsCount(room.Id, filterViewModel)).Value
+                    FreeSeatsCount = (await _roomService.GetFreeSeatsCount(room.Id, filter)).Value
                 });
 
             }

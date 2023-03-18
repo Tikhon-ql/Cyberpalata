@@ -174,17 +174,19 @@ namespace Cyberpalata.Logic.Services
             return resultList;
         }
 
-        public async Task<Maybe<int>> GetFreeSeatsCount(Guid roomId,RoomFilterViewModel filter)
+        public async Task<Maybe<int>> GetFreeSeatsCount(Guid roomId, RoomFilterBL filter)
         {
+            if (filter.HoursCount.HasNoValue || filter.Date.HasNoValue || filter.Begining.HasNoValue)
+                return -1;
             var result = await _seatService.GetSeatsByRoomInRangeIdAsync(new SeatsGettingViewModel
             {
-                Date = DateTime.Parse(filter.Date),
-                Begining = TimeSpan.Parse(filter.Begining),
+                Date = filter.Date.Value,
+                Begining = filter.Begining.Value,
                 RoomId = roomId,
-                HoursCount = filter.HoursCount
+                HoursCount = filter.HoursCount.Value
             });
             if (result.HasNoValue)
-                return Maybe.None;
+                return -1;
             return result.Value.Count();
         }
     }
