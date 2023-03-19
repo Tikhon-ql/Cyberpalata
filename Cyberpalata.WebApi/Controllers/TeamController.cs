@@ -131,6 +131,7 @@ namespace Cyberpalata.WebApi.Controllers
         [HttpGet("getUserTeam")]
         public async Task<IActionResult> GetUserTeam()
         {
+            Console.WriteLine("Refactoring branch");
             var userId = Guid.Parse(User.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Sid).Value);
             var filter = new TeamFilterBL
             {
