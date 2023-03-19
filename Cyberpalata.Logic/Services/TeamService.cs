@@ -126,14 +126,14 @@ namespace Cyberpalata.Logic.Services
             return viewModel;
         }
 
-        public async Task SetHiringState(Guid teamId, bool state)
+        public async Task SetRecrutingState(Guid teamId, bool state)
         {
             var team = await _repository.ReadAsync(teamId);
             if (team.HasNoValue)
                 return;
-            team.Value.IsHiring = state;
+            team.Value.IsRecruting = state;
         }
-
+          
         public async Task<Result> DeleteTeam(Guid teamId)
         {
             var team = await _repository.ReadAsync(teamId);

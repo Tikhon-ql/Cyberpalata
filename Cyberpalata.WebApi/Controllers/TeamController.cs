@@ -26,7 +26,9 @@ namespace Cyberpalata.WebApi.Controllers
         {
             var id = Guid.Parse(User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Sid).Value);
             viewModel.CaptainId = id;
-            await _teamService.CreateAsync(viewModel);
+            var result = await _teamService.CreateAsync(viewModel);
+            if (result.IsFailure)
+                return BadRequestJson(result);
             return await ReturnSuccess();
         }
 
@@ -50,7 +52,7 @@ namespace Cyberpalata.WebApi.Controllers
         }
 
 
-        //[Authorize]
+        [Authorize]
         [HttpDelete("deleteTeam")]
         public async Task<IActionResult> DeleteTeam(Guid teamId)
         {
@@ -75,7 +77,7 @@ namespace Cyberpalata.WebApi.Controllers
         [HttpPut("setRecruting")]
         public async Task<IActionResult> SendTeamRecrutingStateChange(TeamRecrutingStateChangeViewModel viewModel)
         {
-            await _teamService.SetHiringState(viewModel.TeamId, viewModel.State);
+            await _teamService.SetRecrutingState(viewModel.TeamId, viewModel.State);
             return await ReturnSuccess();
         }
 
@@ -86,7 +88,7 @@ namespace Cyberpalata.WebApi.Controllers
             {
                 CurrentPage = page,
                 PageSize = 5,
-                IsHiring = true,
+                IsRecruting = true,
             };
 
             var result = await _teamService.GetPagedList(teamFilter);
@@ -103,7 +105,6 @@ namespace Cyberpalata.WebApi.Controllers
             return Ok(new { Items = viewModel, PageSize = result.PageSize, TotalItemsCount = result.TotalItemsCount });
         }
 
-        //[Authorize]
         [HttpGet("topTeams")]
         public async Task<IActionResult> GetTopTeams(int page)
         {
@@ -144,7 +145,7 @@ namespace Cyberpalata.WebApi.Controllers
                 Id = team.Id,
                 CaptainName = $"{team.Captain.Member.Username} {team.Captain.Member.Surname}",
                 Name = team.Name,
-                Members = team.Members.Select(m => new TeamMemberViewModel {
+                Members = team.Members.OrderByDescending(m=>m.IsCaptain).Select(m => new TeamMemberViewModel {
                     Name = $"{m.Member.Username} {m.Member.Surname}",
                     Position = m.IsCaptain ? "Captain" : "Member"
                 }).ToList(),

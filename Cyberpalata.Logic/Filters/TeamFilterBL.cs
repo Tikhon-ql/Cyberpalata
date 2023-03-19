@@ -6,7 +6,7 @@ namespace Cyberpalata.Logic.Filters
     {
         public Maybe<Guid> CaptainId { get; set; }
         public Maybe<Guid> MemberId { get; set; }
-        public Maybe<bool> IsHiring { get; set; }
+        public Maybe<bool> IsRecruting { get; set; }
         public Maybe<bool> IsTop { get; set; }
     }
 }

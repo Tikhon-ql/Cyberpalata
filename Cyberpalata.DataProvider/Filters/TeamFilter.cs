@@ -7,7 +7,7 @@ namespace Cyberpalata.DataProvider.Filters
     {
         public Maybe<Guid> CaptainId { get; set; }
         public Maybe<Guid> MemberId { get; set; }
-        public Maybe<bool> IsHiring { get; set; }
+        public Maybe<bool> IsRecruting { get; set; }
         public Maybe<bool> IsTop { get; set; }
 
         public override IQueryable<Team> EnrichQuery(IQueryable<Team> query)
@@ -19,8 +19,8 @@ namespace Cyberpalata.DataProvider.Filters
                 query = query.Where(q =>
                     q.Members.FirstOrDefault(m => m.Member.Id == MemberId.Value) != null);
             }
-            if (IsHiring.HasValue)
-                query = query.Where(q => q.IsHiring == IsHiring.Value);
+            if (IsRecruting.HasValue)
+                query = query.Where(q => q.IsRecruting == IsRecruting.Value);
             if(IsTop.HasValue)
             {
                 if(IsTop.Value)
