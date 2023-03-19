@@ -59,6 +59,10 @@ namespace Cyberpalata.DataProvider.Context
             
             modelBuilder.Entity<Chat>().HasOne(c => c.UserToJoin).WithMany().OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Message>().HasOne(c => c.Sender).WithMany().OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Batle>().HasOne(b=>b.FirstTeam).WithMany().OnDelete(DeleteBehavior.SetNull);
+            modelBuilder.Entity<Batle>().HasOne(b=>b.SecondTeam).WithMany().OnDelete(DeleteBehavior.SetNull);
+
             //modelBuilder.Entity<TeamJoinRequest>().HasOne(tjr => tjr.TeamMember).WithMany().OnDelete(DeleteBehavior.NoAction);
             //modelBuilder.Entity<Tournament>().HasOne(t => t.Winner).WithMany();
             //modelBuilder.Entity<UserRefreshToken>().HasOne(urt => urt.User).WithMany().OnDelete(DeleteBehavior.Cascade);
@@ -102,33 +106,33 @@ namespace Cyberpalata.DataProvider.Context
             modelBuilder.Entity<HtmlContent>().HasData(new HtmlContent { Id = "ResetPasswordHtml", Html = resetPasswordHtml });
             modelBuilder.Entity<HtmlContent>().HasData(new HtmlContent { Id = "EmailVerificationHtml", Html = emailVerificationHtml });
 
-            var rooms = new List<Room>();
-            for (int i = 0; i < 10; i++)
-            {
-                rooms.Add(new Room
-                {
-                    Id = Guid.NewGuid(),
-                    Name = $"Generated room {i + 1}",
-                    TypeId = 3,
-                    IsVip = true,
-                });
-            }
+            //var rooms = new List<Room>();
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    rooms.Add(new Room
+            //    {
+            //        Id = Guid.NewGuid(),
+            //        Name = $"Generated room {i + 1}",
+            //        TypeId = 3,
+            //        IsVip = true,
+            //    });
+            //}
 
-            modelBuilder.Entity<Room>().HasData(rooms); 
-            for(int i = 0;i < rooms.Count();i++)
-            {
-                var seatList = new List<Seat>();
-                for (int j = 0; j < 30; j++)
-                {
-                    seatList.Add(new Seat
-                    {
-                        Id = Guid.NewGuid(),
-                        Number = j + 1,
-                        RoomId = rooms.ElementAt(i).Id,
-                    });
-                }
-                modelBuilder.Entity<Seat>().HasData(seatList);
-            }
+            //modelBuilder.Entity<Room>().HasData(rooms); 
+            //for(int i = 0;i < rooms.Count();i++)
+            //{
+            //    var seatList = new List<Seat>();
+            //    for (int j = 0; j < 30; j++)
+            //    {
+            //        seatList.Add(new Seat
+            //        {
+            //            Id = Guid.NewGuid(),
+            //            Number = j + 1,
+            //            RoomId = rooms.ElementAt(i).Id,
+            //        });
+            //    }
+            //    modelBuilder.Entity<Seat>().HasData(seatList);
+            //}
 
 
 

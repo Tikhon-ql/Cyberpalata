@@ -69,7 +69,12 @@ namespace Cyberpalata.Logic.Services
                 UserToJoinId = viewModel.UserToJoinId,
                 State = new List<JoinRequestState> { currentState }
             };
-            var request = (await _teamJoinRequestRepository.GetPageListAsync(filter)).Items.ElementAt(0);
+            var requests = (await _teamJoinRequestRepository.GetPageListAsync(filter)).Items;
+            var request = new TeamJoinRequest();
+            if (requests.Count > 0)
+                request = requests[0];
+            else
+                return Result.Failure("You are not a captain of the team");
             request.State = stateToSet;
 
             if(stateToSet == JoinRequestState.InProgress)
@@ -130,9 +135,9 @@ namespace Cyberpalata.Logic.Services
 
         public async Task<Result> CreateJoinRequest(Guid teamId, Guid userId)
         {
-            var result = await ValidateRequest(teamId, userId);
-            if (result.IsFailure)
-                return result;
+            ////var result = await ValidateRequest(teamId, userId);
+            //if (result.IsFailure)
+            //    return result;
 
             var captain = await ReadCaptainByTeamId(teamId);
             if (captain.HasNoValue)

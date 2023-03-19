@@ -39,6 +39,7 @@ namespace Cyberpalata.WebApi.Controllers
             return await ReturnSuccess(viewModel.Value);
         }
 
+        [Authorize]
         [HttpGet("getTeamInTournament")]
         public async Task<IActionResult> GetTeamInTournament(Guid teamId, Guid tournamentId)
         {
@@ -147,7 +148,7 @@ namespace Cyberpalata.WebApi.Controllers
                     Name = $"{m.Member.Username} {m.Member.Surname}",
                     Position = m.IsCaptain ? "Captain" : "Member"
                 }).ToList(),
-                IsTeamRecruting = team.IsHiring
+                IsTeamRecruting = team.IsRecruting
             };
             return Ok(viewModel);
         }

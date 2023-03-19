@@ -1,11 +1,13 @@
 ﻿using Cyberpalata.Common.Enums;
 using Cyberpalata.Common.Intefaces;
+using Cyberpalata.DataProvider.Models;
 using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.ViewModel.Request.Tournament;
 using Cyberpalata.ViewModel.Response.Tournament;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NLog.Filters;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace Cyberpalata.WebApi.Controllers
@@ -51,6 +53,16 @@ namespace Cyberpalata.WebApi.Controllers
         }
 
         [Authorize]
+        [HttpPut("rejectJoinRequest")]
+        public async Task<IActionResult> rejectJoinRequest(JoinRequestStateSettingViewModel viewModel)
+        {
+            var result = await _teamJoinRequestService.SetJoinRequestState(viewModel, JoinRequestState.None, JoinRequestState.Rejected);
+            if (result.IsFailure)
+                return BadRequestJson(result);
+            return await ReturnSuccess();
+        }
+
+        [Authorize]
         [HttpPut("answerJoinRequest")]
         public async Task<IActionResult> AnswerJoinRequest(AnswerJoinRequestViewModel viewModel)
         {
@@ -75,7 +87,7 @@ namespace Cyberpalata.WebApi.Controllers
 
         [Authorize]
         [HttpGet("getTeamJoinRequests")]
-        public async Task<IActionResult> GetJoinRequests()
+        public async Task<IActionResult> GetJoinRequests(int page)
         {
             var userId = Guid.Parse(User.Claims.First(claim=>claim.Type == JwtRegisteredClaimNames.Sid).Value);
             var teamFilter = new TeamFilterBL
@@ -87,8 +99,8 @@ namespace Cyberpalata.WebApi.Controllers
             var team = await _teamService.GetPagedList(teamFilter);
             var teamJoinFilter = new TeamJoinRequestFilterBL
             {
-                CurrentPage = 1,
-                PageSize = 1,
+                CurrentPage = page,
+                PageSize = 5,
                 TeamId = team.Items.ElementAt(0).Id,
                 State = new List<JoinRequestState> { JoinRequestState.None }
             };
@@ -107,7 +119,7 @@ namespace Cyberpalata.WebApi.Controllers
                 });
             }
 
-            return Ok(viewModel);
+            return Ok(new { Items = viewModel, TotalItemsCount = requests.TotalItemsCount, PageSize = requests.PageSize, CurrentPage = requests.CurrentPageNumber });
         }
     }
 }

@@ -7,6 +7,7 @@ namespace Cyberpalata.DataProvider.Filters
     {
         public Maybe<bool> IsActual { get; set; }
         public Maybe<Guid> TournamentId { get; set; }
+        public Maybe<Guid> TeamId { get;set; }
         public override IQueryable<Batle> EnrichQuery(IQueryable<Batle> query)
         {
             if(IsActual.HasValue)
@@ -20,6 +21,8 @@ namespace Cyberpalata.DataProvider.Filters
             {
                 query = query.Where(q=>q.Tournament.Id == TournamentId.Value);
             }
+            if (TeamId.HasValue)
+                query = query.Where(q => q.FirstTeam.Id == TeamId.Value || q.SecondTeam.Id == TeamId.Value);
             return query;
         }
     }

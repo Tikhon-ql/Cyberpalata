@@ -126,7 +126,7 @@ namespace Cyberpalata.Logic.Services
         {
             if (viewModel.Seats.Count == 0)
                 return Result.Failure("Seats collection is empty");
-            if (viewModel.Date.Add(viewModel.Begining) < DateTime.UtcNow)
+            if (viewModel.Date.Add(viewModel.Begining) <= DateTime.UtcNow)
                 return Result.Failure("You can’t go back in time");
             int bookingMakingMaxAheadDays = int.Parse(_configuration["BookingSettings:BookingMaxMakingAheadDays"]);
             if ((viewModel.Date - DateTime.Now).Days >= bookingMakingMaxAheadDays)

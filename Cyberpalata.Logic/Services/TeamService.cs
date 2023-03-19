@@ -18,13 +18,15 @@ namespace Cyberpalata.Logic.Services
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         private readonly ITournamentRepository _tournamentRepository;
+        private readonly IBatleRepository _batleRepository;
 
-        public TeamService(ITeamRepository repository, IUserRepository userRepository, IMapper mapper,ITournamentRepository tournamentRepository)
+        public TeamService(ITeamRepository repository, IUserRepository userRepository, IMapper mapper,ITournamentRepository tournamentRepository, IBatleRepository batleRepository)
         {
             _repository = repository;
             _mapper = mapper;
             _userRepository = userRepository;
             _tournamentRepository = tournamentRepository;
+            _batleRepository = batleRepository;
         }
 
         public async Task<Result> AddUserToTeam(Guid userId, Guid teamId)
@@ -113,7 +115,15 @@ namespace Cyberpalata.Logic.Services
                 return Result.Failure<TeamDetailViewModel>($"This team doesn't apart in tournament");
 
             var teamDto = _mapper.Map<TeamDto>(team.Value);
-            return _mapper.Map<TeamDetailViewModel>(teamDto);
+            var viewModel = new TeamDetailViewModel
+            {
+                Id = teamId,
+                CaptainName = $"{teamDto.Captain.Member.Username} {teamDto.Captain.Member.Surname}",
+                IsTeamRecruting = teamDto.IsRecruting,
+                Name = teamDto.Name,
+                Members = teamDto.Members.Select(m => new TeamMemberViewModel { Name = $"{m.Member.Username} {m.Member.Surname}", Position = m.IsCaptain ? "Captain" : "Member" }).ToList(),
+            };
+            return viewModel;
         }
 
         public async Task SetHiringState(Guid teamId, bool state)
@@ -129,14 +139,56 @@ namespace Cyberpalata.Logic.Services
             var team = await _repository.ReadAsync(teamId);
             if (team.HasNoValue)
                 return Result.Failure($"Team with id {teamId} not found");
+            var teamDto = _mapper.Map<TeamDto>(team.Value);
+            var hasActualBatles = await CheckActualTournaments(teamDto.Captain.Member.Id);
+            if (hasActualBatles.IsFailure)
+                return hasActualBatles;
             foreach (var member in team.Value.Members.ToList())
             {
                 var result = await KickMember(teamId, member.MemberId.Value);
                 if (result.IsFailure)
                     return result;
             }
+            DeleteTeamsBatles(teamId);
             _repository.Delete(team.Value);
             return Result.Success();
+        }
+
+        private async Task<Result> CheckActualTournaments(Guid captainId)
+        {
+            var filter = new TournamentFilter
+            {
+                CurrentPage = 1,
+                PageSize = int.MaxValue,
+                CaptainId = captainId,
+                IsActual = true,
+            };
+            var tournaments = await _tournamentRepository.GetPageListAsync(filter);
+            if (tournaments.Items.Count > 0)
+                return Result.Failure("You cannot delete your team while actual tournament");
+            return Result.Success();
+        }
+
+        private async void DeleteTeamsBatles(Guid teamId)
+        {
+            var filter = new BatleFilter
+            {
+                CurrentPage = 1,
+                PageSize = int.MaxValue,
+                TeamId = teamId,
+            };
+            var batles = await _batleRepository.GetPageListAsync(filter);
+            foreach(var batle in batles.Items)
+            {
+                if(batle.FirstTeam.Id == teamId)
+                {
+                    batle.FirstTeam = null;
+                }
+                else
+                {
+                    batle.SecondTeam = null;
+                }
+            }
         }
 
         public async Task<Result> KickMember(Guid teamId,Guid memberId)

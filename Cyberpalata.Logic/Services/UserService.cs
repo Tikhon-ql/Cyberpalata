@@ -85,7 +85,6 @@ namespace Cyberpalata.Logic.Services
             var user = await _userRepository.ReadAsync(request.UserId);
             user.Value.Username = request.Username;
             user.Value.Surname = request.Surname;
-            user.Value.Email = request.Email;
             user.Value.Phone = request.Phone;
         }
 

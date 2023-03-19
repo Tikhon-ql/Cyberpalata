@@ -47,15 +47,12 @@ namespace Cyberpalata.Logic.Services
 
             var paymentType = new paymentType { Item = creditCard };
             var lineItems = new lineItemType[1];
-            lineItems[0] = new lineItemType { itemId = "1", name = "userId", description = userId.ToString()};
-
-
+           
             var transactionRequest = new transactionRequestType
             {
                 transactionType = transactionTypeEnum.authCaptureTransaction.ToString(),
                 amount = price,
                 payment = paymentType,
-                lineItems = lineItems
             };
             return transactionRequest;
         }
@@ -89,7 +86,7 @@ namespace Cyberpalata.Logic.Services
                                          $"Error message: {response.transactionResponse.errors[0].errorText}";
                             _logger.LogError(log);
                         }
-                        return Result.Failure("Failed Transaction.");
+                        return Result.Failure("Failed Transaction. Please, check card info.");
                     }
                 }
                 else
@@ -106,12 +103,12 @@ namespace Cyberpalata.Logic.Services
                                          $"Error message: {response.transactionResponse.errors[0].errorText}";
                         _logger.LogError(log);
                     }
-                    return Result.Failure("Failed Transaction.");
+                    return Result.Failure("Failed Transaction. Please, check card info.");
                 }
             }
             else
             {
-                Result.Failure("Null Response.");
+                return Result.Failure("Failed Transaction. Please, check card info.");
             }
             return Result.Success();
         }

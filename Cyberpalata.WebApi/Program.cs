@@ -33,7 +33,6 @@ builder.Services.AddControllers(config =>
 builder.Services.AddScoped<ModelStateValidationFilter>();
 
 builder.Services.AddSingleton<IDictionary<string, ChatConnection>>(opts => new Dictionary<string, ChatConnection>());
-builder.Services.AddSingleton<IDictionary<string, NotificationViewModel>>(opts => new Dictionary<string, NotificationViewModel>());
 
 builder.Services.Configure<ApiBehaviorOptions>(options
     => options.SuppressModelStateInvalidFilter = true);

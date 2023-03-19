@@ -12,7 +12,6 @@ namespace Cyberpalata.Logic.Interfaces.Services
         Task<Maybe<BookingDto>> ReadAsync(Guid id);
         Task<PagedList<BookingDto>> GetPagedListAsync(BookingFilterBL filter);
         Task<Result<BookingDetailsViewModel>> GetBookingDetail(Guid id);
-        //Create payment service
         Task<Result> BookingPay(BookingFinalizationViewModel viewModel, Guid userId);
     }
 }
