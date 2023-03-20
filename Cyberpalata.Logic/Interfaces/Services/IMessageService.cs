@@ -8,6 +8,5 @@ namespace Cyberpalata.Logic.Interfaces.Services
     public interface IMessageService
     {
         Task CreateAsync(MessageViewModel message);
-        Task<PagedList<MessageDto>> GetPagedList(MessageFilterBL filter);
     }
 }

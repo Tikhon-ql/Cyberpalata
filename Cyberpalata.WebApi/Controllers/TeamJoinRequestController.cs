@@ -3,6 +3,7 @@ using Cyberpalata.Common.Intefaces;
 using Cyberpalata.DataProvider.Models;
 using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
+using Cyberpalata.ViewModel.Request;
 using Cyberpalata.ViewModel.Request.Tournament;
 using Cyberpalata.ViewModel.Response.Tournament;
 using Microsoft.AspNetCore.Authorization;
@@ -31,13 +32,14 @@ namespace Cyberpalata.WebApi.Controllers
 
         [Authorize]
         [HttpPost("createJoinRequest")]
-        public async Task<IActionResult> CreateJoinRequest(Guid teamId)
+        public async Task<IActionResult> CreateJoinRequest([FromBody]CreateJoinRequestViewModel viewModel)
         {
             var userId = Guid.Parse(User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Sid).Value);
-            var result = await _teamJoinRequestService.CreateJoinRequest(teamId, userId);
+            var result = await _teamJoinRequestService.CreateJoinRequest(viewModel.TeamId, userId);
 
             if (result.IsFailure)
                 return BadRequestJson(result);
+
 
             return await ReturnSuccess();
         }
@@ -74,11 +76,12 @@ namespace Cyberpalata.WebApi.Controllers
             var joinRequestStateChangeResult = await _teamJoinRequestService.SetJoinRequestState(joinRequestViewModel,JoinRequestState.InProgress ,viewModel.IsAccepted ? JoinRequestState.Accepted : JoinRequestState.Rejected);
             if (joinRequestStateChangeResult.IsFailure)
                 return BadRequestJson(joinRequestStateChangeResult);
-
-            var addingUserToTeamResult = await _teamService.AddUserToTeam(viewModel.UserToJoinId, viewModel.TeamId);
-            if(addingUserToTeamResult.IsFailure)
-                return BadRequestJson(addingUserToTeamResult);
-
+            if(viewModel.IsAccepted)
+            {
+                var addingUserToTeamResult = await _teamService.AddUserToTeam(viewModel.UserToJoinId, viewModel.TeamId);
+                if (addingUserToTeamResult.IsFailure)
+                    return BadRequestJson(addingUserToTeamResult);
+            }
             var chatStateChangeResult = await _chatService.SetIsDeletedState(viewModel.ChatId, true);
             if (chatStateChangeResult.IsFailure)
                 return BadRequestJson(chatStateChangeResult);

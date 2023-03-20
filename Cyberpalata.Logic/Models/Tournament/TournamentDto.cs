@@ -9,13 +9,13 @@
         public TeamDto Winner { get; set; }
         public List<BatleDto> Batles { get; set; }
         public TimeSpan Begining { get; set; }
-        public List<BatleResultDto> BatleResults { get; set; }
+        //public List<BatleResultDto> BatleResults { get; set; }
         public int TeamsCount
         {
             get
             {
                 int count = 0;
-                foreach(var batle in Batles)
+                foreach(var batle in Batles.Where(b=>b.RoundNumber == 0).ToList())
                 {
                     if (batle.FirstTeam != null)
                         count++;

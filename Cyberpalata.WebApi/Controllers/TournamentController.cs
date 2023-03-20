@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using CSharpFunctionalExtensions;
+using Cyberpalata.Common;
 using Cyberpalata.Common.Intefaces;
 using Cyberpalata.DataProvider.Models.Identity;
 using Cyberpalata.Logic.Filters;
 using Cyberpalata.Logic.Interfaces.Services;
+using Cyberpalata.Logic.Models.Tournament;
 using Cyberpalata.ViewModel.Request.Filters;
 using Cyberpalata.ViewModel.Request.Tournament;
 using Cyberpalata.ViewModel.Response.Tournament;
@@ -19,10 +21,12 @@ namespace Cyberpalata.WebApi.Controllers
     {
         private readonly ITournamentService _tournamentService;
         private readonly ITeamService _teamService;
-        public TournamentController(ITournamentService tournamentService, ITeamService teamService, IUnitOfWork uinOfWork) : base(uinOfWork)
+        private readonly ILogger<TournamentController> _logger;
+        public TournamentController(ITournamentService tournamentService, ITeamService teamService, IUnitOfWork uinOfWork, ILogger<TournamentController> logger) : base(uinOfWork)
         {
             _tournamentService = tournamentService;
             _teamService = teamService;
+            _logger = logger;
         }
 
         [Authorize(Roles = "Admin")]
@@ -107,12 +111,8 @@ namespace Cyberpalata.WebApi.Controllers
             return Ok(viewModel);
         }
 
-        [Authorize]
-        [HttpGet("getUsersTournaments")]
-        public async Task<IActionResult> GetActualTournamentsUsersTeamIsRegistered(int page)
+        private async Task<PagedList<TournamentDto>> GetTournaments(Guid userId, int page)
         {
-            var userId = Guid.Parse(User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Sid).Value);
-
             var filter = new TournamentFilterBL
             {
                 CaptainId = userId,
@@ -120,24 +120,55 @@ namespace Cyberpalata.WebApi.Controllers
                 CurrentPage = page,
                 PageSize = 3
             };
+
             var result = await _tournamentService.GetPagedList(filter);
-            var viewModel = new List<UserTournamentViewModel>();
-            foreach (var item in result.Items)
+            return result;
+        }
+        
+        private async Task<Maybe<TeamDto>> GetTeam(Guid userId)
+        {
+            var filter = new TeamFilterBL
             {
-                var teamInTournament = item.Batles.FirstOrDefault(t => t.FirstTeam.Captain.Member.Id == userId).FirstTeam;
-                if (teamInTournament == null)
-                    teamInTournament = item.Batles.FirstOrDefault(t => t.FirstTeam.Captain.Member.Id == userId).SecondTeam;
-                viewModel.Add(new UserTournamentViewModel
-                {
-                    Id = item.Id,
-                    Name = item.Name,
-                    TeamId = teamInTournament.Id,
-                });
-            }
-            return Ok(new { PageSize = result.PageSize, TotalItemsCount = result.TotalItemsCount, Items = viewModel });
+                MemberId = userId,
+                PageSize = 1,
+                CurrentPage = 1
+            };
+            var result = await _teamService.GetPagedList(filter);
+            if (result.Items.Count == 0)
+                return Maybe.None;
+            return result.Items.ElementAt(0);
         }
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize]
+        [HttpGet("getUsersTournaments")]
+        public async Task<IActionResult> GetActualTournamentsUsersTeamIsRegistered(int page)
+        {
+            var userId = Guid.Parse(User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Sid).Value);
+            var tournaments = await GetTournaments(userId, page);
+            var team = await GetTeam(userId);
+            if (team.HasNoValue)
+                return BadRequestJson("Team not found");
+            var viewModel = new List<UserTournamentViewModel>();
+            foreach (var item in tournaments.Items)
+            {
+                _logger.LogCritical($"{item.Name}\n");
+                var teamInBatle = item.Batles.FirstOrDefault(t => t.FirstTeam.Id == team.Value.Id || t.SecondTeam.Id == team.Value.Id);
+                if(teamInBatle != null)
+                {
+                    viewModel.Add(new UserTournamentViewModel
+                    {
+                        Id = item.Id,
+                        Name = item.Name,
+                        TeamId = team.Value.Id,
+                        Date = item.Date.ToString("d")
+                    });
+                }
+               
+            }
+            return Ok(new { PageSize = tournaments.PageSize, TotalItemsCount = tournaments.TotalItemsCount, Items = viewModel });
+        }
+
+        [Authorize(Roles = "Admin")]
         [HttpPut("approveTeam")]
         public async Task<IActionResult> ApproveTeam(Guid teamId, Guid tournamentId)
         {

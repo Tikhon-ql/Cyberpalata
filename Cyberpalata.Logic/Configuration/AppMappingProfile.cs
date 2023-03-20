@@ -13,10 +13,8 @@ namespace Cyberpalata.Logic.Configuration
             RoleMapConfig.CreateMap(this);
             GameMapConfig.CreateMap(this);
             SeatMapConfig.CreateMap(this);
-            MenuItemMapConfig.CreateMap(this);
             PcMapConfig.CreateMap(this);
             PeripheryMapConfig.CreateMap(this);
-            GameConsoleMapConfig.CreateMap(this);
             UserRefreshTokenMapConfig.CreateMap(this);
             RoomMapConfig.CreateMap(this);
             BookingMapConfig.CreateMap(this);
@@ -26,7 +24,6 @@ namespace Cyberpalata.Logic.Configuration
             TournamentMapConfig.CreateMap(this);
             FiltersMapConfig.CreateMap(this);
             BatleMapConfig.CreateMap(this);
-            BatleResultMapConfig.CreateMap(this);
             TeamJoinRequestMapConfig.CreateMap(this);
             NotificationMapConfig.CreateMap(this);
             MessageMapConfig.CreateMap(this);

@@ -34,7 +34,6 @@ namespace Cyberpalata.DataProvider.Filters
 
             var actualRoomBookings = room.Bookings.Where(b => b.Date >= DateTime.UtcNow).ToList();
 
-            //TODO: PUSH IT INTO SEPARATE METHODE
             var bookings = actualRoomBookings
                 .Where(b => (b.Date == Date.Value
                 && ((Begining.Value <= b.Begining

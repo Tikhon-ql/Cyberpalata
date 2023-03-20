@@ -2,6 +2,7 @@
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.ViewModel.Request;
 using Cyberpalata.WebApi.Connections;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Cyberpalata.WebApi.Hubs
@@ -22,7 +23,6 @@ namespace Cyberpalata.WebApi.Hubs
             _logger = logger;
             _unitOfWork = unitOfWork;
         }
-        //[Authorize]
         public override Task OnDisconnectedAsync(Exception? exception)
         {
             if (_connections.TryGetValue(Context.ConnectionId, out ChatConnection connection))
@@ -31,22 +31,15 @@ namespace Cyberpalata.WebApi.Hubs
             }
             return base.OnDisconnectedAsync(exception);
         }
-        //[Authorize]
         public async Task SendMessage(MessageViewModel viewModel)
         {
             if(_connections.TryGetValue(Context.ConnectionId, out ChatConnection connection))
             {
-                _logger.LogCritical(viewModel.ChatId.ToString());
-                _logger.LogCritical(viewModel.Sender);
-                _logger.LogCritical(connection.User.Email);
-                _logger.LogCritical(viewModel.Message);
-               
                 await _messageService.CreateAsync(viewModel);
                 await Clients.Group(connection.ChatId.ToString()).SendAsync("ReceiveMessage", $"{connection.User.Email}", viewModel.Message);
                 await _unitOfWork.CommitAsync();
             }
         }
-        //[Authorize]
         public async Task JoinRoom(ChatConnection connection)
         {       
             await Groups.AddToGroupAsync(Context.ConnectionId, connection.ChatId.ToString());

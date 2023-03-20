@@ -14,16 +14,14 @@ namespace Cyberpalata.Logic.Configuration.MapperConfiguration
                 .ForMember(dst => dst.RoundCount, opt => opt.MapFrom(src => src.RoundsCount))
                 .ForMember(dst => dst.Date, opt => opt.MapFrom(src => src.Date))
                 .ForMember(dst => dst.Winner, opt => opt.MapFrom(src => src.Winner))
-                .ForMember(dst => dst.Begining, opt => opt.MapFrom(src => src.Date - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)))
+                .ForMember(dst => dst.Begining, opt => opt.MapFrom(src => TimeSpan.Parse($"{src.Date.Hour}:{src.Date.Minute}")))
                 .ForMember(dst => dst.Batles, opt => opt.MapFrom(src => src.Batles))
-                .ForMember(dst => dst.BatleResults, opt => opt.MapFrom(src => src.BatleResults))
                 .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name));
             profile.CreateMap<TournamentDto, Tournament>()
                 .ForMember(dst => dst.RoundsCount, opt => opt.MapFrom(src => src.RoundCount))
                 .ForMember(dst => dst.Date, opt => opt.MapFrom(src => src.Date.Add(src.Begining)))
                 .ForMember(dst => dst.Winner, opt => opt.MapFrom(src => src.Winner))
                 .ForMember(dst => dst.Batles, opt => opt.MapFrom(src => src.Batles))
-                .ForMember(dst => dst.BatleResults, opt => opt.MapFrom(src => src.BatleResults))
                 .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name));
             profile.CreateMap<CreateTournamentViewModel, TournamentDto>();
             profile.CreateMap<Tournament, GetTournamentViewModel>()

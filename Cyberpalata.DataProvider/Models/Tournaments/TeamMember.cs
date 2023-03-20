@@ -6,9 +6,7 @@ namespace Cyberpalata.DataProvider.Models.Tournaments
 {
     public class TeamMember : BaseEntity
     {
-        //[Required]
         public Guid? MemberId { get; set; }
-        //[Required]
         [ForeignKey("MemberId")]
         public virtual User? Member { get; set; }
         [Required]

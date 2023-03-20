@@ -25,7 +25,6 @@ namespace Cyberpalata.DataProvider.Configuration
             services.AddScoped<IRoomRepository, RoomRepository>();
             services.AddScoped<IGameRepository, GameRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IGameConsoleRepository, GameConsoleRepository>();
             services.AddScoped<IUserRefreshTokenRepository, UserRefreshTokenRepository>();
             services.AddScoped<IPcRepository, PcRepository>();
             services.AddScoped<IPeripheryRepository, PeripheryRepository>();
@@ -33,9 +32,7 @@ namespace Cyberpalata.DataProvider.Configuration
             services.AddScoped<ISeatRepository, SeatRepository>();
             services.AddScoped<ITournamentRepository, TournamentRepository>();
             services.AddScoped<ITeamRepository, TeamRepository>();
-            services.AddScoped<IHtmlRepository, HtmlRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
-            services.AddScoped<IBatleResultRepository, BatleResultRepository>();
             services.AddScoped<IBatleRepository, BatleRepository>();
             services.AddScoped<ITeamJoinRequestRepository, TeamJoinRequestRepository>();
             services.AddScoped<ITeamMemberRepository, TeamMemberRepository>();

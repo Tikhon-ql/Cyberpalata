@@ -21,15 +21,6 @@ builder.Services.AddControllers(config =>
     config.Filters.Add(new ModelStateValidationFilter());
 }).AddNewtonsoftJson();
 
-//builder.Services.AddCors(o => o.AddPolicy("AllowAnyOrigin",
-//                     builder =>
-//                     {
-//                         builder.AllowAnyOrigin()
-//                                 .AllowAnyMethod()
-//                                 .AllowAnyHeader();
-//                     }));
-//builder.Services.AddCors();
-
 builder.Services.AddScoped<ModelStateValidationFilter>();
 
 builder.Services.AddSingleton<IDictionary<string, ChatConnection>>(opts => new Dictionary<string, ChatConnection>());
@@ -90,13 +81,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 
-//app.UseCors(x =>
-//{
-//    x.AllowAnyOrigin()
-//    .AllowAnyMethod()
-//    .AllowAnyHeader();
-//});
-
 
 app.UseHttpLogging();
 
@@ -106,7 +90,6 @@ app.MapControllers();
 
 app.MapHub<ChatHub>("/chat");
 app.MapHub<NotificationHub>("/notify");
-///once send request;
 
 app.UseAuthorization();
 

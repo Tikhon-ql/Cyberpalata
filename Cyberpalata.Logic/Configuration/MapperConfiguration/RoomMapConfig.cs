@@ -17,7 +17,6 @@ namespace Cyberpalata.Logic.Configuration.MapperConfiguration
                 .ForMember(dst => dst.Seats, opt => opt.MapFrom(src => src.Seats))
                 .ForMember(dst => dst.Bookings, opt => opt.MapFrom(src => src.Bookings))
                 .ForMember(dst => dst.Peripheries, opt => opt.MapFrom(src => src.Peripheries))
-                .ForMember(dst => dst.Consoles, opt => opt.MapFrom(src => src.Consoles))
                 .ForMember(dst => dst.IsVip, opt => opt.MapFrom(src => src.IsVip));
             profile.CreateMap<PagedList<Room>, PagedList<RoomDto>>()
                 .ForMember(dst => dst.Items, opt => opt.MapFrom(src => src.Items.AsEnumerable()))
@@ -30,7 +29,6 @@ namespace Cyberpalata.Logic.Configuration.MapperConfiguration
                 .ForMember(dst => dst.Seats, opt => opt.MapFrom(src => src.Seats))
                 .ForMember(dst => dst.Bookings, opt => opt.MapFrom(src => src.Bookings))
                 .ForMember(dst => dst.Peripheries, opt => opt.MapFrom(src => src.Peripheries))
-                .ForMember(dst => dst.Consoles, opt => opt.MapFrom(src => src.Consoles))
                 .ForMember(dst => dst.IsVip, opt => opt.MapFrom(src => src.IsVip));
             profile.CreateMap<Maybe<Room>, Maybe<RoomDto>>();
             profile.CreateMap<PagedList<RoomDto>, PagedList<Room>>();

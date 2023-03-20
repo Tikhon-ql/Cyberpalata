@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Castle.Core.Logging;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using System.Runtime.CompilerServices;
 
 namespace Cyberpalata.Logic.Services
 {
@@ -57,14 +58,8 @@ namespace Cyberpalata.Logic.Services
             return transactionRequest;
         }
 
-        public Result MakeTransaction(Card card, decimal price, Guid userId)
+        private Result ReturnResult(createTransactionResponse response)
         {
-            var transactionRequest = GetTransactionRequestType(card,price, userId);
-            var request = new createTransactionRequest { transactionRequest = transactionRequest };
-            var controller = new createTransactionController(request);
-            controller.Execute();
-            var response = controller.GetApiResponse();
-
             if (response != null)
             {
                 if (response.messages.resultCode == messageTypeEnum.Ok)
@@ -111,6 +106,17 @@ namespace Cyberpalata.Logic.Services
                 return Result.Failure("Failed Transaction. Please, check card info.");
             }
             return Result.Success();
+        }
+
+        public Result MakeTransaction(Card card, decimal price, Guid userId)
+        {
+            var transactionRequest = GetTransactionRequestType(card,price, userId);
+            var request = new createTransactionRequest { transactionRequest = transactionRequest };
+            var controller = new createTransactionController(request);
+            controller.Execute();
+            var response = controller.GetApiResponse();
+            return ReturnResult(response);
+            
         }
     }
 }

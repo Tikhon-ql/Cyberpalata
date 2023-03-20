@@ -14,7 +14,7 @@ namespace Cyberpalata.DataProvider.Repositories
 
         public async Task<Maybe<User>> ReadAsync(string email)
         {
-            var entity = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);//IsActivated
+            var entity = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
             return entity;
         }
     }

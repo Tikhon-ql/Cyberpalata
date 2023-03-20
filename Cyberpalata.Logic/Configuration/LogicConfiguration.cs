@@ -20,7 +20,6 @@ namespace Cyberpalata.Logic.Configuration
 
             services.AddScoped<IRoomService, RoomService>();
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IGameConsoleService, GameConsoleService>();
             services.AddScoped<IUserRefreshTokenService, UserRefreshTokenService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IPcService, PcService>();
@@ -32,7 +31,6 @@ namespace Cyberpalata.Logic.Configuration
             services.AddScoped<ITournamentService, TournamentService>();
             services.AddScoped<ITeamService, TeamService>();
             services.AddScoped<IGameService, GameService>();
-            services.AddScoped<IBatleResultService, BatleResultService>();
             services.AddScoped<IBatleService, BatleService>();
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<ITeamJoinRequestService, TeamJoinRequestService>();

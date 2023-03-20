@@ -15,7 +15,6 @@ namespace Cyberpalata.Logic.Models.Room
         public bool IsVip { get; set; } = false;
         public List<SeatDto> Seats { get; set; } = new();
         public List<BookingDto> Bookings { get; set; } = new();
-        public List<GameConsoleDto> Consoles { get; set; } = new();
         public List<PeripheryDto> Peripheries { get; set; } = new();
     }
 }

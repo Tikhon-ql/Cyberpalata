@@ -9,12 +9,10 @@ namespace Cyberpalata.Logic.Services
     internal class MailService : IMailService
     {
         private readonly IConfiguration _configuration;
-        private readonly IHtmlRepository _htmlRepository;
 
-        public MailService(IConfiguration configuration, IHtmlRepository htmlRepository)
+        public MailService(IConfiguration configuration)
         {
             _configuration = configuration;
-            _htmlRepository = htmlRepository;
         }
         private void SendMail(string emailTo, string subject, string body)
         {
@@ -36,16 +34,14 @@ namespace Cyberpalata.Logic.Services
                 client.Send(message);
             }
         }
-        //A.K.
         public async Task SendPasswordResetEmail(string emailTo)
         {
-            //string bodyHtml = @$"<html>
-            //                        <div>
-            //                            <a href='{_configuration["PasswordResetPageUrl"]}' class='btn btn-outline-dark btn-sm text-white w-50 m-1'>Reset password</a>
-            //                        </div>
-            //                    </html>";
-            var html = await _htmlRepository.ReadAsync("ResetPasswordHtml");
-            SendMail(emailTo, "Password reset", html.Html);
+            string bodyHtml = @$"<html>
+                                    <div>
+                                        <a href='{_configuration["PasswordResetPageUrl"]}' class='btn btn-outline-dark btn-sm text-white w-50 m-1'>Reset password</a>
+                                    </div>
+                                </html>";
+            SendMail(emailTo, "Password reset", bodyHtml);
         }
 
         public async Task SendVerificationCodeToMail(string emailTo,int code)
@@ -56,7 +52,6 @@ namespace Cyberpalata.Logic.Services
                                     <div><b>{code}</b></div>
                                 </div>
                             </html>";
-            //var html = await _htmlRepository.ReadAsync("EmailVerificationHtml");
             SendMail(emailTo,"Verification code", bodyHtml);
         }
     }

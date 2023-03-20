@@ -12,7 +12,7 @@ namespace Cyberpalata.Logic.Interfaces.Services
     {
         Task<PagedList<RoomDto>> GetPagedListAsync(RoomFilterBL filter);
         Task<Result> AddBookingToRoom(Guid userId, BookingCreateViewModel request);
-        Task<Maybe<List<RoomDto>>> SearchRooms(SearchRoomViewModel request);
+        //Task<Maybe<List<RoomDto>>> SearchRooms(SearchRoomViewModel request);
         Task<Maybe<int>> GetFreeSeatsCount(Guid roomId, RoomFilterBL filter);
     }
 }

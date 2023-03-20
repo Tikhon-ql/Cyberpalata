@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using CSharpFunctionalExtensions;
 using Cyberpalata.DataProvider.Interfaces;
+using Cyberpalata.DataProvider.Models;
 using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Seats;
 using Cyberpalata.ViewModel.Request.Seats;
+using Cyberpalata.ViewModel.Response.Rooms.GamingRoom;
 
 namespace Cyberpalata.Logic.Services
 {
@@ -42,6 +44,27 @@ namespace Cyberpalata.Logic.Services
             return resultSeats;
         }
 
+        private List<Booking> FilterBookings(List<Booking> bookings, SeatsGettingViewModel viewModel)
+        {
+           return bookings.Where(b => (b.Date == viewModel.Date
+                    && ((viewModel.Begining <= b.Begining
+                    && viewModel.Date.Add(viewModel.Begining).AddHours(viewModel.HoursCount) > b.Date.Add(b.Begining))
+                    || (b.Begining <= viewModel.Begining
+                    && viewModel.Date.Add(viewModel.Begining) < b.Date.Add(b.Begining).AddHours(b.HoursCount))))).ToList();
+        }
+
+        private void IsFreePropSetting(List<SeatDto> seats, List<Booking> bookings)
+        {
+            foreach (var seat in seats)
+            {
+                var isSeatFree = bookings.FirstOrDefault(b => b.Seats.FirstOrDefault(s => s.Id == seat.Id) != null) == null;
+                if (!isSeatFree)
+                {
+                    seat.IsFree = false;
+                }
+            }
+        }
+
         public async Task<Maybe<List<SeatDto>>> GetSeatsByRoomInRangeIdAsync(SeatsGettingViewModel viewModel)
         {
             var room = await _roomRepository.ReadAsync(viewModel.RoomId);
@@ -55,21 +78,18 @@ namespace Cyberpalata.Logic.Services
             if (actualRoomBookings.HasNoValue)
                 return resultSeats;
 
-            //TODO: PUSH IT INTO SEPARATE METHODE
-            var bookings = actualRoomBookings.Value
-                .Where(b => (b.Date == viewModel.Date
-                && ((viewModel.Begining <= b.Begining 
-                    && viewModel.Date.Add(viewModel.Begining).AddHours(viewModel.HoursCount) > b.Date.Add(b.Begining)) 
-                || (b.Begining <= viewModel.Begining
-                    && viewModel.Date.Add(viewModel.Begining) < b.Date.Add(b.Begining).AddHours(b.HoursCount))))).ToList();
-            foreach (var seat in resultSeats)
-            {
-                var isSeatFree = bookings.FirstOrDefault(b => b.Seats.FirstOrDefault(s => s.Id == seat.Id) != null) == null;
-                if (!isSeatFree)
-                {
-                    seat.IsFree = false;
-                }
-            }
+            var bookings = FilterBookings(actualRoomBookings.Value, viewModel);
+
+            IsFreePropSetting(resultSeats, bookings);
+
+            //foreach (var seat in resultSeats)
+            //{
+            //    var isSeatFree = bookings.FirstOrDefault(b => b.Seats.FirstOrDefault(s => s.Id == seat.Id) != null) == null;
+            //    if (!isSeatFree)
+            //    {
+            //        seat.IsFree = false;
+            //    }
+            //}
             return resultSeats;
         }
     }

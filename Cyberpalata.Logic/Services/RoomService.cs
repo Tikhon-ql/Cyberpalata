@@ -24,10 +24,8 @@ namespace Cyberpalata.Logic.Services
         private readonly IConfiguration _configuration;
         private readonly IBookingRepository _bookingRepository;
 
-        private readonly IBookingService _bookingService;
-
         public RoomService(IRoomRepository repository, ISeatService seatService,IUserRepository userRepository,
-            IMapper mapper, IConfiguration configuration, IBookingRepository bookingRepository, IBookingService bookingService)
+            IMapper mapper, IConfiguration configuration, IBookingRepository bookingRepository)
         {
             _repository = repository;
             _mapper = mapper;
@@ -35,7 +33,6 @@ namespace Cyberpalata.Logic.Services
             _configuration = configuration;
             _userRepository = userRepository;
             _bookingRepository = bookingRepository;
-            _bookingRepository= bookingRepository;
         }
 
         public async Task<PagedList<RoomDto>> GetPagedListAsync(RoomFilterBL filter)
@@ -43,18 +40,6 @@ namespace Cyberpalata.Logic.Services
             var list = await _repository.GetPageListAsync(_mapper.Map<RoomFilter>(filter));
             return _mapper.Map<PagedList<RoomDto>>(list);
         }
-
-        //public async Task<PagedList<RoomDto>> GetVipRoomsAsync(int pageNumber, RoomType type)
-        //{
-        //    var list = await _repository.GetVipRoomsAsync(pageNumber, type);
-        //    return _mapper.Map<PagedList<RoomDto>>(list);
-        //}
-
-        //public async Task<PagedList<RoomDto>> GetCommonRoomsAsync(int pageNumber, RoomType type)
-        //{
-        //    var list = await _repository.GetCommonRoomsAsync(pageNumber, type);
-        //    return _mapper.Map<PagedList<RoomDto>>(list);
-        //}
 
         private List<Seat> GetFreeSeats(BookingCreateViewModel viewModel, Room room)
         {
@@ -135,44 +120,43 @@ namespace Cyberpalata.Logic.Services
         }
 
    
-        //TODO: REFACTOR IT
-        public async Task<Maybe<List<RoomDto>>> SearchRooms(SearchRoomViewModel viewModel)
-        {
-            var rooms = await _repository.GetAll();
-            var resultList = new List<RoomDto>();
-            foreach (var room in rooms)
-            {
-                var seats = await _seatService.GetSeatsByRoomInRangeIdAsync(new SeatsGettingViewModel
-                {
-                    RoomId = room.Id,
-                    Begining = viewModel.Begining,
-                    Date = viewModel.Date,
-                    HoursCount = viewModel.HoursCount
-                });
+        //public async Task<Maybe<List<RoomDto>>> SearchRooms(SearchRoomViewModel viewModel)
+        //{
+        //    var rooms = await _repository.GetAll();
+        //    var resultList = new List<RoomDto>();
+        //    foreach (var room in rooms)
+        //    {
+        //        var seats = await _seatService.GetSeatsByRoomInRangeIdAsync(new SeatsGettingViewModel
+        //        {
+        //            RoomId = room.Id,
+        //            Begining = viewModel.Begining,
+        //            Date = viewModel.Date,
+        //            HoursCount = viewModel.HoursCount
+        //        });
 
-                if (seats.HasNoValue)
-                    continue;
+        //        if (seats.HasNoValue)
+        //            continue;
 
-                seats.Value.Sort((a,b)=>a.Number - b.Number);
+        //        seats.Value.Sort((a,b)=>a.Number - b.Number);
 
-                int seatCountInRow = 0;
+        //        int seatCountInRow = 0;
 
-                foreach(var seat in seats.Value)
-                {
-                    if (seat.IsFree)
-                        seatCountInRow++;
-                    else
-                        seatCountInRow = 0;
-                    if(viewModel.Count == seatCountInRow)
-                    {
-                        resultList.Add(_mapper.Map<RoomDto>(room));
-                        rooms.Remove(room);
-                        break;
-                    }
-                }
-            }     
-            return resultList;
-        }
+        //        foreach(var seat in seats.Value)
+        //        {
+        //            if (seat.IsFree)
+        //                seatCountInRow++;
+        //            else
+        //                seatCountInRow = 0;
+        //            if(viewModel.Count == seatCountInRow)
+        //            {
+        //                resultList.Add(_mapper.Map<RoomDto>(room));
+        //                rooms.Remove(room);
+        //                break;
+        //            }
+        //        }
+        //    }     
+        //    return resultList;
+        //}
 
         public async Task<Maybe<int>> GetFreeSeatsCount(Guid roomId, RoomFilterBL filter)
         {
@@ -187,7 +171,7 @@ namespace Cyberpalata.Logic.Services
             });
             if (result.HasNoValue)
                 return -1;
-            return result.Value.Count();
+            return result.Value.Where(r=>r.IsFree).Count();
         }
     }
 }

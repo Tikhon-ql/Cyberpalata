@@ -46,11 +46,16 @@ namespace Cyberpalata.Logic.Services
                 UserToJoin = userToJoin,
             };
             await _chatRepository.CreateAsync(chat);
+            await SendNotification(userToJoin, $"{team.Name} ready to chat with you");
+        }
+
+        private async Task SendNotification(User user, string text)
+        {
             var notification = new Notification
             {
-                User = userToJoin,
-                Text = $"{team.Name} ready to chat with you",
+                User = user,
                 CreatedDate = DateTime.UtcNow,
+                Text = text
             };
             await _notificationRepository.CreateAsync(notification);
         }
@@ -82,13 +87,7 @@ namespace Cyberpalata.Logic.Services
                 await CreateNewChat(request.Team, userToJoin.Value);
             }
 
-            var notification = new Notification
-            {
-                User = userToJoin.Value,
-                CreatedDate = DateTime.UtcNow,
-                Text = $"Your request had been {stateToSet.Name}"
-            };
-            await _notificationRepository.CreateAsync(notification);
+            await SendNotification(userToJoin.Value, $"Your request had been {stateToSet.Name.ToLower()}");
 
             return Result.Success();
         }
@@ -135,10 +134,10 @@ namespace Cyberpalata.Logic.Services
 
         public async Task<Result> CreateJoinRequest(Guid teamId, Guid userId)
         {
-            ////var result = await ValidateRequest(teamId, userId);
-            //if (result.IsFailure)
-            //    return result;
-
+            var result = await ValidateRequest(teamId, userId);
+            if (result.IsFailure)
+                return result;
+            _logger.LogCritical(teamId.ToString());
             var captain = await ReadCaptainByTeamId(teamId);
             if (captain.HasNoValue)
                 return Result.Failure("Captain not found");
@@ -147,17 +146,9 @@ namespace Cyberpalata.Logic.Services
             {
                 Team = captain.Value.Team,
                 User = user.Value,
-                //State = JoinRequestState.None,
             };
-            var notification = new Notification
-            {
-                User = captain.Value.Member,
-                Text = $"{user.Value.Username} {user.Value.Surname} have sent you a join request.\nTo accept go to profile",
-                CreatedDate = DateTime.UtcNow,
-            };
-            captain.Value.Member.Notifications.Add(notification);
+            await SendNotification(captain.Value.Member, $"{user.Value.Username} {user.Value.Surname} have sent you a join request.\nTo accept go to profile");
             captain.Value.JoinRequests.Add(request);
-            await _notificationRepository.CreateAsync(notification);
             await _teamJoinRequestRepository.CreateAsync(request);
             return Result.Success();
         }

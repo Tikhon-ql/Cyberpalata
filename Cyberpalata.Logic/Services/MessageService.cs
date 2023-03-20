@@ -13,12 +13,10 @@ namespace Cyberpalata.Logic.Services
         private readonly IMessageRepository _messageRepository;
         private readonly IChatRepository _chatRepository;
         private readonly IUserRepository _userRepository;
-        private readonly IMapper _mapper;
 
-        public MessageService(IMessageRepository messageRepository,IChatRepository chatRepository,IMapper mapper, IUserRepository userRepository)
+        public MessageService(IMessageRepository messageRepository,IChatRepository chatRepository,IUserRepository userRepository)
         {
             _messageRepository = messageRepository;
-            _mapper = mapper;
             _chatRepository = chatRepository;
             _userRepository = userRepository;
         }
@@ -36,11 +34,6 @@ namespace Cyberpalata.Logic.Services
             };
 
             await _messageRepository.CreateAsync(newMessage);
-        }
-
-        public async Task<PagedList<MessageDto>> GetPagedList(MessageFilterBL filter)
-        {
-            return null;
         }
     }
 }

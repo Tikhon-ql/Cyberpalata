@@ -9,6 +9,7 @@ using Cyberpalata.Logic.Interfaces.Services;
 using Cyberpalata.Logic.Models.Tournament;
 using Cyberpalata.ViewModel.Request.Tournament;
 using Cyberpalata.ViewModel.Response.Tournament;
+using NLog.LayoutRenderers;
 
 namespace Cyberpalata.Logic.Services
 {
@@ -68,7 +69,6 @@ namespace Cyberpalata.Logic.Services
                 Date = tournament.Date.ToString("d"),
                 Winner = "",
             };
-            #region Move to separate method
             for (int i = 0;i < tournament.RoundsCount;i++)
             {
                 var roundBatles = tournament.Batles.Where(b=>b.RoundNumber == i).ToList();
@@ -118,7 +118,6 @@ namespace Cyberpalata.Logic.Services
                     }
                 }
             }
-            #endregion
             viewModel.Batles = viewModel.Batles.OrderByDescending(b => b.RoundNumber).ToList();
             if (tournament.Winner != null)
                 viewModel.Winner = tournament.Winner.Name;
@@ -157,7 +156,31 @@ namespace Cyberpalata.Logic.Services
             return false;
         }
 
-        
+        private int GetTournamentTeamsCurrentCount(Tournament tournament)
+        {
+            int count = 0;
+            foreach (var batle in tournament.Batles.Where(t=>t.RoundNumber == 0).ToList())
+            {
+                if (batle.FirstTeam != null)
+                    count++;
+                if(batle.SecondTeam != null)
+                    count++;
+            }
+            return count;
+        }
+
+        private async Task<Result> ValidateTeam(Team team, Tournament tournament)
+        {
+            var alredyInTournament = await AlreadyInTournament(team, tournament);
+            if (alredyInTournament)
+                return Result.Failure<TeamRegistrationViewModel>("Your team is alredy participate in the tournament");
+            //if (team.Members.Count < 5)
+            //    return Result.Failure<TeamRegistrationViewModel>("Your team is understaffed");
+            if (Math.Pow(2, tournament.RoundsCount) <= GetTournamentTeamsCurrentCount(tournament))
+                return Result.Failure("Tournament is full");
+            return Result.Success();
+        }
+
 
         public async Task<Result<TeamRegistrationViewModel>> RegisterTeam(RegisterTeamViewModel viewModel, Guid userId)
         {
@@ -172,16 +195,14 @@ namespace Cyberpalata.Logic.Services
                 return Result.Failure<TeamRegistrationViewModel>("You aren't in a team");
             var team = userTeam.Items.ElementAt(0);
 
-
-            //if (team.Members.Count < 5)
-            //    return Result.Failure<TeamRegistrationViewModel>("Your team is understaffed");
-
             var tournament = await _tournamentRepository.ReadAsync(viewModel.TournamentId);
             if (tournament.HasNoValue)
                 return Result.Failure<TeamRegistrationViewModel>("Tournament with sended id doesn't exist");
 
-            if (await AlreadyInTournament(team, tournament.Value))
-                return Result.Failure<TeamRegistrationViewModel>("Your team is alredy participate in the tournament");
+
+            var validationResult = await ValidateTeam(team, tournament.Value);
+            if (validationResult.IsFailure)
+                return Result.Failure<TeamRegistrationViewModel>(validationResult.Error);
 
             var batleFilter = new BatleFilter
             {

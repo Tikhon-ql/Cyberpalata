@@ -16,12 +16,12 @@ namespace Cyberpalata.WebApi.Controllers
 {
     [ApiController]
     [Route("/gamingRooms")]
-    public class GamingRoomController : BaseController
+    public class RoomController : BaseController
     {
         private readonly IPcService _pcService;
         private readonly IPeripheryService _peripheryService;
         private readonly IRoomService _roomService;
-        public GamingRoomController(IPcService pcService, IPeripheryService peripheryService, IRoomService roomService, IUnitOfWork uinOfWork) : base(uinOfWork)
+        public RoomController(IPcService pcService, IPeripheryService peripheryService, IRoomService roomService, IUnitOfWork uinOfWork) : base(uinOfWork)
         {
             _pcService = pcService;
             _peripheryService = peripheryService;
@@ -68,7 +68,7 @@ namespace Cyberpalata.WebApi.Controllers
 
             var viewModel = new List<RoomItemViewModel>();
 
-            foreach (var room in rooms.Items) 
+            foreach (var room in rooms.Items.OrderBy(r=> r.Name).ToList()) 
             {
                 viewModel.Add(new RoomItemViewModel
                 {
@@ -76,14 +76,8 @@ namespace Cyberpalata.WebApi.Controllers
                     Name = room.Name,
                     FreeSeatsCount = (await _roomService.GetFreeSeatsCount(room.Id, filter)).Value
                 });
-
             }
-
-            //var viewModel = new RoomCollectionViewModel
-            //{
-            //    TotalItemsCount = rooms.TotalItemsCount,
-            //    PageSize = rooms.PageSize
-            //};
+            viewModel = viewModel.OrderByDescending(vm => vm.FreeSeatsCount).ToList();
             return Ok(new { Items = viewModel, TotalItemsCount = rooms.TotalItemsCount, PageSize = filter.PageSize,CurrentPage = rooms.CurrentPageNumber });
         }
 
@@ -132,10 +126,10 @@ namespace Cyberpalata.WebApi.Controllers
         [HttpPost("searchRooms")]
         public async Task<IActionResult> SearchRooms([FromBody]SearchRoomViewModel viewModel)
         {
-            var rooms = await _roomService.SearchRooms(viewModel);
-            if (rooms.HasNoValue)
-                return await ReturnSuccess();
-            return await ReturnSuccess(rooms.Value);
+            //var rooms = await _roomService.SearchRooms(viewModel);
+            //if (rooms.HasNoValue)
+            //    return await ReturnSuccess();
+            return await ReturnSuccess();
         }
     }
 }

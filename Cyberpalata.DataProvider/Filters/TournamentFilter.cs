@@ -21,9 +21,9 @@ namespace Cyberpalata.DataProvider.Filters
             if (IsActual.HasValue)
             {
                 if(IsActual.Value)
-                    query = query.Where(q=>q.Date >= DateTime.UtcNow);
+                    query = query.Where(q=>q.Date > DateTime.UtcNow);
                 else
-                    query = query.Where(q => q.Date < DateTime.UtcNow);
+                    query = query.Where(q => q.Date <= DateTime.UtcNow);
             }
             return query;
         }

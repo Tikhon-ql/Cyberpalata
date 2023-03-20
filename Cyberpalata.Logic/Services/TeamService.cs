@@ -61,7 +61,7 @@ namespace Cyberpalata.Logic.Services
              || viewModel.Name.Contains('.') || viewModel.Name.Contains('\'')
              || viewModel.Name.Contains(',') || viewModel.Name.Contains('?')
              || viewModel.Name.Contains('!') || viewModel.Name.Contains('_'))
-                return Result.Failure("Team name contains bad symbol");
+                return Result.Failure("Team name contains bad symbols(,./\\ ;{}[]!?*<>+-)");
             return Result.Success();
         }
  
@@ -205,7 +205,6 @@ namespace Cyberpalata.Logic.Services
                 member.JoinRequests.Remove(request);
             }
             team.Value.Members.Remove(member);
-            //member.Member.Team = null;
             return Result.Success();
         }
     }

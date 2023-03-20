@@ -18,8 +18,8 @@ namespace Cyberpalata.DataProvider.Models
         public bool IsVip { get; set; }
         public virtual List<Seat>? Seats { get; set; } = new();
         public virtual List<Booking>? Bookings { get; set; } = new();
-        public virtual List<GameConsole>? Consoles { get; set; } = new();//DELETE
-        public virtual Pc? Pc { get; set; }//DELETE
+        //public virtual List<GameConsole>? Consoles { get; set; } = new();//DELETE
+        public virtual Pc? Pc { get; set; }
         public virtual List<Periphery>? Peripheries { get; set; } = new();
     }
 }

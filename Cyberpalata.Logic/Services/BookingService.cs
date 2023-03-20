@@ -108,7 +108,7 @@ namespace Cyberpalata.Logic.Services
             {
                 CardCvv = viewModel.CardCvv,
                 CardDate = viewModel.CardDate,
-                CardNumber = viewModel.CardNumber
+                CardNumber = viewModel.CardNumber.Trim()
             },booking.Value.Price, userId);
             if (transactionResult.IsFailure)
                 return transactionResult;
